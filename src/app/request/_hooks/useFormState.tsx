@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { FormInputs } from '../_types/form';
 
 export const useFormState = () => {
-  const { register, handleSubmit, watch, reset, control  } = useForm<FormInputs>();
+  const { register, handleSubmit, watch, reset, control, formState:{errors} } = useForm<FormInputs>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<string>('');
 
@@ -21,6 +21,7 @@ export const useFormState = () => {
     watch,
     reset,
     control,
+    errors,
     isModalOpen,
     selectedLocation,
     toggleModal,
