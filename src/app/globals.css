@@ -10,4 +10,8 @@
   .bg-container {
     @apply w-[375px] max-w-[100vw] h-screen mx-auto bg-white flex flex-col justify-center overflow-hidden;
   }
+
+  .inner {
+    @apply h-full mx-auto relative;
+  }
 }
