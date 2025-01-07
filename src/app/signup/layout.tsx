@@ -1,8 +1,8 @@
-const LoginLayout = ({
+const SignupLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
   return <>{children}</>;
 };
-export default LoginLayout;
+export default SignupLayout;
