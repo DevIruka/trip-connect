@@ -14,6 +14,21 @@ type Props = {
 };
 
 const MenuBar: React.FC<Props> = ({ editor }) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.result && typeof reader.result === 'string') {
+          editor!.chain().focus().setImage({ src: reader.result }).run();
+        }
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
   if (!editor) return null;
 
   return (
@@ -87,18 +102,22 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       </button>
 
       {/* Insert Image */}
-      <button
-        onClick={() => {
-          const url = prompt('Enter image URL');
-          if (url) {
-            editor.chain().focus().setImage({ src: url }).run();
-          }
-        }}
-        className="p-2 border rounded bg-gray-100 hover:bg-gray-200"
-        title="Insert Image"
-      >
-        <FaImage />
-      </button>
+      <div>
+        <label
+          htmlFor="image-upload"
+          className="cursor-pointer p-2 border rounded bg-gray-100 hover:bg-gray-200"
+          title="Upload Image"
+        >
+          <FaImage />
+        </label>
+        <input
+          type="file"
+          id="image-upload"
+          accept="image/*"
+          onChange={handleImageUpload}
+          className="hidden"
+        />
+      </div>
 
       {/* Font Family */}
       <button
