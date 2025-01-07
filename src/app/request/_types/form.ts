@@ -4,7 +4,7 @@ export type FormInputs = {
   title: string;
   credit: number;
   content: string;
-  deadline: string;
+  deadline: Date | undefined;
 };
 
 export type Continent = {
