@@ -81,7 +81,7 @@ const FormFields: React.FC<Props> = ({ register, watch, control, errors }) => {
       <div className="mb-4 relative">
         <label className="block text-sm font-bold mb-2">기한</label>
         <Controller
-          name="deadline"
+          name="date_end"
           control={control}
           defaultValue={undefined}
           rules={{ required: '기한을 선택해주세요.' }}
@@ -108,9 +108,9 @@ const FormFields: React.FC<Props> = ({ register, watch, control, errors }) => {
                   📅
                 </button>
               </div>
-              {errors.deadline && (
+              {errors.date_end && (
                 <p className="text-sm text-red-500 mt-1">
-                  {errors.deadline.message}
+                  {errors.date_end.message}
                 </p>
               )}
 
