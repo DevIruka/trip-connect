@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import TopicSelector from './_components/TopicSelector';
 import FormFields from './_components/FormFields';
 import LocationModal from './_components/LocationModal';
 import { useFormState } from './_hooks/useFormState';
+import { SubmitHandler } from 'react-hook-form';
+import { FormInputs } from './_types/form';
 
 
 const QuestionFormPage: React.FC = () => {
@@ -19,7 +21,7 @@ const QuestionFormPage: React.FC = () => {
         handleLocationSelect,
       } = useFormState();
 
-  const onSubmit = (data: any) => {
+  const onSubmit:SubmitHandler<FormInputs> = (data) => {
     console.log('Form Data:', data);
     alert('질문이 등록되었습니다!');
     reset();
