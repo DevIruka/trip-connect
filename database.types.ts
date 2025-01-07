@@ -9,18 +9,200 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      contend: {
+      bookmarks: {
         Row: {
           created_at: string
           id: number
+          request_id: string | null
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           id?: number
+          request_id?: string | null
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           id?: number
+          request_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookmarks_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "request_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookmarks_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      request_posts: {
+        Row: {
+          category: string
+          content: string | null
+          country_city: string
+          created_at: string
+          credit: number
+          date_end: string
+          id: string
+          img_url: Json | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          category: string
+          content?: string | null
+          country_city: string
+          created_at?: string
+          credit: number
+          date_end: string
+          id?: string
+          img_url?: Json | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          category?: string
+          content?: string | null
+          country_city?: string
+          created_at?: string
+          credit?: number
+          date_end?: string
+          id?: string
+          img_url?: Json | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "request_post_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      response_posts: {
+        Row: {
+          content_html: string | null
+          created_at: string
+          id: number
+          request_id: string | null
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          content_html?: string | null
+          created_at?: string
+          id?: number
+          request_id?: string | null
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          content_html?: string | null
+          created_at?: string
+          id?: number
+          request_id?: string | null
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "response_post_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "request_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "response_post_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          created_at: string
+          id: number
+          rating: number | null
+          response_id: number | null
+          review: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          rating?: number | null
+          response_id?: number | null
+          review?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          rating?: number | null
+          response_id?: number | null
+          review?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "response_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          authenticated: boolean
+          country: string
+          created_at: string
+          credit: number
+          id: string
+          nickname: string
+          profile_img: string | null
+        }
+        Insert: {
+          authenticated: boolean
+          country: string
+          created_at?: string
+          credit: number
+          id: string
+          nickname: string
+          profile_img?: string | null
+        }
+        Update: {
+          authenticated?: boolean
+          country?: string
+          created_at?: string
+          credit?: number
+          id?: string
+          nickname?: string
+          profile_img?: string | null
         }
         Relationships: []
       }
