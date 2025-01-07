@@ -1,12 +1,7 @@
 'use client'; // 유저로부터 인풋을 받으므로, CSR이 적합하다고 생각하였습니다.
 import { useForm } from 'react-hook-form';
-
-type Signup = {
-  email: string;
-  password: string;
-  passwordCheck: string;
-  nickname: string;
-};
+import { signup } from '../login/action';
+import { Signup } from '@/types/auth/authType';
 
 const SignupPage = () => {
   const {
@@ -15,8 +10,8 @@ const SignupPage = () => {
     formState: { errors },
     watch,
   } = useForm<Signup>({ mode: 'onChange' });
-  const onSubmit = (data: Signup) => {
-    console.log(data);
+  const onSubmit = async (data: Signup) => {
+    await signup(data);
   };
   const password = watch('password');
   return (
