@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { UseFormRegister } from 'react-hook-form';
+import { FormInputs } from '../_types/form';
 
 type Props = {
   topics: string[];
-  register: UseFormRegister<any>;
+  register: UseFormRegister<FormInputs>;
 };
 
 const TopicSelector: React.FC<Props> = ({ topics, register }) => {

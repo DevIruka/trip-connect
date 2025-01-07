@@ -2,16 +2,16 @@
 
 import React from 'react';
 import { UseFormRegister, UseFormWatch } from 'react-hook-form';
+import { FormInputs } from '../_types/form';
 
 type Props = {
-  register: UseFormRegister<any>;
-  watch: UseFormWatch<any>;
+  register: UseFormRegister<FormInputs>;
+  watch: UseFormWatch<FormInputs>;
 };
 
 const FormFields: React.FC<Props> = ({ register, watch }) => {
   return (
     <>
-      {/* 제목 입력 */}
       <div className="mb-4">
         <label className="block text-sm font-bold mb-2">제목</label>
         <input
@@ -22,7 +22,6 @@ const FormFields: React.FC<Props> = ({ register, watch }) => {
         />
       </div>
 
-      {/* 크레딧 입력 */}
       <div className="mb-4">
         <label className="block text-sm font-bold mb-2">크레딧</label>
         <input
@@ -33,7 +32,6 @@ const FormFields: React.FC<Props> = ({ register, watch }) => {
         />
       </div>
 
-      {/* 내용 입력 */}
       <div className="mb-4">
         <label className="block text-sm font-bold mb-2">내용</label>
         <textarea
@@ -46,7 +44,6 @@ const FormFields: React.FC<Props> = ({ register, watch }) => {
         </p>
       </div>
 
-      {/* 기한 선택 */}
       <div className="mb-4">
         <label className="block text-sm font-bold mb-2">기한</label>
         <input
