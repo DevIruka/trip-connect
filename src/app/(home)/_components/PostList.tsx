@@ -23,7 +23,7 @@ const PostList = () => {
   }, []);
 
   return (
-    <div className="w-[800px] overflow-y-scroll">
+    <div className="inner overflow-y-scroll">
       <header className="grid">
         <div className="flex gap-4">
           <button onClick={() => setFilter('All')}>홈</button>
