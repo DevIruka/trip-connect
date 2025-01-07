@@ -14,7 +14,9 @@ type Props = {
 };
 
 const MenuBar: React.FC<Props> = ({ editor }) => {
-  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -32,10 +34,10 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
   if (!editor) return null;
 
   return (
-    <div className="mb-4 flex gap-2 overflow-x-auto scrollbar-hide">
+    <div className="mb-4 flex gap-2 overflow-x-auto items-center scrollbar-hide">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`px-4 py-2 border rounded ${
+        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
           editor.isActive('bold') ? 'bg-blue-200' : 'bg-gray-100'
         } hover:bg-gray-200`}
         title="Bold"
@@ -45,7 +47,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`px-4 py-2 border rounded ${
+        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
           editor.isActive('italic') ? 'bg-blue-200' : 'bg-gray-100'
         } hover:bg-gray-200`}
         title="Italic"
@@ -53,21 +55,10 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
         <FaItalic />
       </button>
 
-      <button
-        onClick={() => editor.chain().focus().setHeading({ level: 1 }).run()}
-        className={`px-4 py-2 border rounded ${
-          editor.isActive('heading', { level: 1 })
-            ? 'bg-blue-200'
-            : 'bg-gray-100'
-        } hover:bg-gray-200`}
-      >
-        H1
-      </button>
-
       {/* Align Left */}
       <button
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
-        className={`px-4 py-2 border rounded ${
+        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
           editor.isActive({ textAlign: 'left' }) ? 'bg-blue-200' : 'bg-gray-100'
         } hover:bg-gray-200`}
         title="Align-Left"
@@ -78,7 +69,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       {/* Align Center */}
       <button
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
-        className={`px-4 py-2 border rounded ${
+        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
           editor.isActive({ textAlign: 'center' })
             ? 'bg-blue-200'
             : 'bg-gray-100'
@@ -91,7 +82,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       {/* Align Right */}
       <button
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
-        className={`px-4 py-2 border rounded ${
+        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
           editor.isActive({ textAlign: 'right' })
             ? 'bg-blue-200'
             : 'bg-gray-100'
@@ -102,10 +93,10 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       </button>
 
       {/* Insert Image */}
-      <div>
+      <div className="relative">
         <label
           htmlFor="image-upload"
-          className="cursor-pointer p-2 border rounded bg-gray-100 hover:bg-gray-200"
+          className="cursor-pointer flex items-center justify-center p-1 border rounded bg-gray-100 hover:bg-gray-200 w-full h-full"
           title="Upload Image"
         >
           <FaImage />
@@ -115,7 +106,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
           id="image-upload"
           accept="image/*"
           onChange={handleImageUpload}
-          className="hidden"
+          className="absolute inset-0 opacity-0 cursor-pointer"
         />
       </div>
 
@@ -127,9 +118,10 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
             editor.chain().focus().setFontFamily(font).run();
           }
         }}
-        className="px-4 py-2 border rounded bg-gray-100 hover:bg-gray-200"
+        className="p-1 w-24 border rounded bg-gray-100 hover:bg-gray-200"
+        title="Font Family"
       >
-        Font Family
+        Font
       </button>
     </div>
   );
