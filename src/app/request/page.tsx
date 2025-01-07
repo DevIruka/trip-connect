@@ -14,6 +14,7 @@ const RequestPage: React.FC = () => {
     handleSubmit,
     watch,
     reset,
+    control,
     isModalOpen,
     selectedLocation,
     toggleModal,
@@ -53,7 +54,7 @@ const RequestPage: React.FC = () => {
           />
         </div>
 
-        <FormFields register={register} watch={watch} />
+        <FormFields register={register} watch={watch} control={control}/>
 
         <button
           type="submit"

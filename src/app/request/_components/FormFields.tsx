@@ -1,15 +1,24 @@
 'use client';
 
 import React from 'react';
-import { UseFormRegister, UseFormWatch } from 'react-hook-form';
+import {
+  Control,
+  Controller,
+  UseFormRegister,
+  UseFormWatch,
+} from 'react-hook-form';
 import { FormInputs } from '../_types/form';
+import { format } from 'date-fns';
+import { DayPicker } from 'react-day-picker';
+import 'react-day-picker/dist/style.css';
 
 type Props = {
   register: UseFormRegister<FormInputs>;
   watch: UseFormWatch<FormInputs>;
+  control: Control<FormInputs>;
 };
 
-const FormFields: React.FC<Props> = ({ register, watch }) => {
+const FormFields: React.FC<Props> = ({ register, watch, control }) => {
   return (
     <>
       <div className="mb-4">
@@ -46,10 +55,25 @@ const FormFields: React.FC<Props> = ({ register, watch }) => {
 
       <div className="mb-4">
         <label className="block text-sm font-bold mb-2">기한</label>
-        <input
-          type="date"
-          {...register('deadline', { required: true })}
-          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none"
+        <Controller
+          name="deadline"
+          control={control}
+          defaultValue={undefined}
+          render={({ field }) => (
+            <div>
+              <DayPicker
+                mode="single"
+                selected={field.value} 
+                onSelect={field.onChange} 
+                className="rounded border border-gray-300 p-2"
+              />
+              {field.value && (
+                <p className="mt-2 text-sm text-gray-500">
+                  선택된 날짜: {format(new Date(field.value), 'yyyy-MM-dd')}
+                </p>
+              )}
+            </div>
+          )}
         />
       </div>
     </>
