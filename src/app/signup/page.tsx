@@ -1,7 +1,8 @@
 'use client'; // 유저로부터 인풋을 받으므로, CSR이 적합하다고 생각하였습니다.
 import { useForm } from 'react-hook-form';
 import { signup } from '../login/action';
-import { Signup } from '@/types/auth/authType';
+import { Signup } from '@/types/authType';
+
 
 const SignupPage = () => {
   const {
