@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { login } from './action';
 import { LoginInputs } from '../common/types/authType';
+import { createClient } from '@/utils/supabase/client';
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
@@ -14,10 +15,41 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginInputs>({ mode: 'onChange' });
+
   const onSubmit = async (data: LoginInputs) => {
     console.log(data);
-    await login(data)
+    await login(data);
   };
+
+  const googleLogin = async () => {
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_URL}/auth/callback`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    });
+    console.log(data, error);
+  };
+
+  const kakaoLogin = async () => {
+    const supabase = createClient();
+    await supabase.auth.signInWithOAuth({
+      provider: 'kakao',
+      options: {
+        redirectTo: `${process.env.NEXT_PUBLIC_URL}/auth/callback`,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    });
+  };
+
   return (
     <>
       <div className="flex flex-col items-center justify-center">
@@ -68,6 +100,7 @@ const LoginPage = () => {
             width={50}
             height={50}
             className="m-2"
+            onClick={googleLogin}
           />
           <Image
             src={kakaoImage}
@@ -75,6 +108,7 @@ const LoginPage = () => {
             width={50}
             height={50}
             className="m-2"
+            onClick={kakaoLogin}
           />
         </div>
       </div>
