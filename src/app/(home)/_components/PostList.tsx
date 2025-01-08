@@ -109,7 +109,13 @@ const PostList = () => {
         const bookmarked = isPostBookmarked(post.id); // 개별 게시물의 북마크 상태 확인
 
         return (
-          <div key={post.id} className="border-2 flex">
+          <div
+            onClick={() => {
+              location.href = `/post/${post.id}`;
+            }}
+            key={post.id}
+            className="border-2 flex cursor-pointer"
+          >
             <div>
               <div>{post.title}</div>
               <div>{post.content}</div>
@@ -117,11 +123,21 @@ const PostList = () => {
               <div>{post.date_end}</div>
             </div>
             {bookmarked ? (
-              <button onClick={() => deleteBookmarkMutation.mutate(post.id)}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteBookmarkMutation.mutate(post.id);
+                }}
+              >
                 북마크 해제
               </button>
             ) : (
-              <button onClick={() => addBookmarkMutation.mutate(post.id)}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addBookmarkMutation.mutate(post.id);
+                }}
+              >
                 북마크
               </button>
             )}
