@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
+  console.log("API 요청 URL:", request.url); // 디버깅 로그
+
   const query = searchParams.get("query");
 
   if (!query) {
@@ -19,8 +21,13 @@ export async function GET(request: Request) {
 
     const data = await response.json();
     return NextResponse.json(data);
-  } catch (error: any) {
-    console.error("Google Places API 호출 오류:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("Google Places API 호출 오류:", error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    } else {
+      console.error("예상치 못한 오류:", error);
+      return NextResponse.json({ error: "알 수 없는 오류가 발생했습니다." }, { status: 500 });
+    }
   }
 }

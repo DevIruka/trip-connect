@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 type Props = {
   isOpen: boolean;
@@ -28,7 +27,7 @@ const GoogleModal: React.FC<Props> = ({ isOpen, onClose, onSelectLocation }) => 
 
   const handleSearch = async () => {
     try {
-      const response = await fetch(`/api/google-places?query=${encodeURIComponent(search)}`);
+      const response = await fetch(`/response/_api?query=${encodeURIComponent(search)}`);
       const data = await response.json();
 
       if (data.results) {
