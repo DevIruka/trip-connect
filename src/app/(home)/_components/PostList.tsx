@@ -1,10 +1,10 @@
 'use client';
 
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-const PAGE_SIZE = 3;
+const PAGE_SIZE = 7;
 
 const PostList = () => {
   const [filter, setFilter] = useState('All'); // 현재 필터 상태 (기본: All)
@@ -38,6 +38,36 @@ const PostList = () => {
 
   const allPosts = data?.pages.flatMap((page) => page.data) || [];
 
+  //북마크
+  const { data: bookmarks, error } = useQuery({
+    queryKey: ['bookmarks'],
+    queryFn: async () => {
+      const { data: bookmarks } = await supabase
+        .from('bookmarks')
+        .select('*')
+        .eq('user_id', '0fdbd37c-1b2e-4142-b50b-e593f13487a7');
+      return bookmarks;
+    },
+  });
+  const isPostBookmarked = (postId: string) =>
+    bookmarks?.some((bookmark) => bookmark.request_id === postId);
+
+  const handleAddBookmark = async (id: string) => {
+    await supabase
+      .from('bookmarks')
+      .insert([
+        { user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7', request_id: id },
+      ])
+      .select();
+  };
+
+  const handleDeleteBookMark = async (id: string) => {
+    await supabase.from('bookmarks').delete().match({
+      user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7',
+      request_id: id,
+    });
+  };
+
   return (
     <div className="inner overflow-y-scroll">
       <header className="grid">
@@ -61,12 +91,23 @@ const PostList = () => {
       </div>
       <button>나라 선택하기</button>
       {allPosts?.map((post) => {
+        const bookmarked = isPostBookmarked(post.id); // 개별 게시물의 북마크 상태 확인
+
         return (
-          <div key={post.id} className="border-2">
-            <div>{post.title}</div>
-            <div>{post.content}</div>
-            <div>{post.credit}</div>
-            <div>{post.date_end}</div>
+          <div key={post.id} className="border-2 flex">
+            <div>
+              <div>{post.title}</div>
+              <div>{post.content}</div>
+              <div>{post.credit}</div>
+              <div>{post.date_end}</div>
+            </div>
+            {bookmarked ? (
+              <button onClick={() => handleAddBookmark(post.id)}>북마크</button>
+            ) : (
+              <button onClick={() => handleDeleteBookMark(post.id)}>
+                북마크 해제
+              </button>
+            )}
           </div>
         );
       })}
@@ -81,9 +122,6 @@ const PostList = () => {
           {isFetchingNextPage ? '로딩 중...' : '더보기'}
         </button>
       )}
-
-      {/* 모든 데이터를 불러왔을 경우 */}
-      {!hasNextPage && <p>모든 데이터를 불러왔습니다.</p>}
     </div>
   );
 };
