@@ -8,36 +8,65 @@ import Link from 'next/link';
 const MyPage = () => {
   const [user, setUser] = useState({
     nickname: '',
+    introduction: '',
     profileImg: '',
     credit: '',
     country: '',
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+  const [nicknameInput, setNicknameInput] = useState(''); // 닉네임 입력 상태
+  const [bioInput, setBioInput] = useState(''); // 자기소개 입력 상태
+
+  const userId = 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac'; // 테스트용 유저 ID
+
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const userId = 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac'; // 테스트용 유저 ID
-
       const { data, error } = await supabase
         .from('users')
-        .select('nickname, profile_img, credit,country')
+        .select('nickname, introduction, profile_img, credit, country')
         .eq('id', userId)
         .single();
 
       if (error) {
-        console.error('에러남:', error);
+        console.error('Error fetching user profile:', error);
         return;
       }
 
       setUser({
         nickname: data.nickname || '닉네임 없음',
+        introduction: data.introduction || '아직 자기소개가 없습니다.',
         profileImg: data.profile_img || '',
         credit: data.credit || '0',
         country: data.country || '국가 정보 없음',
       });
+
+      setNicknameInput(data.nickname || '');
+      setBioInput(data.introduction || '');
     };
 
     fetchUserProfile();
   }, []);
+
+  const handleSaveProfile = async () => {
+    const { error } = await supabase
+      .from('users')
+      .update({ nickname: nicknameInput, introduction: bioInput })
+      .eq('id', userId);
+
+    if (error) {
+      console.error('Error updating profile:', error);
+      return;
+    }
+
+    setUser((prev) => ({
+      ...prev,
+      nickname: nicknameInput,
+      introduction: bioInput,
+    }));
+
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="px-5">
@@ -60,7 +89,7 @@ const MyPage = () => {
               />
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500">
-                {/* Null일 경우 기본 프로필 */}
+                {/* 기본 이미지 표시 */}
               </div>
             )}
           </div>
@@ -72,10 +101,16 @@ const MyPage = () => {
         </div>
 
         {/* 프로필 설정 버튼 */}
-        <button className="flex justify-center items-center gap-[10px] px-[12px] py-[3px] rounded-full bg-[#E5E5EC] text-sm text-gray-600">
+        <button
+          className="flex justify-center items-center gap-[10px] px-[12px] py-[3px] rounded-full bg-[#E5E5EC] text-sm text-gray-600"
+          onClick={() => setIsModalOpen(true)} // 모달 열기
+        >
           프로필 설정
         </button>
       </div>
+
+      {/* 자기소개 */}
+      <div className="mb-4 text-gray-700">{user.introduction}</div>
 
       {/* 크레딧 섹션 */}
       <div className="flex flex-col items-center mb-7">
@@ -117,10 +152,14 @@ const MyPage = () => {
             <span>내가 구매한 게시물</span>
             <span>▶</span>
           </button>
-          <button className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full">
+
+          <Link
+            href="/mypage/bookmark"
+            className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+          >
             <span>북마크한 게시물</span>
             <span>▶</span>
-          </button>
+          </Link>
         </div>
       </div>
 
@@ -133,6 +172,63 @@ const MyPage = () => {
           언어 설정
         </button>
       </div>
+
+      {/* 모달 */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white w-[90%] max-w-[400px] rounded-lg p-6 relative">
+            <button
+              className="absolute top-4 right-4 text-black text-xl"
+              onClick={() => setIsModalOpen(false)} // 모달 닫기
+            >
+              ×
+            </button>
+            <h2 className="text-center text-xl font-bold mb-4">프로필 편집</h2>
+            <div className="flex flex-col items-center mb-4">
+              {/* 프로필 이미지 */}
+              <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden mb-4">
+                {user.profileImg ? (
+                  <Image
+                    src={user.profileImg}
+                    alt="Profile"
+                    width={96}
+                    height={96}
+                    className="object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-gray-500">
+                    이미지
+                  </div>
+                )}
+              </div>
+              {/* 닉네임 */}
+              <label className="w-full text-sm font-bold mb-2">닉네임</label>
+              <input
+                type="text"
+                value={nicknameInput}
+                onChange={(e) => setNicknameInput(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded mb-4"
+                placeholder="닉네임 입력"
+              />
+              {/* 자기소개 */}
+              <label className="w-full text-sm font-bold mb-2">자기 소개</label>
+              <textarea
+                className="w-full p-2 border border-gray-300 rounded h-24"
+                value={bioInput}
+                onChange={(e) => setBioInput(e.target.value)}
+                placeholder="지금까지 다녀온 여행 경험을 추가해 주세요"
+              ></textarea>
+              {/* 저장하기 버튼 */}
+              <button
+                className="w-full p-2 bg-black text-white rounded mt-4"
+                onClick={handleSaveProfile}
+              >
+                저장하기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
