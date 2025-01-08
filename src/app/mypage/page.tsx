@@ -71,9 +71,9 @@ const MyPage = () => {
           </div>
         </div>
 
-        {/* 계정 설정 버튼 */}
+        {/* 프로필 설정 버튼 */}
         <button className="flex justify-center items-center gap-[10px] px-[12px] py-[3px] rounded-full bg-[#E5E5EC] text-sm text-gray-600">
-          계정설정
+          프로필 설정
         </button>
       </div>
 
@@ -91,9 +91,12 @@ const MyPage = () => {
       {/* 셀러 인증 */}
       <div className="mb-6">
         <h2 className="text-lg font-bold mb-4">셀러 인증</h2>
-        <button className="flex flex-col items-start gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full">
+        <Link
+          href="/mypage/seller-auth"
+          className="flex flex-col items-start gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+        >
           인증하러 가기
-        </button>
+        </Link>
       </div>
 
       <div className="h-[1px] w-full bg-[#D9D9D9] mb-7"></div>
@@ -109,7 +112,7 @@ const MyPage = () => {
             <span>내가 작성한 게시물</span>
             <span>▶</span>
           </Link>
-          
+
           <button className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full">
             <span>내가 구매한 게시물</span>
             <span>▶</span>
