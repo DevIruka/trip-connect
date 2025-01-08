@@ -23,17 +23,16 @@ const LoginPage = () => {
 
   const googleLogin = async () => {
     const supabase = createClient();
-    const { data, error } = await supabase.auth.signInWithOAuth({
+    await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_URL}/auth/callback`,
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
         },
       },
     });
-    console.log(data, error);
   };
 
   const kakaoLogin = async () => {
@@ -41,7 +40,7 @@ const LoginPage = () => {
     await supabase.auth.signInWithOAuth({
       provider: 'kakao',
       options: {
-        redirectTo: `${process.env.NEXT_PUBLIC_URL}/auth/callback`,
+        redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
