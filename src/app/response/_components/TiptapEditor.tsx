@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Editor, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import MenuBar from './MenuBar';
@@ -10,17 +10,20 @@ import Image from '@tiptap/extension-image';
 import FontFamily from '@tiptap/extension-font-family';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useParams, useRouter } from 'next/navigation';
+import MapNode from './MapNode';
 
 const TiptapEditor: React.FC = () => {
   const [title, setTitle] = useState('');
   const router = useRouter();
   const { requestId } = useParams(); // 나중에 디테일 페이지에서 request_id 가져오기
+
   const editor: Editor | null = useEditor({
     extensions: [
       StarterKit,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Image,
       FontFamily,
+      MapNode,
     ],
     content: '<p>답변을 작성하세요...</p>',
   });
@@ -42,7 +45,7 @@ const TiptapEditor: React.FC = () => {
       const { error } = await supabase.from('response_posts').insert([
         {
           user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7', // 이거 나중에 전역에서 가져올거임
-          request_id: '115e646f-39ab-4e1d-bda7-d9660f1fbb97', // 요청 ID
+          request_id: '904ad9c0-a94e-40ee-b33c-0b5baadc5590', // 요청 ID
           title,
           content_html: contentHtml,
         },

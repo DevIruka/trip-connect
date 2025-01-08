@@ -5,15 +5,13 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 import Image from 'next/image';
 
 type Post = {
-  id: string;
-  title: string;
   content: string;
+  title: string;
   country_city: string;
   category: string;
-  img_url: string[]; // JSONB 형식이므로 배열로 처리
 };
 
-const WrittenPosts = () => {
+const BookmarkPage = () => {
   const [user, setUser] = useState({
     profileImg: '',
   });
@@ -21,7 +19,7 @@ const WrittenPosts = () => {
   const [writtenCount, setWrittenCount] = useState(0);
   const [purchasedCount, setPurchasedCount] = useState(0);
   const [bookmarkCount, setBookmarkCount] = useState(0);
-  const [activeTab, setActiveTab] = useState('written'); // 현재 활성화된 탭
+  const [activeTab, setActiveTab] = useState('bookmark'); // 현재 활성화된 탭
   const userId = 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac'; // 테스트용 유저 ID
 
   useEffect(() => {
@@ -45,33 +43,29 @@ const WrittenPosts = () => {
     const fetchWrittenPosts = async () => {
       const { data, error } = await supabase
         .from('request_posts')
-        .select('id, title, content, country_city, category, img_url')
+        .select('content, title, country_city, category')
         .eq('user_id', userId);
 
       if (error) {
         console.error('Error fetching written posts:', error);
       } else {
         setPosts(data || []);
-        setWrittenCount(data?.length || 0); // 작성글 개수 업데이트
       }
     };
 
     const fetchCounts = async () => {
-      // 작성글 개수
       const { count: writtenCount } = await supabase
         .from('request_posts')
         .select('*', { count: 'exact' })
         .eq('user_id', userId);
 
-      // 구매한 글 개수
       const { count: purchasedCount } = await supabase
         .from('purchased_posts') // 예시 테이블 이름
         .select('*', { count: 'exact' })
         .eq('user_id', userId);
 
-      // 북마크 글 개수
       const { count: bookmarkCount } = await supabase
-        .from('bookmarks')
+        .from('bookmarked_posts') // 예시 테이블 이름
         .select('*', { count: 'exact' })
         .eq('user_id', userId);
 
@@ -116,7 +110,7 @@ const WrittenPosts = () => {
 
         {/* 카테고리 섹션 */}
         <div className="flex justify-between items-center border-b border-[#D9D9D9] mb-6">
-          {/* 작성글 */}
+          {/* 작성한 글 */}
           <button
             className={`relative pb-2 border-b-2 ${
               activeTab === 'written'
@@ -131,7 +125,7 @@ const WrittenPosts = () => {
             </span>
           </button>
 
-          {/* 구매글 */}
+          {/* 구매한 글 */}
           <button
             className={`relative pb-2 border-b-2 ${
               activeTab === 'purchased'
@@ -183,18 +177,7 @@ const WrittenPosts = () => {
                 <h2 className="text-md font-bold mb-1">{post.title}</h2>
                 <p className="text-sm text-gray-500">{post.content}</p>
               </div>
-              {/* 첫 번째 이미지만 표시 */}
-              {post.img_url && post.img_url.length > 0 && (
-                <div className="w-20 h-20 ml-4 overflow-hidden rounded">
-                  <Image
-                    src={post.img_url[0]} // 첫 번째 이미지
-                    alt="Post Thumbnail"
-                    width={80}
-                    height={80}
-                    className="object-cover"
-                  />
-                </div>
-              )}
+              <button className="text-gray-500">⋮</button>
             </div>
           ))
         ) : (
@@ -207,4 +190,4 @@ const WrittenPosts = () => {
   );
 };
 
-export default WrittenPosts;
+export default BookmarkPage;
