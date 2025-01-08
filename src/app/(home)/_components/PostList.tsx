@@ -1,42 +1,42 @@
 'use client';
 
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
-const PAGE_SIZE = 5;
-
-const fetchPosts = async ({ pageParam = 0 }) => {
-  const from = pageParam * PAGE_SIZE; // 시작 인덱스
-  const to = from + PAGE_SIZE - 1; // 끝 인덱스
-
-  const { data: request_posts, error } = await supabase
-    .from('request_posts')
-    .select('*')
-    .range(from, to);
-  if (error) throw new Error(error.message);
-  return {
-    data: request_posts,
-    nextPage: request_posts.length === PAGE_SIZE ? pageParam + 1 : null, // 다음 페이지가 있는지 여부
-  };
-};
+const PAGE_SIZE = 3;
 
 const PostList = () => {
   const [filter, setFilter] = useState('All'); // 현재 필터 상태 (기본: All)
 
+  const fetchPosts = async ({ pageParam = 0 }) => {
+    const from = pageParam * PAGE_SIZE; // 시작 인덱스
+    const to = from + PAGE_SIZE - 1; // 끝 인덱스
+
+    const query = supabase.from('request_posts').select('*').range(from, to);
+
+    // 필터가 'All'이 아니면 eq 조건 추가
+    if (filter !== 'All') {
+      query.eq('category', filter);
+    }
+
+    const { data: request_posts, error } = await query;
+
+    if (error) throw new Error(error.message);
+    return {
+      data: request_posts,
+      nextPage: request_posts.length === PAGE_SIZE ? pageParam + 1 : null, // 다음 페이지가 있는지 여부
+    };
+  };
+
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ['request_posts'],
+      queryKey: ['request_posts', filter],
       queryFn: fetchPosts,
       getNextPageParam: (lastPage) => lastPage.nextPage, // 다음 페이지 번호 반환
     });
 
   const allPosts = data?.pages.flatMap((page) => page.data) || [];
-
-  const filteredPosts =
-    filter === 'All'
-      ? allPosts
-      : allPosts?.filter((post) => post.category === filter);
 
   return (
     <div className="inner overflow-y-scroll">
@@ -51,10 +51,16 @@ const PostList = () => {
         </div>
       </header>
       <div>
-        <button>질문하기</button>
+        <button
+          onClick={() => {
+            location.href = `/request`;
+          }}
+        >
+          질문하기
+        </button>
       </div>
       <button>나라 선택하기</button>
-      {filteredPosts?.map((post) => {
+      {allPosts?.map((post) => {
         return (
           <div key={post.id} className="border-2">
             <div>{post.title}</div>
