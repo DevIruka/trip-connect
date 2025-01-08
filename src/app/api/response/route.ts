@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  console.log("API 요청 URL:", request.url); // 디버깅 로그
 
   const query = searchParams.get("query");
 
