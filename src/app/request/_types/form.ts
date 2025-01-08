@@ -1,10 +1,10 @@
 export type FormInputs = {
-  location: string;
-  topic: string;
+  country_city: string;
+  category: string;
   title: string;
   credit: number;
   content: string;
-  deadline: Date | undefined;
+  date_end: Date | undefined;
 };
 
 export type Continent = {

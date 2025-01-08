@@ -1,35 +1,45 @@
 'use client';
 
 import React, { useState } from 'react';
-import { UseFormRegister } from 'react-hook-form';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 import { FormInputs } from '../_types/form';
 
 type Props = {
   topics: string[];
   additionalTopics: string[];
   register: UseFormRegister<FormInputs>;
+  setValue: UseFormSetValue<FormInputs>;
 };
 
 const TopicSelector: React.FC<Props> = ({
   topics,
   additionalTopics,
   register,
+  setValue,
 }) => {
   const [isMoreVisible, setIsMoreVisible] = useState(false);
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   const toggleMore = () => {
     setIsMoreVisible((prev) => !prev);
   };
 
+  const handleTopicClick = (topic: string) => {
+    setSelectedTopic(topic);
+    setValue('category', topic);
+  };
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap gap-3">
         {topics.map((topic) => (
           <button
             key={topic}
             type="button"
-            className="px-3 py-2 border rounded text-gray-600 bg-gray-100 hover:bg-gray-200"
-            {...register('topic')}
+            className={`px-4 py-2 border rounded ${
+              selectedTopic === topic ? 'bg-blue-200' : 'bg-gray-100'
+            } hover:bg-gray-200`}
+            onClick={() => handleTopicClick(topic)}
           >
             {topic}
           </button>
@@ -53,20 +63,24 @@ const TopicSelector: React.FC<Props> = ({
 
       {/* 더보기 클릭 시 나타나는 하위 리스트 */}
       {isMoreVisible && (
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-3 mt-2">
           {additionalTopics.map((subTopic) => (
             <button
               key={subTopic}
               type="button"
-              className="px-3 py-2 border rounded text-gray-600 bg-gray-100 hover:bg-gray-200"
-              {...register('topic')}
+              onClick={() => handleTopicClick(subTopic)}
+              className={`px-4 py-2 border rounded ${
+                selectedTopic === subTopic
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              }`}
+              {...register('category')}
             >
               {subTopic}
             </button>
           ))}
         </div>
       )}
-
     </div>
   );
 };
