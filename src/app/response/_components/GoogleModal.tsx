@@ -1,39 +1,58 @@
 'use client';
 
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import React, { useState } from 'react';
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  onSelectLocation: (location: {
-    name: string;
-    address: string;
-    lat: number;
-    lng: number;
-  }) => void;
+  onSelectLocation: (location: { name: string; address: string; lat: number; lng: number }) => void;
 };
 
-const GoogleModal: React.FC<Props> = ({
-  isOpen,
-  onClose,
-  onSelectLocation,
-}) => {
+type GooglePlaceResult = {
+  place_id: string;
+  name: string;
+  formatted_address: string;
+  geometry: {
+    location: {
+      lat: number;
+      lng: number;
+    };
+  };
+};
+
+const GoogleModal: React.FC<Props> = ({ isOpen, onClose, onSelectLocation }) => {
   const [search, setSearch] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState<{
-    name: string;
-    address: string;
-    lat: number;
-    lng: number;
-  } | null>(null);
+  const [results, setResults] = useState<GooglePlaceResult[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<GooglePlaceResult | null>(null);
 
   const handleSearch = async () => {
-    //검색 기능이 들어가야 함
+    try {
+      const response = await fetch(`/api/google-places?query=${encodeURIComponent(search)}`);
+      const data = await response.json();
+
+      if (data.results) {
+        setResults(data.results);
+      } else {
+        console.error('검색 결과가 없습니다:', data.error || 'Unknown error');
+      }
+    } catch (error) {
+      console.error('검색 실패:', error);
+    }
+  };
+
+  const handleLocationSelect = (place: GooglePlaceResult) => {
+    setSelectedLocation(place);
   };
 
   const handleLocationClick = () => {
     if (selectedLocation) {
-      onSelectLocation(selectedLocation);
+      onSelectLocation({
+        name: selectedLocation.name,
+        address: selectedLocation.formatted_address,
+        lat: selectedLocation.geometry.location.lat,
+        lng: selectedLocation.geometry.location.lng,
+      });
       onClose();
     }
   };
@@ -45,9 +64,7 @@ const GoogleModal: React.FC<Props> = ({
       <div className="bg-white w-4/5 max-w-lg rounded p-4 shadow-lg">
         <div className="flex justify-between items-center">
           <h2 className="text-lg font-bold">Google Maps</h2>
-          <button onClick={onClose} className="text-red-500">
-            X
-          </button>
+          <button onClick={onClose} className="text-red-500">X</button>
         </div>
         <input
           type="text"
@@ -56,31 +73,20 @@ const GoogleModal: React.FC<Props> = ({
           placeholder="주소나 장소 검색"
           className="w-full p-2 border rounded my-4"
         />
-        <button
-          onClick={handleSearch}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
+        <button onClick={handleSearch} className="bg-blue-500 text-white px-4 py-2 rounded">
           검색
         </button>
         <div className="h-64 my-4">
-          <LoadScript
-            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-          >
-            <GoogleMap
-              mapContainerStyle={{ width: '100%', height: '100%' }}
-              center={{ lat: 37.7749, lng: -122.4194 }}
-              zoom={10}
+          {results.map((place) => (
+            <div
+              key={place.place_id}
+              className="p-2 border-b cursor-pointer hover:bg-gray-100"
+              onClick={() => handleLocationSelect(place)}
             >
-              {selectedLocation && (
-                <Marker
-                  position={{
-                    lat: selectedLocation.lat,
-                    lng: selectedLocation.lng,
-                  }}
-                />
-              )}
-            </GoogleMap>
-          </LoadScript>
+              <p className="font-bold">{place.name}</p>
+              <p className="text-sm text-gray-600">{place.formatted_address}</p>
+            </div>
+          ))}
         </div>
         <button
           onClick={handleLocationClick}
@@ -92,4 +98,5 @@ const GoogleModal: React.FC<Props> = ({
     </div>
   );
 };
+
 export default GoogleModal;

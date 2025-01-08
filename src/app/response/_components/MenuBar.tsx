@@ -20,21 +20,15 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
   const handleInsertMap = (location: { name: string; address: string; lat: number; lng: number }) => {
     if (editor) {
-      editor.chain().focus().insertContent(`
-        <div>
-          <div>
-            <iframe
-              src="https://www.google.com/maps?q=${location.lat},${location.lng}&output=embed"
-              width="100%"
-              height="250"
-              frameborder="0"
-              allowfullscreen
-            ></iframe>
-          </div>
-          <p><strong>${location.name}</strong></p>
-          <p>${location.address}</p>
-        </div>
-      `).run();
+      editor.chain().focus().insertContent({
+        type: "map",
+        attrs: {
+          lat: location.lat,
+          lng: location.lng,
+          name: location.name,
+          address: location.address,
+        },
+      }).run();
     }
   };
 
@@ -137,7 +131,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       <button
         onClick={() => setIsModalOpen(true)}
         className="p-2 border rounded bg-gray-100 hover:bg-gray-200"
-        title="Insert Google Map"
+        title="Insert-Google-Map"
       >
         <FaMapMarkerAlt />
       </button>

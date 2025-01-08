@@ -10,17 +10,20 @@ import Image from '@tiptap/extension-image';
 import FontFamily from '@tiptap/extension-font-family';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useParams, useRouter } from 'next/navigation';
+import MapNode from './MapNode';
 
 const TiptapEditor: React.FC = () => {
   const [title, setTitle] = useState('');
   const router = useRouter();
   const { requestId } = useParams(); // 나중에 디테일 페이지에서 request_id 가져오기
+
   const editor: Editor | null = useEditor({
     extensions: [
       StarterKit,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Image,
       FontFamily,
+      MapNode,
     ],
     content: '<p>답변을 작성하세요...</p>',
   });
@@ -59,6 +62,24 @@ const TiptapEditor: React.FC = () => {
       alert('답변 등록 중 오류가 발생했습니다.');
     }
   };
+
+  // const handleInsertMap = (location: { name: string; address: string; lat: number; lng: number }) => {
+  //   if (editor) {
+  //     editor
+  //       .chain()
+  //       .focus()
+  //       .insertContent({
+  //         type: "map",
+  //         attrs: {
+  //           lat: location.lat,
+  //           lng: location.lng,
+  //           name: location.name,
+  //           address: location.address,
+  //         },
+  //       })
+  //       .run();
+  //   }
+  // };
 
   return (
     <div className="p-4">
