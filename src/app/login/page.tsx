@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { login } from './action';
-import { LoginInputs } from '../common/types/authType';
 import { createClient } from '@/utils/supabase/client';
+import { LoginInputs } from '@/types/authType';
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
