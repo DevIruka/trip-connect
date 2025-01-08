@@ -7,7 +7,7 @@ const logoImage = '/images/logo.png';
 const Header = () => {
   return (
     <>
-      <div className="flex flex-row fixed top-0 bg-white z-50 w-[375px] justify-between">
+      <div className="flex flex-row sticky top-0 bg-white z-50 w-full justify-between">
         <Image
           src={logoImage}
           alt="트립 커넥트 로고."

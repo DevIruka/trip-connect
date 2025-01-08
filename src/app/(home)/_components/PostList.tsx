@@ -16,18 +16,11 @@ const PostList = () => {
   const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7'; // 고정된 사용자 ID
   const queryClient = useQueryClient();
 
-  const [filter, setFilter] = useState('All'); // 현재 필터 상태 (기본: All)
-
   const fetchPosts = async ({ pageParam = 0 }) => {
     const from = pageParam * PAGE_SIZE; // 시작 인덱스
     const to = from + PAGE_SIZE - 1; // 끝 인덱스
 
     const query = supabase.from('request_posts').select('*').range(from, to);
-
-    // 필터가 'All'이 아니면 eq 조건 추가
-    if (filter !== 'All') {
-      query.eq('category', filter);
-    }
 
     const { data: request_posts, error } = await query;
 
@@ -40,12 +33,26 @@ const PostList = () => {
 
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ['request_posts', filter],
+      queryKey: ['request_posts'],
       queryFn: fetchPosts,
       getNextPageParam: (lastPage) => lastPage.nextPage, // 다음 페이지 번호 반환
     });
 
   const allPosts = data?.pages.flatMap((page) => page.data) || [];
+
+  const [filteredPosts, setFiltered] = useState();
+  const handleFilterPosts = (category) => {
+    if (category === 'All') {
+      setFiltered(allPosts);
+    } else {
+      setFiltered(
+        allPosts.filter((post) => {
+          const parsedCategory = JSON.parse(post.category); // 문자열을 배열로 변환
+          return parsedCategory.includes(category); // 배열에 category 포함 여부 확인
+        }),
+      );
+    }
+  };
 
   //북마크
   const { data: bookmarks } = useQuery({
@@ -87,12 +94,14 @@ const PostList = () => {
     <div className="inner overflow-y-scroll">
       <header className="grid">
         <div className="flex gap-4">
-          <button onClick={() => setFilter('All')}>홈</button>
-          <button onClick={() => setFilter('맛집')}>맛집</button>
-          <button onClick={() => setFilter('장소')}>장소</button>
-          <button onClick={() => setFilter('숙소')}>숙소</button>
-          <button onClick={() => setFilter('이벤트')}>이벤트</button>
-          <button onClick={() => setFilter('일정/경비')}>일정/경비</button>
+          <button onClick={() => handleFilterPosts('All')}>홈</button>
+          <button onClick={() => handleFilterPosts('맛집')}>맛집</button>
+          <button onClick={() => handleFilterPosts('장소')}>장소</button>
+          <button onClick={() => handleFilterPosts('숙소')}>숙소</button>
+          <button onClick={() => handleFilterPosts('이벤트')}>이벤트</button>
+          <button onClick={() => handleFilterPosts('일정/경비')}>
+            일정/경비
+          </button>
         </div>
       </header>
       <div>
@@ -105,7 +114,7 @@ const PostList = () => {
         </button>
       </div>
       <button>나라 선택하기</button>
-      {allPosts?.map((post) => {
+      {(filteredPosts || allPosts)?.map((post) => {
         const bookmarked = isPostBookmarked(post.id); // 개별 게시물의 북마크 상태 확인
 
         return (
