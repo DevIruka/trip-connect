@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/core';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FaAlignCenter,
   FaAlignLeft,
@@ -7,13 +7,31 @@ import {
   FaBold,
   FaImage,
   FaItalic,
+  FaMapMarkerAlt,
 } from 'react-icons/fa';
+import GoogleModal from './GoogleModal';
 
 type Props = {
   editor: Editor | null;
 };
 
 const MenuBar: React.FC<Props> = ({ editor }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleInsertMap = (location: { name: string; address: string; lat: number; lng: number }) => {
+    if (editor) {
+      editor.chain().focus().insertContent({
+        type: "map",
+        attrs: {
+          lat: location.lat,
+          lng: location.lng,
+          name: location.name,
+          address: location.address,
+        },
+      }).run();
+    }
+  };
+
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -109,6 +127,20 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
           className="absolute inset-0 opacity-0 cursor-pointer"
         />
       </div>
+
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="p-2 border rounded bg-gray-100 hover:bg-gray-200"
+        title="Insert-Google-Map"
+      >
+        <FaMapMarkerAlt />
+      </button>
+
+      <GoogleModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSelectLocation={handleInsertMap}
+      />
 
       {/* Font Family */}
       <button
