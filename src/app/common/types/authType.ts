@@ -4,3 +4,8 @@ export type Signup = {
   passwordCheck: string;
   nickname: string;
 };
+
+export type LoginInputs = {
+  email: string;
+  password: string;
+};

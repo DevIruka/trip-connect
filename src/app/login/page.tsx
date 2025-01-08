@@ -1,11 +1,12 @@
 'use client'; // 유저로부터 인풋을 받으므로, CSR이 적합하다고 생각하였습니다.
 
+import Image from 'next/image';
 import { useForm } from 'react-hook-form';
+import { login } from './action';
+import { LoginInputs } from '../common/types/authType';
 
-type LoginInputs = {
-  email: string;
-  password: string;
-};
+const googleImage = '/images/google.png';
+const kakaoImage = '/images/kakao.png';
 
 const LoginPage = () => {
   const {
@@ -13,8 +14,9 @@ const LoginPage = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginInputs>({ mode: 'onChange' });
-  const onSubmit = (data: LoginInputs) => {
+  const onSubmit = async (data: LoginInputs) => {
     console.log(data);
+    await login(data)
   };
   return (
     <>
@@ -59,6 +61,22 @@ const LoginPage = () => {
             로그인
           </button>
         </form>
+        <div className="flex flex-row">
+          <Image
+            src={googleImage}
+            alt="google icon"
+            width={50}
+            height={50}
+            className="m-2"
+          />
+          <Image
+            src={kakaoImage}
+            alt="kakao icon"
+            width={50}
+            height={50}
+            className="m-2"
+          />
+        </div>
       </div>
     </>
   );
