@@ -166,17 +166,18 @@ const MyPage = () => {
       <div className="h-[1px] w-full bg-[#D9D9D9] mb-7"></div>
 
       {/* 설정 */}
-      <div>
-        <h2 className="text-lg font-bold mb-4">설정</h2>
-        <button className="flex flex-col items-start gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full">
-          언어 설정
-        </button>
-      </div>
+      <Link
+        href="/mypage/language"
+        className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+      >
+        <span>언어 설정</span>
+        <span>▶</span>
+      </Link>
 
       {/* 모달 */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white w-[90%] max-w-[400px] rounded-lg p-6 relative">
+          <div className="bg-white w-[90%] max-w-[350px] rounded-lg p-6 relative">
             <button
               className="absolute top-4 right-4 text-black text-xl"
               onClick={() => setIsModalOpen(false)} // 모달 닫기
