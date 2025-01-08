@@ -26,9 +26,17 @@ const GoogleModal: React.FC<Props> = ({ isOpen, onClose, onSelectLocation }) => 
   const [selectedLocation, setSelectedLocation] = useState<GooglePlaceResult | null>(null);
 
   const handleSearch = async () => {
+    const apiUrl = `/api/response?query=${encodeURIComponent(search)}`;
+    console.log('API 요청 URL:', apiUrl); // 디버깅용 로그
+
     try {
-      const response = await fetch(`/response/_api?query=${encodeURIComponent(search)}`);
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log('API 응답 데이터:', data); // 디버깅용 로그
 
       if (data.results) {
         setResults(data.results);

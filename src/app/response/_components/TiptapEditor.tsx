@@ -45,7 +45,7 @@ const TiptapEditor: React.FC = () => {
       const { error } = await supabase.from('response_posts').insert([
         {
           user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7', // 이거 나중에 전역에서 가져올거임
-          request_id: '115e646f-39ab-4e1d-bda7-d9660f1fbb97', // 요청 ID
+          request_id: '904ad9c0-a94e-40ee-b33c-0b5baadc5590', // 요청 ID
           title,
           content_html: contentHtml,
         },
@@ -62,24 +62,6 @@ const TiptapEditor: React.FC = () => {
       alert('답변 등록 중 오류가 발생했습니다.');
     }
   };
-
-  // const handleInsertMap = (location: { name: string; address: string; lat: number; lng: number }) => {
-  //   if (editor) {
-  //     editor
-  //       .chain()
-  //       .focus()
-  //       .insertContent({
-  //         type: "map",
-  //         attrs: {
-  //           lat: location.lat,
-  //           lng: location.lng,
-  //           name: location.name,
-  //           address: location.address,
-  //         },
-  //       })
-  //       .run();
-  //   }
-  // };
 
   return (
     <div className="p-4">
