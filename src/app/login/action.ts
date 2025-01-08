@@ -26,7 +26,7 @@ export async function login(data: LoginInputs) {
 export async function signup(data: Signup) {
   const { email, nickname, password } = data;
   const supabase = await createClient();
-  const { data: signUpData, error } = await supabase.auth.signUp({
+  const { error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -35,8 +35,6 @@ export async function signup(data: Signup) {
       },
     },
   });
-
-  console.log(signUpData);
 
   if (error) {
     console.log(error);

@@ -11,7 +11,7 @@ type Post = {
   category: string;
 };
 
-const WrittenPosts = () => {
+const BookmarkPage = () => {
   const [user, setUser] = useState({
     profileImg: '',
   });
@@ -19,7 +19,8 @@ const WrittenPosts = () => {
   const [writtenCount, setWrittenCount] = useState(0);
   const [purchasedCount, setPurchasedCount] = useState(0);
   const [bookmarkCount, setBookmarkCount] = useState(0);
-  const [activeTab, setActiveTab] = useState('written'); // 현재 활성화된 탭
+  const [loading, setLoading] = useState(true);
+
   const userId = 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac'; // 테스트용 유저 ID
 
   useEffect(() => {
@@ -51,33 +52,41 @@ const WrittenPosts = () => {
       } else {
         setPosts(data || []);
       }
+      setLoading(false);
     };
 
     const fetchCounts = async () => {
-      const { count: writtenCount } = await supabase
+      // 작성한 글 개수
+      const { count: writtenCount, error: writtenError } = await supabase
         .from('request_posts')
         .select('*', { count: 'exact' })
         .eq('user_id', userId);
 
-      const { count: purchasedCount } = await supabase
+      // 구매한 글 개수
+      const { count: purchasedCount, error: purchasedError } = await supabase
         .from('purchased_posts') // 예시 테이블 이름
         .select('*', { count: 'exact' })
         .eq('user_id', userId);
 
-      const { count: bookmarkCount } = await supabase
+      // 북마크 글 개수
+      const { count: bookmarkCount, error: bookmarkError } = await supabase
         .from('bookmarked_posts') // 예시 테이블 이름
         .select('*', { count: 'exact' })
         .eq('user_id', userId);
 
-      setWrittenCount(writtenCount || 0);
-      setPurchasedCount(purchasedCount || 0);
-      setBookmarkCount(bookmarkCount || 0);
+      if (!writtenError) setWrittenCount(writtenCount || 0);
+      if (!purchasedError) setPurchasedCount(purchasedCount || 0);
+      if (!bookmarkError) setBookmarkCount(bookmarkCount || 0);
     };
 
     fetchUserProfile();
     fetchWrittenPosts();
     fetchCounts();
   }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="px-5">
@@ -115,14 +124,7 @@ const WrittenPosts = () => {
       {/* 카테고리 섹션 */}
       <div className="flex justify-between items-center border-b border-[#D9D9D9] mb-6">
         {/* 작성한 글 */}
-        <button
-          className={`relative pb-2 border-b-2 ${
-            activeTab === 'written'
-              ? 'border-black font-bold'
-              : 'border-transparent'
-          } hover:border-black`}
-          onClick={() => setActiveTab('written')}
-        >
+        <button className="relative pb-2 border-b-2 border-transparent hover:border-black">
           <span className="text-lg font-bold text-black">작성글</span>
           <span className="text-[#808080] font-[Pretendard] text-[16px] font-semibold leading-[1.4] ml-1">
             {writtenCount}
@@ -130,29 +132,15 @@ const WrittenPosts = () => {
         </button>
 
         {/* 구매한 글 */}
-        <button
-          className={`relative pb-2 border-b-2 ${
-            activeTab === 'purchased'
-              ? 'border-black font-bold'
-              : 'border-transparent'
-          } hover:border-black`}
-          onClick={() => setActiveTab('purchased')}
-        >
-          <span className="text-lg font-bold text-black">구매글</span>
+        <button className="relative pb-2 border-b-2 border-transparent hover:border-black">
+          <span className="text-lg font-bold text-black">답변글</span>
           <span className="text-[#808080] font-[Pretendard] text-[16px] font-semibold leading-[1.4] ml-1">
             {purchasedCount}
           </span>
         </button>
 
         {/* 북마크 */}
-        <button
-          className={`relative pb-2 border-b-2 ${
-            activeTab === 'bookmark'
-              ? 'border-black font-bold'
-              : 'border-transparent'
-          } hover:border-black`}
-          onClick={() => setActiveTab('bookmark')}
-        >
+        <button className="relative pb-2 border-b-2 border-transparent hover:border-black">
           <span className="text-lg font-bold text-black">북마크</span>
           <span className="text-[#808080] font-[Pretendard] text-[16px] font-semibold leading-[1.4] ml-1">
             {bookmarkCount}
@@ -191,4 +179,4 @@ const WrittenPosts = () => {
   );
 };
 
-export default WrittenPosts;
+export default BookmarkPage;
