@@ -1,12 +1,21 @@
 'use client';
 
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useState } from 'react';
+import { addBookmark, deleteBookmark } from '../_hooks/useBookmark';
 
 const PAGE_SIZE = 7;
 
 const PostList = () => {
+  const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7'; // 고정된 사용자 ID
+  const queryClient = useQueryClient();
+
   const [filter, setFilter] = useState('All'); // 현재 필터 상태 (기본: All)
 
   const fetchPosts = async ({ pageParam = 0 }) => {
@@ -39,34 +48,40 @@ const PostList = () => {
   const allPosts = data?.pages.flatMap((page) => page.data) || [];
 
   //북마크
-  const { data: bookmarks, error } = useQuery({
-    queryKey: ['bookmarks'],
+  const { data: bookmarks } = useQuery({
+    queryKey: ['bookmarks', userId],
     queryFn: async () => {
       const { data: bookmarks } = await supabase
         .from('bookmarks')
         .select('*')
-        .eq('user_id', '0fdbd37c-1b2e-4142-b50b-e593f13487a7');
+        .eq('user_id', userId);
       return bookmarks;
     },
+    initialData: [],
   });
   const isPostBookmarked = (postId: string) =>
     bookmarks?.some((bookmark) => bookmark.request_id === postId);
 
-  const handleAddBookmark = async (id: string) => {
-    await supabase
-      .from('bookmarks')
-      .insert([
-        { user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7', request_id: id },
-      ])
-      .select();
-  };
+  // 북마크 추가 Mutation
+  const addBookmarkMutation = useMutation({
+    mutationFn: (postId: string) => addBookmark(postId, userId),
+    onSuccess: (_, postId) => {
+      queryClient.setQueryData(['bookmarks', userId], (old: any) => [
+        ...(old || []),
+        { request_id: postId },
+      ]);
+    },
+  });
 
-  const handleDeleteBookMark = async (id: string) => {
-    await supabase.from('bookmarks').delete().match({
-      user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7',
-      request_id: id,
-    });
-  };
+  // 북마크 삭제 Mutation
+  const deleteBookmarkMutation = useMutation({
+    mutationFn: (postId: string) => deleteBookmark(postId, userId),
+    onSuccess: (_, postId) => {
+      queryClient.setQueryData(['bookmarks', userId], (old: any) =>
+        (old || []).filter((bookmark: any) => bookmark.request_id !== postId),
+      );
+    },
+  });
 
   return (
     <div className="inner overflow-y-scroll">
@@ -102,10 +117,12 @@ const PostList = () => {
               <div>{post.date_end}</div>
             </div>
             {bookmarked ? (
-              <button onClick={() => handleAddBookmark(post.id)}>북마크</button>
-            ) : (
-              <button onClick={() => handleDeleteBookMark(post.id)}>
+              <button onClick={() => deleteBookmarkMutation.mutate(post.id)}>
                 북마크 해제
+              </button>
+            ) : (
+              <button onClick={() => addBookmarkMutation.mutate(post.id)}>
+                북마크
               </button>
             )}
           </div>
