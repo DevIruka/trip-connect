@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { GrSearch } from 'react-icons/gr';
-import { LuBell } from 'react-icons/lu';
 import { FiUser } from 'react-icons/fi';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -10,7 +9,9 @@ const logoImage = '/images/logo.png';
 
 const Header = () => {
   const pathname = usePathname();
-  return pathname === '/login' || pathname === '/signup' ? (
+  return pathname === '/login' ||
+    pathname === '/signup' ||
+    pathname === '/search' ? (
     <></>
   ) : (
     <>
@@ -24,8 +25,9 @@ const Header = () => {
           />
         </Link>
         <div className="flex flex-row items-center justify-center gap-4 mr-2">
-          <LuBell size={25} />
-          <GrSearch size={25} />
+          <Link href="search">
+            <GrSearch size={25} />
+          </Link>
           <Link href="mypage">
             <FiUser size={25} />
           </Link>
