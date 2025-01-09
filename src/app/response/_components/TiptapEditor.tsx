@@ -35,7 +35,7 @@ const TiptapEditor: React.FC<Props> = ({
       StarterKit,
       TextStyle,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      Image.configure({ allowBase64: true }),
+      Image,
       FontFamily,
       MapNode,
     ],
