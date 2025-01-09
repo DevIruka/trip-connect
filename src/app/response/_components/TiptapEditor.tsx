@@ -8,59 +8,39 @@ import EditorContent from './EditorContent';
 import TextAlign from '@tiptap/extension-text-align';
 import Image from '@tiptap/extension-image';
 import FontFamily from '@tiptap/extension-font-family';
-import { supabase } from '@/utils/supabase/supabaseClient';
-import { useParams, useRouter } from 'next/navigation';
 import MapNode from './MapNode';
+import TextStyle from '@tiptap/extension-text-style';
 
-const TiptapEditor: React.FC = () => {
-  const [title, setTitle] = useState('');
-  const router = useRouter();
-  const { requestId } = useParams(); // 나중에 디테일 페이지에서 request_id 가져오기
+type Props = {
+  title: string;
+  contentHtml: string;
+  onChange: (content: { title: string; contentHtml: string }) => void;
+  onSubmit: () => void;
+  mode: 'create' | 'edit';
+};
+
+const TiptapEditor: React.FC<Props> = ({ title, contentHtml, onChange, onSubmit, mode }) => {
+  const [localTitle, setLocalTitle] = useState(title);
 
   const editor: Editor | null = useEditor({
     extensions: [
       StarterKit,
+      TextStyle,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
       Image,
       FontFamily,
       MapNode,
     ],
-    content: '<p>답변을 작성하세요...</p>',
+    content: contentHtml,
+    onUpdate: ({ editor }) => {
+      const contentHtml = editor.getHTML();
+      onChange({ title: localTitle, contentHtml });
+    },
   });
 
-  const handleSubmit = async () => {
-    if (!editor) {
-      alert('에디터가 초기화되지 않았습니다.');
-      return;
-    }
-
-    if (!title.trim()) {
-      alert('제목을 입력해주세요.');
-      return;
-    }
-
-    const contentHtml = editor.getHTML(); // 에디터 컨텐츠 가져오기
-
-    try {
-      const { error } = await supabase.from('response_posts').insert([
-        {
-          user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7', // 이거 나중에 전역에서 가져올거임
-          request_id: '904ad9c0-a94e-40ee-b33c-0b5baadc5590', // 요청 ID
-          title,
-          content_html: contentHtml,
-        },
-      ]);
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      alert('답변이 성공적으로 등록되었습니다!');
-      router.push(`/request/${requestId}`); // 원래 게시글로 리다이렉트 해줌줌
-    } catch (error) {
-      console.error('오류 발생:', error);
-      alert('답변 등록 중 오류가 발생했습니다.');
-    }
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLocalTitle(e.target.value);
+    onChange({ title: e.target.value, contentHtml });
   };
 
   return (
@@ -70,8 +50,8 @@ const TiptapEditor: React.FC = () => {
         <label className="block text-sm font-bold mb-2">제목</label>
         <input
           type="text"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          value={localTitle}
+          onChange={handleTitleChange}
           placeholder="답변 제목을 입력하세요"
           className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none"
         />
@@ -83,10 +63,10 @@ const TiptapEditor: React.FC = () => {
       </div>
 
       <button
-        onClick={handleSubmit}
-        className="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
+        onClick={onSubmit}
+        className={`w-full text-white px-4 py-2 rounded ${mode === 'create' ? 'bg-blue-500' : 'bg-green-500'} hover:opacity-90`}
       >
-        등록
+        {mode === 'create' ? '등록' : '수정'}
       </button>
     </div>
   );
