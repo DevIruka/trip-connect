@@ -1,11 +1,13 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useForm } from 'react-hook-form';
 import { IoIosArrowBack } from 'react-icons/io';
 import { IoMdCloseCircle } from 'react-icons/io';
+import { getUser } from '../login/action';
 
 const SearchPage = () => {
   const router = useRouter();
