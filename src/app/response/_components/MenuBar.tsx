@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/core';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   FaAlignCenter,
   FaAlignLeft,
@@ -7,13 +7,41 @@ import {
   FaBold,
   FaImage,
   FaItalic,
+  FaMapMarkerAlt,
 } from 'react-icons/fa';
+import GoogleModal from './GoogleModal';
 
 type Props = {
   editor: Editor | null;
 };
 
 const MenuBar: React.FC<Props> = ({ editor }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [fontSize, setFontSize] = useState('16px');
+
+  const handleInsertMap = (location: {
+    name: string;
+    address: string;
+    lat: number;
+    lng: number;
+  }) => {
+    if (editor) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: 'map',
+          attrs: {
+            lat: location.lat,
+            lng: location.lng,
+            name: location.name,
+            address: location.address,
+          },
+        })
+        .run();
+    }
+  };
+
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -28,6 +56,13 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       };
 
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleFontSizeChange = (size: string) => {
+    setFontSize(size);
+    if (editor) {
+      editor.chain().focus().setMark('textStyle', { fontSize: size }).run();
     }
   };
 
@@ -110,19 +145,35 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
         />
       </div>
 
-      {/* Font Family */}
       <button
-        onClick={() => {
-          const font = prompt('Enter font family (e.g., Arial)');
-          if (font) {
-            editor.chain().focus().setFontFamily(font).run();
-          }
-        }}
-        className="p-1 w-24 border rounded bg-gray-100 hover:bg-gray-200"
-        title="Font Family"
+        onClick={() => setIsModalOpen(true)}
+        className="p-2 border rounded bg-gray-100 hover:bg-gray-200"
+        title="Insert-Google-Map"
       >
-        Font
+        <FaMapMarkerAlt />
       </button>
+
+      <GoogleModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSelectLocation={handleInsertMap}
+      />
+
+      <div className="relative">
+        <select
+          value={fontSize}
+          onChange={(e) => handleFontSizeChange(e.target.value)}
+          className="border rounded p-1 bg-gray-100 hover:bg-gray-200"
+          title="Set Text Size"
+        >
+          <option value="12px">12px</option>
+          <option value="14px">14px</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+          <option value="24px">24px</option>
+        </select>
+      </div>
     </div>
   );
 };
