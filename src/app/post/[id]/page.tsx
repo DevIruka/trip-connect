@@ -27,6 +27,21 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
     },
   });
 
+  // response 게시물 데이터 가져오기
+  const { data: response_posts } = useQuery({
+    queryKey: ['response_posts'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('response_posts')
+        .select('*')
+        .eq('request_id', postId);
+      if (error) throw new Error(error.message);
+      return data;
+    },
+  });
+
+  console.log(response_posts);
+
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   // 북마크 상태 확인
@@ -64,7 +79,6 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러 발생: {error.message}</div>;
 
-  console.log(post);
   return (
     <div className="inner">
       <button onClick={() => router.back()}>뒤로가기</button>
@@ -77,7 +91,11 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
             <button onClick={handleAddBookmark}>북마크</button>
           )}
           <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-          <p>{post.category}</p>
+          <p>
+            {JSON.parse(post.category).map((item) => (
+              <>{item}</>
+            ))}
+          </p>
           <p className="text-sm text-gray-500 mb-4">
             여행 지역: {post.country_city}
           </p>
@@ -86,7 +104,6 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
           </p>
           <p className="text-sm text-gray-500 mb-4">크레딧: {post.credit}</p>
           <p className="mb-4">{post.content}</p>
-          <button>번역하기</button>
           <button>답변하기</button>
         </div>
       ) : (
