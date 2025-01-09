@@ -16,10 +16,18 @@ type Props = {
   contentHtml: string;
   onChange: (content: { title: string; contentHtml: string }) => void;
   onSubmit: () => void;
+  onDelete?: () => void;
   mode: 'create' | 'edit';
 };
 
-const TiptapEditor: React.FC<Props> = ({ title, contentHtml, onChange, onSubmit, mode }) => {
+const TiptapEditor: React.FC<Props> = ({
+  title,
+  contentHtml,
+  onChange,
+  onSubmit,
+  onDelete,
+  mode,
+}) => {
   const [localTitle, setLocalTitle] = useState(title);
 
   const editor: Editor | null = useEditor({
@@ -43,6 +51,15 @@ const TiptapEditor: React.FC<Props> = ({ title, contentHtml, onChange, onSubmit,
     onChange({ title: e.target.value, contentHtml });
   };
 
+  const handleDelete = () => {
+    if (onDelete) {
+      const confirmDelete = confirm('정말로 삭제하시겠습니까?');
+      if (confirmDelete) {
+        onDelete();
+      }
+    }
+  };
+
   return (
     <div className="p-4">
       {/* 제목 입력 */}
@@ -62,12 +79,25 @@ const TiptapEditor: React.FC<Props> = ({ title, contentHtml, onChange, onSubmit,
         <EditorContent editor={editor} />
       </div>
 
-      <button
-        onClick={onSubmit}
-        className={`w-full text-white px-4 py-2 rounded ${mode === 'create' ? 'bg-blue-500' : 'bg-green-500'} hover:opacity-90`}
-      >
-        {mode === 'create' ? '등록' : '수정'}
-      </button>
+      <div className="flex gap-4">
+        <button
+          onClick={onSubmit}
+          className={`w-full text-white px-4 py-2 rounded ${
+            mode === 'create' ? 'bg-blue-500' : 'bg-green-500'
+          } hover:opacity-90`}
+        >
+          {mode === 'create' ? '등록' : '수정'}
+        </button>
+
+        {mode === 'edit' && (
+          <button
+            onClick={handleDelete}
+            className="w-full bg-red-500 text-white px-4 py-2 rounded hover:opacity-90"
+          >
+            삭제
+          </button>
+        )}
+      </div>
     </div>
   );
 };

@@ -47,6 +47,26 @@ const EditResponsePage: React.FC = () => {
     }
   };
 
+  const handleDelete = async () => {
+    const confirmDelete = confirm('정말로 삭제하시겠습니까?');
+    if (!confirmDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from('response_posts')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      alert('삭제되었습니다.');
+      router.push('/request');
+    } catch (error) {
+      console.error('Error:', error);
+      alert('삭제 중 문제가 발생했습니다.');
+    }
+  };
+
   useEffect(() => {
     fetchResponseDetails();
   }, [id]);
@@ -59,6 +79,7 @@ const EditResponsePage: React.FC = () => {
       contentHtml={data.contentHtml}
       onChange={(updatedData) => setData(updatedData)}
       onSubmit={handleSubmit}
+      onDelete={handleDelete}
       mode="edit"
     />
   );

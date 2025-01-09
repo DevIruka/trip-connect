@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { supabase } from "@/utils/supabase/supabaseClient";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -28,5 +29,27 @@ export async function GET(request: Request) {
       console.error("예상치 못한 오류:", error);
       return NextResponse.json({ error: "알 수 없는 오류가 발생했습니다." }, { status: 500 });
     }
+  }
+}
+
+export async function DELETE(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  if (!id) {
+    return NextResponse.json({ error: "삭제할 ID가 제공되지 않았습니다." }, { status: 400 });
+  }
+
+  try {
+    const { error } = await supabase.from('response_posts').delete().eq('id', id);
+
+    if (error) {
+      throw error;
+    }
+
+    return NextResponse.json({ message: "삭제되었습니다." });
+  } catch (error: any) {
+    console.error("삭제 오류:", error.message);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
