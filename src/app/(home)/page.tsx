@@ -1,10 +1,11 @@
-import PostList from './_components/PostList';
+import HomeLayout from './layout';
+import CategoryPage from './[id]/page';
 
 const Homepage = () => {
   return (
-    <>
-      <PostList />
-    </>
+    <HomeLayout>
+      <CategoryPage params={{ id: 'All' }} />
+    </HomeLayout>
   );
 };
 
