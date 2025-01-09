@@ -18,15 +18,24 @@ const TopicSelector: React.FC<Props> = ({
   setValue,
 }) => {
   const [isMoreVisible, setIsMoreVisible] = useState(false);
-  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
   const toggleMore = () => {
     setIsMoreVisible((prev) => !prev);
   };
 
   const handleTopicClick = (topic: string) => {
-    setSelectedTopic(topic);
-    setValue('category', topic);
+    if (selectedTopics.includes(topic)) {
+      // 이미 선택된 경우, 배열에서 제거
+      const updatedTopics = selectedTopics.filter((t) => t !== topic);
+      setSelectedTopics(updatedTopics);
+      setValue('category', updatedTopics); // 배열 업데이트
+    } else {
+      // 선택되지 않은 경우, 배열에 추가
+      const updatedTopics = [...selectedTopics, topic];
+      setSelectedTopics(updatedTopics);
+      setValue('category', updatedTopics); // 배열 업데이트
+    }
   };
 
   return (
@@ -37,7 +46,7 @@ const TopicSelector: React.FC<Props> = ({
             key={topic}
             type="button"
             className={`px-4 py-2 border rounded ${
-              selectedTopic === topic ? 'bg-blue-200' : 'bg-gray-100'
+              selectedTopics.includes(topic) ? 'bg-blue-200' : 'bg-gray-100'
             } hover:bg-gray-200`}
             onClick={() => handleTopicClick(topic)}
           >
@@ -70,7 +79,7 @@ const TopicSelector: React.FC<Props> = ({
               type="button"
               onClick={() => handleTopicClick(subTopic)}
               className={`px-4 py-2 border rounded ${
-                selectedTopic === subTopic
+                selectedTopics.includes(subTopic)
                   ? 'bg-blue-500 text-white'
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
