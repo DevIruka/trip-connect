@@ -9,15 +9,12 @@ const ResponsePage: React.FC = () => {
   const router = useRouter();
   const [data, setData] = useState({ title: '', contentHtml: '' });
 
-  const request_id = '4076a3ed-2372-41ff-a6b7-b422bdabf0d0';
-  const user_id = 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac';
-
   const handleSubmit = async () => {
     try {
       const { error } = await supabase.from('response_posts').insert([
         {
           user_id: 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac',
-          request_id: '4076a3ed-2372-41ff-a6b7-b422bdabf0d0',
+          request_id: '9c774f8a-8c6e-4899-9e9e-f5b0e06fe4b8',
           title: data.title,
           content_html: data.contentHtml,
         },

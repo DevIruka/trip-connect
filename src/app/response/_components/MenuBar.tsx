@@ -10,6 +10,7 @@ import {
   FaMapMarkerAlt,
 } from 'react-icons/fa';
 import GoogleModal from './GoogleModal';
+import { supabase } from '@/utils/supabase/supabaseClient';
 
 type Props = {
   editor: Editor | null;
@@ -42,20 +43,32 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
     }
   };
 
-  const handleImageUpload = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-
-      reader.onload = () => {
-        if (reader.result && typeof reader.result === 'string') {
-          editor!.chain().focus().setImage({ src: reader.result }).run();
+    if (file && editor) {
+      try {
+        const fileName = `${Date.now()}-${file.name}`;
+        const { data, error } = await supabase.storage
+          .from('editor') // 버킷 이름
+          .upload(`${fileName}`, file);
+  
+        if (error) {
+          console.error('Error uploading image:', error.message);
+          alert('이미지 업로드에 실패했습니다.');
+          return;
         }
-      };
-
-      reader.readAsDataURL(file);
+  
+        const { data: publicUrlData } = supabase.storage
+          .from('editor')
+          .getPublicUrl(`${fileName}`);
+  
+        const imageUrl = publicUrlData.publicUrl;
+  
+        editor.chain().focus().setImage({ src: imageUrl }).run(); // 이미지 삽입
+      } catch (err) {
+        console.error('Unexpected error:', err);
+        alert('이미지 업로드 중 문제가 발생했습니다.');
+      } 
     }
   };
 

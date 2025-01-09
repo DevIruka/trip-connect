@@ -1,6 +1,6 @@
 export type FormInputs = {
   country_city: string;
-  category: string;
+  category: string[];
   title: string;
   credit: number;
   content: string;
