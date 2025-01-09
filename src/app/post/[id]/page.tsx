@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import UseTranslate from '../ai';
 
 const DetailPage = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -40,9 +41,17 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
     },
   });
 
-  console.log(response_posts);
-
   const [isBookmarked, setIsBookmarked] = useState(false);
+
+  const { data: translated } = useQuery({
+    queryKey: ['translated'],
+    queryFn: async () => {
+      const res = await UseTranslate(response_posts![1].content_html);
+      return res;
+    },
+  });
+  let translatedText = translated ? translated.choices[0].message.content : '';
+  console.log(translatedText);
 
   // 북마크 상태 확인
   useEffect(() => {
@@ -78,6 +87,7 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
 
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러 발생: {error.message}</div>;
+  // console.log('response_posts', response_posts[0].content_html);
 
   return (
     <div className="inner">
@@ -92,7 +102,7 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
           )}
           <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
           <p>
-            {JSON.parse(post.category).map((item) => (
+            {post.category?.map((item) => (
               <>{item}</>
             ))}
           </p>
@@ -109,6 +119,14 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
       ) : (
         <div>게시물을 찾을 수 없습니다.</div>
       )}
+
+      {response_posts?.map((post) => (
+        <>
+          ------
+          <div>{post.title}</div>
+          <div>{post.content_html}</div>
+        </>
+      ))}
     </div>
   );
 };
