@@ -5,11 +5,13 @@ import { useForm } from 'react-hook-form';
 import { login } from './action';
 import { createClient } from '@/utils/supabase/client';
 import { LoginInputs } from '@/types/authType';
+import { useRouter } from 'next/navigation';
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
 
 const LoginPage = () => {
+  const route = useRouter();
   const {
     register,
     handleSubmit,
@@ -17,8 +19,8 @@ const LoginPage = () => {
   } = useForm<LoginInputs>({ mode: 'onChange' });
 
   const onSubmit = async (data: LoginInputs) => {
-    console.log(data);
     await login(data);
+    route.push('/');
   };
 
   const googleLogin = async () => {
