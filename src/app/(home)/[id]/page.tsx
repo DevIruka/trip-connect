@@ -17,7 +17,7 @@ const CategoryPage = ({ params }: { params: { id: string } }) => {
 
   return (
     <>
-      <div className="inner overflow-y-scroll">
+      <div className="inner">
         <QnaHeader />
         <Navbar />
         {allPosts?.map((post) => {

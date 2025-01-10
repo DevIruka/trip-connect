@@ -27,7 +27,6 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
     error: transError,
   } = useTranslate(text);
 
-  console.log(translatedText);
   if (isTransLoading) return <div>번역 중...</div>;
   if (transError) return <div>에러 발생: {(error as Error).message}</div>;
 
