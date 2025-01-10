@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+
 const SellerPage = () => {
   return (
     <div className="px-5">
@@ -14,9 +16,11 @@ const SellerPage = () => {
             현재 거주 국가 및 지역을 인증하면 해당하는 국가와 관련된 게시물에
             답변이 필터링 확률이 높아져요
           </p>
-          <button className="w-full py-3 text-center rounded-[4px] bg-[#D9D9D9] text-black font-medium">
-            국가 인증하기
-          </button>
+          <Link href="/mypage/seller-auth/country-verification">
+            <button className="w-full py-3 text-center rounded-[4px] bg-[#D9D9D9] text-black font-medium">
+              국가 인증하기
+            </button>
+          </Link>
         </div>
 
         {/* 본인 인증 */}

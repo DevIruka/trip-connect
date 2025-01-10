@@ -18,54 +18,83 @@ const MyPage = () => {
   const [nicknameInput, setNicknameInput] = useState(''); // 닉네임 입력 상태
   const [bioInput, setBioInput] = useState(''); // 자기소개 입력 상태
 
-  const userId = 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac'; // 테스트용 유저 ID
-
   useEffect(() => {
     const fetchUserProfile = async () => {
-      const { data, error } = await supabase
-        .from('users')
-        .select('nickname, introduction, profile_img, credit, country')
-        .eq('id', userId)
-        .single();
+      try {
+        // 로그인된 사용자 정보 가져오기
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
 
-      if (error) {
-        console.error('Error fetching user profile:', error);
-        return;
+        if (userError || !userData?.user) {
+          console.error('No active session or user not logged in.');
+          return;
+        }
+
+        const userId = userData.user.id;
+
+        // Supabase users 테이블에서 사용자 정보 가져오기
+        const { data: profileData, error: profileError } = await supabase
+          .from('users')
+          .select('nickname, introduction, profile_img, credit, country')
+          .eq('id', userId)
+          .single();
+
+        if (profileError) {
+          console.error('Error fetching user profile:', profileError);
+          return;
+        }
+
+        setUser({
+          nickname: profileData?.nickname || '닉네임 없음',
+          introduction:
+            profileData?.introduction || '아직 자기소개가 없습니다.',
+          profileImg: profileData?.profile_img || '',
+          credit: profileData?.credit || '0',
+          country: profileData?.country || '국가 정보 없음',
+        });
+
+        setNicknameInput(profileData?.nickname || '');
+        setBioInput(profileData?.introduction || '');
+      } catch (error) {
+        console.error('Unexpected error:', error);
       }
-
-      setUser({
-        nickname: data.nickname || '닉네임 없음',
-        introduction: data.introduction || '아직 자기소개가 없습니다.',
-        profileImg: data.profile_img || '',
-        credit: data.credit || '0',
-        country: data.country || '국가 정보 없음',
-      });
-
-      setNicknameInput(data.nickname || '');
-      setBioInput(data.introduction || '');
     };
 
     fetchUserProfile();
   }, []);
 
   const handleSaveProfile = async () => {
-    const { error } = await supabase
-      .from('users')
-      .update({ nickname: nicknameInput, introduction: bioInput })
-      .eq('id', userId);
+    try {
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
 
-    if (error) {
-      console.error('Error updating profile:', error);
-      return;
+      if (userError || !userData?.user) {
+        console.error('No active session or user not logged in.');
+        return;
+      }
+
+      const userId = userData.user.id;
+
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({ nickname: nicknameInput, introduction: bioInput })
+        .eq('id', userId);
+
+      if (updateError) {
+        console.error('Error updating profile:', updateError);
+        return;
+      }
+
+      setUser((prev) => ({
+        ...prev,
+        nickname: nicknameInput,
+        introduction: bioInput,
+      }));
+
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Unexpected error:', error);
     }
-
-    setUser((prev) => ({
-      ...prev,
-      nickname: nicknameInput,
-      introduction: bioInput,
-    }));
-
-    setIsModalOpen(false);
   };
 
   return (
@@ -76,7 +105,6 @@ const MyPage = () => {
 
       {/* 프로필 섹션 */}
       <div className="flex items-center justify-between mb-6">
-        {/* 프로필 이미지 */}
         <div className="flex items-center">
           <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
             {user.profileImg ? (
@@ -103,7 +131,7 @@ const MyPage = () => {
         {/* 프로필 설정 버튼 */}
         <button
           className="flex justify-center items-center gap-[10px] px-[12px] py-[3px] rounded-full bg-[#E5E5EC] text-sm text-gray-600"
-          onClick={() => setIsModalOpen(true)} // 모달 열기
+          onClick={() => setIsModalOpen(true)}
         >
           프로필 설정
         </button>
@@ -141,17 +169,20 @@ const MyPage = () => {
         <h2 className="text-lg font-bold mb-4">활동 내역</h2>
         <div className="space-y-2 mt-2">
           <Link
-            href="/mypage/written"
+            href="/mypage/request"
             className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
           >
             <span>내가 작성한 게시물</span>
             <span>▶</span>
           </Link>
 
-          <button className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full">
-            <span>내가 구매한 게시물</span>
+          <Link
+            href="/mypage/response"
+            className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+          >
+            <span>내가 답변한 게시물</span>
             <span>▶</span>
-          </button>
+          </Link>
 
           <Link
             href="/mypage/bookmark"

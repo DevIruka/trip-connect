@@ -9,9 +9,11 @@ const logoImage = '/images/logo.png';
 
 const Header = () => {
   const pathname = usePathname();
-  return pathname === '/login' ||
-    pathname === '/signup' ||
-    pathname === '/search' ? (
+  const excludedPaths = ['/login', '/signup', '/search'];
+  const shouldHideHeader = excludedPaths.some((path) =>
+    pathname.startsWith(path),
+  );
+  return shouldHideHeader ? (
     <></>
   ) : (
     <>
@@ -25,10 +27,10 @@ const Header = () => {
           />
         </Link>
         <div className="flex flex-row items-center justify-center gap-4 mr-2">
-          <Link href="search">
+          <Link href="/search">
             <GrSearch size={25} />
           </Link>
-          <Link href="mypage">
+          <Link href="/mypage">
             <FiUser size={25} />
           </Link>
         </div>
