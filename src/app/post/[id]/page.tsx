@@ -1,93 +1,38 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/utils/supabase/supabaseClient';
-import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
-import UseTranslate from '../ai';
+import { usePost } from '../_hooks/usePost';
+import { useResPosts } from '../_hooks/useResPosts';
+import { useBookmarkMutations } from '@/app/(home)/_hooks/BookmarkHooks';
+import { useBookmarks } from '@/app/(home)/_hooks/useBookmark';
+import Link from 'next/link';
+import useTranslate from '../_hooks/useTranslate';
+import RenderTranslatedHTML from '../_components/RenderTranslatedHTML';
 
 const DetailPage = ({ params }: { params: { id: string } }) => {
+  const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7';
   const router = useRouter();
   const postId = params.id; // URL에서 전달된 게시물 ID
+  const { data: post, error, isLoading } = usePost(postId);
+  const { data: response_posts } = useResPosts(postId);
+  const { addBookmarkMutation, deleteBookmarkMutation } =
+    useBookmarkMutations(userId);
+  const { isPostBookmarked } = useBookmarks(userId);
+  const bookmarked = isPostBookmarked(postId);
+  const text = response_posts ? response_posts[0]?.content_html : '';
 
-  // 게시물 데이터 가져오기
   const {
-    data: post,
-    error,
-    isLoading,
-  } = useQuery({
-    queryKey: ['post', postId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('request_posts')
-        .select('*')
-        .eq('id', postId)
-        .single(); // 단일 게시물 조회
-      if (error) throw new Error(error.message);
-      return data;
-    },
-  });
+    data: translatedText,
+    isLoading: isTransLoading,
+    error: transError,
+  } = useTranslate(text);
 
-  // response 게시물 데이터 가져오기
-  const { data: response_posts } = useQuery({
-    queryKey: ['response_posts'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('response_posts')
-        .select('*')
-        .eq('request_id', postId);
-      if (error) throw new Error(error.message);
-      return data;
-    },
-  });
-
-  const [isBookmarked, setIsBookmarked] = useState(false);
-
-  const { data: translated } = useQuery({
-    queryKey: ['translated'],
-    queryFn: async () => {
-      const res = await UseTranslate(response_posts![1].content_html);
-      return res;
-    },
-  });
-  let translatedText = translated ? translated.choices[0].message.content : '';
   console.log(translatedText);
-
-  // 북마크 상태 확인
-  useEffect(() => {
-    const fetchBookmarkStatus = async () => {
-      const { data: bookmarks } = await supabase
-        .from('bookmarks')
-        .select('*')
-        .eq('user_id', '0fdbd37c-1b2e-4142-b50b-e593f13487a7') // 유저 ID
-        .eq('request_id', postId);
-      setIsBookmarked(bookmarks?.length > 0);
-    };
-    fetchBookmarkStatus();
-  }, [postId]);
-
-  // 북마크 추가
-  const handleAddBookmark = async () => {
-    const { error } = await supabase
-      .from('bookmarks')
-      .insert([
-        { user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7', request_id: postId },
-      ]);
-    if (!error) setIsBookmarked(true);
-  };
-
-  // 북마크 해제
-  const handleDeleteBookmark = async () => {
-    const { error } = await supabase.from('bookmarks').delete().match({
-      user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7',
-      request_id: postId,
-    });
-    if (!error) setIsBookmarked(false);
-  };
+  if (isTransLoading) return <div>번역 중...</div>;
+  if (transError) return <div>에러 발생: {(error as Error).message}</div>;
 
   if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러 발생: {error.message}</div>;
-  // console.log('response_posts', response_posts[0].content_html);
 
   return (
     <div className="inner">
@@ -95,17 +40,34 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
       {post ? (
         <div>
           <div>닉네임</div>
-          {isBookmarked ? (
-            <button onClick={handleDeleteBookmark}>북마크 해제</button>
+          {bookmarked ? (
+            <button
+              onClick={() => {
+                deleteBookmarkMutation.mutate(postId);
+              }}
+            >
+              북마크 해제
+            </button>
           ) : (
-            <button onClick={handleAddBookmark}>북마크</button>
+            <button
+              onClick={() => {
+                addBookmarkMutation.mutate(postId);
+              }}
+            >
+              북마크
+            </button>
           )}
           <h1 className="text-2xl font-bold mb-4">{post.title}</h1>
-          <p>
-            {post.category?.map((item) => (
-              <>{item}</>
+          <div>
+            {post.category?.map((item, index) => (
+              <div
+                key={`${item}-${index}`}
+                className="bg-gray-500 w-fit rounded-xl px-2"
+              >
+                {item}
+              </div>
             ))}
-          </p>
+          </div>
           <p className="text-sm text-gray-500 mb-4">
             여행 지역: {post.country_city}
           </p>
@@ -114,18 +76,25 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
           </p>
           <p className="text-sm text-gray-500 mb-4">크레딧: {post.credit}</p>
           <p className="mb-4">{post.content}</p>
-          <button>답변하기</button>
+          <Link
+            href={`/response/${postId}`}
+            className="bg-gray-500 w-full rounded-sm px-2"
+          >
+            답변하기
+          </Link>
         </div>
       ) : (
         <div>게시물을 찾을 수 없습니다.</div>
       )}
 
+      {/* 답변 게시물 */}
+      <div>답변 {response_posts?.length}개</div>
       {response_posts?.map((post) => (
-        <>
+        <div key={post.id}>
           ------
           <div>{post.title}</div>
-          <div>{post.content_html}</div>
-        </>
+          <RenderTranslatedHTML data={JSON.parse(translatedText)} />
+        </div>
       ))}
     </div>
   );
