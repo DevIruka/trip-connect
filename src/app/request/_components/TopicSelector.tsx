@@ -1,34 +1,33 @@
 'use client';
 
 import React, { useState } from 'react';
-import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
+import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { FormInputs } from '../_types/form';
 
 type Props = {
   topics: string[];
   additionalTopics: string[];
-  register: UseFormRegister<FormInputs>;
   setValue: UseFormSetValue<FormInputs>;
+  watch: UseFormWatch<FormInputs>;
 };
 
 const TopicSelector: React.FC<Props> = ({
-  topics,
-  additionalTopics,
+  topics = [],
+  additionalTopics = [],
   setValue,
+  watch,
 }) => {
   const [isMoreVisible, setIsMoreVisible] = useState(false);
-  const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
 
   const toggleMore = () => {
     setIsMoreVisible((prev) => !prev);
   };
 
-  const handleTopicClick = (topic: string) => {
-    const updatedTopics = selectedTopics.includes(topic)
-      ? selectedTopics.filter((t) => t !== topic)
-      : [...selectedTopics, topic];
+  const handleTopicClick = (topic: string, currentTopics: string[]) => {
+    const updatedTopics = currentTopics.includes(topic)
+      ? currentTopics.filter((t) => t !== topic)
+      : [...currentTopics, topic];
 
-    setSelectedTopics(updatedTopics);
     setValue('category', updatedTopics); // category 업데이트
   };
 
@@ -40,11 +39,11 @@ const TopicSelector: React.FC<Props> = ({
             key={topic}
             type="button"
             className={`px-3 py-1 text-sm border rounded-full ${
-              selectedTopics.includes(topic)
+              (watch('category') || []).includes(topic)
                 ? 'bg-black text-white'
                 : 'bg-[#E5E5EC] text-black'
             } hover:bg-black hover:text-white transition`}
-            onClick={() => handleTopicClick(topic)}
+            onClick={() => handleTopicClick(topic, watch('category') || [])}
           >
             {topic}
           </button>
@@ -73,9 +72,11 @@ const TopicSelector: React.FC<Props> = ({
             <button
               key={subTopic}
               type="button"
-              onClick={() => handleTopicClick(subTopic)}
+              onClick={() =>
+                handleTopicClick(subTopic, watch('category') || [])
+              }
               className={`px-3 py-1 text-sm border rounded-full ${
-                selectedTopics.includes(subTopic)
+                (watch('category') || []).includes(subTopic)
                   ? 'bg-black text-white'
                   : 'bg-[#E5E5EC] text-black'
               } hover:bg-black hover:text-white transition`}

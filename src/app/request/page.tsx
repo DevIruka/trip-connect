@@ -9,24 +9,7 @@ import { SubmitHandler } from 'react-hook-form';
 import { FormInputs } from './_types/form';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { FaSearch } from 'react-icons/fa';
-
-// 주제 한국어-영어
-const topicMapping: { [key: string]: string } = {
-  맛집: 'food',
-  쇼핑: 'shopping',
-  숙소: 'lodging',
-  이벤트: 'event',
-  '일정/경비': 'schedule-expenses',
-  문화: 'culture',
-  역사: 'history',
-  액티비티: 'activity',
-  기타: 'etc',
-};
-
-// 주제를 영어로 바꿔줌
-const convertTopicsToEnglish = (topics: string[]): string[] => {
-  return topics.map((topic) => topicMapping[topic] || topic);
-};
+import { convertTopicsToEnglish } from '@/utils/topics';
 
 const RequestPage: React.FC = () => {
   const {
@@ -113,8 +96,8 @@ const RequestPage: React.FC = () => {
           <TopicSelector
             topics={['맛집', '쇼핑', '숙소', '이벤트']}
             additionalTopics={['일정/경비', '문화', '역사', '액티비티', '기타']}
-            register={register}
             setValue={setValue}
+            watch={watch}
           />
         </div>
 
