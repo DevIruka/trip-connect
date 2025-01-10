@@ -50,7 +50,7 @@ const SearchPage = () => {
   const handleRecentSearchClick = async (term: string) => {
     setKeyword(term);
     setValue('searchQuery', term); // 클릭 시 입력 필드가 최근 검색어로 고정된다.
-    router.push(`/search/${term}`)
+    router.push(`/search/${term}`);
   };
 
   const handleRecentSearchDelete = (term: string) => {
@@ -63,7 +63,7 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="inner">
+    <>
       <form
         onSubmit={handleSubmit(handleSearch)}
         className="flex flex-row items-center gap-2"
@@ -88,37 +88,41 @@ const SearchPage = () => {
           <span className="mr-1">닫기</span>
         </Link>
       </form>
-      <div className="flex flex-col">
-        <p className="font-extrabold m-2">최근 검색어</p>
-        <ul className="flex flex-col">
-          {recentSearches?.map((term, index) => {
-            return (
-              <li key={index} className="flex flex-row justify-between">
-                <form
-                  onSubmit={handleSubmit(handleSearch)}
-                  className="flex flex-row items-center"
-                >
-                  <button
-                    type="submit"
-                    className="text-left"
-                    onClick={() => handleRecentSearchClick(term)}
+      <div className="inner">
+        <div className="flex flex-col">
+          <p className="font-extrabold m-2">최근 검색어</p>
+          <ul className="flex flex-col">
+            {recentSearches && recentSearches.length > 0 ? (
+              recentSearches.map((term, index) => (
+                <li key={index} className="flex flex-row justify-between">
+                  <form
+                    onSubmit={handleSubmit(handleSearch)}
+                    className="flex flex-row items-center"
                   >
-                    {term}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleRecentSearchDelete(term)}
-                    className="ml-2"
-                  >
-                    삭제
-                  </button>
-                </form>
-              </li>
-            );
-          })}
-        </ul>
+                    <button
+                      type="submit"
+                      className="text-left"
+                      onClick={() => handleRecentSearchClick(term)}
+                    >
+                      {term}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleRecentSearchDelete(term)}
+                      className="ml-2"
+                    >
+                      삭제
+                    </button>
+                  </form>
+                </li>
+              ))
+            ) : (
+              <p>검색어가 없습니다~</p>
+            )}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 export default SearchPage;
