@@ -17,11 +17,12 @@ const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
   const [nicknameInput, setNicknameInput] = useState(''); // 닉네임 입력 상태
   const [bioInput, setBioInput] = useState(''); // 자기소개 입력 상태
+  const [selectedImage, setSelectedImage] = useState<File | null>(null); // 이미지 파일 상태
+  const [previewImage, setPreviewImage] = useState<string>(''); // 이미지 미리보기
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        // 로그인된 사용자 정보 가져오기
         const { data: userData, error: userError } =
           await supabase.auth.getUser();
 
@@ -32,7 +33,6 @@ const MyPage = () => {
 
         const userId = userData.user.id;
 
-        // Supabase users 테이블에서 사용자 정보 가져오기
         const { data: profileData, error: profileError } = await supabase
           .from('users')
           .select('nickname, introduction, profile_img, credit, country')
@@ -55,6 +55,7 @@ const MyPage = () => {
 
         setNicknameInput(profileData?.nickname || '');
         setBioInput(profileData?.introduction || '');
+        setPreviewImage(profileData?.profile_img || '');
       } catch (error) {
         console.error('Unexpected error:', error);
       }
@@ -62,6 +63,14 @@ const MyPage = () => {
 
     fetchUserProfile();
   }, []);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedImage(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
 
   const handleSaveProfile = async () => {
     try {
@@ -75,9 +84,36 @@ const MyPage = () => {
 
       const userId = userData.user.id;
 
+      let profileImageUrl = user.profileImg;
+
+      // 이미지 업로드 처리
+      if (selectedImage) {
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('profile-images')
+          .upload(`public/${userId}/${selectedImage.name}`, selectedImage, {
+            cacheControl: '3600',
+            upsert: true,
+          });
+
+        if (uploadError) {
+          console.error('Error uploading image:', uploadError);
+          return;
+        }
+
+        const publicUrlData = supabase.storage
+          .from('profile-images')
+          .getPublicUrl(uploadData.path);
+
+        profileImageUrl = publicUrlData.data.publicUrl;
+      }
+
       const { error: updateError } = await supabase
         .from('users')
-        .update({ nickname: nicknameInput, introduction: bioInput })
+        .update({
+          nickname: nicknameInput,
+          introduction: bioInput,
+          profile_img: profileImageUrl,
+        })
         .eq('id', userId);
 
       if (updateError) {
@@ -89,6 +125,7 @@ const MyPage = () => {
         ...prev,
         nickname: nicknameInput,
         introduction: bioInput,
+        profileImg: profileImageUrl,
       }));
 
       setIsModalOpen(false);
@@ -117,7 +154,6 @@ const MyPage = () => {
               />
             ) : (
               <div className="flex items-center justify-center h-full text-gray-500">
-                {/* 기본 이미지 표시 */}
               </div>
             )}
           </div>
@@ -128,7 +164,6 @@ const MyPage = () => {
           </div>
         </div>
 
-        {/* 프로필 설정 버튼 */}
         <button
           className="flex justify-center items-center gap-[10px] px-[12px] py-[3px] rounded-full bg-[#E5E5EC] text-sm text-gray-600"
           onClick={() => setIsModalOpen(true)}
@@ -139,17 +174,6 @@ const MyPage = () => {
 
       {/* 자기소개 */}
       <div className="mb-4 text-gray-700">{user.introduction}</div>
-
-      {/* 크레딧 섹션 */}
-      <div className="flex flex-col items-center mb-7">
-        <div className="flex justify-between items-center w-[335px] p-[12px_16px] rounded-[4px] border border-[#E5E5EC] bg-[#FFF]">
-          <div className="flex items-center gap-[10px]">
-            <div className="w-[20px] h-[20px] bg-[#D9D9D9]"></div>
-            <h2 className="text-lg font-bold">크레딧</h2>
-          </div>
-          <p className="text-lg text-gray-800">{user.credit}c</p>
-        </div>
-      </div>
 
       {/* 셀러 인증 */}
       <div className="mb-6">
@@ -211,7 +235,7 @@ const MyPage = () => {
           <div className="bg-white w-[90%] max-w-[350px] rounded-lg p-6 relative">
             <button
               className="absolute top-4 right-4 text-black text-xl"
-              onClick={() => setIsModalOpen(false)} // 모달 닫기
+              onClick={() => setIsModalOpen(false)}
             >
               ×
             </button>
@@ -219,20 +243,30 @@ const MyPage = () => {
             <div className="flex flex-col items-center mb-4">
               {/* 프로필 이미지 */}
               <div className="w-24 h-24 rounded-full bg-gray-200 overflow-hidden mb-4">
-                {user.profileImg ? (
-                  <Image
-                    src={user.profileImg}
-                    alt="Profile"
-                    width={96}
-                    height={96}
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full text-gray-500">
-                    이미지
-                  </div>
-                )}
+                <label htmlFor="profileImageInput" className="cursor-pointer">
+                  {previewImage ? (
+                    <Image
+                      src={previewImage}
+                      alt="Preview"
+                      width={96}
+                      height={96}
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center h-full text-gray-500">
+                      이미지 추가
+                    </div>
+                  )}
+                </label>
+                <input
+                  id="profileImageInput"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
               </div>
+
               {/* 닉네임 */}
               <label className="w-full text-sm font-bold mb-2">닉네임</label>
               <input
@@ -242,6 +276,7 @@ const MyPage = () => {
                 className="w-full p-2 border border-gray-300 rounded mb-4"
                 placeholder="닉네임 입력"
               />
+
               {/* 자기소개 */}
               <label className="w-full text-sm font-bold mb-2">자기 소개</label>
               <textarea
@@ -250,6 +285,7 @@ const MyPage = () => {
                 onChange={(e) => setBioInput(e.target.value)}
                 placeholder="지금까지 다녀온 여행 경험을 추가해 주세요"
               ></textarea>
+
               {/* 저장하기 버튼 */}
               <button
                 className="w-full p-2 bg-black text-white rounded mt-4"
