@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Continent } from '../_types/form';
 import { continents } from '@/data/continents';
+import { FaSearch } from 'react-icons/fa';
 
 type Props = {
   isOpen: boolean;
@@ -10,37 +11,75 @@ type Props = {
   handleLocationSelect: (location: string) => void;
 };
 
-const LocationModal: React.FC<Props> = ({ isOpen, toggleModal, handleLocationSelect }) => {
+const LocationModal: React.FC<Props> = ({
+  isOpen,
+  toggleModal,
+  handleLocationSelect,
+}) => {
+  const [searchTerm, setSearchTerm] = useState('');
+
   if (!isOpen) return null;
 
+  const filteredContinents = continents.map(({ name, cities }) => ({
+    name,
+    cities: cities.filter((city) =>
+      city.toLowerCase().includes(searchTerm.toLowerCase()),
+    ),
+  }));
+
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white rounded-lg shadow-lg w-96 p-6">
-        <h2 className="text-lg font-bold mb-4">나라/도시 선택</h2>
-        <div className="space-y-4">
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-end">
+      <div className="bg-white rounded-t-lg shadow-lg w-full max-w-lg p-4">
+        <div className="relative flex justify-center items-center mb-4">
+          <button
+            onClick={toggleModal}
+            className="absolute left-0 text-gray-600 hover:text-gray-800"
+          >
+            ✕
+          </button>
+          <h2 className="text-lg font-bold">나라/도시 선택</h2>
+        </div>
+
+        {/* 검색 바 */}
+        <div className="mb-4 relative">
+          <input
+            type="text"
+            placeholder="나라/도시 검색"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring pr-10"
+          />
+          <FaSearch
+            className="absolute right-3 top-1/2 transform -translate-y-1/2"
+            style={{ color: 'black' }}
+            size={16}
+          />
+        </div>
+
+        <div className="space-y-4 max-h-[60vh] overflow-y-auto">
           {continents.map(({ name, cities }) => (
             <div key={name}>
               <h3 className="font-semibold text-gray-700 mb-2">{name}</h3>
               <div className="grid grid-cols-2 gap-2">
-                {cities.map((city) => (
-                  <button
-                    key={city}
-                    className="px-3 py-2 border rounded text-gray-600 bg-gray-100 hover:bg-gray-200"
-                    onClick={() => handleLocationSelect(city)}
-                  >
-                    {city}
-                  </button>
-                ))}
+                {cities.map((city) => {
+                  const isVisible =
+                    !searchTerm ||
+                    city.toLowerCase().includes(searchTerm.toLowerCase());
+
+                  return isVisible ? (
+                    <button
+                      key={city}
+                      className="px-3 py-2 border rounded text-gray-600 bg-gray-100 hover:bg-gray-200"
+                      onClick={() => handleLocationSelect(city)}
+                    >
+                      {city}
+                    </button>
+                  ) : null;
+                })}
               </div>
             </div>
           ))}
         </div>
-        <button
-          className="mt-4 w-full bg-black text-white py-2 px-4 rounded hover:bg-gray-800"
-          onClick={toggleModal}
-        >
-          닫기
-        </button>
       </div>
     </div>
   );
