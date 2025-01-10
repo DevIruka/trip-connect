@@ -15,3 +15,11 @@ export const topicMapping: { [key: string]: string } = {
 export const convertTopicsToEnglish = (topics: string[]): string[] => {
   return topics.map((topic) => topicMapping[topic] || topic);
 };
+
+// 영어에서 한국어로
+export const convertTopicsToKorean = (topics: string[]): string[] => {
+  const reverseMapping = Object.fromEntries(
+    Object.entries(topicMapping).map(([kor, eng]) => [eng, kor]),
+  );
+  return topics.map((topic) => reverseMapping[topic] || topic);
+};
