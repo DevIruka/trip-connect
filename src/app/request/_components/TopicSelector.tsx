@@ -14,7 +14,6 @@ type Props = {
 const TopicSelector: React.FC<Props> = ({
   topics,
   additionalTopics,
-  register,
   setValue,
 }) => {
   const [isMoreVisible, setIsMoreVisible] = useState(false);
@@ -25,29 +24,26 @@ const TopicSelector: React.FC<Props> = ({
   };
 
   const handleTopicClick = (topic: string) => {
-    if (selectedTopics.includes(topic)) {
-      // 이미 선택된 경우, 배열에서 제거
-      const updatedTopics = selectedTopics.filter((t) => t !== topic);
-      setSelectedTopics(updatedTopics);
-      setValue('category', updatedTopics); // 배열 업데이트
-    } else {
-      // 선택되지 않은 경우, 배열에 추가
-      const updatedTopics = [...selectedTopics, topic];
-      setSelectedTopics(updatedTopics);
-      setValue('category', updatedTopics); // 배열 업데이트
-    }
+    const updatedTopics = selectedTopics.includes(topic)
+      ? selectedTopics.filter((t) => t !== topic)
+      : [...selectedTopics, topic];
+
+    setSelectedTopics(updatedTopics);
+    setValue('category', updatedTopics); // category 업데이트
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap gap-3">
+      <div className="flex items-center gap-2 flex-nowrap overflow-x-auto">
         {topics.map((topic) => (
           <button
             key={topic}
             type="button"
-            className={`px-4 py-2 border rounded ${
-              selectedTopics.includes(topic) ? 'bg-blue-200' : 'bg-gray-100'
-            } hover:bg-gray-200`}
+            className={`px-3 py-1 text-sm border rounded-full ${
+              selectedTopics.includes(topic)
+                ? 'bg-black text-white'
+                : 'bg-[#E5E5EC] text-black'
+            } hover:bg-black hover:text-white transition`}
             onClick={() => handleTopicClick(topic)}
           >
             {topic}
@@ -56,7 +52,7 @@ const TopicSelector: React.FC<Props> = ({
 
         <button
           type="button"
-          className="flex items-center gap-1 text-gray-600 hover:underline"
+          className="text-black text-sm hover:underline flex items-center gap-1"
           onClick={toggleMore}
         >
           더보기
@@ -78,12 +74,11 @@ const TopicSelector: React.FC<Props> = ({
               key={subTopic}
               type="button"
               onClick={() => handleTopicClick(subTopic)}
-              className={`px-4 py-2 border rounded ${
+              className={`px-3 py-1 text-sm border rounded-full ${
                 selectedTopics.includes(subTopic)
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-              {...register('category')}
+                  ? 'bg-black text-white'
+                  : 'bg-[#E5E5EC] text-black'
+              } hover:bg-black hover:text-white transition`}
             >
               {subTopic}
             </button>
