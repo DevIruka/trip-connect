@@ -18,20 +18,33 @@ const CategoryTabs = ({ activeTab }: Props) => {
   useEffect(() => {
     const fetchCounts = async () => {
       try {
+        // 로그인된 사용자 정보 가져오기
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
+        if (userError || !userData?.user) {
+          console.error('No active session or user not logged in.');
+          return;
+        }
+
+        const userId = userData.user.id; // 사용자 ID
+
         // 작성글 개수 가져오기
         const { count: writtenCount } = await supabase
           .from('request_posts')
-          .select('*', { count: 'exact' });
+          .select('*', { count: 'exact' })
+          .eq('user_id', userId);
 
         // 답변글 개수 가져오기
         const { count: responseCount } = await supabase
           .from('response_posts')
-          .select('*', { count: 'exact' });
+          .select('*', { count: 'exact' })
+          .eq('user_id', userId);
 
         // 북마크 개수 가져오기
         const { count: bookmarkCount } = await supabase
           .from('bookmarks')
-          .select('*', { count: 'exact' });
+          .select('*', { count: 'exact' })
+          .eq('user_id', userId);
 
         setCounts({
           written: writtenCount || 0,
