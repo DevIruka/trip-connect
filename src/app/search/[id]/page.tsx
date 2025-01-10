@@ -74,7 +74,7 @@ const SearchResultPage = () => {
     isFetchingNextPage,
   } = useInfiniteQuery({
     queryKey: ['searched request post', keyword],
-    queryFn: fetchPosts,
+    queryFn: ({ pageParam = 0 }) => fetchPosts({ pageParam, keyword }),
     getNextPageParam: (lastPage) => lastPage.nextPage, // 다음 페이지 번호 반환
     onError: (err: Error) => {
       console.error('Error fetching posts:', err);
