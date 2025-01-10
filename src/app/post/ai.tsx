@@ -5,7 +5,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-const UseTranslate = async (text: string) => {
+export const GPTTranslator = async (text: string) => {
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',
     messages: [
@@ -14,7 +14,7 @@ const UseTranslate = async (text: string) => {
         content: [
           {
             type: 'text',
-            text: '언어를 감지해서 사용자의 언어로 번역해주세요. 아래와 같은 json 형식으로\n---\n{\n"원문":"blah",\n"번역문":"블라",\n}\n',
+            text: '언어를 감지해서 사용자의 언어가 아니면, 사용자의 언어로 번역해주세요. 사용자 언어: 한국어\nhtml 문법상 텍스트만 번역해주세요. 나머지는 그대로 되돌려주세요.\n아래의 JSON 형식으로\n---\n{\n  "original": <div>hi</div>,\n "translated": <div>안녕</div>\n}',
           },
         ],
       },
@@ -23,22 +23,17 @@ const UseTranslate = async (text: string) => {
         content: [
           {
             type: 'text',
-            text: `사용자 언어: 한국어\n${text}`,
+            text: text,
           },
         ],
       },
     ],
-    response_format: {
-      type: 'text',
-    },
+    response_format: { type: 'json_object' },
     temperature: 1,
     max_completion_tokens: 2048,
     top_p: 1,
     frequency_penalty: 0,
     presence_penalty: 0,
   });
-
   return response;
 };
-
-export default UseTranslate;

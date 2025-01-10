@@ -12,6 +12,6 @@
   }
 
   .inner {
-    @apply h-full w-full mx-auto relative p-10;
+    @apply h-full w-full mx-auto relative px-10;
   }
 }
