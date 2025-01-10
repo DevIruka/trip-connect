@@ -8,6 +8,8 @@ import { FormInputs } from '../_types/form';
 import FormFields from '../_components/FormFields';
 import LocationModal from '../_components/LocationModal';
 import TopicSelector from '../_components/TopicSelector';
+import { FaSearch } from 'react-icons/fa';
+import { convertTopicsToEnglish, convertTopicsToKorean } from '@/utils/topics';
 
 const EditRequestPage: React.FC = () => {
   const { id } = useParams();
@@ -44,12 +46,14 @@ const EditRequestPage: React.FC = () => {
 
       if (error) throw error;
 
+      const koreanCategories = convertTopicsToKorean(data.category || []);
+
       reset({
         title: data.title,
         credit: data.credit,
         content: data.content,
         date_end: data.date_end,
-        category: data.category,
+        category: koreanCategories,
         country_city: data.country_city,
       });
       setSelectedLocation(data.country_city);
@@ -66,10 +70,13 @@ const EditRequestPage: React.FC = () => {
 
   const onSubmit = async (data: FormInputs) => {
     try {
+      const englishCategories = convertTopicsToEnglish(data.category || []);
+
       const { error } = await supabase
         .from('request_posts')
         .update({
           ...data,
+          category: englishCategories,
           country_city: selectedLocation,
         })
         .eq('id', id);
@@ -84,83 +91,68 @@ const EditRequestPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async () => {
-    const confirmDelete = confirm('정말로 삭제하시겠습니까?');
-    if (!confirmDelete) return;
-
-    try {
-      const { error } = await supabase
-        .from('request_posts')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-
-      alert('삭제가 완료되었습니다.');
-      router.push('/request'); // 삭제 후 또 어디로 가야하죠 아저씨
-    } catch (error) {
-      console.error('삭제 중 오류:', error);
-      alert('삭제 중 문제가 발생했습니다.');
-    }
-  };
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="p-4">
-      <div className="mb-4">
-        <label className="block text-sm font-bold mb-2">나라/도시 선택</label>
-        <div className="relative">
-          <input
-            type="text"
-            value={selectedLocation}
-            placeholder="나라/도시를 선택하세요"
-            readOnly
-            {...register('country_city', { required: true })}
-            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none"
-            onClick={toggleModal}
+    <>
+      <div className="flex justify-between items-center p-4 border-b border-gray-300">
+        <button
+          className="text-lg font-bold text-gray-800"
+          onClick={() => router.back()}
+        >
+          ✕
+        </button>
+        <h1 className="text-lg font-bold">질문 수정하기</h1>
+        <button
+          onClick={handleSubmit(onSubmit)}
+          className="bg-black text-white py-1 px-4 rounded hover:bg-gray-800"
+        >
+          수정
+        </button>
+      </div>
+
+      <form className="p-4">
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2">나라/도시 선택</label>
+          <div className="relative">
+            <input
+              type="text"
+              value={selectedLocation}
+              placeholder="나라/도시를 선택하세요"
+              readOnly
+              {...register('country_city', { required: true })}
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none"
+              onClick={toggleModal}
+            />
+            <FaSearch
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              size={18}
+            />
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-sm font-bold mb-2">주제 선택</label>
+          <TopicSelector
+            topics={['맛집', '쇼핑', '숙소', '이벤트']}
+            additionalTopics={['일정/경비', '문화', '역사', '액티비티', '기타']}
+            setValue={setValue}
+            watch={watch}
           />
         </div>
-      </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-bold mb-2">주제 선택</label>
-        <TopicSelector
-          topics={['맛집', '관광', '이벤트', '쇼핑', '숙소']}
-          additionalTopics={['문화', '역사', '액티비티', '기타']}
+        <FormFields
           register={register}
-          setValue={setValue}
+          watch={watch}
+          control={control}
+          errors={errors}
         />
-      </div>
 
-      <FormFields
-        register={register}
-        watch={watch}
-        control={control}
-        errors={errors}
-      />
-
-      <div className="flex gap-4 mt-4">
-        <button
-          type="submit"
-          className="w-full bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600"
-        >
-          수정하기
-        </button>
-
-        <button
-          type="button"
-          onClick={handleDelete}
-          className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-        >
-          삭제하기
-        </button>
-      </div>
-
-      <LocationModal
-        isOpen={isModalOpen}
-        toggleModal={toggleModal}
-        handleLocationSelect={handleLocationSelect}
-      />
-    </form>
+        <LocationModal
+          isOpen={isModalOpen}
+          toggleModal={toggleModal}
+          handleLocationSelect={handleLocationSelect}
+        />
+      </form>
+    </>
   );
 };
 
