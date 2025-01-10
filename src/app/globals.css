@@ -12,6 +12,12 @@
   }
 
   .inner {
-    @apply h-full w-full mx-auto relative px-10 overflow-y-scroll;
+    @apply h-full w-full mx-auto relative px-5 overflow-y-scroll;
+  }
+}
+
+@layer utilities {
+  .menuscrollbar::-webkit-scrollbar {
+    display: none;
   }
 }
