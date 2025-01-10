@@ -31,6 +31,7 @@ const SearchResultPage = () => {
   const { id } = useParams<Params>();
   const keyword = decodeUrl(id);
   const [noResults, setNoResults] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
   const route = useRouter();
   useEffect(() => {
@@ -66,18 +67,31 @@ const SearchResultPage = () => {
     };
   };
 
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useInfiniteQuery({
-      queryKey: ['searched request post', keyword],
-      queryFn: fetchPosts,
-      getNextPageParam: (lastPage) => lastPage.nextPage, // 다음 페이지 번호 반환
-      onError: (err: Error) => {
-        console.error('Error fetching posts:', err);
-      },
-    });
-  const allPosts = data?.pages.flatMap((page) => page.data) || [];
+  const {
+    data: searchedRequestPost,
+    hasNextPage,
+    fetchNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['searched request post', keyword],
+    queryFn: fetchPosts,
+    getNextPageParam: (lastPage) => lastPage.nextPage, // 다음 페이지 번호 반환
+    onError: (err: Error) => {
+      console.error('Error fetching posts:', err);
+    },
+  });
+  const requestPosts =
+    searchedRequestPost?.pages.flatMap((page) => page.data) || [];
+
+  const filteredPosts = selectedCategory
+    ? requestPosts.filter(
+        (post) =>
+          Array.isArray(post.category) &&
+          post.category.includes(selectedCategory),
+      )
+    : requestPosts;
   return (
-    <div className="inner">
+    <>
       <div className="flex flex-row items-center gap-2">
         <Link href="/">
           <IoIosArrowBack size={30} />
@@ -96,30 +110,53 @@ const SearchResultPage = () => {
           <span className="mr-1">닫기</span>
         </Link>
       </div>
-      {noResults && <p>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>}
-      {!noResults && (
-        <>
-          <ul className="w-">
-            {allPosts.map((post) => (
-              <li key={post.id} className="w-[365px]">
-                <div className="border-2 flex flex-col cursor-pointer">
-                  <span>제목 : {post.title}</span>
-                  <p>내용 : {post.content}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-          {hasNextPage && (
-            <button
-              onClick={() => fetchNextPage()}
-              disabled={isFetchingNextPage}
-            >
-              {isFetchingNextPage ? 'Loading more...' : 'Load More'}
-            </button>
-          )}
-        </>
-      )}
-    </div>
+      <div className="flex gap-2 m-2">
+        {['food', 'place', 'other'].map((category) => (
+          <button
+            key={category}
+            onClick={() =>
+              setSelectedCategory((prev) =>
+                prev === category ? null : category,
+              )
+            }
+            className={`px-4 py-2 border ${
+              selectedCategory === category
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+      <div className="inner">
+        {noResults && <p>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>}
+        {!noResults && (
+          <>
+            <ul>
+              {filteredPosts.map((post) => (
+                <li key={post.id} className="w-full">
+                  <div className="border-2 flex flex-col cursor-pointer">
+                    <span>제목 : {post.title}</span>
+                    <p>내용 : {post.content}</p>
+                    <p>크레딧 : {post.credit}</p>
+                    <p>기한 : {post.date_end}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            {hasNextPage && (
+              <button
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+              >
+                {isFetchingNextPage ? '검색 결과 로드 중' : '검색 결과 더보기'}
+              </button>
+            )}
+          </>
+        )}
+      </div>
+    </>
   );
 };
 
