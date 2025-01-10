@@ -1,15 +1,19 @@
+import { topicMapping } from '@/utils/topics';
 import Link from 'next/link';
 
 const Navbar = () => {
+  const topicArr = Object.entries(topicMapping);
   return (
-    <nav className="grid gap-4 sticky">
-      <div>
-        <Link href="/">전체보기</Link>
-        <Link href="/food">맛집</Link>
-        <Link href="/place">장소</Link>
-        <Link href="/shelter">숙소</Link>
-        <Link href="/event">이벤트</Link>
-        <Link href="/date-price">일정/경비</Link>
+    <nav className="grid gap-4 sticky top-[0px] bg-white">
+      <div className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-4">
+        <Link href="/" className="w-[100px]">
+          전체보기
+        </Link>
+        {topicArr.map(([key, value]) => (
+          <Link href={`/${value}`} className="w-[100px]" key={key}>
+            {key}
+          </Link>
+        ))}
       </div>
       <div className="flex place-content-between">
         <div className="flex gap-4">
