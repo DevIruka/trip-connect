@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface SearchState {
+type SearchState = {
   keyword: string;
   setKeyword: (by: string) => void;
 }
