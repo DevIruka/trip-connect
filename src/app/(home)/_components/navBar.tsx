@@ -5,7 +5,7 @@ const Navbar = () => {
   const topicArr = Object.entries(topicMapping);
   return (
     <nav className="grid sticky top-[0px] bg-white">
-      <div className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-4">
+      <div className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-4 pl-5">
         <Link href="/" className="flex items-center">
           전체보기
         </Link>
@@ -15,7 +15,7 @@ const Navbar = () => {
           </Link>
         ))}
       </div>
-      <div className="flex h-16 justify-between">
+      <div className="flex h-16 justify-between px-5">
         <div className="flex gap-2">
           <button className="menu-btn">최신</button>
           <button className="menu-btn">질문</button>

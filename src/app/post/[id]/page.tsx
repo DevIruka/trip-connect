@@ -3,8 +3,8 @@
 import { useRouter } from 'next/navigation';
 import { usePost } from '../_hooks/usePost';
 import { useResPosts } from '../_hooks/useResPosts';
-import { useBookmarkMutations } from '@/app/(home)/_hooks/BookmarkHooks';
-import { useBookmarks } from '@/app/(home)/_hooks/useBookmark';
+import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
+import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import Link from 'next/link';
 import useTranslate from '../_hooks/useTranslate';
 import RenderTranslatedHTML from '../_components/RenderTranslatedHTML';
