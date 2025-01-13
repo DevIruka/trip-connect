@@ -47,38 +47,38 @@ export type Database = {
       }
       request_posts: {
         Row: {
-          category: string
+          category: string[] | null
           content: string | null
           country_city: string
           created_at: string
           credit: number
           date_end: string
           id: string
-          img_url: Json | null
+          img_url: string | null
           title: string
           user_id: string
         }
         Insert: {
-          category: string
+          category?: string[] | null
           content?: string | null
           country_city: string
           created_at?: string
           credit: number
           date_end: string
           id?: string
-          img_url?: Json | null
+          img_url?: string | null
           title: string
           user_id: string
         }
         Update: {
-          category?: string
+          category?: string[] | null
           content?: string | null
           country_city?: string
           created_at?: string
           credit?: number
           date_end?: string
           id?: string
-          img_url?: Json | null
+          img_url?: string | null
           title?: string
           user_id?: string
         }
@@ -96,26 +96,32 @@ export type Database = {
         Row: {
           content_html: string | null
           created_at: string
+          free_content: string | null
           id: number
-          request_id: string | null
+          request_id: string
           title: string
           user_id: string | null
+          verified_country: string | null
         }
         Insert: {
           content_html?: string | null
           created_at?: string
+          free_content?: string | null
           id?: number
-          request_id?: string | null
+          request_id?: string
           title: string
           user_id?: string | null
+          verified_country?: string | null
         }
         Update: {
           content_html?: string | null
           created_at?: string
+          free_content?: string | null
           id?: number
-          request_id?: string | null
+          request_id?: string
           title?: string
           user_id?: string | null
+          verified_country?: string | null
         }
         Relationships: [
           {
@@ -178,30 +184,36 @@ export type Database = {
       }
       users: {
         Row: {
-          authenticated: boolean
-          country: string
+          authenticated: boolean | null
+          country: string | null
           created_at: string
-          credit: number
+          credit: number | null
+          email: string | null
           id: string
-          nickname: string
+          introduction: string | null
+          nickname: string | null
           profile_img: string | null
         }
         Insert: {
-          authenticated: boolean
-          country: string
+          authenticated?: boolean | null
+          country?: string | null
           created_at?: string
-          credit: number
+          credit?: number | null
+          email?: string | null
           id: string
-          nickname: string
+          introduction?: string | null
+          nickname?: string | null
           profile_img?: string | null
         }
         Update: {
-          authenticated?: boolean
-          country?: string
+          authenticated?: boolean | null
+          country?: string | null
           created_at?: string
-          credit?: number
+          credit?: number | null
+          email?: string | null
           id?: string
-          nickname?: string
+          introduction?: string | null
+          nickname?: string | null
           profile_img?: string | null
         }
         Relationships: []

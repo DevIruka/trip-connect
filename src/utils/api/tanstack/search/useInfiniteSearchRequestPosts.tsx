@@ -1,19 +1,28 @@
-import { FetchPostsResult, PostData } from '@/app/search/[id]/_types/searchTypes';
 import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 import { Dispatch, SetStateAction } from 'react';
-import { fetchSearchRequestPosts } from '../supabase_api/fetchSearchRequestPosts';
+import { fetchSearchRequestPosts } from '../../supabase_api/search/fetchSearchRequestPosts';
+import {
+  FetchRequestPostsResult,
+  RequestPostData,
+} from '@/app/search/[id]/_types/searchTypes';
 const PAGE_SIZE = 12; // 페이지 사이즈
 
-const useInfiniteSearchPosts = (
+const useInfiniteSearchRequestPosts = (
   keyword: string,
   setNoResults: Dispatch<SetStateAction<boolean>>,
 ) => {
   const {
     data: searchedRequestPost,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery<FetchPostsResult, Error, PostData[], QueryKey, number>({
+    hasNextPage: requestHasNextPage,
+    fetchNextPage: requestFetchNextPage,
+    isFetchingNextPage: requestIsFetchingNextPage,
+  } = useInfiniteQuery<
+    FetchRequestPostsResult,
+    Error,
+    RequestPostData[],
+    QueryKey,
+    number
+  >({
     queryKey: ['searched request post', keyword],
     queryFn: async ({ pageParam = 1 }) => {
       const posts = await fetchSearchRequestPosts(keyword, pageParam);
@@ -37,10 +46,10 @@ const useInfiniteSearchPosts = (
 
   return {
     searchedRequestPost,
-    hasNextPage,
-    fetchNextPage,
-    isFetchingNextPage,
+    requestHasNextPage,
+    requestFetchNextPage,
+    requestIsFetchingNextPage,
   };
 };
 
-export default useInfiniteSearchPosts;
+export default useInfiniteSearchRequestPosts;

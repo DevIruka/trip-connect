@@ -1,13 +1,12 @@
 'use client';
 
 import { decodeUrl } from '@/utils/decodeUrl';
-import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { IoIosArrowBack, IoMdCloseCircle } from 'react-icons/io';
 import { Params } from './_types/searchTypes';
-import useInfiniteSearchPosts from '@/utils/api/tanstack/useInfiniteSearchRequestPosts';
-import { category, categoryMapping } from '@/data/category';
+import useInfiniteSearchRequestPosts from '@/utils/api/tanstack/search/useInfiniteSearchRequestPosts';
+import useInfiniteSearchResponsePosts from '@/utils/api/tanstack/search/useInfiniteSearchResponsePosts';
+import DetailedSearchBar from '../_components/DetailedSearchBar';
 
 const SearchResultPage = () => {
   const { id } = useParams<Params>();
@@ -28,11 +27,13 @@ const SearchResultPage = () => {
   };
 
   const {
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
     searchedRequestPost,
-  } = useInfiniteSearchPosts(keyword!, setNoResults);
+    requestFetchNextPage,
+    requestHasNextPage,
+    requestIsFetchingNextPage,
+  } = useInfiniteSearchRequestPosts(keyword!, setNoResults);
+
+  // const {fetchNextPage, hasNextPage, isFetchingNextPage, searchedRequestPost} = useInfiniteSearchResponsePosts(keyword!, setNoResults);
 
   const filteredPosts =
     selectedCategory === 'all' || !selectedCategory
@@ -43,57 +44,31 @@ const SearchResultPage = () => {
             post.category.includes(selectedCategory),
         );
 
+  console.log(filteredPosts);
+
   return (
     <>
-      <div className="flex flex-row items-center gap-2">
-        <Link href="/">
-          <IoIosArrowBack size={30} />
-        </Link>
-        <input
-          type="text"
-          placeholder="검색어를 입력해주세요"
-          ref={inputRef}
-          className="border border-black rounded-full h-8 w-72 mt-1 mb-1 px-4"
-          onClick={inputOnclick}
-        />
-        <button type="button" className="absolute right-14 top-2">
-          <IoMdCloseCircle size={25} />
-        </button>
-        <Link href="/">
-          <span className="mr-1">닫기</span>
-        </Link>
-      </div>
-      <div className="flex items-center justify-center">
-        <div className="flex m-1 w-11/12 overflow-y-scroll scrollbar-hide">
-          <div className="flex flex-row justify-center items-center">
-            {category.map((category) => (
-              <button
-                key={category}
-                onClick={() =>
-                  setSelectedCategory((prev) =>
-                    prev === category ? null : category,
-                  )
-                }
-                className={`w-16 h-10 mx-1 rounded-full border ${
-                  selectedCategory === category
-                    ? 'bg-black text-white'
-                    : 'bg-gray-200'
-                }`}
-              >
-                <span className="text-s">{categoryMapping[category]}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
+      <DetailedSearchBar
+        inputOnclick={inputOnclick}
+        inputRef={inputRef}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
       <div className="inner">
         {noResults && <p>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>}
         {!noResults && (
           <>
             <ul>
               {filteredPosts?.map((post) => (
-                <li key={post.id} className="w-full">
+                <li
+                  key={post.id}
+                  className="w-full"
+                  onClick={() => {
+                    location.href = post.id
+                      ? `/post/${post.id}`
+                      : `/post/${post.id}`;
+                  }}
+                >
                   <div className="border-2 flex flex-col cursor-pointer">
                     <span>제목 : {post.title}</span>
                     <p>내용 : {post.content}</p>
@@ -104,13 +79,13 @@ const SearchResultPage = () => {
               ))}
             </ul>
             <div className="flex flex-col items-center justify-center p-3">
-              {!hasNextPage && (
+              {!requestHasNextPage && (
                 <button
-                  onClick={() => fetchNextPage()}
-                  disabled={isFetchingNextPage}
+                  onClick={() => requestFetchNextPage()}
+                  disabled={requestIsFetchingNextPage}
                   className="border"
                 >
-                  {isFetchingNextPage
+                  {requestIsFetchingNextPage
                     ? '검색 결과 로드 중'
                     : '검색 결과 더보기'}
                 </button>
