@@ -10,6 +10,7 @@ import moreButton from '../../../../public/images/more-button.svg';
 
 import { topicMapping } from '@/utils/topics';
 import { usePosts } from '@/utils/api/tanstack/home/usePosts';
+import { useState } from 'react';
 
 const CategoryPage = ({ params }: { params: { id: string } }) => {
   const category = params.id;
@@ -21,13 +22,20 @@ const CategoryPage = ({ params }: { params: { id: string } }) => {
   const { isPostBookmarked } = useBookmarks(userId);
   const topicArr = Object.entries(topicMapping);
 
+  const [filterType, setFilterType] = useState('latest');
+  const filteredPosts = allPosts?.filter((post) => {
+    if (filterType === 'request') return !post.request_id; // 질문글 (request_id가 없는 경우)
+    if (filterType === 'response') return !!post.request_id; // 답변글 (request_id가 있는 경우)
+    return true; // 최신 (모두 표시)
+  });
+
   return (
     <>
       <div className="h-full w-full mx-auto relative overflow-y-scroll">
         <QnaHeader />
-        <Navbar />
+        <Navbar setFilterType={setFilterType} />
         <ul className="px-5">
-          {allPosts?.map((post) => {
+          {filteredPosts?.map((post) => {
             const bookmarked = isPostBookmarked(post.id);
             return (
               <li
