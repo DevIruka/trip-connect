@@ -16,9 +16,9 @@ type Post = {
 };
 
 const RequestPage = () => {
-  const [profileImg, setProfileImg] = useState<string>(''); // 프로필 이미지 상태
-  const [writtenPosts, setWrittenPosts] = useState<Post[]>([]); // 작성글 상태
-  const [error, setError] = useState<string | null>(null); // 에러 상태
+  const [profileImg, setProfileImg] = useState<string>('');
+  const [writtenPosts, setWrittenPosts] = useState<Post[]>([]); 
+  const [error, setError] = useState<string | null>(null); 
 
   useEffect(() => {
     const fetchProfileAndPosts = async () => {
@@ -52,7 +52,7 @@ const RequestPage = () => {
         const { data: postsData, error: postsError } = await supabase
           .from('request_posts')
           .select('id, title, content, country_city, category, img_url')
-          .eq('user_id', userId); // user_id로 필터링
+          .eq('user_id', userId); 
 
         if (postsError) {
           console.error('Error fetching written posts:', postsError);
