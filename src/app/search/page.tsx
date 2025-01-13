@@ -62,22 +62,24 @@ const SearchPage = () => {
         <Link href="/">
           <IoIosArrowBack size={30} />
         </Link>
-        <input
-          {...register('searchQuery')}
-          type="text"
-          placeholder="검색어를 입력해주세요"
-          className="border border-black rounded-full h-8 w-72 mt-1 mb-1 px-4"
-        />
-        <button
-          type="button"
-          className="absolute right-14 top-2"
-          onClick={() => setValue('searchQuery', '')}
-        >
-          <IoMdCloseCircle size={25} />
-        </button>
-        <Link href="/">
-          <span className="mr-1">닫기</span>
-        </Link>
+        <div className='flex flex-row justify-center items-center relative'>
+          <input
+            {...register('searchQuery')}
+            type="text"
+            placeholder="검색어를 입력해주세요"
+            className="border border-black rounded-full h-8 w-72 mt-1 mb-1 px-4"
+          />
+          <button
+            type="button"
+            className="absolute right-11"
+            onClick={() => setValue('searchQuery', '')}
+          >
+            <IoMdCloseCircle size={25} />
+          </button>
+          <Link href="/">
+            <span className="ml-2">닫기</span>
+          </Link>
+        </div>
       </form>
       <div className="inner">
         <div className="flex flex-col">
