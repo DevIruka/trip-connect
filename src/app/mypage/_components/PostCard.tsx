@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { supabase } from '@/utils/supabase/supabaseClient';
 
 type Post = {
   id: string;
@@ -14,13 +15,38 @@ type Post = {
 
 type PostCardProps = {
   post: Post;
+  onDelete: (postId: string) => void; // 삭제 후 부모 컴포넌트에 알릴 콜백
 };
 
-const PostCard = ({ post }: PostCardProps) => {
+const PostCard = ({ post, onDelete }: PostCardProps) => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const handleMenuToggle = () => {
     setMenuVisible((prev) => !prev);
+  };
+
+  const handleDelete = async () => {
+    const confirmDelete = confirm('정말로 삭제하시겠습니까?');
+    if (!confirmDelete) return;
+
+    try {
+      const { error } = await supabase
+        .from('request_posts') // 삭제하려는 테이블 이름
+        .delete()
+        .eq('id', post.id);
+
+      if (error) {
+        console.error('Error deleting post:', error);
+        alert('게시글 삭제 중 오류가 발생했습니다.');
+        return;
+      }
+
+      alert('게시글이 성공적으로 삭제되었습니다.');
+      onDelete(post.id); // 삭제된 게시글의 ID를 부모 컴포넌트에 알림
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      alert('예기치 않은 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -70,7 +96,7 @@ const PostCard = ({ post }: PostCardProps) => {
             </button>
             <button
               className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 hover:text-black"
-              onClick={() => console.log(`Delete post: ${post.id}`)}
+              onClick={handleDelete}
             >
               삭제하기
             </button>

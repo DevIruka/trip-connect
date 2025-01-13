@@ -30,9 +30,11 @@ const SellerPage = () => {
             본인 인증을 마치면 프로필 옆에 인증 마크가 생기고 나의 답변이 검증된
             답변으로 표시돼요
           </p>
-          <button className="w-full py-3 text-center rounded-[4px] bg-[#D9D9D9] text-black font-medium">
-            본인 인증하기
-          </button>
+          <Link href="/mypage/seller-auth/identity-verification">
+            <button className="w-full py-3 text-center rounded-[4px] bg-[#D9D9D9] text-black font-medium">
+              본인 인증하기
+            </button>
+          </Link>
         </div>
 
         {/* 계좌 인증 */}

@@ -21,6 +21,36 @@ const ResponsePage = () => {
   const [responsePosts, setResponsePosts] = useState<ResponsePost[]>([]); // 응답글 상태
   const [error, setError] = useState<string | null>(null); // 에러 상태
 
+  // 카운트를 업데이트하는 함수
+  const handleUpdateCounts = async () => {
+    console.log('Counts updated.');
+  };
+
+  // 응답글 삭제 함수
+  const handleDeleteResponse = async (responseId: number) => {
+    try {
+      const { error } = await supabase
+        .from('response_posts')
+        .delete()
+        .eq('id', responseId);
+
+      if (error) {
+        console.error('Error deleting response post:', error);
+        return;
+      }
+
+      // 응답글 상태 업데이트
+      setResponsePosts((prev) =>
+        prev.filter((response) => response.id !== responseId),
+      );
+
+      // 카운트 업데이트 호출
+      handleUpdateCounts();
+    } catch (e) {
+      console.error('Unexpected error while deleting response post:', e);
+    }
+  };
+
   useEffect(() => {
     const fetchProfileAndResponses = async () => {
       try {
@@ -80,7 +110,7 @@ const ResponsePage = () => {
       <UserProfileSection profileImg={profileImg} />
 
       {/* 카테고리 탭 */}
-      <CategoryTabs activeTab="response" />
+      <CategoryTabs activeTab="response" onUpdateCounts={handleUpdateCounts} />
 
       {/* 응답글 목록 */}
       {responsePosts.length > 0 ? (
@@ -95,6 +125,7 @@ const ResponsePage = () => {
               category: '', // 응답글에는 없으므로 빈 문자열로 설정
               img_url: [], // 이미지가 없는 경우 빈 배열로 설정
             }}
+            onDelete={() => handleDeleteResponse(post.id)} // 삭제 핸들러 전달
           />
         ))
       ) : (
