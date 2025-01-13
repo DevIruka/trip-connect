@@ -19,6 +19,7 @@ const EditResponsePage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
 
+  useEffect(() => {
   const fetchResponseDetails = async () => {
     try {
       const { data: responseData, error: responseError } = await supabase
@@ -52,6 +53,9 @@ const EditResponsePage: React.FC = () => {
     }
   };
 
+  fetchResponseDetails();
+}, [id]);
+
   const handleSubmit = async () => {
     try {
       const { error } = await supabase
@@ -72,10 +76,6 @@ const EditResponsePage: React.FC = () => {
       alert('수정 중 문제가 발생했습니다.');
     }
   };
-
-  useEffect(() => {
-    fetchResponseDetails();
-  }, [id]);
 
   if (isLoading) return <p>로딩 중...</p>;
 
