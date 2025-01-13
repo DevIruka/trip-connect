@@ -16,6 +16,8 @@ const DetailedSearchBar = ({
   selectedCategory,
   setSelectedCategory,
 }: DetailedSearchBarProps) => {
+    console.log(category)
+    console.log(categoryMapping)
   return (
     <>
       <div className="flex flex-row items-center gap-2">
@@ -47,13 +49,13 @@ const DetailedSearchBar = ({
                     prev === category ? null : category,
                   )
                 }
-                className={`w-16 h-10 mx-1 rounded-full border ${
+                className={`w-14 h-10 mx-1 rounded-full border ${
                   selectedCategory === category
                     ? 'bg-black text-white'
                     : 'bg-gray-200'
                 }`}
               >
-                <span className="text-s">{categoryMapping[category]}</span>
+                <span className="text-xs">{category}</span>
               </button>
             ))}
           </div>
