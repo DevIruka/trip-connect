@@ -1,5 +1,5 @@
+import { fetchPosts } from '@/app/(home)/_utils/fetchPosts';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { fetchPosts } from '../_utils/fetchPosts';
 
 // 게시물 데이터 타입 정의
 type Post = {
