@@ -6,58 +6,66 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 
 type Props = {
   activeTab: 'written' | 'response' | 'bookmark';
+  onUpdateCounts?: () => void; // 카운트를 업데이트하는 콜백 함수
 };
 
-const CategoryTabs = ({ activeTab }: Props) => {
+const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
   const [counts, setCounts] = useState({
     written: 0,
     response: 0,
     bookmark: 0,
   });
 
-  useEffect(() => {
-    const fetchCounts = async () => {
-      try {
-        // 로그인된 사용자 정보 가져오기
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
-        if (userError || !userData?.user) {
-          console.error('No active session or user not logged in.');
-          return;
-        }
-
-        const userId = userData.user.id; // 사용자 ID
-
-        // 작성글 개수 가져오기
-        const { count: writtenCount } = await supabase
-          .from('request_posts')
-          .select('*', { count: 'exact' })
-          .eq('user_id', userId);
-
-        // 답변글 개수 가져오기
-        const { count: responseCount } = await supabase
-          .from('response_posts')
-          .select('*', { count: 'exact' })
-          .eq('user_id', userId);
-
-        // 북마크 개수 가져오기
-        const { count: bookmarkCount } = await supabase
-          .from('bookmarks')
-          .select('*', { count: 'exact' })
-          .eq('user_id', userId);
-
-        setCounts({
-          written: writtenCount || 0,
-          response: responseCount || 0,
-          bookmark: bookmarkCount || 0,
-        });
-      } catch (error) {
-        console.error('Error fetching counts:', error);
+  const fetchCounts = async () => {
+    try {
+      // 로그인된 사용자 정보 가져오기
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
+      if (userError || !userData?.user) {
+        console.error('No active session or user not logged in.');
+        return;
       }
-    };
 
+      const userId = userData.user.id; // 사용자 ID
+
+      // 작성글 개수 가져오기
+      const { count: writtenCount } = await supabase
+        .from('request_posts')
+        .select('*', { count: 'exact' })
+        .eq('user_id', userId);
+
+      // 답변글 개수 가져오기
+      const { count: responseCount } = await supabase
+        .from('response_posts')
+        .select('*', { count: 'exact' })
+        .eq('user_id', userId);
+
+      // 북마크 개수 가져오기
+      const { count: bookmarkCount } = await supabase
+        .from('bookmarks')
+        .select('*', { count: 'exact' })
+        .eq('user_id', userId);
+
+      setCounts({
+        written: writtenCount || 0,
+        response: responseCount || 0,
+        bookmark: bookmarkCount || 0,
+      });
+    } catch (error) {
+      console.error('Error fetching counts:', error);
+    }
+  };
+
+  useEffect(() => {
     fetchCounts();
   }, []);
+
+  // 부모에서 전달받은 onUpdateCounts 콜백이 실행될 때 카운트를 갱신
+  useEffect(() => {
+    if (onUpdateCounts) {
+      onUpdateCounts();
+    }
+  }, [onUpdateCounts]);
 
   return (
     <div
