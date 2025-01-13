@@ -2,7 +2,7 @@ import HeaderButton from './headerButton';
 
 export default function QnaHeader() {
   return (
-    <header className="h-[180px] place-content-center">
+    <header className="h-[180px] place-content-center px-5">
       <div className="flex gap-3">
         <HeaderButton
           url="request"

@@ -3,7 +3,6 @@
 import { useSearchStore } from '@/store/useSearchStore';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { IoIosArrowBack } from 'react-icons/io';
 import { IoMdCloseCircle } from 'react-icons/io';
@@ -15,7 +14,6 @@ const SearchPage = () => {
       ? JSON.parse(localStorage.getItem('recentSearches') || '[]')
       : []; // 로컬 스토리지에서 recentSearches를 가져오고, 없으면 빈 공백으로 설정해요.
 
-  const keyword = useSearchStore((state) => state.keyword);
   const setKeyword = useSearchStore((state) => state.setKeyword);
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
@@ -25,13 +23,6 @@ const SearchPage = () => {
   });
   const recentSearches: string[] = watch('recentSearches', storedSearches); // 최근 검색어 리스트
   const query = watch('searchQuery'); // 검색 입력값
-
-  useEffect(() => {
-    console.log(keyword);
-    if (keyword) {
-      setValue('searchQuery', keyword);
-    }
-  }, [keyword, setValue]);
 
   const handleSearch = () => {
     if (!query.trim()) return;
@@ -71,22 +62,24 @@ const SearchPage = () => {
         <Link href="/">
           <IoIosArrowBack size={30} />
         </Link>
-        <input
-          {...register('searchQuery')}
-          type="text"
-          placeholder="검색어를 입력해주세요"
-          className="border border-black rounded-full h-8 w-72 mt-1 mb-1 px-4"
-        />
-        <button
-          type="button"
-          className="absolute right-14 top-2"
-          onClick={() => setValue('searchQuery', '')}
-        >
-          <IoMdCloseCircle size={25} />
-        </button>
-        <Link href="/">
-          <span className="mr-1">닫기</span>
-        </Link>
+        <div className='flex flex-row justify-center items-center relative'>
+          <input
+            {...register('searchQuery')}
+            type="text"
+            placeholder="검색어를 입력해주세요"
+            className="border border-black rounded-full h-8 w-72 mt-1 mb-1 px-4"
+          />
+          <button
+            type="button"
+            className="absolute right-11"
+            onClick={() => setValue('searchQuery', '')}
+          >
+            <IoMdCloseCircle size={25} />
+          </button>
+          <Link href="/">
+            <span className="ml-2">닫기</span>
+          </Link>
+        </div>
       </form>
       <div className="inner">
         <div className="flex flex-col">
@@ -117,7 +110,11 @@ const SearchPage = () => {
                 </li>
               ))
             ) : (
-              <p>검색어가 없습니다~</p>
+              <div className="flex flex-col justify-center items-center">
+                <p className="text-xl font-bold pt-10">
+                  검색어를 입력해주세요.
+                </p>
+              </div>
             )}
           </ul>
         </div>

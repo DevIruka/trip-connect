@@ -1,5 +1,28 @@
 // 주제 한국어-영어 매핑
-export const topicMapping: { [key: string]: string } = {
+export type EnglishCategory =
+  | 'food'
+  | 'shopping'
+  | 'lodging'
+  | 'event'
+  | 'date-price'
+  | 'schedule-expenses'
+  | 'culture'
+  | 'history'
+  | 'activity'
+  | 'etc';
+
+export type KoreanCategory =
+  | '맛집'
+  | '쇼핑'
+  | '숙소'
+  | '이벤트'
+  | '일정/경비'
+  | '문화'
+  | '역사'
+  | '액티비티'
+  | '기타';
+
+export const topicMapping: Record<KoreanCategory, EnglishCategory> = {
   맛집: 'food',
   쇼핑: 'shopping',
   숙소: 'lodging',
@@ -12,12 +35,12 @@ export const topicMapping: { [key: string]: string } = {
 };
 
 // 주제를 영어로 변환하는 유틸 함수
-export const convertTopicsToEnglish = (topics: string[]): string[] => {
+export const convertTopicsToEnglish = (topics: KoreanCategory[]): string[] => {
   return topics.map((topic) => topicMapping[topic] || topic);
 };
 
 // 영어에서 한국어로
-export const convertTopicsToKorean = (topics: string[]): string[] => {
+export const convertTopicsToKorean = (topics: EnglishCategory[]): string[] => {
   const reverseMapping = Object.fromEntries(
     Object.entries(topicMapping).map(([kor, eng]) => [eng, kor]),
   );
