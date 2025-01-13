@@ -1,51 +1,41 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { usePost } from '../_hooks/usePost';
-import { useResPosts } from '../_hooks/useResPosts';
-import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
-import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import Link from 'next/link';
-import useTranslate from '../_hooks/useTranslate';
-import RenderTranslatedHTML from '../_components/RenderTranslatedHTML';
 import backButton from '../../../../public/images/back.svg';
-import bookmarkButton from '../../../../public/images/bookmark.svg';
 import Image from 'next/image';
 import { topicMapping } from '@/utils/topics';
+import { getPostUser } from '@/utils/api/supabase_api/post/getPostUser';
+import { useQuery } from '@tanstack/react-query';
+import Responses from '../_components/Responses';
+import BookmarkBtn from '../_components/BookmarkBtn';
+import { supabase } from '@/utils/supabase/supabaseClient';
 
-const DetailPage = ({ params }: { params: { id: string } }) => {
+const DetailPage = async ({ params }: { params: { id: string } }) => {
   const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7';
-  const router = useRouter();
+  // const router = useRouter();
   const postId = params.id; // URL에서 전달된 게시물 ID
-  const { data: post, error, isLoading } = usePost(postId);
-  const { data: response_posts } = useResPosts(postId);
-  const { addBookmarkMutation, deleteBookmarkMutation } =
-    useBookmarkMutations(userId);
-  const { isPostBookmarked } = useBookmarks(userId);
-  const bookmarked = isPostBookmarked(postId);
-  const text = response_posts ? response_posts[0]?.content_html : '';
-  const title = response_posts ? response_posts[0]?.title : '';
-
+  const { data: post, error } = await supabase
+    .from('request_posts')
+    .select('*')
+    .eq('id', postId)
+    .single(); // 단일 게시물 조회
   const topicArr = Object.entries(topicMapping);
 
-  const {
-    data: translatedText,
-    isLoading: isTransLoading,
-    error: transError,
-  } = useTranslate(text);
+  // const { data: user } = useQuery({
+  //   queryKey: ['responseUser'],
+  //   queryFn: async () => {
+  //     await getPostUser(userId);
+  //   },
+  // });
+  // console.log(user);
 
-  const { data: translatedTitle } = useTranslate(title);
-  console.log('translatedTitle', translatedTitle);
-  if (isTransLoading) return <div>번역 중...</div>;
-  if (transError) return <div>에러 발생: {(error as Error).message}</div>;
-
-  if (isLoading) return <div>로딩 중...</div>;
+  // if (isLoading) return <div>로딩 중...</div>;
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
     <div className="inner">
       <div className="h-12 place-content-center">
-        <button onClick={() => router.back()}>
+        {/* <button onClick={() => router.back()}>
           <Image
             width={0}
             height={0}
@@ -54,7 +44,7 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
             src={backButton}
             alt="back button"
           />
-        </button>
+        </button> */}
       </div>
       {post ? (
         <div>
@@ -83,40 +73,7 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
           <p className="text-sm text-gray-500 mb-4">크레딧: {post.credit}</p>
           <p className="mb-4">{post.content}</p>
           <div className="h-12 flex border-t-2">
-            {post.user_id === userId ? (
-              bookmarked ? (
-                <button
-                  onClick={() => {
-                    deleteBookmarkMutation.mutate(postId);
-                  }}
-                >
-                  <Image
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    style={{ width: '100%', height: 'auto' }}
-                    src={bookmarkButton}
-                    alt="bookmark button"
-                    className="brightness-0"
-                  />
-                </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    addBookmarkMutation.mutate(postId);
-                  }}
-                >
-                  <Image
-                    width={20}
-                    height={20}
-                    src={bookmarkButton}
-                    alt="bookmark button"
-                  />
-                </button>
-              )
-            ) : (
-              ''
-            )}
+            <BookmarkBtn userId={userId} postId={postId} />
           </div>
           <div className="bg-gray-500 w-full h-12 rounded-sm px-2 flex justify-center items-center mb-5">
             <Link href={`/response/${postId}`}>답변하기</Link>
@@ -127,17 +84,7 @@ const DetailPage = ({ params }: { params: { id: string } }) => {
       )}
 
       {/* 답변 게시물 */}
-      <div className="h-12 border-b-2">
-        {response_posts?.length}개의 답변이 있어요
-      </div>
-      {response_posts?.map((post) => (
-        <div key={post.id}>
-          <div className="h-12 flex items-center">
-            <RenderTranslatedHTML data={JSON.parse(translatedTitle)} />
-          </div>
-          <RenderTranslatedHTML data={JSON.parse(translatedText)} />
-        </div>
-      ))}
+      <Responses postId={postId} />
     </div>
   );
 };
