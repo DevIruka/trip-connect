@@ -1,7 +1,7 @@
 import { topicMapping } from '@/utils/topics';
 import Link from 'next/link';
 
-const Navbar = () => {
+const Navbar = ({ setFilterType }) => {
   const topicArr = Object.entries(topicMapping);
   return (
     <nav className="grid sticky top-[0px] bg-white z-10">
@@ -17,9 +17,18 @@ const Navbar = () => {
       </div>
       <div className="flex h-16 justify-between px-5">
         <div className="flex gap-2">
-          <button className="menu-btn">최신</button>
-          <button className="menu-btn">질문</button>
-          <button className="menu-btn">답변</button>
+          <button className="menu-btn" onClick={() => setFilterType('latest')}>
+            최신
+          </button>
+          <button className="menu-btn" onClick={() => setFilterType('request')}>
+            질문
+          </button>
+          <button
+            className="menu-btn"
+            onClick={() => setFilterType('response')}
+          >
+            답변
+          </button>
         </div>
         <button>나라 선택하기</button>
       </div>
