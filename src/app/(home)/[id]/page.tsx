@@ -42,10 +42,12 @@ const CategoryPage = ({ params }: { params: { id: string } }) => {
                 <div>{post.request_id ? '답변글' : '질문글'}</div>
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <div className="bg-gray-300 rounded-md px-1">
-                      {post.country_city}
+                    <div className="bg-gray-300 rounded-md px-1 min-w-10 flex justify-center">
+                      {post.request_id
+                        ? post.verified_country
+                        : post.country_city}
                     </div>
-                    <div className="flex gap-2 overflow-hidden">
+                    <div className="flex gap-2 min-w-10 overflow-x-hidden">
                       {post.category
                         ? topicArr
                             .filter(([_, value]) =>

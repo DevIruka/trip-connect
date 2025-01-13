@@ -5,7 +5,7 @@ import BookmarkBtn from '../_components/BookmarkBtn';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import BackButton from '../_components/BackBtn';
 import { getPostUser } from '@/utils/api/supabase_api/post/getPostUser';
-import Image from 'next/image';
+import Profile from '../_components/profile';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7';
@@ -17,7 +17,6 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
     .single(); // 단일 게시물 조회
 
   const user = await getPostUser(post.user_id);
-  console.log(user);
   const topicArr = Object.entries(topicMapping);
 
   if (error) return <div>에러 발생: {error.message}</div>;
@@ -30,29 +29,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
       {post ? (
         <div className="bg-white px-5 pb-5 mb-5">
           <div className="grid grid-cols-1 gap-4">
-            <div className="h-12 flex items-center gap-2">
-              <div className="bg-gray-300 rounded-full w-10 h-10">
-                {user.profile_img ? (
-                  <Image
-                    width={100}
-                    height={100}
-                    src={`${user.profile_img}`}
-                    alt="profile_image"
-                  />
-                ) : (
-                  ''
-                )}
-              </div>
-              <div>
-                <div className="flex place-content-center gap-2">
-                  <div>{user.nickname}</div>
-                  <div className="text-sm bg-gray-300 rounded-md flex items-center px-1">
-                    {user.country}
-                  </div>
-                </div>
-                <div className="text-sm text-gray-400">1시간 전</div>
-              </div>
-            </div>
+            <Profile user={user} />
             <h1 className="text-xl font-bold place-content-center">
               {post.title}
             </h1>
@@ -102,7 +79,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
       )}
 
       {/* 답변 게시물 */}
-      <div className="px-5 bg-white">
+      <div className="bg-white">
         <Responses postId={postId} />
       </div>
     </div>

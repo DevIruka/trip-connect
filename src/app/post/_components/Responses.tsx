@@ -1,38 +1,46 @@
-'use client';
-
-import React from 'react';
-import { useResPosts } from '../_hooks/useResPosts';
-import useTranslate from '../_hooks/useTranslate';
+import { supabase } from '@/utils/supabase/supabaseClient';
 import RenderTranslatedHTML from './RenderTranslatedHTML';
+import { GPTTranslator } from '../GPTTranslator';
+import Profile from './profile';
+import { getPostUser } from '@/utils/api/supabase_api/post/getPostUser';
 
-const Responses = ({ postId }: { postId: string }) => {
-  const { data: response_posts } = useResPosts(postId);
+const Responses = async ({ postId }: { postId: string }) => {
+  const { data: response_posts } = await supabase
+    .from('response_posts')
+    .select('*')
+    .eq('request_id', postId);
+
   const text = response_posts ? response_posts[0]?.content_html : '';
   const title = response_posts ? response_posts[0]?.title : '';
-  const {
-    data: translatedText,
-    isLoading: isTransLoading,
-    error: transError,
-  } = useTranslate(text);
 
-  const { data: translatedTitle } = useTranslate(title);
-
-  if (isTransLoading) return <div>번역 중...</div>;
-  if (transError) return <div>에러 발생: {(transError as Error).message}</div>;
+  const textResponse = await GPTTranslator(text);
+  const translatedText = textResponse?.choices[0]?.message?.content || '';
+  const titleResponse = await GPTTranslator(title);
+  const translatedTitle = titleResponse?.choices[0]?.message?.content || '';
 
   return (
     <>
-      <div className="h-12 border-b-2">
+      <div className="h-12 flex items-center px-5">
         {response_posts?.length}개의 답변이 있어요
       </div>
-      {response_posts?.map((post) => (
-        <div key={post.id}>
-          <div className="h-12 flex items-center">
-            <RenderTranslatedHTML data={JSON.parse(translatedTitle)} />
+      <div className="border-b-2"></div>
+
+      {response_posts?.map(async (post) => {
+        const user = await getPostUser(post.user_id);
+
+        return (
+          <div key={post.id} className="px-5 py-5 mb-5">
+            <Profile user={user} />
+            <div>
+              <div className="h-12 grid items-center justify-start">
+                <RenderTranslatedHTML data={JSON.parse(translatedTitle!)} />
+                <button>원문보기</button>
+              </div>
+              <RenderTranslatedHTML data={JSON.parse(translatedText!)} />
+            </div>
           </div>
-          <RenderTranslatedHTML data={JSON.parse(translatedText)} />
-        </div>
-      ))}
+        );
+      })}
     </>
   );
 };
