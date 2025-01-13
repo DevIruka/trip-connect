@@ -6,7 +6,6 @@ import UserProfileSection from '../_components/UserProfileSection';
 import PostCard from '../_components/PostCard';
 import CategoryTabs from '../_components/CategoryTabs';
 
-// 응답글 타입 정의
 type ResponsePost = {
   id: number;
   title: string;
@@ -17,16 +16,14 @@ type ResponsePost = {
 };
 
 const ResponsePage = () => {
-  const [profileImg, setProfileImg] = useState<string>(''); // 프로필 이미지 상태
-  const [responsePosts, setResponsePosts] = useState<ResponsePost[]>([]); // 응답글 상태
-  const [error, setError] = useState<string | null>(null); // 에러 상태
+  const [profileImg, setProfileImg] = useState<string>(''); 
+  const [responsePosts, setResponsePosts] = useState<ResponsePost[]>([]); 
+  const [error, setError] = useState<string | null>(null); 
 
-  // 카운트를 업데이트하는 함수
   const handleUpdateCounts = async () => {
     console.log('Counts updated.');
   };
 
-  // 응답글 삭제 함수
   const handleDeleteResponse = async (responseId: number) => {
     try {
       const { error } = await supabase
@@ -39,12 +36,10 @@ const ResponsePage = () => {
         return;
       }
 
-      // 응답글 상태 업데이트
       setResponsePosts((prev) =>
         prev.filter((response) => response.id !== responseId),
       );
 
-      // 카운트 업데이트 호출
       handleUpdateCounts();
     } catch (e) {
       console.error('Unexpected error while deleting response post:', e);
@@ -83,7 +78,7 @@ const ResponsePage = () => {
         const { data: responseData, error: responseError } = await supabase
           .from('response_posts')
           .select('id, title, content_html, created_at, user_id, request_id')
-          .eq('user_id', userId); // user_id로 필터링
+          .eq('user_id', userId); 
 
         if (responseError) {
           console.error('Error fetching response posts:', responseError);
@@ -121,9 +116,9 @@ const ResponsePage = () => {
               id: post.id.toString(),
               title: post.title,
               content: post.content_html,
-              country_city: '', // 응답글에는 없으므로 빈 문자열로 설정
-              category: '', // 응답글에는 없으므로 빈 문자열로 설정
-              img_url: [], // 이미지가 없는 경우 빈 배열로 설정
+              country_city: '', 
+              category: '', 
+              img_url: [], 
             }}
             onDelete={() => handleDeleteResponse(post.id)} // 삭제 핸들러 전달
           />
