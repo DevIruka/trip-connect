@@ -14,51 +14,38 @@ const MyPage = () => {
     country: '',
   });
 
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-  const [nicknameInput, setNicknameInput] = useState(''); // 닉네임 입력 상태
-  const [bioInput, setBioInput] = useState(''); // 자기소개 입력 상태
-  const [selectedImage, setSelectedImage] = useState<File | null>(null); // 이미지 파일 상태
-  const [previewImage, setPreviewImage] = useState<string>(''); // 이미지 미리보기
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [nicknameInput, setNicknameInput] = useState('');
+  const [bioInput, setBioInput] = useState('');
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [previewImage, setPreviewImage] = useState<string>('');
 
   useEffect(() => {
     const fetchUserProfile = async () => {
-      try {
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
+      const { data: userData } = await supabase.auth.getUser();
+      if (!userData?.user) return;
 
-        if (userError || !userData?.user) {
-          console.error('No active session or user not logged in.');
-          return;
-        }
+      const userId = userData.user.id;
 
-        const userId = userData.user.id;
+      const { data: profileData } = await supabase
+        .from('users')
+        .select('nickname, introduction, profile_img, credit, country')
+        .eq('id', userId)
+        .single();
 
-        const { data: profileData, error: profileError } = await supabase
-          .from('users')
-          .select('nickname, introduction, profile_img, credit, country')
-          .eq('id', userId)
-          .single();
+      if (!profileData) return;
 
-        if (profileError) {
-          console.error('Error fetching user profile:', profileError);
-          return;
-        }
+      setUser({
+        nickname: profileData.nickname || '닉네임 없음',
+        introduction: profileData.introduction || '아직 자기소개가 없습니다.',
+        profileImg: profileData.profile_img || '',
+        credit: profileData.credit || '0',
+        country: profileData.country || '국가 정보 없음',
+      });
 
-        setUser({
-          nickname: profileData?.nickname || '닉네임 없음',
-          introduction:
-            profileData?.introduction || '아직 자기소개가 없습니다.',
-          profileImg: profileData?.profile_img || '',
-          credit: profileData?.credit || '0',
-          country: profileData?.country || '국가 정보 없음',
-        });
-
-        setNicknameInput(profileData?.nickname || '');
-        setBioInput(profileData?.introduction || '');
-        setPreviewImage(profileData?.profile_img || '');
-      } catch (error) {
-        console.error('Unexpected error:', error);
-      }
+      setNicknameInput(profileData.nickname || '');
+      setBioInput(profileData.introduction || '');
+      setPreviewImage(profileData.profile_img || '');
     };
 
     fetchUserProfile();
@@ -73,65 +60,45 @@ const MyPage = () => {
   };
 
   const handleSaveProfile = async () => {
-    try {
-      const { data: userData, error: userError } =
-        await supabase.auth.getUser();
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData?.user) return;
 
-      if (userError || !userData?.user) {
-        console.error('No active session or user not logged in.');
-        return;
-      }
+    const userId = userData.user.id;
+    let profileImageUrl = user.profileImg;
 
-      const userId = userData.user.id;
+    if (selectedImage) {
+      const { data: uploadData } = await supabase.storage
+        .from('profile-images')
+        .upload(`public/${userId}/${selectedImage.name}`, selectedImage, {
+          cacheControl: '3600',
+          upsert: true,
+        });
 
-      let profileImageUrl = user.profileImg;
-
-      // 이미지 업로드 처리
-      if (selectedImage) {
-        const { data: uploadData, error: uploadError } = await supabase.storage
-          .from('profile-images')
-          .upload(`public/${userId}/${selectedImage.name}`, selectedImage, {
-            cacheControl: '3600',
-            upsert: true,
-          });
-
-        if (uploadError) {
-          console.error('Error uploading image:', uploadError);
-          return;
-        }
-
+      if (uploadData) {
         const publicUrlData = supabase.storage
           .from('profile-images')
           .getPublicUrl(uploadData.path);
-
         profileImageUrl = publicUrlData.data.publicUrl;
       }
+    }
 
-      const { error: updateError } = await supabase
-        .from('users')
-        .update({
-          nickname: nicknameInput,
-          introduction: bioInput,
-          profile_img: profileImageUrl,
-        })
-        .eq('id', userId);
-
-      if (updateError) {
-        console.error('Error updating profile:', updateError);
-        return;
-      }
-
-      setUser((prev) => ({
-        ...prev,
+    await supabase
+      .from('users')
+      .update({
         nickname: nicknameInput,
         introduction: bioInput,
-        profileImg: profileImageUrl,
-      }));
+        profile_img: profileImageUrl,
+      })
+      .eq('id', userId);
 
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error('Unexpected error:', error);
-    }
+    setUser((prev) => ({
+      ...prev,
+      nickname: nicknameInput,
+      introduction: bioInput,
+      profileImg: profileImageUrl,
+    }));
+
+    setIsModalOpen(false);
   };
 
   return (
@@ -153,17 +120,14 @@ const MyPage = () => {
                 className="object-cover"
               />
             ) : (
-              <div className="flex items-center justify-center h-full text-gray-500">
-              </div>
+              <div className="flex items-center justify-center h-full text-gray-500"></div>
             )}
           </div>
-
           <div className="ml-4">
             <h2 className="text-lg font-bold">{user.nickname}</h2>
             <p className="text-sm text-gray-600">{user.country}</p>
           </div>
         </div>
-
         <button
           className="flex justify-center items-center gap-[10px] px-[12px] py-[3px] rounded-full bg-[#E5E5EC] text-sm text-gray-600"
           onClick={() => setIsModalOpen(true)}
@@ -199,7 +163,6 @@ const MyPage = () => {
             <span>내가 작성한 게시물</span>
             <span>▶</span>
           </Link>
-
           <Link
             href="/mypage/response"
             className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
@@ -207,7 +170,6 @@ const MyPage = () => {
             <span>내가 답변한 게시물</span>
             <span>▶</span>
           </Link>
-
           <Link
             href="/mypage/bookmark"
             className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
@@ -283,7 +245,7 @@ const MyPage = () => {
                 className="w-full p-2 border border-gray-300 rounded h-24"
                 value={bioInput}
                 onChange={(e) => setBioInput(e.target.value)}
-                placeholder="지금까지 다녀온 여행 경험을 추가해 주세요"
+                placeholder="자기 소개를 입력하세요"
               ></textarea>
 
               {/* 저장하기 버튼 */}

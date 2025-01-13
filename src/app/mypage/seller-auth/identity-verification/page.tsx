@@ -1,13 +1,23 @@
 'use client';
 
-import React from 'react';
-import { useRouter } from 'next/navigation'; 
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const IdentityVerification = () => {
-  const router = useRouter(); // router 객체 생성
+  const router = useRouter(); 
+  const [phoneNumber, setPhoneNumber] = useState(''); 
 
   const handleSendCode = () => {
-    router.push('/mypage/seller-auth/identity-verification/codepage');
+    if (phoneNumber.length === 11) {
+      router.push('/mypage/seller-auth/identity-verification/codepage'); 
+    } else {
+      alert('전화번호를 정확히 입력해주세요.');
+    }
+  };
+
+  const handlePhoneNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value.replace(/[^0-9]/g, '');
+    setPhoneNumber(input);
   };
 
   return (
@@ -32,7 +42,7 @@ const IdentityVerification = () => {
           <option value="kr">대한민국</option>
           <option value="us">미국</option>
           <option value="jp">일본</option>
-          {/* 필요한 국가 추가할 예정임 */}
+          {/* 필요한 국가 추가할 예정 */}
         </select>
       </div>
 
@@ -42,14 +52,22 @@ const IdentityVerification = () => {
         <input
           type="text"
           placeholder="전화번호를 입력하세요"
+          value={phoneNumber} 
+          onChange={handlePhoneNumberChange} 
           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+          maxLength={11} // 최대 입력 길이 제한
         />
       </div>
 
       {/* 인증 코드 받기 버튼 */}
       <button
-        className="w-full py-3 text-center bg-black text-white rounded-lg text-lg font-medium"
-        onClick={handleSendCode} 
+        className={`w-full py-3 text-center text-lg font-medium rounded-lg ${
+          phoneNumber.length === 11
+            ? 'bg-black text-white'
+            : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+        }`}
+        onClick={handleSendCode}
+        disabled={phoneNumber.length !== 11} 
       >
         인증 코드 받기
       </button>
