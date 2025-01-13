@@ -15,17 +15,21 @@ export const fetchPosts = async ({
     const to = from + PAGE_SIZE - 1;
 
     let query = supabase.from('request_posts').select('*').range(from, to);
+    const responseQuery = supabase
+      .from('response_posts')
+      .select('*')
+      .range(from, to);
 
     if (category !== 'All') {
       query = query.contains('category', [category]); // 카테고리 필터
     }
 
     const { data: request_posts, error } = await query;
-
+    const { data: response_posts } = await responseQuery;
     if (error) throw new Error(error.message); // 에러 처리
 
     return {
-      data: request_posts || [], // 데이터 반환 (null 방지)
+      data: [...request_posts, ...response_posts] || [], // 데이터 반환 (null 방지)
       nextPage: request_posts?.length === PAGE_SIZE ? pageParam + 1 : null, // 다음 페이지 여부 확인
     };
   } catch (error) {

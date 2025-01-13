@@ -1,5 +1,8 @@
+import {
+  addBookmark,
+  deleteBookmark,
+} from '@/utils/api/supabase_api/home/fetchBookmarks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { addBookmark, deleteBookmark } from './useBookmark';
 
 export const useBookmarkMutations = (userId: string) => {
   const queryClient = useQueryClient();

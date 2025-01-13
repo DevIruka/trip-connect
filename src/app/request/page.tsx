@@ -86,6 +86,7 @@ const RequestPage: React.FC = () => {
             />
             <FaSearch
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+              style={{color:'black'}}
               size={18} // 아이콘 크기
             />
           </div>

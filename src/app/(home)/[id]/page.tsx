@@ -1,10 +1,15 @@
 'use client';
 
+import Image from 'next/image';
 import Navbar from '../_components/navBar';
 import QnaHeader from '../_components/qnaHeader';
-import { useBookmarkMutations } from '../_hooks/BookmarkHooks';
-import { useBookmarks } from '../_hooks/useBookmark';
-import { usePosts } from '../_hooks/usePosts';
+import { useBookmarkMutations } from '../../../utils/api/tanstack/home/BookmarkHooks';
+import { useBookmarks } from '../../../utils/api/tanstack/home/useBookmark';
+import bookmarkButton from '../../../../public/images/bookmark.svg';
+import moreButton from '../../../../public/images/more-button.svg';
+
+import { topicMapping } from '@/utils/topics';
+import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 
 const CategoryPage = ({ params }: { params: { id: string } }) => {
   const category = params.id;
@@ -14,61 +19,110 @@ const CategoryPage = ({ params }: { params: { id: string } }) => {
   const { allPosts, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePosts(category);
   const { isPostBookmarked } = useBookmarks(userId);
+  const topicArr = Object.entries(topicMapping);
 
   return (
     <>
-      <div className="inner overflow-y-scroll">
+      <div className="h-full w-full mx-auto relative overflow-y-scroll">
         <QnaHeader />
         <Navbar />
-        {allPosts?.map((post) => {
-          const bookmarked = isPostBookmarked(post.id);
-          return (
-            <div
-              onClick={() => {
-                location.href = `/post/${post.id}`;
-              }}
-              key={post.id}
-              className="border-2 flex cursor-pointer"
-            >
-              <div>
-                <div>{post.title}</div>
-                <div>{post.content}</div>
-                <div>{post.credit}</div>
-                <div>{post.date_end}</div>
-              </div>
-              {bookmarked ? (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteBookmarkMutation.mutate(post.id);
-                  }}
-                >
-                  북마크 해제
-                </button>
-              ) : (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    addBookmarkMutation.mutate(post.id);
-                  }}
-                >
-                  북마크
-                </button>
-              )}
-            </div>
-          );
-        })}
+        <ul className="px-5">
+          {allPosts?.map((post) => {
+            const bookmarked = isPostBookmarked(post.id);
+            return (
+              <li
+                onClick={() => {
+                  location.href = post.request_id
+                    ? `/post/${post.request_id}`
+                    : `/post/${post.id}`;
+                }}
+                key={post.id}
+                className="border-2 rounded-lg p-2 grid cursor-pointer w-full mb-2"
+              >
+                <div>{post.request_id ? '답변글' : '질문글'}</div>
+                <div className="flex justify-between">
+                  <div className="flex gap-2">
+                    <div className="bg-gray-300 rounded-md px-1">
+                      {post.country_city}
+                    </div>
+                    <div className="flex gap-2 overflow-hidden">
+                      {post.category
+                        ? topicArr
+                            .filter(([_, value]) =>
+                              post.category.includes(value),
+                            )
+                            .map(([key, _]) => (
+                              <div
+                                className="bg-gray-300 rounded-md px-1"
+                                key={key}
+                              >
+                                {key}
+                              </div>
+                            ))
+                        : ''}
+                    </div>
+                  </div>
+                  {!post.request_id ? (
+                    bookmarked ? (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteBookmarkMutation.mutate(post.id);
+                        }}
+                      >
+                        <Image
+                          width={20}
+                          height={20}
+                          src={bookmarkButton}
+                          alt="bookmark button"
+                          className="brightness-0 z-0"
+                        />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addBookmarkMutation.mutate(post.id);
+                        }}
+                      >
+                        <Image
+                          width={20}
+                          height={20}
+                          src={bookmarkButton}
+                          alt="bookmark button"
+                        />
+                      </button>
+                    )
+                  ) : (
+                    <Image
+                      width={20}
+                      height={20}
+                      src={moreButton}
+                      alt="more button"
+                    />
+                  )}
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold">{post.title}</h1>
+                  <div>{post.content}</div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
 
         {/* 더보기 버튼 */}
-        {hasNextPage && (
-          <button
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
-            style={{ marginTop: '20px', padding: '10px 20px' }}
-          >
-            {isFetchingNextPage ? '로딩 중...' : '더보기'}
-          </button>
-        )}
+        <div className="px-5">
+          {hasNextPage && (
+            <button
+              onClick={() => fetchNextPage()}
+              disabled={isFetchingNextPage}
+              className="border-2 rounded-lg p-2 grid cursor-pointer w-full mb-2"
+            >
+              {isFetchingNextPage ? '로딩 중...' : '더보기'}
+            </button>
+          )}
+        </div>
       </div>
     </>
   );

@@ -12,6 +12,16 @@
   }
 
   .inner {
-    @apply h-full w-full mx-auto relative px-10;
+    @apply h-full w-full mx-auto relative px-5 overflow-y-scroll;
+  }
+
+  .menu-btn {
+    @apply bg-gray-400 rounded-3xl my-3 px-3;
+  }
+}
+
+@layer utilities {
+  .menuscrollbar::-webkit-scrollbar {
+    display: none;
   }
 }

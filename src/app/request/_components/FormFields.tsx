@@ -99,10 +99,6 @@ const FormFields: React.FC<Props> = ({ register, watch, control, errors }) => {
             return (
               <>
                 <div className="relative flex items-center">
-                  <FaCalendarAlt
-                    className="absolute left-3 text-black pointer-events-none"
-                    size={20} // 아이콘 크기
-                  />
                   <input
                     type="text"
                     placeholder="yyyy/mm/dd"
@@ -113,8 +109,12 @@ const FormFields: React.FC<Props> = ({ register, watch, control, errors }) => {
                     }
                     readOnly
                     onClick={toggleCalendar}
-                    className="w-full pl-10 px-3 py-2 border border-gray-300 rounded focus:outline-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none pr-10"
                   />
+                <FaCalendarAlt
+                  className="absolute right-3 text-black pointer-events-none"
+                  size={20} // 아이콘 크기
+                />
                 </div>
                 {errors.date_end && (
                   <p className="text-sm text-red-500 mt-1">
