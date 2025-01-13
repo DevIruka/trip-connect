@@ -4,7 +4,7 @@ import Link from 'next/link';
 const Navbar = () => {
   const topicArr = Object.entries(topicMapping);
   return (
-    <nav className="grid sticky top-[0px] bg-white">
+    <nav className="grid sticky top-[0px] bg-white z-10">
       <div className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-4 pl-5">
         <Link href="/" className="flex items-center">
           전체보기

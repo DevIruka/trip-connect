@@ -32,26 +32,37 @@ const CategoryPage = ({ params }: { params: { id: string } }) => {
             return (
               <li
                 onClick={() => {
-                  location.href = `/post/${post.id}`;
+                  location.href = post.request_id
+                    ? `/post/${post.request_id}`
+                    : `/post/${post.id}`;
                 }}
                 key={post.id}
                 className="border-2 rounded-lg p-2 grid cursor-pointer w-full mb-2"
               >
-                <div>질문글</div>
+                <div>{post.request_id ? '답변글' : '질문글'}</div>
                 <div className="flex justify-between">
                   <div className="flex gap-2">
-                    <div>{post.country_city}</div>
+                    <div className="bg-gray-300 rounded-md px-1">
+                      {post.country_city}
+                    </div>
                     <div className="flex gap-2 overflow-hidden">
                       {post.category
                         ? topicArr
                             .filter(([_, value]) =>
                               post.category.includes(value),
                             )
-                            .map(([key, _]) => <div key={key}>{key}</div>)
+                            .map(([key, _]) => (
+                              <div
+                                className="bg-gray-300 rounded-md px-1"
+                                key={key}
+                              >
+                                {key}
+                              </div>
+                            ))
                         : ''}
                     </div>
                   </div>
-                  {post.user_id === userId ? (
+                  {!post.request_id ? (
                     bookmarked ? (
                       <button
                         onClick={(e) => {
@@ -60,13 +71,11 @@ const CategoryPage = ({ params }: { params: { id: string } }) => {
                         }}
                       >
                         <Image
-                          width={0}
-                          height={0}
-                          sizes="100vw"
-                          style={{ width: '100%', height: 'auto' }}
+                          width={20}
+                          height={20}
                           src={bookmarkButton}
                           alt="bookmark button"
-                          className="brightness-0"
+                          className="brightness-0 z-0"
                         />
                       </button>
                     ) : (
