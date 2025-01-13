@@ -6,7 +6,7 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 
 type Props = {
   activeTab: 'written' | 'response' | 'bookmark';
-  onUpdateCounts?: () => void; // 카운트를 업데이트하는 콜백 함수
+  onUpdateCounts?: () => void; 
 };
 
 const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
@@ -26,7 +26,7 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
         return;
       }
 
-      const userId = userData.user.id; // 사용자 ID
+      const userId = userData.user.id;
 
       // 작성글 개수 가져오기
       const { count: writtenCount } = await supabase
