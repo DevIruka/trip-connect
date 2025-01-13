@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { supabase } from '@/utils/supabase/supabaseClient';
 import Link from 'next/link';
+import { supabase } from '@/utils/supabase/supabaseClient';
 
 const MyPage = () => {
   const [user, setUser] = useState({
@@ -19,22 +19,24 @@ const MyPage = () => {
   const [bioInput, setBioInput] = useState('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string>('');
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      const { data: userData } = await supabase.auth.getUser();
-      if (!userData?.user) return;
+  const fetchUserProfile = async () => {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session) {
+      setLoading(false);
+      return;
+    }
 
-      const userId = userData.user.id;
+    const userId = sessionData.session.user.id;
 
-      const { data: profileData } = await supabase
-        .from('users')
-        .select('nickname, introduction, profile_img, credit, country')
-        .eq('id', userId)
-        .single();
+    const { data: profileData } = await supabase
+      .from('users')
+      .select('nickname, introduction, profile_img, credit, country')
+      .eq('id', userId)
+      .single();
 
-      if (!profileData) return;
-
+    if (profileData) {
       setUser({
         nickname: profileData.nickname || '닉네임 없음',
         introduction: profileData.introduction || '아직 자기소개가 없습니다.',
@@ -46,10 +48,10 @@ const MyPage = () => {
       setNicknameInput(profileData.nickname || '');
       setBioInput(profileData.introduction || '');
       setPreviewImage(profileData.profile_img || '');
-    };
+    }
 
-    fetchUserProfile();
-  }, []);
+    setLoading(false);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -60,26 +62,32 @@ const MyPage = () => {
   };
 
   const handleSaveProfile = async () => {
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData?.user) return;
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session) {
+      return;
+    }
 
-    const userId = userData.user.id;
+    const userId = sessionData.session.user.id;
     let profileImageUrl = user.profileImg;
 
     if (selectedImage) {
-      const { data: uploadData } = await supabase.storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from('profile-images')
         .upload(`public/${userId}/${selectedImage.name}`, selectedImage, {
           cacheControl: '3600',
           upsert: true,
         });
 
-      if (uploadData) {
-        const publicUrlData = supabase.storage
-          .from('profile-images')
-          .getPublicUrl(uploadData.path);
-        profileImageUrl = publicUrlData.data.publicUrl;
+      if (uploadError || !uploadData) {
+        // 업로드 오류가 발생하거나 uploadData가 null인 경우 처리
+        return;
       }
+
+      const publicUrlData = supabase.storage
+        .from('profile-images')
+        .getPublicUrl(uploadData.path);
+
+      profileImageUrl = publicUrlData.data.publicUrl;
     }
 
     await supabase
@@ -101,6 +109,14 @@ const MyPage = () => {
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <div className="px-5">
       <h1 className="text-black font-[Pretendard] text-[20px] font-semibold leading-none mb-7">
@@ -120,7 +136,9 @@ const MyPage = () => {
                 className="object-cover"
               />
             ) : (
-              <div className="flex items-center justify-center h-full text-gray-500"></div>
+              <div className="flex items-center justify-center h-full text-gray-500">
+                {/* 기본 이미지 */}
+              </div>
             )}
           </div>
           <div className="ml-4">
