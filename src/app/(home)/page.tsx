@@ -28,9 +28,9 @@ const CategoryPage = () => {
   const topicArr = Object.entries(topicMapping);
 
   //로그인한 유저
-  const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7';
   const { user } = useUserStore();
-  console.log(user);
+  const userId = user ? user.id : '';
+
   //북마크
   const { addBookmarkMutation, deleteBookmarkMutation } =
     useBookmarkMutations(userId);
@@ -52,7 +52,11 @@ const CategoryPage = () => {
     <>
       <div className="h-full w-full mx-auto relative overflow-y-scroll">
         <QnaHeader />
-        <Navbar setFilterType={setFilterType} changeCategory={changeCategory} />
+        <Navbar
+          setFilterType={setFilterType}
+          changeCategory={changeCategory}
+          category={searchParams}
+        />
         <ul className="px-5">
           {filteredPosts?.map((post) => {
             const bookmarked = isPostBookmarked(post.id);
