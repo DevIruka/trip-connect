@@ -13,6 +13,7 @@ import { topicMapping } from '@/utils/topics';
 import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
+import { useUserStore } from '@/store/userStore';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -28,7 +29,8 @@ const CategoryPage = () => {
 
   //로그인한 유저
   const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7';
-
+  const { user } = useUserStore();
+  console.log(user);
   //북마크
   const { addBookmarkMutation, deleteBookmarkMutation } =
     useBookmarkMutations(userId);
