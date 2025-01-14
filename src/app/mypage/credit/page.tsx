@@ -1,15 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
+import { useRouter } from 'next/navigation';
 
 const TEST_CLIENT_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6';
 
 const fetchCredit = async () => {
   const { data: sessionData, error: sessionError } =
     await supabase.auth.getSession();
+
+  console.log('세션 데이터:', sessionData); //디버깅용
 
   if (sessionError || !sessionData.session) {
     throw new Error('사용자 정보를 가져오지 못했습니다.');
@@ -31,6 +34,7 @@ const fetchCredit = async () => {
 };
 
 const CreditPage: React.FC = () => {
+  const router = useRouter();
   const {
     data: credit,
     isLoading,
@@ -41,6 +45,17 @@ const CreditPage: React.FC = () => {
     queryFn: fetchCredit,
     retry: false,
   });
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData?.session) {
+        router.push('/login');
+      }
+    };
+
+    checkSession();
+  }, [router]);
 
   const handlePayment = async () => {
     // 토스 결제 SDK 로드
