@@ -94,7 +94,7 @@ export type Database = {
       }
       response_posts: {
         Row: {
-          content_html: string | null
+          content_html: string
           created_at: string
           free_content: string | null
           id: number
@@ -104,7 +104,7 @@ export type Database = {
           verified_country: string | null
         }
         Insert: {
-          content_html?: string | null
+          content_html: string
           created_at?: string
           free_content?: string | null
           id?: number
@@ -114,7 +114,7 @@ export type Database = {
           verified_country?: string | null
         }
         Update: {
-          content_html?: string | null
+          content_html?: string
           created_at?: string
           free_content?: string | null
           id?: number
