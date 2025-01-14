@@ -18,5 +18,5 @@ export const getUser = async () => {
     return null;
   }
 
-  return user;
+  return user[0];
 };
