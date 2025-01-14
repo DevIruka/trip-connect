@@ -5,11 +5,7 @@ const RenderTranslatedHTML = ({
 }: {
   data: { original: string | undefined; translated: string | undefined };
 }) => {
-  return (
-    <div>
-      <div dangerouslySetInnerHTML={{ __html: data.translated }}></div>
-    </div>
-  );
+  return <div dangerouslySetInnerHTML={{ __html: data.translated! }}></div>;
 };
 
 export default RenderTranslatedHTML;

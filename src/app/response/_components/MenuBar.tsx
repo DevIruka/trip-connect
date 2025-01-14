@@ -18,7 +18,6 @@ type Props = {
 
 const MenuBar: React.FC<Props> = ({ editor }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [fontSize, setFontSize] = useState('16px');
 
   const handleInsertMap = (location: {
     name: string;
@@ -72,82 +71,71 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
     }
   };
 
-  const handleFontSizeChange = (size: string) => {
-    setFontSize(size);
-    if (editor) {
-      editor.chain().focus().setMark('textStyle', { fontSize: size }).run();
-    }
-  };
-
   if (!editor) return null;
 
   return (
-    <div className="mb-4 flex gap-2 overflow-x-auto items-center scrollbar-hide">
+    <div className="fixed bottom-0 left-0 w-full bg-white border-t border-gray-300 p-2 flex justify-around items-center z-50">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
-          editor.isActive('bold') ? 'bg-blue-200' : 'bg-gray-100'
-        } hover:bg-gray-200`}
+        className={`p-1 w-10 h-10 flex items-center justify-center ${
+          editor.isActive('bold') ? 'bg-gray-200' : ''
+        }`}
         title="Bold"
       >
-        <FaBold />
+        <FaBold className="text-gray-500" />
       </button>
 
       <button
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
-          editor.isActive('italic') ? 'bg-blue-200' : 'bg-gray-100'
-        } hover:bg-gray-200`}
+        className={`p-1 w-10 h-10 flex items-center justify-center ${
+          editor.isActive('italic') ? 'bg-gray-200' : ''
+        }`}
         title="Italic"
       >
-        <FaItalic />
+        <FaItalic className="text-gray-500" />
       </button>
 
       {/* Align Left */}
       <button
         onClick={() => editor.chain().focus().setTextAlign('left').run()}
-        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
-          editor.isActive({ textAlign: 'left' }) ? 'bg-blue-200' : 'bg-gray-100'
-        } hover:bg-gray-200`}
-        title="Align-Left"
+        className={`p-1 w-10 h-10 flex items-center justify-center ${
+          editor.isActive({ textAlign: 'left' }) ? 'bg-gray-200' : ''
+        }`}
+        title="Align Left"
       >
-        <FaAlignLeft />
+        <FaAlignLeft className="text-gray-500" />
       </button>
 
       {/* Align Center */}
       <button
         onClick={() => editor.chain().focus().setTextAlign('center').run()}
-        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
-          editor.isActive({ textAlign: 'center' })
-            ? 'bg-blue-200'
-            : 'bg-gray-100'
-        } hover:bg-gray-200`}
-        title="Align-Center"
+        className={`p-1 w-10 h-10 flex items-center justify-center ${
+          editor.isActive({ textAlign: 'center' }) ? 'bg-gray-200' : ''
+        }`}
+        title="Align Center"
       >
-        <FaAlignCenter />
+        <FaAlignCenter className="text-gray-500" />
       </button>
 
       {/* Align Right */}
       <button
         onClick={() => editor.chain().focus().setTextAlign('right').run()}
-        className={`p-1 w-8 h-8 border rounded flex items-center justify-center ${
-          editor.isActive({ textAlign: 'right' })
-            ? 'bg-blue-200'
-            : 'bg-gray-100'
-        } hover:bg-gray-200`}
-        title="Align-Right"
+        className={`p-1 w-10 h-10 flex items-center justify-center ${
+          editor.isActive({ textAlign: 'right' }) ? 'bg-gray-200' : ''
+        }`}
+        title="Align Right"
       >
-        <FaAlignRight />
+        <FaAlignRight className="text-gray-500" />
       </button>
 
       {/* Insert Image */}
       <div className="relative">
         <label
           htmlFor="image-upload"
-          className="cursor-pointer flex items-center justify-center p-1 border rounded bg-gray-100 hover:bg-gray-200 w-full h-full"
+          className="cursor-pointer flex items-center justify-center w-10 h-10"
           title="Upload Image"
         >
-          <FaImage />
+          <FaImage className="text-gray-500" />
         </label>
         <input
           type="file"
@@ -160,10 +148,10 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
       <button
         onClick={() => setIsModalOpen(true)}
-        className="p-2 border rounded bg-gray-100 hover:bg-gray-200"
-        title="Insert-Google-Map"
+        className="p-2 flex items-center justify-center w-10 h-10"
+        title="Insert Map"
       >
-        <FaMapMarkerAlt />
+        <FaMapMarkerAlt className="text-gray-500"/>
       </button>
 
       <GoogleModal
@@ -172,21 +160,6 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
         onSelectLocation={handleInsertMap}
       />
 
-      <div className="relative">
-        <select
-          value={fontSize}
-          onChange={(e) => handleFontSizeChange(e.target.value)}
-          className="border rounded p-1 bg-gray-100 hover:bg-gray-200"
-          title="Set Text Size"
-        >
-          <option value="12px">12px</option>
-          <option value="14px">14px</option>
-          <option value="16px">16px</option>
-          <option value="18px">18px</option>
-          <option value="20px">20px</option>
-          <option value="24px">24px</option>
-        </select>
-      </div>
     </div>
   );
 };

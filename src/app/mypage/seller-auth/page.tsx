@@ -70,7 +70,7 @@ const SellerPage = () => {
               {/* 완료 상태 박스 */}
               {isIdentityVerified && (
                 <div
-                  className="flex items-center justify-center px-2 py-1 gap-2 text-white text-sm font-medium rounded"
+                  className="flex items-center justify-center px-1.5 py-0.5 gap-1 text-white text-xs font-medium rounded"
                   style={{
                     background: '#575757',
                     borderRadius: '4px',

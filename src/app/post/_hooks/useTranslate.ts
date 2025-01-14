@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { GPTTranslator } from '../ai';
+import { GPTTranslator } from '../GPTTranslator';
 
 const useTranslate = (text: string) => {
   return useQuery({
