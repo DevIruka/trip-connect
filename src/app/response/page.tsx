@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import TiptapEditor from './_components/TiptapEditor';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
@@ -13,7 +13,9 @@ type RequestDetails = {
   content: string;
 };
 
-const fetchRequestDetails = async (requestId: string): Promise<RequestDetails> => {
+const fetchRequestDetails = async (
+  requestId: string,
+): Promise<RequestDetails> => {
   const { data, error } = await supabase
     .from('request_posts')
     .select('title, content')
@@ -27,7 +29,10 @@ const fetchRequestDetails = async (requestId: string): Promise<RequestDetails> =
 
 const ResponsePage: React.FC = () => {
   const router = useRouter();
-  // const { id } = useParams();
+  const searchParams = useSearchParams();
+  const postId = searchParams.get('responseId') || '';
+  const userId = searchParams.get('userId') || '';
+
   const [data, setData] = useState({
     title: '',
     contentHtml: '',
@@ -37,7 +42,11 @@ const ResponsePage: React.FC = () => {
 
   const requestId = 'd5442544-fff0-4408-a496-4b3c7a52b194';
 
-  const { data: request, isLoading, error } = useQuery<RequestDetails, Error>({
+  const {
+    data: request,
+    isLoading,
+    error,
+  } = useQuery<RequestDetails, Error>({
     queryKey: ['requestDetails', requestId],
     queryFn: () => fetchRequestDetails(requestId),
   });
@@ -46,8 +55,8 @@ const ResponsePage: React.FC = () => {
     try {
       const { error } = await supabase.from('response_posts').insert([
         {
-          user_id: 'e5ed6f58-da46-4451-b5a2-80d058d2c1b0',
-          request_id: requestId,
+          user_id: userId,
+          request_id: postId,
           title: data.title,
           content_html: data.contentHtml,
           free_content: data.freeContent,
@@ -57,7 +66,7 @@ const ResponsePage: React.FC = () => {
       if (error) throw error;
 
       alert('등록이 완료되었습니다.');
-      router.push('/response');
+      router.push(`/post/${postId}`);
     } catch (error) {
       console.error('Error:', error);
       alert('등록 중 문제가 발생했습니다.');
@@ -66,7 +75,7 @@ const ResponsePage: React.FC = () => {
 
   if (isLoading) return <p>로딩 중...</p>;
   if (error) return <p>요청 정보를 불러오는 중 오류가 발생했습니다.</p>;
-  
+
   return (
     <div className="p-0">
       <HeaderWithButton buttonLabel="등록" onButtonClick={handleSubmit} />

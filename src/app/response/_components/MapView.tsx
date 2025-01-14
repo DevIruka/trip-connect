@@ -1,4 +1,4 @@
-import { NodeViewWrapper, NodeViewContent, NodeViewProps } from '@tiptap/react';
+import { NodeViewWrapper, NodeViewProps } from '@tiptap/react';
 import React from 'react';
 
 const MapView: React.FC<NodeViewProps> = ({ node }) => {

@@ -44,12 +44,17 @@ export async function DELETE(request: Request) {
     const { error } = await supabase.from('response_posts').delete().eq('id', id);
 
     if (error) {
-      throw error;
+      throw new Error(error.message);
     }
 
     return NextResponse.json({ message: "삭제되었습니다." });
-  } catch (error: any) {
-    console.error("삭제 오류:", error.message);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error("삭제 오류:", error.message);
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    } else {
+      console.error("예상치 못한 오류:", error);
+      return NextResponse.json({ error: "알 수 없는 오류가 발생했습니다." }, { status: 500 });
+    }
   }
 }
