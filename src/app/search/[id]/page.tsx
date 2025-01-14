@@ -3,18 +3,27 @@
 import { decodeUrl } from '@/utils/decodeUrl';
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { Params } from './_types/searchTypes';
+import {
+  ExtendedResponsePostData,
+  Params,
+  RequestPostData,
+} from './_types/searchTypes';
 import useInfiniteSearchRequestPosts from '@/utils/api/tanstack/search/useInfiniteSearchRequestPosts';
 import useInfiniteSearchResponsePosts from '@/utils/api/tanstack/search/useInfiniteSearchResponsePosts';
 import DetailedSearchBar from '../_components/DetailedSearchBar';
+import SearchResults, { ReqResPost } from '../_components/SearchResults';
+export type Post = ExtendedResponsePostData | RequestPostData;
 
 const SearchResultPage = () => {
   const { id } = useParams<Params>();
   const keyword = decodeUrl(id);
-  const [noResults, setNoResults] = useState<boolean>(false);
+  const [noReqResults, setNoReqResults] = useState<boolean>(false);
+  const [noResResults, setNoResResults] = useState<boolean>(false);
+  // const [noResults, setNoResults] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
   const route = useRouter();
+  const [allPosts, setAllPosts] = useState<ReqResPost[] | []>([]);
 
   useEffect(() => {
     if (keyword && inputRef.current) {
@@ -31,17 +40,57 @@ const SearchResultPage = () => {
     requestFetchNextPage,
     requestHasNextPage,
     requestIsFetchingNextPage,
-  } = useInfiniteSearchRequestPosts(keyword!, setNoResults);
+  } = useInfiniteSearchRequestPosts(keyword!, setNoReqResults);
 
-  // const {fetchNextPage, hasNextPage, isFetchingNextPage, searchedRequestPost} = useInfiniteSearchResponsePosts(keyword!, setNoResults);
+  const {
+    searchedResponsePost,
+    responseFetchNextPage,
+    responseHasNextPage,
+    responseIsFetchingNextPage,
+  } = useInfiniteSearchResponsePosts(keyword!, setNoResResults);
 
-  const filteredPosts =
-    selectedCategory === 'all' || !selectedCategory
-      ? searchedRequestPost
-      : searchedRequestPost?.filter(
+  const moreBtnHandler = async () => {
+    await requestFetchNextPage();
+    await responseFetchNextPage();
+  };
+
+  useEffect(() => {
+    if (searchedRequestPost) {
+      setAllPosts((prevPosts) => {
+        const newPosts = [...prevPosts, ...searchedRequestPost];
+        // 중복된 ID를 가진 포스트를 필터링
+        return newPosts.filter(
+          (post, index, self) =>
+            index === self.findIndex((p) => p.id === post.id),
+        );
+      });
+    }
+  }, [searchedRequestPost]);
+
+  useEffect(() => {
+    if (searchedResponsePost) {
+      setAllPosts((prevPosts) => {
+        const newPosts = [...prevPosts, ...searchedResponsePost];
+        // 중복된 ID를 가진 포스트를 필터링
+        return newPosts.filter(
+          (post, index, self) =>
+            index === self.findIndex((p) => p.id === post.id),
+        );
+      });
+    }
+  }, [searchedResponsePost]);
+
+  const sortedPosts = allPosts.sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
+  const filteredPosts: ReqResPost[] =
+    selectedCategory === '전체' || !selectedCategory
+      ? sortedPosts
+      : sortedPosts?.filter(
           (post) =>
             Array.isArray(post.category) &&
-            post.category.includes(selectedCategory),
+            post!.category.includes(selectedCategory),
         );
 
   console.log(filteredPosts);
@@ -55,34 +104,19 @@ const SearchResultPage = () => {
         setSelectedCategory={setSelectedCategory}
       />
       <div className="inner">
-        {noResults && <p>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>}
-        {!noResults && (
+        {noReqResults && noResResults && (
+          <p>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>
+        )}
+        {!(noReqResults && noResResults) && (
           <>
-            <ul>
-              {filteredPosts?.map((post) => (
-                <li
-                  key={post.id}
-                  className="w-full"
-                  onClick={() => {
-                    location.href = post.id
-                      ? `/post/${post.id}`
-                      : `/post/${post.id}`;
-                  }}
-                >
-                  <div className="border-2 flex flex-col cursor-pointer">
-                    <span>제목 : {post.title}</span>
-                    <p>내용 : {post.content}</p>
-                    <p>크레딧 : {post.credit}</p>
-                    <p>기한 : {post.date_end}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            <SearchResults filteredPosts={filteredPosts} />
             <div className="flex flex-col items-center justify-center p-3">
-              {!requestHasNextPage && (
+              {!(requestHasNextPage || responseHasNextPage) && (
                 <button
-                  onClick={() => requestFetchNextPage()}
-                  disabled={requestIsFetchingNextPage}
+                  onClick={() => moreBtnHandler()}
+                  disabled={
+                    requestIsFetchingNextPage && responseIsFetchingNextPage
+                  }
                   className="border"
                 >
                   {requestIsFetchingNextPage

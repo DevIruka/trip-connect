@@ -3,7 +3,7 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 export const fetchSearchRequestPosts = async (
   keyword: string | null,
   page: number,
-  limit: number = 12,
+  limit: number = 5,
 ) => {
   const startIndex = (page - 1) * limit;
 

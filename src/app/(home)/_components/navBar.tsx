@@ -1,18 +1,24 @@
 import { topicMapping } from '@/utils/topics';
-import Link from 'next/link';
 
-const Navbar = ({ setFilterType }) => {
+const Navbar = ({ setFilterType, changeCategory }) => {
   const topicArr = Object.entries(topicMapping);
   return (
     <nav className="grid sticky top-[0px] bg-white z-10">
-      <div className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-4 pl-5">
-        <Link href="/" className="flex items-center">
+      <div className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-5 pl-5">
+        <button
+          onClick={() => changeCategory('all')}
+          className="flex items-center"
+        >
           전체보기
-        </Link>
+        </button>
         {topicArr.map(([key, value]) => (
-          <Link href={`/${value}`} className="flex items-center" key={key}>
+          <button
+            onClick={() => changeCategory(value)}
+            className="flex items-center"
+            key={key}
+          >
             {key}
-          </Link>
+          </button>
         ))}
       </div>
       <div className="flex h-16 justify-between px-5">

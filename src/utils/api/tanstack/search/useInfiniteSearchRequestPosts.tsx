@@ -3,13 +3,13 @@ import { Dispatch, SetStateAction } from 'react';
 import { fetchSearchRequestPosts } from '../../supabase_api/search/fetchSearchRequestPosts';
 import {
   FetchRequestPostsResult,
-  RequestPostData,
 } from '@/app/search/[id]/_types/searchTypes';
-const PAGE_SIZE = 12; // 페이지 사이즈
+import { ReqResPost } from '@/app/search/_components/SearchResults';
+const PAGE_SIZE = 5; // 페이지 사이즈
 
 const useInfiniteSearchRequestPosts = (
   keyword: string,
-  setNoResults: Dispatch<SetStateAction<boolean>>,
+  setNoReqResults: Dispatch<SetStateAction<boolean>>,
 ) => {
   const {
     data: searchedRequestPost,
@@ -19,7 +19,7 @@ const useInfiniteSearchRequestPosts = (
   } = useInfiniteQuery<
     FetchRequestPostsResult,
     Error,
-    RequestPostData[],
+    ReqResPost[],
     QueryKey,
     number
   >({
@@ -27,9 +27,9 @@ const useInfiniteSearchRequestPosts = (
     queryFn: async ({ pageParam = 1 }) => {
       const posts = await fetchSearchRequestPosts(keyword, pageParam);
       if (posts?.length === 0) {
-        setNoResults(true);
+        setNoReqResults(true);
       } else {
-        setNoResults(false);
+        setNoReqResults(false);
       }
       return {
         data: posts,
@@ -40,10 +40,10 @@ const useInfiniteSearchRequestPosts = (
     initialPageParam: 1,
     select: (data) => {
       // pages 배열에서 data 속성을 평탄화하여 PostData[] 배열로 변환
-      return data.pages.flatMap((page) => page.data) || [];
+      const flattenedData = data.pages.flatMap((page) => page.data) || [];
+      return flattenedData;
     },
   });
-
   return {
     searchedRequestPost,
     requestHasNextPage,
