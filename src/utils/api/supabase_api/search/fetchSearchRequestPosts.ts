@@ -9,13 +9,13 @@ export const fetchSearchRequestPosts = async (
 
   const query = supabase
     .from('request_posts')
-    .select('*')
+    .select('*', { count: 'exact' })
     .ilike('title', `%${keyword}%`)
     .range(startIndex, startIndex + limit - 1);
 
-  const { data: searched_request_posts, error } = await query;
+  const { data: searched_request_posts, count, error } = await query;
 
   if (error) throw new Error(error.message);
 
-  return searched_request_posts;
+  return { searched_request_posts, totalCount: count };
 };

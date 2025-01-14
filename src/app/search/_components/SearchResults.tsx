@@ -1,5 +1,8 @@
+import { Dispatch, SetStateAction, useState } from 'react';
+
 type SearchResultsProps = {
   filteredPosts: ReqResPost[];
+  filter : 'all' | 'question' | 'answer'
 };
 
 export type ReqResPost = {
@@ -19,25 +22,31 @@ export type ReqResPost = {
   img_url?: string | null;
 };
 
-const onClickHandler = (post: ReqResPost) => {
-  if (post.request_id) {
-    location.href = `/post/${post.request_id}`;
-  } else {
-    location.href = `/post/${post.id}`;
-  }
-};
-
-const SearchResults = ({ filteredPosts }: SearchResultsProps) => {
+const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
+  
   const truncateText = (text: string | null | undefined, maxLength: number) => {
     if (!text) return ''; // null 또는 undefined 처리
     return text.length > maxLength
       ? `${text.substring(0, maxLength)}...`
       : text;
   };
+  const onClickHandler = (post: ReqResPost) => {
+    if (post.request_id) {
+      location.href = `/post/${post.request_id}`;
+    } else {
+      location.href = `/post/${post.id}`;
+    }
+  };
+  const filtered = filteredPosts.filter((post) => {
+    if (filter === 'all') return true;
+    if (filter === 'question') return !post.request_id;
+    if (filter === 'answer') return !!post.request_id;
+    return true;
+  });
   return (
     <>
-      <ul className="mt-3 w-full">
-        {filteredPosts?.map((post) => (
+      <ul className="w-full">
+        {filtered?.map((post) => (
           <li
             key={post.id}
             className="w-full"
@@ -85,7 +94,9 @@ const SearchResults = ({ filteredPosts }: SearchResultsProps) => {
                     </div>
                   </div>
                   <p className="text-lg font-bold">{post.title}</p>
-                  <p className="text-sm text-[#808080] font-bold">{truncateText(post.content, 20)}</p>
+                  <p className="text-sm text-[#808080] font-bold">
+                    {truncateText(post.content, 20)}
+                  </p>
                   {/* <p>크레딧 : {post.credit}</p> */}
                   {/* <p>기한 : {post.date_end}</p> */}
                 </div>
