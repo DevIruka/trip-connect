@@ -18,10 +18,12 @@ type FetchPostsResponse = {
 };
 
 export const usePosts = (category: string) => {
+  const isAll = category === 'all'; // 'all'인지 확인
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery<FetchPostsResponse, Error, any, [string, string], number>({
-      queryKey: ['request_posts', category], // 카테고리 기반 캐시 키
-      queryFn: ({ pageParam = 0 }) => fetchPosts({ pageParam, category }),
+      queryKey: ['request_posts', isAll ? 'all' : category], // 'all'일 경우 특별한 캐시 키 사용
+      queryFn: ({ pageParam = 0 }) =>
+        fetchPosts({ pageParam, category: isAll ? '' : category }), // 'all'일 경우 category 제거
       getNextPageParam: (lastPage) => lastPage.nextPage, // 다음 페이지 번호 계산
     });
 
