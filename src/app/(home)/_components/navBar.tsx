@@ -4,7 +4,7 @@ const Navbar = ({ setFilterType, changeCategory }) => {
   const topicArr = Object.entries(topicMapping);
   return (
     <nav className="grid sticky top-[0px] bg-white z-10">
-      <div className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-4 pl-5">
+      <div className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-5 pl-5">
         <button
           onClick={() => changeCategory('all')}
           className="flex items-center"

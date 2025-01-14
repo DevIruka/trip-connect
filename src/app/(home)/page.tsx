@@ -142,7 +142,9 @@ const CategoryPage = () => {
         <div className="px-5">
           {hasNextPage && (
             <button
-              onClick={() => fetchNextPage()}
+              onClick={() => {
+                fetchNextPage();
+              }}
               disabled={isFetchingNextPage}
               className="border-2 rounded-lg p-2 grid cursor-pointer w-full mb-2"
             >
