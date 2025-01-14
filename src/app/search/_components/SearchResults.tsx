@@ -36,7 +36,7 @@ const SearchResults = ({ filteredPosts }: SearchResultsProps) => {
   };
   return (
     <>
-      <ul className="mt-3 w-full">
+      <ul className="w-full">
         {filteredPosts?.map((post) => (
           <li
             key={post.id}

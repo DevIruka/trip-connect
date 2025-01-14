@@ -18,8 +18,9 @@ const SearchResultPage = () => {
   const { id } = useParams<Params>();
   const keyword = decodeUrl(id);
   const [noReqResults, setNoReqResults] = useState<boolean>(false);
+  const [countReq, setCountReq] = useState<number | null>(0);
+  const [countRes, setCountRes] = useState<number | null>(0);
   const [noResResults, setNoResResults] = useState<boolean>(false);
-  // const [noResults, setNoResults] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
   const route = useRouter();
@@ -40,14 +41,14 @@ const SearchResultPage = () => {
     requestFetchNextPage,
     requestHasNextPage,
     requestIsFetchingNextPage,
-  } = useInfiniteSearchRequestPosts(keyword!, setNoReqResults);
+  } = useInfiniteSearchRequestPosts(keyword!, setNoReqResults, setCountReq);
 
   const {
     searchedResponsePost,
     responseFetchNextPage,
     responseHasNextPage,
     responseIsFetchingNextPage,
-  } = useInfiniteSearchResponsePosts(keyword!, setNoResResults);
+  } = useInfiniteSearchResponsePosts(keyword!, setNoResResults, setCountRes);
 
   const moreBtnHandler = async () => {
     await requestFetchNextPage();
@@ -93,7 +94,7 @@ const SearchResultPage = () => {
             post!.category.includes(selectedCategory),
         );
 
-  console.log(filteredPosts);
+  // console.log(filteredPosts);
 
   return (
     <>
@@ -109,17 +110,27 @@ const SearchResultPage = () => {
         )}
         {!(noReqResults && noResResults) && (
           <>
+            {countReq! + countRes! !== 0 ? (
+              <div className="flex flex-row items-center">
+                <p className="font-bold text-xl my-2">검색 결과 </p>
+                <span className="ml-2 text-xl text-gray-500">
+                  {countReq! + countRes!}
+                </span>
+              </div>
+            ) : (
+              <p></p>
+            )}
             <SearchResults filteredPosts={filteredPosts} />
             <div className="flex flex-col items-center justify-center p-3">
-              {!(requestHasNextPage || responseHasNextPage) && (
+              {(requestHasNextPage || responseHasNextPage) && (
                 <button
                   onClick={() => moreBtnHandler()}
                   disabled={
-                    requestIsFetchingNextPage && responseIsFetchingNextPage
+                    requestIsFetchingNextPage || responseIsFetchingNextPage
                   }
                   className="border"
                 >
-                  {requestIsFetchingNextPage
+                  {requestIsFetchingNextPage || responseIsFetchingNextPage
                     ? '검색 결과 로드 중'
                     : '검색 결과 더보기'}
                 </button>

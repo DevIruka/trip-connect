@@ -10,6 +10,7 @@ const PAGE_SIZE = 5; // 페이지 사이즈
 const useInfiniteSearchRequestPosts = (
   keyword: string,
   setNoReqResults: Dispatch<SetStateAction<boolean>>,
+  setCountReq : Dispatch<SetStateAction<number | null>>
 ) => {
   const {
     data: searchedRequestPost,
@@ -25,15 +26,16 @@ const useInfiniteSearchRequestPosts = (
   >({
     queryKey: ['searched request post', keyword],
     queryFn: async ({ pageParam = 1 }) => {
-      const posts = await fetchSearchRequestPosts(keyword, pageParam);
-      if (posts?.length === 0) {
+      const { searched_request_posts, totalCount: count } = await fetchSearchRequestPosts(keyword, pageParam);
+      if (searched_request_posts?.length === 0) {
         setNoReqResults(true);
       } else {
         setNoReqResults(false);
+        setCountReq(count)
       }
       return {
-        data: posts,
-        nextPage: posts.length === PAGE_SIZE ? pageParam + 1 : null,
+        data: searched_request_posts,
+        nextPage: searched_request_posts.length === PAGE_SIZE ? pageParam + 1 : null,
       };
     },
     getNextPageParam: (lastPage) => lastPage.nextPage,

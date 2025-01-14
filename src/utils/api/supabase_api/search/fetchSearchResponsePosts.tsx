@@ -1,11 +1,16 @@
 import { ExtendedResponsePostData } from '@/app/search/[id]/_types/searchTypes';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
+interface FetchSearchResponsePostsResult {
+  searched_response_posts: ExtendedResponsePostData[]
+  totalCount: number | null;
+}
+
 export const fetchSearchResponsePosts = async (
   keyword: string | null,
   page: number,
   limit: number = 5,
-) => {
+) : Promise<FetchSearchResponsePostsResult> => {
   const startIndex = (page - 1) * limit;
 
   const query = supabase
@@ -15,11 +20,12 @@ export const fetchSearchResponsePosts = async (
       *,
       request_posts (category)
     `,
+      { count: 'exact' },
     )
     .ilike('title', `%${keyword}%`)
     .range(startIndex, startIndex + limit - 1);
 
-  const { data, error } = await query;
+  const { data, error, count } = await query;
 
   if (error) throw new Error(error.message);
 
@@ -31,5 +37,5 @@ export const fetchSearchResponsePosts = async (
     };
   });
 
-  return searched_response_posts as ExtendedResponsePostData[];
+  return {searched_response_posts, totalCount: count }
 };
