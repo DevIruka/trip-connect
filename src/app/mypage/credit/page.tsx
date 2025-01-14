@@ -5,21 +5,11 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 import { useQuery } from '@tanstack/react-query';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/userStore';
 
 const TEST_CLIENT_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6';
 
-const fetchCredit = async () => {
-  const { data: sessionData, error: sessionError } =
-    await supabase.auth.getSession();
-
-  console.log('세션 데이터:', sessionData); //디버깅용
-
-  if (sessionError || !sessionData.session) {
-    throw new Error('사용자 정보를 가져오지 못했습니다.');
-  }
-
-  const userId = sessionData.session.user.id;
-
+const fetchCredit = async (userId: string) => {
   const { data, error } = await supabase
     .from('users')
     .select('credit')
@@ -35,27 +25,23 @@ const fetchCredit = async () => {
 
 const CreditPage: React.FC = () => {
   const router = useRouter();
+  const { user } = useUserStore();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
   const {
     data: credit,
     isLoading,
     isError,
-    error,
   } = useQuery({
-    queryKey: ['userCredit'],
-    queryFn: fetchCredit,
-    retry: false,
+    queryKey: ['userCredit', user?.id],
+    queryFn:() => fetchCredit(user?.id || ''),
+    enabled: !!user,
   });
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data: sessionData } = await supabase.auth.getSession();
-      if (!sessionData?.session) {
-        router.push('/login');
-      }
-    };
-
-    checkSession();
-  }, [router]);
 
   const handlePayment = async () => {
     // 토스 결제 SDK 로드
@@ -66,7 +52,7 @@ const CreditPage: React.FC = () => {
         amount: 10000, // 결제 금액
         orderId: `order-${Date.now()}`, // 고유 주문 ID
         orderName: '10,000C 충전', // 주문 이름
-        customerName: '테스트 사용자', // 사용자 이름
+        customerName: user?.email, // 사용자 이름
         successUrl: 'http://localhost:3000/payment/success', // 결제 성공 URL
         failUrl: 'http://localhost:3000/payment/fail', // 결제 실패 URL
       })
@@ -80,8 +66,7 @@ const CreditPage: React.FC = () => {
     return <div>로딩 중...</div>;
   }
 
-  if (isError) {
-    console.error(error);
+  if (isError || !user) {
     return <div>데이터를 가져오는 중 오류가 발생했습니다.</div>;
   }
 
