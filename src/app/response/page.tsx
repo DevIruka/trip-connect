@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import TiptapEditor from './_components/TiptapEditor';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';

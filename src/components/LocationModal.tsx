@@ -19,12 +19,14 @@ const LocationModal: React.FC<Props> = ({
 
   if (!isOpen) return null;
 
-  const filteredContinents = continents.map(({ name, cities }) => ({
-    name,
-    cities: cities.filter((city) =>
-      city.toLowerCase().includes(searchTerm.toLowerCase()),
-    ),
-  }));
+  const filteredContinents = continents
+    .map(({ name, cities }) => ({
+      name,
+      cities: cities.filter((city) =>
+        city.toLowerCase().includes(searchTerm.toLowerCase()),
+      ),
+    }))
+    .filter(({ cities }) => cities.length > 0);
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 z-50 flex justify-center items-end">
@@ -43,7 +45,7 @@ const LocationModal: React.FC<Props> = ({
         <div className="mb-4 relative">
           <input
             type="text"
-            placeholder="나라/도시 검색"        
+            placeholder="나라/도시 검색"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring pr-10"
@@ -56,25 +58,19 @@ const LocationModal: React.FC<Props> = ({
         </div>
 
         <div className="space-y-4 max-h-[60vh] overflow-y-auto">
-          {continents.map(({ name, cities }) => (
+          {filteredContinents.map(({ name, cities }) => (
             <div key={name}>
               <h3 className="font-semibold text-gray-700 mb-2">{name}</h3>
               <div className="grid grid-cols-2 gap-2">
-                {cities.map((city) => {
-                  const isVisible =
-                    !searchTerm ||
-                    city.toLowerCase().includes(searchTerm.toLowerCase());
-
-                  return isVisible ? (
-                    <button
-                      key={city}
-                      className="px-3 py-2 border rounded text-gray-600 bg-gray-100 hover:bg-gray-200"
-                      onClick={() => handleLocationSelect(city)}
-                    >
-                      {city}
-                    </button>
-                  ) : null;
-                })}
+                {cities.map((city) => (
+                  <button
+                    key={city}
+                    className="px-3 py-2 border rounded text-gray-600 bg-gray-100 hover:bg-gray-200"
+                    onClick={() => handleLocationSelect(city)}
+                  >
+                    {city}
+                  </button>
+                ))}
               </div>
             </div>
           ))}

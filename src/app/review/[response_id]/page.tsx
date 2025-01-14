@@ -14,6 +14,16 @@ type Review = {
   profile_img: string | null;
 };
 
+type SupabaseReview = {
+  id: string;
+  review: string;
+  user_id: string;
+  users: {
+    nickname: string | null;
+    profile_img: string | null;
+  } | null;
+};
+
 const ReviewPage = () => {
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -27,24 +37,22 @@ const ReviewPage = () => {
 
     setLoading(true);
     const { data, error } = await supabase
-      .from('reviews')
-      .select(
-        `
-        id, review, user_id,
-        users (
-          nickname,
-          profile_img
-        )
-      `,
+    .from('reviews')
+    .select(`
+      id, review, user_id,
+      users:nickname (
+        nickname,
+        profile_img
       )
-      .eq('response_id', response_id);
+    `) 
+    .eq('response_id', response_id);
 
     if (error) {
       console.error('리뷰 가져오기 실패:', error.message);
       return;
     }
 
-    const formattedReviews = data?.map((r: any) => ({
+    const formattedReviews: Review[] =  (data as unknown as SupabaseReview[]).map((r) => ({
       id: r.id,
       review: r.review,
       user_id: r.user_id,
@@ -52,7 +60,7 @@ const ReviewPage = () => {
       profile_img: r.users?.profile_img || null,
     }));
 
-    setReviews(formattedReviews || []);
+    setReviews(formattedReviews);
     setLoading(false);
   };
 

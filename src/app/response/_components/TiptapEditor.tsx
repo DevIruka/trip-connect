@@ -42,10 +42,10 @@ const TiptapEditor: React.FC<Props> = ({
     ],
     content: contentHtml,
     onUpdate: ({ editor }) => {
-      const contentHtml = editor.getHTML();
+      const updatedContentHtml = editor.getHTML();
       onChange({
         title: localTitle,
-        contentHtml: editor.getHTML(),
+        contentHtml: updatedContentHtml,
         freeContent,
       });
     },
@@ -53,7 +53,7 @@ const TiptapEditor: React.FC<Props> = ({
     editorProps: {
       attributes: {
         class: 'outline-none',
-        placeholder: '미리보기 답변을 작성해 주세요', 
+        placeholder: '미리보기 답변을 작성해 주세요',
       },
     },
   });
@@ -101,9 +101,7 @@ const TiptapEditor: React.FC<Props> = ({
       </div>
 
       <div className="mb-4">
-        <EditorContent
-          editor={previewEditor}
-        />
+        <EditorContent editor={previewEditor} />
       </div>
 
       <div className="relative my-4 flex items-center justify-center">
