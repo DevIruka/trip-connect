@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Continent } from '../_types/form';
 import { continents } from '@/data/continents';
 import { FaSearch } from 'react-icons/fa';
 
@@ -44,7 +43,7 @@ const LocationModal: React.FC<Props> = ({
         <div className="mb-4 relative">
           <input
             type="text"
-            placeholder="나라/도시 검색"
+            placeholder="나라/도시 검색"        
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring pr-10"
