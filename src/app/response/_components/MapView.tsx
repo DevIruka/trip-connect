@@ -9,7 +9,7 @@ const MapView: React.FC<NodeViewProps> = ({ node }) => {
       <iframe
         src={`https://www.google.com/maps?q=${lat},${lng}&output=embed`}
         width="100%"
-        height="250"
+        height="180"
         style={{ border: "none" }}
         title="Google Map"
       />

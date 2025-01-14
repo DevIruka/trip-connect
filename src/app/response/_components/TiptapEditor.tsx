@@ -29,9 +29,9 @@ const TiptapEditor: React.FC<Props> = ({
   onChange,
 }) => {
   const [localTitle, setLocalTitle] = useState(title);
-  const [localFreeContent, setLocalFreeContent] = useState(freeContent);
+  const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
 
-  const editor: Editor | null = useEditor({
+  const editor = useEditor({
     extensions: [
       StarterKit,
       TextStyle,
@@ -45,10 +45,37 @@ const TiptapEditor: React.FC<Props> = ({
       const contentHtml = editor.getHTML();
       onChange({
         title: localTitle,
-        contentHtml,
-        freeContent: localFreeContent,
+        contentHtml: editor.getHTML(),
+        freeContent,
       });
     },
+    onFocus: ({ editor }) => setActiveEditor(editor),
+    editorProps: {
+      attributes: {
+        class: 'outline-none',
+        placeholder: '미리보기 답변을 작성해 주세요', 
+      },
+    },
+  });
+
+  const previewEditor = useEditor({
+    extensions: [
+      StarterKit,
+      TextStyle,
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Image,
+      FontFamily,
+      MapNode,
+    ],
+    content: freeContent,
+    onUpdate: ({ editor }) => {
+      onChange({
+        title: localTitle,
+        contentHtml,
+        freeContent: editor.getHTML(),
+      });
+    },
+    onFocus: ({ editor }) => setActiveEditor(editor),
   });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,13 +83,8 @@ const TiptapEditor: React.FC<Props> = ({
     onChange({
       title: e.target.value,
       contentHtml,
-      freeContent: localFreeContent,
+      freeContent,
     });
-  };
-
-  const handleFreeContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setLocalFreeContent(e.target.value);
-    onChange({ title: localTitle, contentHtml, freeContent: e.target.value });
   };
 
   return (
@@ -79,13 +101,9 @@ const TiptapEditor: React.FC<Props> = ({
       </div>
 
       <div className="mb-4">
-        <label className="sr-only">미리보기</label>
-        <textarea
-          value={localFreeContent}
-          onChange={handleFreeContentChange}
-          placeholder="미리보기 답변을 작성해 주세요"
-          className="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none min-h-[150px]"
-          />
+        <EditorContent
+          editor={previewEditor}
+        />
       </div>
 
       <div className="relative my-4 flex items-center justify-center">
@@ -97,7 +115,7 @@ const TiptapEditor: React.FC<Props> = ({
       </div>
 
       <div className="mb-4">
-        <MenuBar editor={editor} />
+        <MenuBar editor={activeEditor} />
         <EditorContent editor={editor} />
       </div>
     </div>

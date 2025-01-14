@@ -3,7 +3,7 @@
 import React from 'react';
 import TopicSelector from './_components/TopicSelector';
 import FormFields from './_components/FormFields';
-import LocationModal from './_components/LocationModal';
+import LocationModal from '../../components/LocationModal';
 import { useFormState } from './_hooks/useFormState';
 import { SubmitHandler } from 'react-hook-form';
 import { FormInputs } from './_types/form';
@@ -95,8 +95,7 @@ const RequestPage: React.FC = () => {
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2">주제 선택</label>
           <TopicSelector
-            topics={['맛집', '쇼핑', '숙소', '이벤트']}
-            additionalTopics={['일정/경비', '문화', '역사', '액티비티', '기타']}
+            topics={['맛집', '쇼핑', '숙소', '이벤트','일정/경비', '문화', '역사', '액티비티', '기타']}
             setValue={setValue}
             watch={watch}
           />

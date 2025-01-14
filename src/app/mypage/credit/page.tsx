@@ -8,16 +8,19 @@ import { loadTossPayments } from '@tosspayments/payment-sdk';
 const TEST_CLIENT_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6';
 
 const fetchCredit = async () => {
-  const { data: user, error: userError } = await supabase.auth.getUser();
+  const { data: sessionData, error: sessionError } =
+    await supabase.auth.getSession();
 
-  if (userError || !user.user) {
+  if (sessionError || !sessionData.session) {
     throw new Error('사용자 정보를 가져오지 못했습니다.');
   }
+
+  const userId = sessionData.session.user.id;
 
   const { data, error } = await supabase
     .from('users')
     .select('credit')
-    .eq('id', user.user.id)
+    .eq('id', userId)
     .single();
 
   if (error) {
