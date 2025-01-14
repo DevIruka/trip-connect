@@ -6,10 +6,10 @@ import { useForm } from 'react-hook-form';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { FormInputs } from '../_types/form';
 import FormFields from '../_components/FormFields';
-import LocationModal from '../_components/LocationModal';
+import LocationModal from '../../../components/LocationModal';
 import TopicSelector from '../_components/TopicSelector';
 import { FaSearch } from 'react-icons/fa';
-import { convertTopicsToEnglish, convertTopicsToKorean } from '@/utils/topics';
+import { convertTopicsToEnglish, convertTopicsToKorean, EnglishCategory, KoreanCategory, topicMapping } from '@/utils/topics';
 
 const EditRequestPage: React.FC = () => {
   const { id } = useParams();
@@ -35,6 +35,7 @@ const EditRequestPage: React.FC = () => {
     setValue('country_city', location);
   };
 
+  useEffect(() => {
   // 기존 데이터 불러옴옴
   const fetchRequestDetails = async () => {
     try {
@@ -46,7 +47,12 @@ const EditRequestPage: React.FC = () => {
 
       if (error) throw error;
 
-      const koreanCategories = convertTopicsToKorean(data.category || []);
+      const categories = (data.category || []) as string[];
+      const validCategories = categories.filter((cat): cat is EnglishCategory =>
+        Object.values(topicMapping).includes(cat as EnglishCategory)
+      );
+
+      const koreanCategories = convertTopicsToKorean(validCategories) as KoreanCategory[];
 
       reset({
         title: data.title,
@@ -64,13 +70,12 @@ const EditRequestPage: React.FC = () => {
     }
   };
 
-  useEffect(() => {
     fetchRequestDetails();
   }, [id]);
 
   const onSubmit = async (data: FormInputs) => {
     try {
-      const englishCategories = convertTopicsToEnglish(data.category || []);
+      const englishCategories = convertTopicsToEnglish(data.category as KoreanCategory[]);
 
       const { error } = await supabase
         .from('request_posts')
@@ -133,8 +138,7 @@ const EditRequestPage: React.FC = () => {
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2">주제 선택</label>
           <TopicSelector
-            topics={['맛집', '쇼핑', '숙소', '이벤트']}
-            additionalTopics={['일정/경비', '문화', '역사', '액티비티', '기타']}
+            topics={['맛집', '쇼핑', '숙소', '이벤트','일정/경비', '문화', '역사', '액티비티', '기타']}
             setValue={setValue}
             watch={watch}
           />
