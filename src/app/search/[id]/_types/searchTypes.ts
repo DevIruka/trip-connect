@@ -1,4 +1,5 @@
 import { Database } from '@/types/supabase';
+import { ReqResPost } from '../../_components/SearchResults';
 
 export type Params = {
   id: string;
@@ -8,7 +9,7 @@ export type RequestPostData =
   Database['public']['Tables']['request_posts']['Row'];
 
 export type FetchRequestPostsResult = {
-  data: RequestPostData[]; // 개별 데이터 배열
+  data: ReqResPost[]; // 개별 데이터 배열
   nextPage: number | null; // 다음 페이지 번호
 };
 

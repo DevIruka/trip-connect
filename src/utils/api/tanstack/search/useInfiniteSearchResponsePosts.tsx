@@ -5,11 +5,11 @@ import {
   ExtendedResponsePostData,
   FetchResponsePostsResult,
 } from '@/app/search/[id]/_types/searchTypes';
-const PAGE_SIZE = 12; // 페이지 사이즈
+const PAGE_SIZE = 5; // 페이지 사이즈
 
 const useInfiniteSearchResponsePosts = (
   keyword: string,
-  setNoResults: Dispatch<SetStateAction<boolean>>,
+  setNoResResults: Dispatch<SetStateAction<boolean>>,
 ) => {
   const {
     data: searchedResponsePost,
@@ -27,9 +27,9 @@ const useInfiniteSearchResponsePosts = (
     queryFn: async ({ pageParam = 1 }) => {
       const posts = await fetchSearchResponsePosts(keyword, pageParam);
       if (posts?.length === 0) {
-        setNoResults(true);
+        setNoResResults(true);
       } else {
-        setNoResults(false);
+        setNoResResults(false);
       }
       return {
         data: posts,
@@ -39,11 +39,10 @@ const useInfiniteSearchResponsePosts = (
     getNextPageParam: (lastPage) => lastPage.nextPage,
     initialPageParam: 1,
     select: (data) => {
-      // pages 배열에서 data 속성을 평탄화하여 PostData[] 배열로 변환
-      return data.pages.flatMap((page) => page.data) || [];
+      const flattenedData = data.pages.flatMap((page) => page.data) || [];
+      return flattenedData;
     },
   });
-
   return {
     searchedResponsePost,
     responseHasNextPage,
