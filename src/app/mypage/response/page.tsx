@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import UserProfileSection from '../_components/UserProfileSection';
 import PostCard from '../_components/PostCard';
@@ -16,9 +17,10 @@ type ResponsePost = {
 };
 
 const ResponsePage = () => {
-  const [profileImg, setProfileImg] = useState<string>(''); 
-  const [responsePosts, setResponsePosts] = useState<ResponsePost[]>([]); 
-  const [error, setError] = useState<string | null>(null); 
+  const { user } = useUserStore(); 
+  const [profileImg, setProfileImg] = useState<string>('');
+  const [responsePosts, setResponsePosts] = useState<ResponsePost[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleUpdateCounts = async () => {
     console.log('Counts updated.');
@@ -48,23 +50,16 @@ const ResponsePage = () => {
 
   useEffect(() => {
     const fetchProfileAndResponses = async () => {
+      if (!user?.id) {
+        setError('No active session. Please log in.');
+        return;
+      }
+
       try {
-        // 로그인된 사용자 정보 가져오기
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
-
-        if (userError || !userData?.user) {
-          setError('No active session. Please log in.');
-          return;
-        }
-
-        const userId = userData.user.id;
-
-        // 프로필 이미지 가져오기
         const { data: profileData, error: profileError } = await supabase
           .from('users')
           .select('profile_img')
-          .eq('id', userId)
+          .eq('id', user.id)
           .single();
 
         if (profileError) {
@@ -78,7 +73,7 @@ const ResponsePage = () => {
         const { data: responseData, error: responseError } = await supabase
           .from('response_posts')
           .select('id, title, content_html, created_at, user_id, request_id')
-          .eq('user_id', userId); 
+          .eq('user_id', user.id);
 
         if (responseError) {
           console.error('Error fetching response posts:', responseError);
@@ -93,7 +88,7 @@ const ResponsePage = () => {
     };
 
     fetchProfileAndResponses();
-  }, []);
+  }, [user]); 
 
   if (error) {
     return <div className="text-center text-red-500">{error}</div>;
@@ -116,11 +111,11 @@ const ResponsePage = () => {
               id: post.id.toString(),
               title: post.title,
               content: post.content_html,
-              country_city: '', 
-              category: '', 
-              img_url: [], 
+              country_city: '',
+              category: '',
+              img_url: [],
             }}
-            onDelete={() => handleDeleteResponse(post.id)} // 삭제 핸들러 전달
+            onDelete={() => handleDeleteResponse(post.id)}
           />
         ))
       ) : (

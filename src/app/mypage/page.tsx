@@ -1,57 +1,62 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useUserStore } from '@/store/userStore';
+import { supabase } from '@/utils/supabase/supabaseClient';
 import Image from 'next/image';
 import Link from 'next/link';
-import { supabase } from '@/utils/supabase/supabaseClient';
+import { logout } from '../login/action';
 
 const MyPage = () => {
-  const [user, setUser] = useState({
+  const { user } = useUserStore();
+  const [userProfile, setUserProfile] = useState({
     nickname: '',
     introduction: '',
     profileImg: '',
     credit: '',
     country: '',
   });
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nicknameInput, setNicknameInput] = useState('');
   const [bioInput, setBioInput] = useState('');
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewImage, setPreviewImage] = useState<string>('');
-  const [loading, setLoading] = useState(true);
 
-  const fetchUserProfile = async () => {
-    const { data: sessionData } = await supabase.auth.getSession();
-    if (!sessionData.session) {
-      setLoading(false);
-      return;
-    }
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (!user?.id) return;
 
-    const userId = sessionData.session.user.id;
+      try {
+        const { data: profileData, error: profileError } = await supabase
+          .from('users')
+          .select('nickname, introduction, profile_img, credit, country')
+          .eq('id', user.id)
+          .single();
 
-    const { data: profileData } = await supabase
-      .from('users')
-      .select('nickname, introduction, profile_img, credit, country')
-      .eq('id', userId)
-      .single();
+        if (profileError) {
+          console.error('Error fetching profile data:', profileError);
+          return;
+        }
 
-    if (profileData) {
-      setUser({
-        nickname: profileData.nickname || '닉네임 없음',
-        introduction: profileData.introduction || '아직 자기소개가 없습니다.',
-        profileImg: profileData.profile_img || '',
-        credit: profileData.credit || '0',
-        country: profileData.country || '국가 정보 없음',
-      });
+        setUserProfile({
+          nickname: profileData?.nickname || '닉네임 없음',
+          introduction:
+            profileData?.introduction || '아직 자기소개가 없습니다.',
+          profileImg: profileData?.profile_img || '',
+          credit: profileData?.credit || '0',
+          country: profileData?.country || '국가 정보 없음',
+        });
 
-      setNicknameInput(profileData.nickname || '');
-      setBioInput(profileData.introduction || '');
-      setPreviewImage(profileData.profile_img || '');
-    }
+        setNicknameInput(profileData?.nickname || '');
+        setBioInput(profileData?.introduction || '');
+        setPreviewImage(profileData?.profile_img || '');
+      } catch (fetchError) {
+        console.error('Unexpected error:', fetchError);
+      }
+    };
 
-    setLoading(false);
-  };
+    fetchUserProfile();
+  }, [user]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -62,60 +67,59 @@ const MyPage = () => {
   };
 
   const handleSaveProfile = async () => {
-    const { data: sessionData } = await supabase.auth.getSession();
-    if (!sessionData.session) {
-      return;
-    }
+    if (!user?.id) return;
 
-    const userId = sessionData.session.user.id;
-    let profileImageUrl = user.profileImg;
+    try {
+      let profileImageUrl = userProfile.profileImg;
 
-    if (selectedImage) {
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('profile-images')
-        .upload(`public/${userId}/${selectedImage.name}`, selectedImage, {
-          cacheControl: '3600',
-          upsert: true,
-        });
+      if (selectedImage) {
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('profile-images')
+          .upload(`public/${user.id}/${selectedImage.name}`, selectedImage, {
+            cacheControl: '3600',
+            upsert: true,
+          });
 
-      if (uploadError || !uploadData) {
-        // 업로드 오류가 발생하거나 uploadData가 null인 경우 처리
+        if (uploadError) {
+          return;
+        }
+
+        const publicUrlData = supabase.storage
+          .from('profile-images')
+          .getPublicUrl(uploadData.path);
+
+        profileImageUrl = publicUrlData.data.publicUrl;
+      }
+
+      const { error: updateError } = await supabase
+        .from('users')
+        .update({
+          nickname: nicknameInput,
+          introduction: bioInput,
+          profile_img: profileImageUrl,
+        })
+        .eq('id', user.id);
+
+      if (updateError) {
         return;
       }
 
-      const publicUrlData = supabase.storage
-        .from('profile-images')
-        .getPublicUrl(uploadData.path);
-
-      profileImageUrl = publicUrlData.data.publicUrl;
-    }
-
-    await supabase
-      .from('users')
-      .update({
+      setUserProfile((prev) => ({
+        ...prev,
         nickname: nicknameInput,
         introduction: bioInput,
-        profile_img: profileImageUrl,
-      })
-      .eq('id', userId);
+        profileImg: profileImageUrl,
+      }));
 
-    setUser((prev) => ({
-      ...prev,
-      nickname: nicknameInput,
-      introduction: bioInput,
-      profileImg: profileImageUrl,
-    }));
-
-    setIsModalOpen(false);
+      setIsModalOpen(false);
+    } catch (saveError) {
+      console.error('Unexpected error while saving profile:', saveError);
+    }
   };
 
-  useEffect(() => {
-    fetchUserProfile();
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  const handleLogout = async () => {
+    await logout();
+  };
 
   return (
     <div className="px-5">
@@ -127,9 +131,9 @@ const MyPage = () => {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
           <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
-            {user.profileImg ? (
+            {userProfile.profileImg ? (
               <Image
-                src={user.profileImg}
+                src={userProfile.profileImg}
                 alt="Profile"
                 width={64}
                 height={64}
@@ -142,8 +146,10 @@ const MyPage = () => {
             )}
           </div>
           <div className="ml-4">
-            <h2 className="text-lg font-bold">{user.nickname}</h2>
-            <p className="text-sm text-gray-600">{user.country}</p>
+            <h2 className="text-lg font-bold flex items-center">
+              {userProfile.nickname}
+            </h2>
+            <p className="text-sm text-gray-600">{userProfile.country}</p>
           </div>
         </div>
         <button
@@ -155,7 +161,19 @@ const MyPage = () => {
       </div>
 
       {/* 자기소개 */}
-      <div className="mb-4 text-gray-700">{user.introduction}</div>
+      <div className="mb-4 text-gray-700">{userProfile.introduction}</div>
+
+      {/* 크레딧 섹션 */}
+      <div className="flex items-center justify-between mb-6 p-4 bg-[#F9F9F9] rounded-lg">
+        <div className="flex items-center">
+          <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center mr-3">
+          </div>
+          <span className="text-sm text-gray-700">크레딧</span>
+        </div>
+        <div className="text-lg font-bold text-gray-800">
+          {userProfile.credit} C
+        </div>
+      </div>
 
       {/* 셀러 인증 */}
       <div className="mb-6">
@@ -208,6 +226,14 @@ const MyPage = () => {
         <span>언어 설정</span>
         <span>▶</span>
       </Link>
+
+      {/* 로그아웃 버튼 */}
+      <button
+        className="w-full py-3 text-center rounded-[4px] bg-[#E5E5EC] text-black font-medium mt-4"
+        onClick={handleLogout}
+      >
+        로그아웃
+      </button>
 
       {/* 모달 */}
       {isModalOpen && (

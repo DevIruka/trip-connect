@@ -3,10 +3,18 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import { useUserStore } from '@/store/userStore'; 
 
 const VerificationCodePage = () => {
+  const { user } = useUserStore(); 
   const router = useRouter();
   const [verificationCode, setVerificationCode] = useState('');
+
+  useEffect(() => {
+    if (!user?.id) {
+      router.push('/login');
+    }
+  }, [user, router]);
 
   // 페이지 진입 시 6자리 랜덤 코드 생성
   useEffect(() => {
@@ -19,18 +27,16 @@ const VerificationCodePage = () => {
   }, []);
 
   const handleSubmit = async () => {
-    const { data, error } = await supabase.auth.getUser();
-
-    if (error || !data.user) {
+    if (!user?.id) {
       alert('로그인이 필요합니다.');
       return;
     }
 
-    const userId = data.user.id;
+    const userId = user.id;
 
     const { error: updateError } = await supabase
       .from('users')
-      .update({ authenticated: true }) 
+      .update({ authenticated: true })
       .eq('id', userId);
 
     if (updateError) {

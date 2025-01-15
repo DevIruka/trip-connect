@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import { useUserStore } from '@/store/userStore';
 import UserProfileSection from '../_components/UserProfileSection';
 import PostCard from '../_components/PostCard';
 import CategoryTabs from '../_components/CategoryTabs';
@@ -16,29 +17,23 @@ type Post = {
 };
 
 const RequestPage = () => {
+  const { user } = useUserStore(); 
   const [profileImg, setProfileImg] = useState<string>('');
-  const [writtenPosts, setWrittenPosts] = useState<Post[]>([]); 
-  const [error, setError] = useState<string | null>(null); 
+  const [writtenPosts, setWrittenPosts] = useState<Post[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchProfileAndPosts = async () => {
+      if (!user?.id) {
+        setError('No active session. Please log in.');
+        return;
+      }
+
       try {
-        // 로그인된 사용자 정보 가져오기
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
-
-        if (userError || !userData?.user) {
-          setError('No active session. Please log in.');
-          return;
-        }
-
-        const userId = userData.user.id;
-
-        // 프로필 이미지 가져오기
         const { data: profileData, error: profileError } = await supabase
           .from('users')
           .select('profile_img')
-          .eq('id', userId)
+          .eq('id', user.id)
           .single();
 
         if (profileError) {
@@ -52,7 +47,7 @@ const RequestPage = () => {
         const { data: postsData, error: postsError } = await supabase
           .from('request_posts')
           .select('id, title, content, country_city, category, img_url')
-          .eq('user_id', userId); 
+          .eq('user_id', user.id);
 
         if (postsError) {
           console.error('Error fetching written posts:', postsError);
@@ -67,7 +62,7 @@ const RequestPage = () => {
     };
 
     fetchProfileAndPosts();
-  }, []);
+  }, [user]);
 
   const handleDeletePost = async (postId: string) => {
     try {
@@ -81,7 +76,6 @@ const RequestPage = () => {
         return;
       }
 
-      // 삭제된 게시물 상태에서 제거
       setWrittenPosts((prevPosts) =>
         prevPosts.filter((post) => post.id !== postId),
       );
