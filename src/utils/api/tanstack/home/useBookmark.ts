@@ -2,12 +2,17 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchBookmarks } from '../../supabase_api/home/fetchBookmarks';
 
 // 북마크 상태 확인
-export const useBookmarks = (userId: string) => {
+export const useBookmarks = (userId: string | undefined) => {
   // 북마크 데이터 가져오기
   const { data: bookmarks = [] } = useQuery({
     queryKey: ['bookmarks', userId],
-    queryFn: () => fetchBookmarks(userId),
+    queryFn: () => {
+      if (userId) {
+        return fetchBookmarks(userId);
+      }
+    },
     initialData: [], // 초기 데이터 설정
+    enabled: !!userId,
   });
 
   // 특정 게시물이 북마크되어 있는지 확인
