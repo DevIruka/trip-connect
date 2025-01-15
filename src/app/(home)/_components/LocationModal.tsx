@@ -67,7 +67,7 @@ export const Modal = ({ isOpen, onClose, setCountry }) => {
           />
           <button
             type="submit" // 폼 제출 버튼으로 설정
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-400 px-2 py-1 rounded-md text-white hover:bg-gray-500"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 px-2 py-1 rounded-md text-white hover:bg-gray-500"
           >
             🔍
           </button>

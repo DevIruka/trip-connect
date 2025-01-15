@@ -126,6 +126,7 @@ const CategoryPage = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
+
                           addBookmarkMutation.mutate(post.id);
                         }}
                       >

@@ -2,6 +2,7 @@ import { topicMapping } from '@/utils/topics';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 import { Modal } from './LocationModal';
+import Icon from '../../../components/icons';
 
 const Navbar = ({ setFilterType, changeCategory, category }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
@@ -20,6 +21,7 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
             onClick={() => changeCategory('all')}
             className="rounded-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-black data-[state=active]:shadow-none"
           >
+            <Icon type={'all'} size={20} />
             전체보기
           </TabsTrigger>
           {topicArr.map(([key, value]) => (
@@ -29,6 +31,7 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
               className="rounded-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-black data-[state=active]:shadow-none"
               key={key}
             >
+              <Icon type={value} size={20} />
               {key}
             </TabsTrigger>
           ))}
