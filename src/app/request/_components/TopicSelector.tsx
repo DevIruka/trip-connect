@@ -16,7 +16,7 @@ const TopicSelector: React.FC<Props> = ({ topics = [], setValue, watch }) => {
       ? currentTopics.filter((t) => t !== topic)
       : [...currentTopics, topic];
 
-    setValue('category', updatedTopics); // category 업데이트
+    setValue('category', updatedTopics, { shouldValidate: true }); // category 업데이트
   };
 
   return (

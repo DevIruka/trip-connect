@@ -12,6 +12,7 @@ export const useFormState = () => {
     reset,
     control,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<FormInputs>();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,6 +32,7 @@ export const useFormState = () => {
     control,
     errors,
     setValue,
+    clearErrors,
     isModalOpen,
     selectedLocation,
     toggleModal,
