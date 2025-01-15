@@ -45,6 +45,78 @@ export type Database = {
           },
         ]
       }
+      likes: {
+        Row: {
+          created_at: string
+          id: string
+          request_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          request_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          request_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "request_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "likes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      purchased_users: {
+        Row: {
+          created_at: string
+          id: string
+          response_id: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          response_id?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          response_id?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchased_users_response_id_fkey"
+            columns: ["response_id"]
+            isOneToOne: false
+            referencedRelation: "response_posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchased_users_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       request_posts: {
         Row: {
           category: string[] | null
@@ -100,7 +172,7 @@ export type Database = {
           id: number
           request_id: string
           title: string
-          user_id: string | null
+          user_id: string
           verified_country: string | null
         }
         Insert: {
@@ -110,7 +182,7 @@ export type Database = {
           id?: number
           request_id?: string
           title: string
-          user_id?: string | null
+          user_id: string
           verified_country?: string | null
         }
         Update: {
@@ -120,7 +192,7 @@ export type Database = {
           id?: number
           request_id?: string
           title?: string
-          user_id?: string | null
+          user_id?: string
           verified_country?: string | null
         }
         Relationships: [
@@ -186,6 +258,7 @@ export type Database = {
         Row: {
           authenticated: boolean | null
           country: string | null
+          country_verified: boolean | null
           created_at: string
           credit: number | null
           email: string | null
@@ -197,6 +270,7 @@ export type Database = {
         Insert: {
           authenticated?: boolean | null
           country?: string | null
+          country_verified?: boolean | null
           created_at?: string
           credit?: number | null
           email?: string | null
@@ -208,6 +282,7 @@ export type Database = {
         Update: {
           authenticated?: boolean | null
           country?: string | null
+          country_verified?: boolean | null
           created_at?: string
           credit?: number | null
           email?: string | null
