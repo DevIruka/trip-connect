@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { supabase } from '@/utils/supabase/supabaseClient';
+import React, { useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { useRouter } from 'next/navigation';
+import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
-
-const TEST_CLIENT_KEY = 'test_ck_mBZ1gQ4YVXWzABpg7g6a3l2KPoqN';
+import { useHandlePayment } from './_hooks/useHandlePayment';
+import CreditBalance from './_components/CreditBalance';
+import PaymentOptions from './_components/PaymentOptions';
 
 const fetchCredit = async (userId: string) => {
   const { data, error } = await supabase
@@ -26,12 +26,9 @@ const fetchCredit = async (userId: string) => {
 const CreditPage: React.FC = () => {
   const router = useRouter();
   const { user } = useUserStore();
+  const { handlePayment, processPaymentResult } = useHandlePayment();
 
-  useEffect(() => {
-    if (!user) {
-      router.push('/login');
-    }
-  }, [user, router]);
+  const paymentProcessedRef = useRef(false);
 
   const {
     data: credit,
@@ -39,34 +36,35 @@ const CreditPage: React.FC = () => {
     isError,
   } = useQuery({
     queryKey: ['userCredit', user?.id],
-    queryFn:() => fetchCredit(user?.id || ''),
+    queryFn: () => fetchCredit(user?.id || ''),
     enabled: !!user,
+    retry: 1, // 실패 시 1회 재시도
   });
 
-  const handlePayment = async () => {
-    // 토스 결제 SDK 로드
-    const tossPayments = await loadTossPayments(TEST_CLIENT_KEY);
+  
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+      return;
+    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const status = urlParams.get('status');
 
-    tossPayments
-      .requestPayment('카드', {
-        amount: 10000, // 결제 금액
-        orderId: `order-${Date.now()}`, // 고유 주문 ID
-        orderName: '10,000C 충전', // 주문 이름
-        customerName: user?.email, // 사용자 이름
-        successUrl: 'http://localhost:3000/payment/success', // 결제 성공 URL
-        failUrl: 'http://localhost:3000/payment/fail', // 결제 실패 URL
-      })
-      .catch((error) => {
-        // 결제 실패 시 처리
-        console.error('결제 요청 중 오류 발생:', error.message);
-      });
-  };
+    if  ((status === 'success' || status === 'fail') && !paymentProcessedRef.current) {
+      paymentProcessedRef.current = true; // Alert 중복 방지
+      processPaymentResult(user.id, urlParams);
+    }
+  }, [processPaymentResult, router, user]);
 
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
 
-  if (isError || !user) {
+  if (!user) {
+    return <div>사용자 정보를 불러오는 중입니다...</div>;
+  }
+
+  if (isError) {
     return <div>데이터를 가져오는 중 오류가 발생했습니다.</div>;
   }
 
@@ -74,41 +72,28 @@ const CreditPage: React.FC = () => {
     <div className="p-4 bg-white h-screen">
       {/* 상단 제목 및 뒤로가기 */}
       <div className="flex items-center mb-4">
-        <button className="text-gray-500">←</button>
+        <button className="text-gray-500" onClick={() => router.back()}>
+          ←
+        </button>
       </div>
 
       {/* 보유 크레딧 */}
-      <div className="mb-6">
-        <h2 className="text-gray-600 text-lg font-medium mb-2">보유 크레딧</h2>
-        <div className="bg-gray-100 rounded-lg p-4 flex items-center justify-between">
-          <div className="w-16 h-16 bg-gray-300 rounded" />
-          <p className="text-3xl font-bold">{credit?.toLocaleString()}c</p>
-        </div>
-      </div>
+      <CreditBalance credit={credit} />
 
       {/* 충전하기 */}
       <h2 className="text-gray-600 text-lg font-medium mb-4">충전하기</h2>
-      <div className="space-y-4">
-        {Array.from({ length: 5 }).map((_, idx) => (
-          <div
-            key={idx}
-            className="bg-gray-100 rounded-lg p-4 flex items-center justify-between"
-          >
-            <div>
-              <p className="text-xl font-bold">10,000C</p>
-              <p className="text-blue-500 text-sm font-medium mt-1">
-                +500 추가크레딧
-              </p>
-            </div>
-            <button
-              className="bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-lg"
-              onClick={handlePayment}
-            >
-              10,000원
-            </button>
-          </div>
-        ))}
-      </div>
+      <PaymentOptions
+        options={[
+          { amount: 1000, bonusRate: 0.05 },
+          { amount: 5000, bonusRate: 0.05 },
+          { amount: 10000, bonusRate: 0.05 },
+          { amount: 20000, bonusRate: 0.1 },
+          { amount: 50000, bonusRate: 0.1 },
+        ]}
+        onPayment={(amount, bonus) =>
+          handlePayment(amount, bonus, user?.email || '')
+        }
+      />
     </div>
   );
 };
