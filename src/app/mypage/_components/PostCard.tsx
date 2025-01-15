@@ -1,7 +1,6 @@
-'use client';
-
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link'; // Link import 추가
 import { supabase } from '@/utils/supabase/supabaseClient';
 
 type Post = {
@@ -103,6 +102,11 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
           </div>
         )}
       </div>
+
+      {/* 게시물 클릭 시 /post/[postId]로 이동 */}
+      <Link href={`/post/${post.id}`} passHref>
+        <div className="absolute inset-0 w-full h-full cursor-pointer"></div>
+      </Link>
     </div>
   );
 };

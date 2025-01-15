@@ -3,29 +3,27 @@
 import { supabase } from '@/utils/supabase/supabaseClient';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import { useUserStore } from '@/store/userStore';
+import { useRouter } from 'next/navigation';
 
 const SellerPage = () => {
-  const [isIdentityVerified, setIsIdentityVerified] = useState(false); 
+  const { user } = useUserStore();
+  const router = useRouter();
+  const [isIdentityVerified, setIsIdentityVerified] = useState(false);
+  const [isCountryVerified, setIsCountryVerified] = useState(false); 
 
   useEffect(() => {
     const fetchAuthenticationStatus = async () => {
+      if (!user?.id) {
+        router.push('/login');
+        return;
+      }
+
       try {
-        // 현재 로그인된 사용자 가져오기
-        const { data: userData, error: userError } =
-          await supabase.auth.getUser();
-
-        if (userError || !userData.user) {
-          console.error('사용자 정보를 가져오는 중 오류 발생:', userError);
-          return;
-        }
-
-        const userId = userData.user.id; 
-
-        // Supabase에서 인증 상태 확인
-        const { data: user, error: fetchError } = await supabase
+        const { data: userRecord, error: fetchError } = await supabase
           .from('users')
-          .select('authenticated')
-          .eq('id', userId)
+          .select('authenticated, country_verified')
+          .eq('id', user.id)
           .single();
 
         if (fetchError) {
@@ -33,14 +31,15 @@ const SellerPage = () => {
           return;
         }
 
-        setIsIdentityVerified(user?.authenticated || false); 
+        setIsIdentityVerified(userRecord?.authenticated || false);
+        setIsCountryVerified(userRecord?.country_verified || false); 
       } catch (err) {
         console.error('예기치 않은 오류 발생:', err);
       }
     };
 
     fetchAuthenticationStatus();
-  }, []);
+  }, [user, router]);
 
   return (
     <div className="px-5">
@@ -50,7 +49,23 @@ const SellerPage = () => {
       <div className="space-y-4">
         {/* 국가 인증 */}
         <div className="p-4 border border-[#D9D9D9] rounded-lg bg-white">
-          <h3 className="text-lg font-bold mb-2">국가 인증</h3>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <h3 className="text-lg font-bold mb-2">국가 인증</h3>
+              {/* 완료 상태 박스 */}
+              {isCountryVerified && (
+                <div
+                  className="flex items-center justify-center px-1.5 py-0.5 gap-1 text-white text-xs font-medium rounded"
+                  style={{
+                    background: '#575757',
+                    borderRadius: '4px',
+                  }}
+                >
+                  완료
+                </div>
+              )}
+            </div>
+          </div>
           <p className="text-sm text-gray-600 mb-4 leading-[1.4]">
             현재 거주 국가 및 지역을 인증하면 해당하는 국가와 관련된 게시물에
             답변이 필터링 확률이 높아져요
