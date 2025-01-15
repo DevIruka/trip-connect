@@ -13,7 +13,7 @@ export const useBookmarkMutations = (userId: string | undefined) => {
       if (userId) {
         return addBookmark(postId, userId);
       } else {
-        alert('로그인해주세요');
+        return;
       }
     },
     onSuccess: (_, postId) => {
