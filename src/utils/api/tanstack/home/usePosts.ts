@@ -17,6 +17,7 @@ type FetchPostsResponse = {
   nextPage: number | null; // 다음 페이지 번호 (없으면 null)
 };
 
+//TODO: 인피니트쿼리 타입지정
 export const usePosts = (category: string) => {
   const isAll = category === 'all'; // 'all'인지 확인
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =

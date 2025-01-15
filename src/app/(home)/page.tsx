@@ -48,6 +48,8 @@ const CategoryPage = () => {
     return true; // 최신 (모두 표시)
   });
 
+  console.log('filteredPosts', filteredPosts);
+
   return (
     <>
       <div className="h-full w-full mx-auto relative overflow-y-scroll">
@@ -92,7 +94,18 @@ const CategoryPage = () => {
                                 {key}
                               </div>
                             ))
-                        : ''}
+                        : topicArr
+                            .filter(([_, value]) =>
+                              post.request_posts.category.includes(value),
+                            )
+                            .map(([key, _]) => (
+                              <div
+                                className="bg-gray-300 rounded-md px-1"
+                                key={key}
+                              >
+                                {key}
+                              </div>
+                            ))}
                     </div>
                   </div>
                   {!post.request_id ? (
