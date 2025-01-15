@@ -16,7 +16,7 @@ export const useBookmarks = (userId: string | undefined) => {
   });
 
   // 특정 게시물이 북마크되어 있는지 확인
-  const isPostBookmarked = (postId: string) =>
+  const isPostBookmarked = (postId: string | number) =>
     bookmarks?.some((bookmark) => bookmark.request_id === postId);
 
   return {

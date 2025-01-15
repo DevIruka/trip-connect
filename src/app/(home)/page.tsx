@@ -48,8 +48,6 @@ const CategoryPage = () => {
     return true; // 최신 (모두 표시)
   });
 
-  console.log('filteredPosts', filteredPosts);
-
   return (
     <>
       <div className="h-full w-full mx-auto relative overflow-y-scroll">

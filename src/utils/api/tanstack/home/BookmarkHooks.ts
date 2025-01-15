@@ -8,8 +8,8 @@ export const useBookmarkMutations = (userId: string | undefined) => {
   const queryClient = useQueryClient();
 
   // 북마크 추가 Mutation
-  const addBookmarkMutation = useMutation<unknown, Error, string>({
-    mutationFn: (postId: string) => {
+  const addBookmarkMutation = useMutation<unknown, Error, string | number>({
+    mutationFn: (postId: string | number) => {
       if (userId) {
         return addBookmark(postId, userId);
       } else {
@@ -26,7 +26,7 @@ export const useBookmarkMutations = (userId: string | undefined) => {
 
   // 북마크 삭제 Mutation
   const deleteBookmarkMutation = useMutation({
-    mutationFn: (postId: string) => deleteBookmark(postId, userId),
+    mutationFn: (postId: string | number) => deleteBookmark(postId, userId),
     onSuccess: (_, postId) => {
       queryClient.setQueryData<Array<{ request_id: string }>>(
         ['bookmarks', userId],
