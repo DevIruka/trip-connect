@@ -92,7 +92,18 @@ const CategoryPage = () => {
                                 {key}
                               </div>
                             ))
-                        : ''}
+                        : topicArr
+                            .filter(([_, value]) =>
+                              post.request_posts.category.includes(value),
+                            )
+                            .map(([key, _]) => (
+                              <div
+                                className="bg-gray-300 rounded-md px-1"
+                                key={key}
+                              >
+                                {key}
+                              </div>
+                            ))}
                     </div>
                   </div>
                   {!post.request_id ? (

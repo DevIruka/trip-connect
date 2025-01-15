@@ -10,7 +10,7 @@ export const fetchBookmarks = async (userId: string) => {
 };
 
 // 북마크 추가
-export const addBookmark = async (postId: string, userId: string) => {
+export const addBookmark = async (postId: string | number, userId: string) => {
   const { error } = await supabase
     .from('bookmarks')
     .insert([{ user_id: userId, request_id: postId }])
@@ -19,7 +19,10 @@ export const addBookmark = async (postId: string, userId: string) => {
 };
 
 // 북마크 삭제
-export const deleteBookmark = async (postId: string, userId: string) => {
+export const deleteBookmark = async (
+  postId: string | number,
+  userId: string,
+) => {
   const { error } = await supabase
     .from('bookmarks')
     .delete()
