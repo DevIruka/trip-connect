@@ -23,8 +23,8 @@ export type KoreanCategory =
   | '기타';
 
 export const topicMapping: Record<KoreanCategory, EnglishCategory> = {
-  맛집: 'food',
-  쇼핑: 'shopping',
+  '맛집': 'food',
+  '쇼핑': 'shopping',
   숙소: 'lodging',
   이벤트: 'event',
   '일정/경비': 'schedule-expenses',

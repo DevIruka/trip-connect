@@ -1,5 +1,6 @@
 import { Database } from '@/types/supabase';
 import { ReqResPost } from '../../_components/SearchResults';
+import { EnglishCategory } from '@/utils/topics';
 
 export type Params = {
   id: string;
@@ -17,7 +18,7 @@ export type ResponsePostData =
   Database['public']['Tables']['response_posts']['Row']
 
 export type ExtendedResponsePostData = ResponsePostData & {
-  category: string[] | null;
+  category: EnglishCategory[] | null;
 };
 
 export type FetchResponsePostsResult = {

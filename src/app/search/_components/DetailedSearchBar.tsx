@@ -3,12 +3,13 @@ import Link from 'next/link';
 import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Tabs, Tab, Box } from '@mui/material';
+import { KoreanCategory } from '@/utils/topics';
 
 type DetailedSearchBarProps = {
   inputRef: RefObject<HTMLInputElement>;
   inputOnclick: () => void;
   selectedCategory: string | null;
-  setSelectedCategory: Dispatch<SetStateAction<string | null>>;
+  setSelectedCategory: Dispatch<SetStateAction<KoreanCategory | "전체">>;
 };
 
 const DetailedSearchBar = ({
@@ -27,7 +28,9 @@ const DetailedSearchBar = ({
     newValue: string | null,
   ) => {
     // 선택된 카테고리가 클릭된 것과 같으면 해제(null), 아니면 업데이트
-    setSelectedCategory((prev) => (prev === newValue ? null : newValue));
+    setSelectedCategory((prev) => 
+      prev === newValue ? '전체' : (newValue as KoreanCategory | "전체")
+    );
   };
   return (
     <>
