@@ -164,16 +164,18 @@ const MyPage = () => {
       <div className="mb-4 text-gray-700">{userProfile.introduction}</div>
 
       {/* 크레딧 섹션 */}
-      <div className="flex items-center justify-between mb-6 p-4 bg-[#F9F9F9] rounded-lg">
+      <Link
+        href="/mypage/credit"
+        className="flex items-center justify-between mb-6 p-4 bg-[#F9F9F9] rounded-lg"
+      >
         <div className="flex items-center">
-          <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center mr-3">
-          </div>
+          <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center mr-3"></div>
           <span className="text-sm text-gray-700">크레딧</span>
         </div>
         <div className="text-lg font-bold text-gray-800">
           {userProfile.credit} C
         </div>
-      </div>
+      </Link>
 
       {/* 셀러 인증 */}
       <div className="mb-6">
