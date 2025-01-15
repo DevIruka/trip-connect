@@ -4,12 +4,18 @@ import {
 } from '@/utils/api/supabase_api/home/fetchBookmarks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-export const useBookmarkMutations = (userId: string) => {
+export const useBookmarkMutations = (userId: string | undefined) => {
   const queryClient = useQueryClient();
 
   // 북마크 추가 Mutation
   const addBookmarkMutation = useMutation<unknown, Error, string>({
-    mutationFn: (postId: string) => addBookmark(postId, userId),
+    mutationFn: (postId: string) => {
+      if (userId) {
+        return addBookmark(postId, userId);
+      } else {
+        alert('로그인해주세요');
+      }
+    },
     onSuccess: (_, postId) => {
       queryClient.setQueryData<Array<{ request_id: string }>>(
         ['bookmarks', userId],
