@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import TiptapEditor from '../_components/TiptapEditor';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import HeaderWithButton from '../_components/HeaderButtons';
 import { useQuery } from '@tanstack/react-query';
+import { useUserStore } from '@/store/userStore';
 
 type RequestDetails = {
   title: string;
@@ -30,7 +31,7 @@ const fetchRequestDetails = async (
 const ResponsePage = ({ params }: { params: { postId: string } }) => {
   const router = useRouter();
   const { postId } = params;
-  const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7'; // 테스트용 유저 ID
+  const { user } = useUserStore();
   
   const [data, setData] = useState({
     title: '',
@@ -46,10 +47,16 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   });
 
   const handleSubmit = async () => {
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      router.push('/login');
+      return;
+    }
+
     try {
       const { error } = await supabase.from('response_posts').insert([
         {
-          user_id: userId,
+          user_id: user.id,
           request_id: postId,
           title: data.title,
           content_html: data.contentHtml,
