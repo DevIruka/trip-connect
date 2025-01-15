@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { login } from './action';
 import { createClient } from '@/utils/supabase/client';
 import { LoginInputs } from '@/types/authType';
-import { useRouter } from 'next/navigation';
 import Input from '@/components/Input';
 import BlackButton from '@/components/BlackBtn';
 import Link from 'next/link';
@@ -15,7 +14,6 @@ const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
 
 const LoginPage = () => {
-  const route = useRouter();
   const {
     register,
     handleSubmit,

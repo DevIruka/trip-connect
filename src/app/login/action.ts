@@ -12,7 +12,7 @@ export async function login(data: LoginInputs) {
   // type-casting here for convenience
   // in practice, you should validate your inputs
 
-  const { data : logindata, error } = await supabase.auth.signInWithPassword(
+  const { error } = await supabase.auth.signInWithPassword(
     data,
   );
 

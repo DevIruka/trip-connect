@@ -12,27 +12,23 @@ import {
   Params,
   RequestPostData,
 } from '../[id]/_types/searchTypes';
-import { Database } from '@/types/supabase';
+import SearchResultCount from './SearchResultCount';
+import SelectBox from './SelectBox';
+import { KoreanCategory, topicMapping } from '@/utils/topics';
 export type Post = ExtendedResponsePostData | RequestPostData;
 
-type SearchResultComponentProps = {
-  user: Database['public']['Tables']['users']['Row'] | null;
-};
-
-const SearchResultComponent = ({ user }: SearchResultComponentProps) => {
+const SearchResultComponent = () => {
   const { id } = useParams<Params>();
   const keyword = decodeUrl(id);
   const [noReqResults, setNoReqResults] = useState<boolean>(false);
   const [countReq, setCountReq] = useState<number | null>(0);
   const [countRes, setCountRes] = useState<number | null>(0);
   const [noResResults, setNoResResults] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<KoreanCategory | '전체'>('전체');
   const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
   const route = useRouter();
   const [allPosts, setAllPosts] = useState<ReqResPost[] | []>([]);
   const [filter, setFilter] = useState<'all' | 'question' | 'answer'>('all');
-
-  console.log(user);
 
   useEffect(() => {
     if (keyword && inputRef.current) {
@@ -99,10 +95,8 @@ const SearchResultComponent = ({ user }: SearchResultComponentProps) => {
       : sortedPosts?.filter(
           (post) =>
             Array.isArray(post.category) &&
-            post!.category.includes(selectedCategory),
+            post!.category.includes(topicMapping[selectedCategory]),
         );
-
-  // console.log(filteredPosts);
 
   return (
     <>
@@ -119,30 +113,30 @@ const SearchResultComponent = ({ user }: SearchResultComponentProps) => {
         {!(noReqResults && noResResults) && (
           <>
             {countReq! + countRes! !== 0 ? (
-              <div>
-                <div className="flex flex-row items-center">
-                  <p className="font-bold text-xl my-2">검색 결과 </p>
-                  <span className="ml-2 text-xl text-gray-500">
-                    {countReq! + countRes!}
-                  </span>
-                </div>
+              <div className="flex justify-between my-2">
+                <SearchResultCount
+                  countReq={countReq}
+                  countRes={countRes}
+                  filter={filter}
+                />
+                <SelectBox filter={filter} setFilter={setFilter} />
               </div>
             ) : (
               <p></p>
             )}
             <SearchResults filteredPosts={filteredPosts} filter={filter} />
-            <div className="flex flex-col items-center justify-center p-3">
+            <div className="flex flex-col w-full items-center justify-center">
               {(requestHasNextPage || responseHasNextPage) && (
                 <button
                   onClick={() => moreBtnHandler()}
                   disabled={
                     requestIsFetchingNextPage || responseIsFetchingNextPage
                   }
-                  className="border"
+                  className="border-2 rounded-lg p-2 grid cursor-pointer w-full"
                 >
                   {requestIsFetchingNextPage || responseIsFetchingNextPage
                     ? '검색 결과 로드 중'
-                    : '검색 결과 더보기'}
+                    : '더보기'}
                 </button>
               )}
             </div>
