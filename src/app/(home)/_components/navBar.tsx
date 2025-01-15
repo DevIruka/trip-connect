@@ -1,7 +1,12 @@
 import { topicMapping } from '@/utils/topics';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useState } from 'react';
+import { Modal } from './LocationModal';
 
 const Navbar = ({ setFilterType, changeCategory, category }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
+  const [selectedCountry, setSelectedCountry] = useState(''); // 선택된 나라 관리
+
   const topicArr = Object.entries(topicMapping);
   return (
     <div className="grid sticky top-[0px] bg-white z-10">
@@ -45,8 +50,24 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
             답변
           </button>
         </div>
-        <button>나라 선택하기</button>
+        <button
+          className="menu-btn"
+          onClick={() => setIsModalOpen(true)} // 모달 열기
+        >
+          나라 선택하기
+        </button>
       </div>
+
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+        setCountry={(country) => {
+          setSelectedCountry(country); // 선택된 나라 업데이트
+          console.log('선택된 나라:', country);
+        }}
+      />
     </div>
   );
 };

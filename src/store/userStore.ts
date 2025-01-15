@@ -74,4 +74,18 @@ export const useUserStore = create<UserState>((set) => ({
       console.error('사용자 데이터 가져오기 오류:', err);
     }
   },
+
+  signOut: async () => {
+    const supabase = createClient();
+
+    try {
+      await supabase.auth.signOut();
+      window.location.href = '/login';
+      set({ user: null, userTable: null, isLogin: false });
+      document.cookie =
+        'supabase.auth.token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;'; // 쿠키 삭제
+    } catch (err) {
+      console.error('로그아웃 오류:', err);
+    }
+  },
 }));
