@@ -27,9 +27,9 @@ const CategoryPage = () => {
   //카테고리 한글표시
   const topicArr = Object.entries(topicMapping);
 
-  //로그인한 유저
+  // //로그인한 유저
   const { user } = useUserStore();
-  const userId = user ? user.id : '';
+  const userId = user?.id;
 
   //북마크
   const { addBookmarkMutation, deleteBookmarkMutation } =
