@@ -9,7 +9,13 @@ import FormFields from '../_components/FormFields';
 import LocationModal from '../../../components/LocationModal';
 import TopicSelector from '../_components/TopicSelector';
 import { FaSearch } from 'react-icons/fa';
-import { convertTopicsToEnglish, convertTopicsToKorean, EnglishCategory, KoreanCategory, topicMapping } from '@/utils/topics';
+import {
+  convertTopicsToEnglish,
+  convertTopicsToKorean,
+  EnglishCategory,
+  KoreanCategory,
+  topicMapping,
+} from '@/utils/topics';
 
 const EditRequestPage: React.FC = () => {
   const { id } = useParams();
@@ -22,6 +28,7 @@ const EditRequestPage: React.FC = () => {
     reset,
     control,
     setValue,
+    clearErrors,
     formState: { errors },
   } = useForm<FormInputs>();
 
@@ -33,49 +40,53 @@ const EditRequestPage: React.FC = () => {
     setSelectedLocation(location);
     setIsModalOpen(false);
     setValue('country_city', location);
+    clearErrors('country_city');
   };
 
   useEffect(() => {
-  // 기존 데이터 불러옴옴
-  const fetchRequestDetails = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('request_posts')
-        .select('*')
-        .eq('id', id)
-        .single();
+    // 기존 데이터 불러옴옴
+    const fetchRequestDetails = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('request_posts')
+          .select('*')
+          .eq('id', id)
+          .single();
 
-      if (error) throw error;
+        if (error) throw error;
 
-      const categories = (data.category || []) as string[];
-      const validCategories = categories.filter((cat): cat is EnglishCategory =>
-        Object.values(topicMapping).includes(cat as EnglishCategory)
-      );
+        const categories = (data.category || []) as string[];
+        const validCategories = categories.filter(
+          (cat): cat is EnglishCategory =>
+            Object.values(topicMapping).includes(cat as EnglishCategory),
+        );
 
-      const koreanCategories = convertTopicsToKorean(validCategories) as KoreanCategory[];
+        const koreanCategories = convertTopicsToKorean(validCategories);
 
-      reset({
-        title: data.title,
-        credit: data.credit,
-        content: data.content,
-        date_end: data.date_end,
-        category: koreanCategories,
-        country_city: data.country_city,
-      });
-      setSelectedLocation(data.country_city);
-    } catch (error) {
-      console.error('데이터 불러오기 오류:', error);
-      alert('데이터를 불러오는 데 문제가 발생했습니다.');
-      router.push('/request'); // 실패했을때 어디로 리다이렉트를 해야할까...
-    }
-  };
+        reset({
+          title: data.title,
+          credit: data.credit,
+          content: data.content,
+          date_end: data.date_end,
+          category: koreanCategories,
+          country_city: data.country_city,
+        });
+        setSelectedLocation(data.country_city);
+      } catch (error) {
+        console.error('데이터 불러오기 오류:', error);
+        alert('데이터를 불러오는 데 문제가 발생했습니다.');
+        router.push('/request'); // 실패했을때 어디로 리다이렉트를 해야할까...
+      }
+    };
 
     fetchRequestDetails();
-  }, [id]);
+  }, [id, reset, router]);
 
   const onSubmit = async (data: FormInputs) => {
     try {
-      const englishCategories = convertTopicsToEnglish(data.category as KoreanCategory[]);
+      const englishCategories = convertTopicsToEnglish(
+        data.category as KoreanCategory[],
+      );
 
       const { error } = await supabase
         .from('request_posts')
@@ -123,10 +134,22 @@ const EditRequestPage: React.FC = () => {
               value={selectedLocation}
               placeholder="나라/도시를 선택하세요"
               readOnly
-              {...register('country_city', { required: true })}
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none"
-              onClick={toggleModal}
+              {...register('country_city', {
+                required: '나라/도시를 선택하세요.',
+              })}
+              className={`w-full px-3 py-2 border ${
+                errors.country_city ? 'border-red-500' : 'border-gray-300'
+              } rounded focus:outline-none`}
+              onClick={() => {
+                clearErrors('country_city');
+                toggleModal();
+              }}
             />
+            {errors.country_city && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.country_city.message}
+              </p>
+            )}
             <FaSearch
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               style={{ color: 'black' }}
@@ -138,10 +161,32 @@ const EditRequestPage: React.FC = () => {
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2">주제 선택</label>
           <TopicSelector
-            topics={['맛집', '쇼핑', '숙소', '이벤트','일정/경비', '문화', '역사', '액티비티', '기타']}
+            topics={[
+              '맛집',
+              '쇼핑',
+              '숙소',
+              '이벤트',
+              '일정/경비',
+              '문화',
+              '역사',
+              '액티비티',
+              '기타',
+            ]}
             setValue={setValue}
             watch={watch}
           />
+          <input
+            type="hidden"
+            {...register('category', {
+              validate: (value) =>
+                value?.length > 0 ? true : '최소 하나의 주제를 선택하세요.',
+            })}
+          />
+          {errors.category && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.category.message}
+            </p>
+          )}
         </div>
 
         <FormFields
@@ -154,7 +199,11 @@ const EditRequestPage: React.FC = () => {
         <LocationModal
           isOpen={isModalOpen}
           toggleModal={toggleModal}
-          handleLocationSelect={handleLocationSelect}
+          handleLocationSelect={(location) => {
+            handleLocationSelect(location);
+            setValue('country_city', location);
+            clearErrors('country_city');
+          }}
         />
       </form>
     </>

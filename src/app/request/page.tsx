@@ -9,7 +9,11 @@ import { SubmitHandler } from 'react-hook-form';
 import { FormInputs } from './_types/form';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { FaSearch } from 'react-icons/fa';
-import { convertTopicsToEnglish } from '@/utils/topics';
+import {
+  convertTopicsToEnglish,
+  KoreanCategory,
+  topicMapping,
+} from '@/utils/topics';
 
 const RequestPage: React.FC = () => {
   const {
@@ -24,13 +28,24 @@ const RequestPage: React.FC = () => {
     selectedLocation,
     toggleModal,
     handleLocationSelect,
+    clearErrors,
   } = useFormState();
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
-      const selectedTopicsInEnglish = convertTopicsToEnglish(
-        data.category || [],
-      );
+      const selectedCategories = data.category as KoreanCategory[];
+
+      // 유효성 검사
+      if (
+        !selectedCategories.every((cat) =>
+          Object.keys(topicMapping).includes(cat),
+        )
+      ) {
+        throw new Error('유효하지 않은 카테고리가 포함되어 있습니다.');
+      }
+
+      const selectedTopicsInEnglish =
+        convertTopicsToEnglish(selectedCategories);
 
       const { error } = await supabase.from('request_posts').insert([
         {
@@ -80,13 +95,25 @@ const RequestPage: React.FC = () => {
               value={selectedLocation}
               placeholder="나라/도시를 선택하세요"
               readOnly
-              {...register('country_city', { required: true })}
-              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none pr-10"
-              onClick={toggleModal}
+              {...register('country_city', {
+                required: '나라/도시를 선택하세요.',
+              })}
+              className={`w-full px-3 py-2 border ${
+                errors.country_city ? 'border-red-500' : 'border-gray-300'
+              } rounded focus:outline-none pr-10`}
+              onClick={() => {
+                clearErrors('country_city');
+                toggleModal();
+              }}
             />
+            {errors.country_city && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.country_city.message}
+              </p>
+            )}
             <FaSearch
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              style={{color:'black'}}
+              style={{ color: 'black' }}
               size={18} // 아이콘 크기
             />
           </div>
@@ -95,10 +122,32 @@ const RequestPage: React.FC = () => {
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2">주제 선택</label>
           <TopicSelector
-            topics={['맛집', '쇼핑', '숙소', '이벤트','일정/경비', '문화', '역사', '액티비티', '기타']}
+            topics={[
+              '맛집',
+              '쇼핑',
+              '숙소',
+              '이벤트',
+              '일정/경비',
+              '문화',
+              '역사',
+              '액티비티',
+              '기타',
+            ]}
             setValue={setValue}
             watch={watch}
           />
+          <input
+            type="hidden"
+            {...register('category', {
+              validate: (value) =>
+                value?.length > 0 ? true : '최소 하나의 주제를 선택하세요.',
+            })}
+          />
+          {errors.category && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.category.message}
+            </p>
+          )}
         </div>
 
         <FormFields
@@ -111,7 +160,11 @@ const RequestPage: React.FC = () => {
         <LocationModal
           isOpen={isModalOpen}
           toggleModal={toggleModal}
-          handleLocationSelect={handleLocationSelect}
+          handleLocationSelect={(location) => {
+            handleLocationSelect(location); // 기존 로직 수행
+            setValue('country_city', location); // react-hook-form에 선택된 값 설정
+            clearErrors('country_city'); // 에러 메시지 제거
+          }}
         />
       </form>
     </>
