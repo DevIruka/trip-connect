@@ -5,10 +5,10 @@ import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import Image from 'next/image';
 import Link from 'next/link';
-import { logout } from '../login/action';
 
 const MyPage = () => {
-  const { user } = useUserStore();
+  const user = useUserStore((state) => state.user); // user 상태 가져오기
+  const signOut = useUserStore((state) => state.signOut); // signOut 함수 가져오기
   const [userProfile, setUserProfile] = useState({
     nickname: '',
     introduction: '',
@@ -118,7 +118,7 @@ const MyPage = () => {
   };
 
   const handleLogout = async () => {
-    await logout();
+    await signOut();
   };
 
   return (
