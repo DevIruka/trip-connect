@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "genTypes": "npx supabase gen types typescript --project-id xailyedpvaueladwiqrg --schema public > src/types/supabase.ts"
+    "genTypes": "supabase gen types typescript --project-id xailyedpvaueladwiqrg --schema public > src/types/supabase.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -50,6 +50,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.20",
     "postcss": "^8",
+    "supabase": ">=1.8.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

@@ -23,7 +23,7 @@ export const GPTTranslator = async (text: string) => {
         content: [
           {
             type: 'text',
-            text: text,
+            text,
           },
         ],
       },
