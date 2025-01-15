@@ -7,7 +7,7 @@ import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/userStore';
 
-const TEST_CLIENT_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6';
+const TEST_CLIENT_KEY = 'test_ck_mBZ1gQ4YVXWzABpg7g6a3l2KPoqN';
 
 const fetchCredit = async (userId: string) => {
   const { data, error } = await supabase
