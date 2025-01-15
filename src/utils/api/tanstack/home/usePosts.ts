@@ -41,7 +41,7 @@ export const usePosts = (category: string) => {
       fetchPosts({ pageParam, category: isAll ? '' : category }), // 'all'일 경우 category 제거
     getNextPageParam: (lastPage) => lastPage.nextPage, // 다음 페이지 번호 계산
     select: (data) => data?.pages.flatMap((page) => page.data) || [],
-    initialPageParam: 1, // 여기에 초기 페이지를 지정
+    initialPageParam: 0, // 여기에 초기 페이지를 지정
   });
 
   return {
