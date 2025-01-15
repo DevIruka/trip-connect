@@ -9,7 +9,7 @@ type DetailedSearchBarProps = {
   inputRef: RefObject<HTMLInputElement>;
   inputOnclick: () => void;
   selectedCategory: string | null;
-  setSelectedCategory: Dispatch<SetStateAction<KoreanCategory | "전체">>;
+  setSelectedCategory: Dispatch<SetStateAction<KoreanCategory | "👀전체">>;
 };
 
 const DetailedSearchBar = ({
@@ -20,7 +20,7 @@ const DetailedSearchBar = ({
 }: DetailedSearchBarProps) => {
 
   useEffect(() => {
-    setSelectedCategory('전체');
+    setSelectedCategory('👀전체');
   }, [setSelectedCategory]);
 
   const handleCategoryChange = (
@@ -29,7 +29,7 @@ const DetailedSearchBar = ({
   ) => {
     // 선택된 카테고리가 클릭된 것과 같으면 해제(null), 아니면 업데이트
     setSelectedCategory((prev) => 
-      prev === newValue ? '전체' : (newValue as KoreanCategory | "전체")
+      prev === newValue ? '👀전체' : (newValue as KoreanCategory | "👀전체")
     );
   };
   return (

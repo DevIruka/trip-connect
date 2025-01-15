@@ -24,7 +24,7 @@ const SearchResultComponent = () => {
   const [countReq, setCountReq] = useState<number | null>(0);
   const [countRes, setCountRes] = useState<number | null>(0);
   const [noResResults, setNoResResults] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<KoreanCategory | '전체'>('전체');
+  const [selectedCategory, setSelectedCategory] = useState<KoreanCategory | '👀전체'>('👀전체');
   const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
   const route = useRouter();
   const [allPosts, setAllPosts] = useState<ReqResPost[] | []>([]);
@@ -90,7 +90,7 @@ const SearchResultComponent = () => {
   });
 
   const filteredPosts: ReqResPost[] =
-    selectedCategory === '전체' || !selectedCategory
+    selectedCategory === '👀전체' || !selectedCategory
       ? sortedPosts
       : sortedPosts?.filter(
           (post) =>
@@ -108,7 +108,7 @@ const SearchResultComponent = () => {
       />
       <div className="inner">
         {noReqResults && noResResults && (
-          <p>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>
+          <p className='p-1'>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>
         )}
         {!(noReqResults && noResResults) && (
           <>
