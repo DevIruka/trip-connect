@@ -1,109 +1,36 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { supabase } from '@/utils/supabase/supabaseClient';
-import { useUserStore } from '@/store/userStore';
+import React from 'react';
 import UserProfileSection from '../_components/UserProfileSection';
-import PostCard from '../_components/PostCard';
 import CategoryTabs from '../_components/CategoryTabs';
-
-type Post = {
-  id: string;
-  title: string;
-  content: string;
-  country_city: string;
-  category: string;
-  img_url: string[];
-};
+import FilterTabs from '../_components/FilterTabs';
+import AllPosts from './filters/AllPosts';
+import Questions from './filters/Questions';
+import Answers from './filters/Answers';
 
 const RequestPage = () => {
-  const { user } = useUserStore(); 
-  const [profileImg, setProfileImg] = useState<string>('');
-  const [writtenPosts, setWrittenPosts] = useState<Post[]>([]);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchProfileAndPosts = async () => {
-      if (!user?.id) {
-        setError('No active session. Please log in.');
-        return;
-      }
-
-      try {
-        const { data: profileData, error: profileError } = await supabase
-          .from('users')
-          .select('profile_img')
-          .eq('id', user.id)
-          .single();
-
-        if (profileError) {
-          console.error('Error fetching profile image:', profileError);
-          setProfileImg('');
-        } else {
-          setProfileImg(profileData?.profile_img || '');
-        }
-
-        // 작성글 가져오기
-        const { data: postsData, error: postsError } = await supabase
-          .from('request_posts')
-          .select('id, title, content, country_city, category, img_url')
-          .eq('user_id', user.id);
-
-        if (postsError) {
-          console.error('Error fetching written posts:', postsError);
-          setWrittenPosts([]);
-        } else {
-          setWrittenPosts(postsData || []);
-        }
-      } catch (e) {
-        console.error('Unexpected error:', e);
-        setError('An unexpected error occurred.');
-      }
-    };
-
-    fetchProfileAndPosts();
-  }, [user]);
-
-  const handleDeletePost = async (postId: string) => {
-    try {
-      const { error } = await supabase
-        .from('request_posts')
-        .delete()
-        .eq('id', postId);
-
-      if (error) {
-        console.error('Error deleting post:', error);
-        return;
-      }
-
-      setWrittenPosts((prevPosts) =>
-        prevPosts.filter((post) => post.id !== postId),
-      );
-    } catch (e) {
-      console.error('Unexpected error while deleting post:', e);
-    }
-  };
-
-  if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
-  }
+  const [activeFilter, setActiveFilter] = React.useState<
+    'all' | 'question' | 'answer'
+  >('all');
 
   return (
     <div className="px-5 space-y-4 min-h-screen">
       {/* 프로필 섹션 */}
-      <UserProfileSection profileImg={profileImg} />
+      <UserProfileSection />
 
       {/* 카테고리 탭 */}
       <CategoryTabs activeTab="written" />
 
-      {/* 작성글 목록 */}
-      {writtenPosts.length > 0 ? (
-        writtenPosts.map((post) => (
-          <PostCard key={post.id} post={post} onDelete={handleDeletePost} />
-        ))
-      ) : (
-        <div className="text-center text-gray-500">작성한 글이 없습니다.</div>
-      )}
+      {/* 작성글 필터링 탭 */}
+      <FilterTabs
+        activeFilter={activeFilter}
+        onChangeFilter={setActiveFilter}
+      />
+
+      {/* 필터별 컴포넌트 렌더링 */}
+      {activeFilter === 'all' && <AllPosts />}
+      {activeFilter === 'question' && <Questions />}
+      {activeFilter === 'answer' && <Answers />}
     </div>
   );
 };
