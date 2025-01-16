@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Editor, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import MenuBar from './MenuBar';
@@ -83,6 +83,12 @@ const TiptapEditor: React.FC<Props> = ({
       },
     },
   });
+
+  useEffect(() => {
+    if (editor) {
+      setActiveEditor(editor); // 초기 activeEditor 설정
+    }
+  }, [editor]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocalTitle(e.target.value);

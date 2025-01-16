@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import TiptapEditor from '../../_components/TiptapEditor';
-import HeaderWithButton from '../../_components/HeaderButtons';
+import TiptapEditor from '../../response/_components/TiptapEditor';
+import HeaderWithButton from '../../response/_components/HeaderButtons';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const EditResponsePage: React.FC = () => {
