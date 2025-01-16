@@ -4,6 +4,9 @@ import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import { EnglishCategory, KoreanCategory, topicMapping } from '@/utils/topics';
 // import bookmarkButton from '@/images/bookmark.svg';
 import Image from 'next/image';
+import RequestDetail from './RequestDetail';
+import { useUserNicknames } from '@/utils/api/tanstack/search/useUserNickNames';
+import ResponseContent from './ResponseContent';
 
 type SearchResultsProps = {
   filteredPosts: ReqResPost[];
@@ -27,7 +30,7 @@ export type ReqResPost = {
   img_url?: string | null;
 };
 
-const bookmarkButton = '/images/bookmark.svg';
+const a = '/images/a.png';
 
 const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
   const { user } = useUserStore();
@@ -38,12 +41,6 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
 
   const { isPostBookmarked } = useBookmarks(userId);
 
-  const truncateText = (text: string | null | undefined, maxLength: number) => {
-    if (!text) return ''; // null 또는 undefined 처리
-    return text.length > maxLength
-      ? `${text.substring(0, maxLength)}...`
-      : text;
-  };
   const onClickHandler = (post: ReqResPost) => {
     if (post.request_id) {
       location.href = `/post/${post.request_id}`;
@@ -51,6 +48,13 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
       location.href = `/post/${post.id}`;
     }
   };
+
+  const userIds = filteredPosts
+    .map((post) => post.user_id)
+    .filter((userId) => userId); // null 제외
+
+  const { data: nicknameMap, isLoading, isError } = useUserNicknames(userIds);
+
   const filtered = filteredPosts.filter((post) => {
     if (filter === 'all') return true;
     if (filter === 'question') return !post.request_id;
@@ -59,35 +63,42 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
   });
 
   const reverseTopicMapping = Object.fromEntries(
-    Object.entries(topicMapping).map(([key, value]) => [value, key])
+    Object.entries(topicMapping).map(([key, value]) => [value, key]),
   );
-  
-  function convertToKorean(english: EnglishCategory): KoreanCategory {
-    return reverseTopicMapping[english] as KoreanCategory
-  }
-  
+
+  const convertToKorean = (english: EnglishCategory): KoreanCategory =>
+    reverseTopicMapping[english] as KoreanCategory;
+
   return (
     <>
       <ul className="w-full">
         {filtered?.map((post) => {
           const bookmarked = isPostBookmarked(String(post.id));
+          const nickname = nicknameMap?.[post.user_id!];
+
           return (
             <li
               key={post.id}
               className="w-full"
               onClick={() => onClickHandler(post)}
             >
-              <div className="flex border-2 rounded-lg p-2 cursor-pointer w-full mb-2">
+              <div className="flex border-b-2 border-[#F4F4F4] cursor-pointer w-full">
                 {'request_id' in post ? ( // `request_id`가 있으면 RequestPostData로 취급
                   <div className="w-full">
-                    <p className="font-bold">답변글</p>
                     <div className="flex flex-row">
+                      <Image
+                        width={35}
+                        height={35}
+                        src={a}
+                        alt="answer"
+                        className="mr-1"
+                      />
                       <div className="flex items-center justify-center min-w-11 bg-[#F7F7FB] rounded-md px-1 mr-2 my-1">
                         {post.verified_country}
                       </div>
                       <div className="flex flex-row">
-                        {post.category?.slice(0, 3).map((element, i) => {
-                          const koreanCategory = convertToKorean(element)
+                        {post.category?.slice(0, 2).map((element, i) => {
+                          const koreanCategory = convertToKorean(element);
                           return (
                             <div
                               key={i}
@@ -98,64 +109,29 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
                           );
                         })}
                       </div>
+                    </div>
+                    <div>
+                      {isLoading ? (
+                        <p className="text-sm text-gray-400">닉네임 로딩 중</p>
+                      ) : isError ? (
+                        <p className="text-sm text-gray-400">
+                          닉네임 로딩 중 오류 발생
+                        </p>
+                      ) : (
+                        <p className="text-sm text-gray-400">{nickname}</p>
+                      )}
                     </div>
                     <span className="text-lg font-bold">{post.title}</span>
+                    <ResponseContent html={post.free_content!}/>
                   </div>
                 ) : (
-                  <div className="w-full">
-                    <p className="font-bold">질문글</p>
-                    <div className="flex flex-row w-full relative">
-                      <div className="flex flex-row">
-                        {post.category?.slice(0, 3).map((element, i) => {
-                          const koreanCategory = convertToKorean(element)
-                          return (
-                            <div
-                              key={i}
-                              className="flex items-center justify-center min-w-11 bg-[#F7F7FB] rounded-md px-1 mr-2 my-1"
-                            >
-                              {koreanCategory}
-                            </div>
-                          );
-                        })}
-                        <div className="absolute right-0">
-                          {bookmarked ? (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                deleteBookmarkMutation.mutate(String(post.id));
-                              }}
-                            >
-                              <Image
-                                width={20}
-                                height={20}
-                                src={bookmarkButton}
-                                alt="bookmark button"
-                                className="brightness-0 z-0"
-                              />
-                            </button>
-                          ) : (
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                addBookmarkMutation.mutate(String(post.id));
-                              }}
-                            >
-                              <Image
-                                width={20}
-                                height={20}
-                                src={bookmarkButton}
-                                alt="bookmark button"
-                              />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                    <p className="text-lg font-bold">{post.title}</p>
-                    <p className="text-sm text-[#808080] font-bold">
-                      {truncateText(post.content, 20)}
-                    </p>
-                  </div>
+                  <RequestDetail
+                    addBookmarkMutation={addBookmarkMutation}
+                    bookmarked={bookmarked}
+                    convertToKorean={convertToKorean}
+                    deleteBookmarkMutation={deleteBookmarkMutation}
+                    post={post}
+                  />
                 )}
               </div>
             </li>
