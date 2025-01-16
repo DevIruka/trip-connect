@@ -1,27 +1,15 @@
 import React from 'react';
+import { parseHtmlToArray } from '../_hooks/parseHtmlToArray';
+import { ContentRenderer } from './MapComponent';
 
 const RenderTranslatedHTML = ({
   data,
 }: {
   data: { original: string | undefined; translated: string | undefined };
 }) => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(data.original!, 'text/html');
+  const aaa = parseHtmlToArray(data.translated);
 
-  // <div data-type="map"> 요소 추출
-  const mapElement = doc.querySelector('div[data-type="map"]');
-  const mapData = mapElement
-    ? {
-        lat: mapElement.getAttribute('lat'),
-        lng: mapElement.getAttribute('lng'),
-        name: mapElement.getAttribute('name'),
-        address: mapElement.getAttribute('address'),
-      }
-    : null;
-
-  console.log(mapData);
-
-  return <div dangerouslySetInnerHTML={{ __html: data.translated! }}></div>;
+  return <ContentRenderer parsedArray={aaa} />; //1. 리턴 맵데이터 함수 2. 호출하면 맵데이터로 구글 지도 그리는 컴포넌트를 만들어서 (파일 구분) 3.
 };
 
 export default RenderTranslatedHTML;
