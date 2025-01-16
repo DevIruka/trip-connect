@@ -39,7 +39,6 @@ const Navbar = ({
     if (!selectedCountry) {
       return '나라 선택하기';
     }
-
     if (!selectedCountry.city) {
       return selectedCountry.country;
     }
