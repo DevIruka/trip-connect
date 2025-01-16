@@ -10,6 +10,7 @@ import Image from '@tiptap/extension-image';
 import FontFamily from '@tiptap/extension-font-family';
 import MapNode from './MapNode';
 import TextStyle from '@tiptap/extension-text-style';
+import Placeholder from '@tiptap/extension-placeholder';
 
 type Props = {
   title: string;
@@ -31,16 +32,24 @@ const TiptapEditor: React.FC<Props> = ({
   const [localTitle, setLocalTitle] = useState(title);
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
 
+  const extensions = [
+    StarterKit,
+    Placeholder.configure({
+      placeholder: ({ node }) =>
+        node.type.name === 'paragraph'
+          ? '답변을 입력해 주세요'
+          : '내용을 작성해 주세요',
+    }),
+    TextStyle,
+    TextAlign.configure({ types: ['heading', 'paragraph'] }),
+    Image,
+    FontFamily,
+    MapNode,
+  ];
+
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      TextStyle,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      Image,
-      FontFamily,
-      MapNode,
-    ],
-    content: contentHtml,
+    extensions,
+    content: contentHtml||'',
     onUpdate: ({ editor }) => {
       const updatedContentHtml = editor.getHTML();
       onChange({
@@ -52,22 +61,14 @@ const TiptapEditor: React.FC<Props> = ({
     onFocus: ({ editor }) => setActiveEditor(editor),
     editorProps: {
       attributes: {
-        class: 'outline-none',
-        placeholder: '미리보기 답변을 작성해 주세요',
+        class: 'outline-none ProseMirror min-h-[150px]',
       },
     },
   });
 
   const previewEditor = useEditor({
-    extensions: [
-      StarterKit,
-      TextStyle,
-      TextAlign.configure({ types: ['heading', 'paragraph'] }),
-      Image,
-      FontFamily,
-      MapNode,
-    ],
-    content: freeContent,
+    extensions,
+    content: freeContent||'',
     onUpdate: ({ editor }) => {
       onChange({
         title: localTitle,
@@ -76,6 +77,11 @@ const TiptapEditor: React.FC<Props> = ({
       });
     },
     onFocus: ({ editor }) => setActiveEditor(editor),
+    editorProps: {
+      attributes: {
+        class: 'outline-none ProseMirror min-h-[150px]',
+      },
+    },
   });
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +107,14 @@ const TiptapEditor: React.FC<Props> = ({
       </div>
 
       <div className="mb-4">
-        <EditorContent editor={previewEditor} />
+      <div className="relative">
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-gray-400">
+            {!previewEditor?.getText() && '미리보기 답변을 작성해 주세요'}
+          </div>
+          <div>
+            <EditorContent editor={previewEditor} />
+          </div>
+        </div>
       </div>
 
       <div className="relative my-4 flex items-center justify-center">
@@ -114,7 +127,14 @@ const TiptapEditor: React.FC<Props> = ({
 
       <div className="mb-4">
         <MenuBar editor={activeEditor} />
-        <EditorContent editor={editor} />
+      <div className="relative">
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-gray-400">
+            {!editor?.getText() && '유료 분량의 답변을 작성해 주세요'}
+          </div>
+          <div>
+            <EditorContent editor={editor} />
+          </div>
+        </div>
       </div>
     </div>
   );
