@@ -2,11 +2,13 @@ import { topicMapping } from '@/utils/topics';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useState } from 'react';
 import { Modal } from './LocationModal';
+import Icon from '@/components/icons';
 
 const Navbar = ({ setFilterType, changeCategory, category }) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-  const [selectedCountry, setSelectedCountry] = useState(''); // 선택된 나라 관리
-
+  const [selectedCountry, setSelectedCountry] = useState(
+    JSON.parse(sessionStorage.getItem('selectedLocation')) || null,
+  ); // 선택된 나라 관리
   const topicArr = Object.entries(topicMapping);
   return (
     <div className="grid sticky top-[0px] bg-white z-10">
@@ -14,12 +16,13 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
         defaultValue={category}
         className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-5 pl-5"
       >
-        <TabsList className="bg-transparent h-full border-0">
+        <TabsList className="bg-transparent h-full border-0 flex gap-5">
           <TabsTrigger
             value="all"
             onClick={() => changeCategory('all')}
             className="rounded-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-black data-[state=active]:shadow-none"
           >
+            <Icon type={'all'} size={20} />
             전체보기
           </TabsTrigger>
           {topicArr.map(([key, value]) => (
@@ -29,6 +32,7 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
               className="rounded-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-black data-[state=active]:shadow-none"
               key={key}
             >
+              <Icon type={value} size={20} />
               {key}
             </TabsTrigger>
           ))}
@@ -50,11 +54,14 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
             답변
           </button>
         </div>
+
         <button
           className="menu-btn"
           onClick={() => setIsModalOpen(true)} // 모달 열기
         >
-          나라 선택하기
+          {selectedCountry
+            ? `${selectedCountry.country}, ${selectedCountry.city}`
+            : '나라 선택하기'}
         </button>
       </div>
 
@@ -65,7 +72,6 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
         }}
         setCountry={(country) => {
           setSelectedCountry(country); // 선택된 나라 업데이트
-          console.log('선택된 나라:', country);
         }}
       />
     </div>

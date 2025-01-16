@@ -3,12 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import TiptapEditor from '../_components/TiptapEditor';
-import HeaderWithButton from '../_components/HeaderButtons';
+import TiptapEditor from '../../_components/TiptapEditor';
+import HeaderWithButton from '../../_components/HeaderButtons';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const EditResponsePage: React.FC = () => {
-  const { id } = useParams();
+  const { postId } = useParams(); 
   const router = useRouter();
   const [data, setData] = useState({
     title: '',
@@ -25,7 +25,7 @@ const EditResponsePage: React.FC = () => {
       const { data: responseData, error: responseError } = await supabase
         .from('response_posts')
         .select('title, content_html, free_content, request_id')
-        .eq('id', id)
+        .eq('id', postId)
         .single();
 
       if (responseError) throw responseError;
@@ -54,7 +54,7 @@ const EditResponsePage: React.FC = () => {
   };
 
   fetchResponseDetails();
-}, [id]);
+}, [postId]);
 
   const handleSubmit = async () => {
     try {
@@ -65,12 +65,12 @@ const EditResponsePage: React.FC = () => {
           content_html: data.contentHtml,
           free_content: data.freeContent,
         })
-        .eq('id', id);
+        .eq('id', postId);
 
       if (error) throw error;
 
       alert('수정이 완료되었습니다.');
-      router.push('/response');
+      router.push(`/response/${postId}`);
     } catch (error) {
       console.error('Error:', error);
       alert('수정 중 문제가 발생했습니다.');

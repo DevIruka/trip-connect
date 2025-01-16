@@ -126,7 +126,12 @@ const CategoryPage = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          addBookmarkMutation.mutate(post.id);
+
+                          if (userId) {
+                            addBookmarkMutation.mutate(post.id);
+                          } else {
+                            alert('로그인해주세요');
+                          }
                         }}
                       >
                         <Image

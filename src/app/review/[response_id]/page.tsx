@@ -1,5 +1,6 @@
 'use client';
 
+import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -25,10 +26,10 @@ type SupabaseReview = {
 };
 
 const ReviewPage = () => {
+  const {user} = useUserStore()
   const [review, setReview] = useState('');
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const { response_id } = useParams();
   const router = useRouter();
 
@@ -40,7 +41,7 @@ const ReviewPage = () => {
     .from('reviews')
     .select(`
       id, review, user_id,
-      users:nickname (
+      users (
         nickname,
         profile_img
       )
@@ -64,22 +65,13 @@ const ReviewPage = () => {
     setLoading(false);
   };
 
-  const fetchCurrentUser = async () => {
-    const { data: sessionData } = await supabase.auth.getSession();
-    if (sessionData?.session) {
-      setCurrentUserId(sessionData.session.user.id);
-    } else {
-      setCurrentUserId(null);
-    }
-  };
-
   const handleSubmit = async () => {
     if (!review.trim()) {
       alert('리뷰를 입력해주세요!');
       return;
     }
 
-    if (!currentUserId) {
+    if (!user) {
       alert('로그인이 필요합니다.');
       router.push('/login');
       return;
@@ -89,7 +81,7 @@ const ReviewPage = () => {
       {
         response_id,
         review,
-        user_id: currentUserId,
+        user_id: user.id,
       },
     ]);
 
@@ -124,7 +116,6 @@ const ReviewPage = () => {
 
   useEffect(() => {
     fetchReviews();
-    fetchCurrentUser();
   }, [response_id]);
 
   return (
@@ -170,7 +161,7 @@ const ReviewPage = () => {
                 </div>
 
                 {/* 내 리뷰에만 표시되는 '...' 버튼 */}
-                {r.user_id === currentUserId && (
+                {r.user_id === user?.id && (
                   <div className="relative group">
                     <button className="text-gray-500 hover:text-gray-700">
                       <IoEllipsisVertical size={20} />
