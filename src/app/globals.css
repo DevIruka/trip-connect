@@ -80,6 +80,10 @@
   .ProseMirror:focus {
     outline: none;
   }
+
+  .selected-day {
+    @apply bg-[#0582FF] text-white rounded-full;
+  }
 }
 
 @layer utilities {

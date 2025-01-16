@@ -20,15 +20,15 @@ const TopicSelector: React.FC<Props> = ({ topics = [], setValue, watch }) => {
   };
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-[8px]">
       {topics.map((topic) => (
         <button
           key={topic}
           type="button"
-          className={`px-3 py-1 text-sm border rounded-full ${
+          className={`px-[12px] py-[7px] text-[14px] font-semibold border border-[#DFE1E5] rounded-full ${
             (watch('category') || []).includes(topic)
               ? 'bg-black text-white'
-              : 'bg-[#E5E5EC] text-black'
+              : 'bg-white text-[#797C80]'
           } hover:bg-black hover:text-white transition`}
           onClick={() => handleTopicClick(topic, watch('category') || [])}
         >
