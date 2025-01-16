@@ -4,16 +4,17 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
 
-import bookmarkButton from '../../../public/images/bookmark.svg';
-import moreButton from '../../../public/images/more-button.svg';
 import QnaHeader from './_components/qnaHeader';
 import Navbar from './_components/navBar';
 
+import bookmarkButton from '@/data/images/bookmark.svg';
+import moreButton from '@/data/images/more-button.svg';
 import { topicMapping } from '@/utils/topics';
 import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import { useUserStore } from '@/store/userStore';
+import { nation } from './_types/homeTypes';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -49,9 +50,9 @@ const CategoryPage = () => {
   });
 
   //nation filter
-  const [nationFilter, setNationFilter] = useState(
+  const [nationFilter, setNationFilter] = useState<nation | null>(
     typeof window !== 'undefined'
-      ? JSON.parse(sessionStorage.getItem('selectedLocation'))
+      ? JSON.parse(sessionStorage.getItem('selectedLocation')!)
       : null,
   );
   const nationfilteredPosts = filteredPosts?.filter((post) => {
@@ -84,7 +85,6 @@ const CategoryPage = () => {
         <Navbar
           setFilterType={setFilterType}
           changeCategory={changeCategory}
-          category={searchParams}
           setNationFilter={setNationFilter}
         />
         <ul className="px-5">
@@ -112,7 +112,7 @@ const CategoryPage = () => {
                       {post.category
                         ? topicArr
                             .filter(([_, value]) =>
-                              post.category.includes(value),
+                              post.category?.includes(value),
                             )
                             .map(([key, _]) => (
                               <div
@@ -124,7 +124,7 @@ const CategoryPage = () => {
                             ))
                         : topicArr
                             .filter(([_, value]) =>
-                              post.request_posts.category.includes(value),
+                              post.request_posts?.category.includes(value),
                             )
                             .map(([key, _]) => (
                               <div

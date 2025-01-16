@@ -1,106 +1,36 @@
 import { useState } from 'react';
-const data = [
-  {
-    continent: '아시아',
-    countries: [
-      {
-        name: '한국',
-        cities: ['서울'],
-      },
-      {
-        name: '일본',
-        cities: ['도쿄'],
-      },
-      {
-        name: '태국',
-        cities: ['방콕'],
-      },
-      {
-        name: '싱가포르',
-        cities: ['싱가포르'],
-      },
-    ],
-  },
-  {
-    continent: '유럽',
-    countries: [
-      {
-        name: '영국',
-        cities: ['런던'],
-      },
-      {
-        name: '프랑스',
-        cities: ['파리'],
-      },
-      {
-        name: '이탈리아',
-        cities: ['로마'],
-      },
-      {
-        name: '독일',
-        cities: ['베를린'],
-      },
-    ],
-  },
-  {
-    continent: '북미',
-    countries: [
-      {
-        name: '미국',
-        cities: ['뉴욕', '로스앤젤레스', '시애틀'],
-      },
-      {
-        name: '캐나다',
-        cities: ['토론토'],
-      },
-    ],
-  },
-  {
-    continent: '오세아니아',
-    countries: [
-      {
-        name: '호주',
-        cities: ['시드니', '멜버른'],
-      },
-      {
-        name: '뉴질랜드',
-        cities: ['오클랜드'],
-      },
-    ],
-  },
-  {
-    continent: '기타',
-    countries: [
-      {
-        name: '두바이',
-        cities: ['두바이'],
-      },
-      {
-        name: '튀르키예',
-        cities: ['이스탄불'],
-      },
-      {
-        name: '러시아',
-        cities: ['모스크바'],
-      },
-    ],
-  },
-];
+import { nations } from '../_constants/nation';
+import { nation } from '../_types/homeTypes';
+
+type Props = {
+  isOpen: boolean;
+  onClose: () => void;
+  setCountry: (country: nation) => void;
+};
+
+type nationProps = {
+  continent: string;
+  country: string;
+  cities: string[];
+};
+
 // 모달 컴포넌트
-export const Modal = ({ isOpen, onClose, setCountry }) => {
+export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredResults, setFilteredResults] = useState([]);
+  const [filteredResults, setFilteredResults] = useState<nationProps[] | []>(
+    [],
+  );
   if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
 
   // 검색 입력 변경 처리
-  const handleSearchChange = (e) => {
+  const handleSearchChange = (e: any) => {
     const value = e.target.value;
     setSearchTerm(value);
 
     if (value) {
       // 검색어를 기반으로 필터링
-      const results = [];
-      data.forEach((continent) => {
+      const results: nationProps[] = [];
+      nations.forEach((continent) => {
         continent.countries.forEach((country) => {
           if (country.name.toLowerCase().includes(value.toLowerCase())) {
             results.push({
@@ -130,7 +60,11 @@ export const Modal = ({ isOpen, onClose, setCountry }) => {
   };
 
   // 위치 선택
-  const handleSelect = (continent, country, city) => {
+  const handleSelect = (
+    continent: string,
+    country: string,
+    city: string,
+  ): void => {
     const location = { continent, country, city };
     setCountry(location);
     sessionStorage.setItem('selectedLocation', JSON.stringify(location));
@@ -195,7 +129,7 @@ export const Modal = ({ isOpen, onClose, setCountry }) => {
                       <ul>
                         <li
                           onClick={() =>
-                            handleSelect(result.continent, result.country)
+                            handleSelect(result.continent, result.country, '')
                           }
                         >
                           {result.country}
@@ -224,7 +158,7 @@ export const Modal = ({ isOpen, onClose, setCountry }) => {
               )
             ) : (
               // 대륙 > 나라 버튼 표시
-              data.map((continent, idx) => (
+              nations.map((continent, idx) => (
                 <div key={idx}>
                   <div className="grid gap-5">
                     <h3 className="font-bold">{continent.continent}</h3>
