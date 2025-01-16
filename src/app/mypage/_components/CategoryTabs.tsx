@@ -6,7 +6,7 @@ import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
 type Props = {
-  activeTab: 'written' | 'response' | 'bookmark';
+  activeTab: 'written' | 'purchased' | 'bookmark';
   onUpdateCounts?: () => void;
 };
 
@@ -14,7 +14,7 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
   const { user } = useUserStore();
   const [counts, setCounts] = useState({
     written: 0,
-    response: 0,
+    purchased: 0,
     bookmark: 0,
   });
 
@@ -25,27 +25,35 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
     }
 
     try {
-      // 작성글 개수 가져오기
+      // 작성글 + 답변글 갯수 가져오기
       const { count: writtenCount, error: writtenError } = await supabase
         .from('request_posts')
         .select('*', { count: 'exact' })
         .eq('user_id', user.id);
 
-      if (writtenError) {
-        console.error('작성글 카운트 가져오기 실패:', writtenError);
-      }
-
-      // 답변글 개수 가져오기
       const { count: responseCount, error: responseError } = await supabase
         .from('response_posts')
         .select('*', { count: 'exact' })
         .eq('user_id', user.id);
 
-      if (responseError) {
-        console.error('답변글 카운트 가져오기 실패:', responseError);
+      if (writtenError || responseError) {
+        console.error(
+          '작성글 또는 답변글 카운트 가져오기 실패:',
+          writtenError || responseError,
+        );
       }
 
-      // 북마크 개수 가져오기
+      // 구매글 갯수 가져오기
+      const { count: purchasedCount, error: purchasedError } = await supabase
+        .from('purchased_users')
+        .select('*', { count: 'exact' })
+        .eq('user_id', user.id);
+
+      if (purchasedError) {
+        console.error('구매글 카운트 가져오기 실패:', purchasedError);
+      }
+
+      // 북마크 갯수 가져오기
       const { count: bookmarkCount, error: bookmarkError } = await supabase
         .from('bookmarks')
         .select('*', { count: 'exact' })
@@ -56,8 +64,8 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
       }
 
       setCounts({
-        written: writtenCount || 0,
-        response: responseCount || 0,
+        written: (writtenCount || 0) + (responseCount || 0),
+        purchased: purchasedCount || 0,
         bookmark: bookmarkCount || 0,
       });
     } catch (error) {
@@ -89,21 +97,21 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
           } hover:border-black`}
         >
           <span className="text-lg font-bold text-black">작성글</span>
-          <span className="text-sm text-gray-600 ml-2">({counts.written})</span>
+          <span className="text-sm text-gray-600 ml-2">{counts.written}</span>
         </button>
       </Link>
 
-      <Link href="/mypage/response">
+      <Link href="/mypage/purchase">
         <button
           className={`relative pb-2 border-b-2 ${
-            activeTab === 'response'
+            activeTab === 'purchased'
               ? 'border-black font-bold'
               : 'border-transparent'
           } hover:border-black`}
         >
-          <span className="text-lg font-bold text-black">답변글</span>
+          <span className="text-lg font-bold text-black">구매한 글</span>
           <span className="text-sm text-gray-600 ml-2">
-            ({counts.response})
+            {counts.purchased}
           </span>
         </button>
       </Link>
@@ -118,7 +126,7 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
         >
           <span className="text-lg font-bold text-black">북마크</span>
           <span className="text-sm text-gray-600 ml-2">
-            ({counts.bookmark})
+            {counts.bookmark}
           </span>
         </button>
       </Link>

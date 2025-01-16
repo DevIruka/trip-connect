@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
 import UserProfileSection from '../_components/UserProfileSection';
+import CategoryTabs from '../_components/CategoryTabs';
 import Image from 'next/image';
-
 
 type Post = {
   id: string;
@@ -20,52 +20,49 @@ type Bookmark = {
 };
 
 const BookmarkPage = () => {
-  const { user } = useUserStore(); 
-  const [profileImg, setProfileImg] = useState<string>('');
+  const { user } = useUserStore();
   const [bookmarkedPosts, setBookmarkedPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBookmarks = async () => {
       if (!user?.id) {
-        setError('No active session. Please log in.');
+        setError('활성화된 세션이 없습니다. 로그인해주세요.');
         return;
       }
 
       try {
-        // 프로필 이미지 가져오기
-        const { data: profileData, error: profileError } = await supabase
-          .from('users')
-          .select('profile_img')
-          .eq('id', user.id)
-          .single();
-
-        if (profileError) {
-          console.error('Error fetching profile image:', profileError);
-          setProfileImg('');
-        } else {
-          setProfileImg(profileData?.profile_img || '');
-        }
-
         // 북마크 데이터 가져오기
         const { data: bookmarksData, error: bookmarksError } = await supabase
           .from('bookmarks')
-          .select('request_posts(id, title, content, img_url, country_city)')
+          .select(
+            `
+            request_posts (
+              id,
+              title,
+              content,
+              img_url,
+              country_city
+            )
+          `,
+          )
           .eq('user_id', user.id);
 
         if (bookmarksError) {
-          console.error('Error fetching bookmarks:', bookmarksError);
+          console.error(
+            '북마크 데이터를 가져오는 중 오류가 발생했습니다:',
+            bookmarksError,
+          );
           setBookmarkedPosts([]);
         } else {
+          // 데이터 매핑
           setBookmarkedPosts(
-            bookmarksData
-              .map((bookmark: Bookmark) => bookmark.request_posts)
-              .filter((post) => post),
+            bookmarksData.map((bookmark: Bookmark) => bookmark.request_posts),
           );
         }
       } catch (e) {
-        console.error('Unexpected error:', e);
-        setError('An unexpected error occurred.');
+        console.error('예상치 못한 오류가 발생했습니다:', e);
+        setError('오류가 발생했습니다. 다시 시도해주세요.');
       }
     };
 
@@ -81,7 +78,7 @@ const BookmarkPage = () => {
         .eq('request_id', postId);
 
       if (error) {
-        console.error('Error removing bookmark:', error);
+        console.error('북마크를 삭제하는 중 오류가 발생했습니다:', error);
         return;
       }
 
@@ -89,7 +86,7 @@ const BookmarkPage = () => {
         prevPosts.filter((post) => post.id !== postId),
       );
     } catch (e) {
-      console.error('Unexpected error while removing bookmark:', e);
+      console.error('북마크를 삭제하는 중 예상치 못한 오류가 발생했습니다:', e);
     }
   };
 
@@ -100,7 +97,10 @@ const BookmarkPage = () => {
   return (
     <div className="px-5 space-y-4 min-h-screen">
       {/* 프로필 섹션 */}
-      <UserProfileSection profileImg={profileImg} />
+      <UserProfileSection />
+
+      {/* 카테고리 탭 */}
+      <CategoryTabs activeTab="bookmark" />
 
       {/* 북마크된 게시글 */}
       {bookmarkedPosts.length > 0 ? (
@@ -134,9 +134,15 @@ const BookmarkPage = () => {
             {/* 북마크 해제 버튼 */}
             <button
               onClick={() => handleRemoveBookmark(post.id)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-red-500"
+              className="absolute top-2 right-2"
             >
-              ✖
+              <Image
+                src="/images/bookmark.svg"
+                alt="북마크 해제"
+                width={24}
+                height={24}
+                className="hover:opacity-70 cursor-pointer"
+              />
             </button>
           </div>
         ))

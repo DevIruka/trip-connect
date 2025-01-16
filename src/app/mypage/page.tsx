@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const MyPage = () => {
-  const user = useUserStore((state) => state.user); // user 상태 가져오기
+  const user = useUserStore((state) => state.user);
   const signOut = useUserStore((state) => state.signOut); // signOut 함수 가져오기
   const [userProfile, setUserProfile] = useState({
     nickname: '',
@@ -140,9 +140,13 @@ const MyPage = () => {
                 className="object-cover"
               />
             ) : (
-              <div className="flex items-center justify-center h-full text-gray-500">
-                {/* 기본 이미지 */}
-              </div>
+              <Image
+                src="/images/default-profile.svg" 
+                alt="Default Profile"
+                width={64}
+                height={64}
+                className="object-cover"
+              />
             )}
           </div>
           <div className="ml-4">
@@ -173,7 +177,7 @@ const MyPage = () => {
           <span className="text-sm text-gray-700">크레딧</span>
         </div>
         <div className="text-lg font-bold text-gray-800">
-          {userProfile.credit} C
+          {new Intl.NumberFormat().format(Number(userProfile.credit))} C
         </div>
       </Link>
 
@@ -182,9 +186,15 @@ const MyPage = () => {
         <h2 className="text-lg font-bold mb-4">셀러 인증</h2>
         <Link
           href="/mypage/seller-auth"
-          className="flex flex-col items-start gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+          className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
         >
-          인증하러 가기
+          <span>인증하러 가기</span>
+          <Image
+            src="/images/right arrow.svg"
+            alt="Arrow Right"
+            width={20}
+            height={20}
+          />
         </Link>
       </div>
 
@@ -199,21 +209,39 @@ const MyPage = () => {
             className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
           >
             <span>내가 작성한 게시물</span>
-            <span>▶</span>
+            <Image
+              src="/images/right arrow.svg"
+              alt="Arrow Right"
+              width={20}
+              height={20}
+              className="ml-2"
+            />
           </Link>
           <Link
-            href="/mypage/response"
+            href="/mypage/purchase"
             className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
           >
-            <span>내가 답변한 게시물</span>
-            <span>▶</span>
+            <span>내가 구매한 게시물</span>
+            <Image
+              src="/images/right arrow.svg"
+              alt="Arrow Right"
+              width={20}
+              height={20}
+              className="ml-2"
+            />
           </Link>
           <Link
             href="/mypage/bookmark"
             className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
           >
             <span>북마크한 게시물</span>
-            <span>▶</span>
+            <Image
+              src="/images/right arrow.svg"
+              alt="Arrow Right"
+              width={20}
+              height={20}
+              className="ml-2"
+            />
           </Link>
         </div>
       </div>
@@ -226,7 +254,13 @@ const MyPage = () => {
         className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
       >
         <span>언어 설정</span>
-        <span>▶</span>
+        <Image
+          src="/images/right arrow.svg"
+          alt="Arrow Right"
+          width={20}
+          height={20}
+          className="ml-2"
+        />
       </Link>
 
       {/* 로그아웃 버튼 */}
@@ -291,7 +325,7 @@ const MyPage = () => {
                 className="w-full p-2 border border-gray-300 rounded h-24"
                 value={bioInput}
                 onChange={(e) => setBioInput(e.target.value)}
-                placeholder="자기 소개를 입력하세요"
+                placeholder="지금까지 다녀온 여행 경험을 추가해 주세요"
               ></textarea>
 
               {/* 저장하기 버튼 */}
