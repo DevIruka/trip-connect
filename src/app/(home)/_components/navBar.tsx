@@ -1,14 +1,25 @@
 import { topicMapping } from '@/utils/topics';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Modal } from './LocationModal';
 import Icon from '@/components/icons';
 
-const Navbar = ({ setFilterType, changeCategory, category }) => {
+const Navbar = ({
+  setFilterType,
+  changeCategory,
+  category,
+  setNationFilter,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-  const [selectedCountry, setSelectedCountry] = useState(
-    JSON.parse(sessionStorage.getItem('selectedLocation')) || null,
-  ); // 선택된 나라 관리
+  const [selectedCountry, setSelectedCountry] = useState(() => {
+    return typeof window !== 'undefined'
+      ? JSON.parse(sessionStorage.getItem('selectedLocation'))
+      : null;
+  }); // 선택된 나라 관리
+  const [isHydrated, setIsHydrated] = useState(false);
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
   const topicArr = Object.entries(topicMapping);
   return (
     <div className="grid sticky top-[0px] bg-white z-10">
@@ -59,8 +70,10 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
           className="menu-btn"
           onClick={() => setIsModalOpen(true)} // 모달 열기
         >
-          {selectedCountry
-            ? `${selectedCountry.country}, ${selectedCountry.city}`
+          {isHydrated && selectedCountry
+            ? !selectedCountry.city
+              ? selectedCountry.country
+              : `${selectedCountry.country}, ${selectedCountry.city}`
             : '나라 선택하기'}
         </button>
       </div>
@@ -72,6 +85,7 @@ const Navbar = ({ setFilterType, changeCategory, category }) => {
         }}
         setCountry={(country) => {
           setSelectedCountry(country); // 선택된 나라 업데이트
+          setNationFilter(country);
         }}
       />
     </div>

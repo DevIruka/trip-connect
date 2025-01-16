@@ -48,6 +48,37 @@ const CategoryPage = () => {
     return true; // 최신 (모두 표시)
   });
 
+  //nation filter
+  const [nationFilter, setNationFilter] = useState(
+    typeof window !== 'undefined'
+      ? JSON.parse(sessionStorage.getItem('selectedLocation'))
+      : null,
+  );
+  const nationfilteredPosts = filteredPosts?.filter((post) => {
+    // Request 유형 처리
+    if (nationFilter) {
+      if (
+        !post.request_id &&
+        !post.country_city?.includes(nationFilter.country)
+      ) {
+        return false;
+      }
+
+      // Response 유형 처리
+      if (
+        post.request_id &&
+        !post.verified_country?.includes(nationFilter.country)
+      ) {
+        return false;
+      }
+    }
+
+    // 유형이 일치하지 않으면 필터링에서 제외
+    return true;
+  });
+
+  console.log('nationFilter', nationFilter);
+
   return (
     <>
       <div className="h-full w-full mx-auto relative overflow-y-scroll">
@@ -56,9 +87,10 @@ const CategoryPage = () => {
           setFilterType={setFilterType}
           changeCategory={changeCategory}
           category={searchParams}
+          setNationFilter={setNationFilter}
         />
         <ul className="px-5">
-          {filteredPosts?.map((post) => {
+          {nationfilteredPosts?.map((post) => {
             const bookmarked = isPostBookmarked(post.id);
             return (
               <li
@@ -152,7 +184,7 @@ const CategoryPage = () => {
                   )}
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold">{post.title}</h1>
+                  <h1 className="text-xl font-bold truncate">{post.title}</h1>
                   <div>{post.content}</div>
                 </div>
               </li>
