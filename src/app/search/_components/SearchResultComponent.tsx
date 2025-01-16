@@ -108,12 +108,12 @@ const SearchResultComponent = () => {
       />
       <div className="inner">
         {noReqResults && noResResults && (
-          <p>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>
+          <p className='p-1'>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>
         )}
         {!(noReqResults && noResResults) && (
           <>
             {countReq! + countRes! !== 0 ? (
-              <div className="flex justify-between my-2">
+              <div className="flex justify-between mt-[20px] mb-[16px]">
                 <SearchResultCount
                   countReq={countReq}
                   countRes={countRes}
