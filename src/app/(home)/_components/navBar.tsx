@@ -21,6 +21,19 @@ const Navbar = ({
     setIsHydrated(true);
   }, []);
   const topicArr = Object.entries(topicMapping);
+
+  const getSelectedCountryLabel = (selectedCountry) => {
+    if (!selectedCountry) {
+      return '나라 선택하기';
+    }
+
+    if (!selectedCountry.city) {
+      return selectedCountry.country;
+    }
+
+    return `${selectedCountry.country}, ${selectedCountry.city}`;
+  };
+
   return (
     <div className="grid sticky top-[0px] bg-white z-10">
       <Tabs
@@ -70,11 +83,7 @@ const Navbar = ({
           className="menu-btn"
           onClick={() => setIsModalOpen(true)} // 모달 열기
         >
-          {isHydrated && selectedCountry
-            ? !selectedCountry.city
-              ? selectedCountry.country
-              : `${selectedCountry.country}, ${selectedCountry.city}`
-            : '나라 선택하기'}
+          {isHydrated && getSelectedCountryLabel(selectedCountry)}
         </button>
       </div>
 

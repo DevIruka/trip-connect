@@ -205,7 +205,7 @@ const MyPage = () => {
         <h2 className="text-lg font-bold mb-4">활동 내역</h2>
         <div className="space-y-2 mt-2">
           <Link
-            href="/mypage/request"
+            href="/mypage/filters/all"
             className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
           >
             <span>내가 작성한 게시물</span>
