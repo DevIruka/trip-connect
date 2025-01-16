@@ -4,11 +4,9 @@ import Responses from '../_components/Responses';
 import BookmarkBtn from '../_components/BookmarkBtn';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import BackButton from '../_components/BackBtn';
-import { getPostUser } from '@/utils/api/supabase_api/post/getPostUser';
 import Profile from '../_components/profile';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
-  const userId = '0fdbd37c-1b2e-4142-b50b-e593f13487a7';
   const postId = params.id; // URL에서 전달된 게시물 ID
   const { data: post, error } = await supabase
     .from('request_posts')
@@ -16,7 +14,6 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
     .eq('id', postId)
     .single(); // 단일 게시물 조회
 
-  const user = await getPostUser(post.user_id);
   const topicArr = Object.entries(topicMapping);
 
   if (error) return <div>에러 발생: {error.message}</div>;
@@ -29,7 +26,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
       {post ? (
         <div className="bg-white px-5 pb-5 mb-5">
           <div className="grid grid-cols-1 gap-4">
-            <Profile user={user} />
+            <Profile postUserId={post.user_id} />
             <h1 className="text-xl font-bold place-content-center">
               {post.title}
             </h1>
@@ -64,7 +61,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               한국어로 작성된 글이에요
             </div>
             <div className="h-16 flex border-t-2 place-content-end">
-              <BookmarkBtn userId={userId} postId={postId} />
+              <BookmarkBtn postId={postId} />
             </div>
           </div>
           <Link

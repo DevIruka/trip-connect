@@ -9,7 +9,7 @@ const useTranslate = (text: string) => {
       return response?.choices[0]?.message?.content || '';
     },
     enabled: !!text, // 텍스트가 존재할 때만 실행
-    staleTime: Infinity,
+    staleTime: 86000,
   });
 };
 

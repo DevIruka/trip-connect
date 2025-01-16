@@ -5,14 +5,11 @@ import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import Image from 'next/image';
 import React from 'react';
 import bookmarkButton from '../../../../public/images/bookmark.svg';
+import { useUserStore } from '@/store/userStore';
 
-const BookmarkBtn = ({
-  userId,
-  postId,
-}: {
-  userId: string;
-  postId: string;
-}) => {
+const BookmarkBtn = ({ postId }: { postId: string }) => {
+  const { user } = useUserStore();
+  const userId = user?.id;
   const { isPostBookmarked } = useBookmarks(userId);
   const bookmarked = isPostBookmarked(postId);
   const { addBookmarkMutation, deleteBookmarkMutation } =
@@ -39,6 +36,9 @@ const BookmarkBtn = ({
       ) : (
         <button
           onClick={() => {
+            if (!userId) {
+              alert('로그인해주세요');
+            }
             addBookmarkMutation.mutate(postId);
           }}
         >
