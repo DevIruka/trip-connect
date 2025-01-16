@@ -3,90 +3,99 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
-import UserProfileSection from '../_components/UserProfileSection';
-import CategoryTabs from '../_components/CategoryTabs';
-import FilterTabs from '../_components/FilterTabs';
-import PostCard from '../_components/PostCard';
+import FilterTabs from '../../_components/FilterTabs';
+import PostCard from '../../_components/PostCard';
+import CategoryTabs from '../../_components/CategoryTabs';
+import UserProfileSection from '../../_components/UserProfileSection';
 
-type Post = {
+
+type UnifiedPost = {
   id: string;
   title: string;
   content: string;
-  content_html?: string;
-  country_city?: string;
-  category: string;
+  country_city: string;
+  category: string[];
   img_url: string[];
-  request_id?: string;
+  type: 'question' | 'answer';
+  request_id?: string; 
 };
 
-type FilterType = 'all' | 'question' | 'answer';
-
-const RequestPage = () => {
-  const { user } = useUserStore();
-  const [activeFilter, setActiveFilter] = useState<FilterType>('all');
-  const [posts, setPosts] = useState<Post[]>([]);
+const AllPostsPage = () => {
+  const { user } = useUserStore(); 
+  const [posts, setPosts] = useState<UnifiedPost[]>([]);
+  const [activeFilter, setActiveFilter] = useState<
+    'all' | 'question' | 'answer'
+  >('all');
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
       if (!user?.id) {
-        setError('사용자 정보가 없습니다. 로그인해주세요.');
+        setError('유저 정보가 없습니다.');
         setLoading(false);
         return;
       }
+
+      setLoading(true);
+      setError(null);
 
       try {
         const [requestData, responseData] = await Promise.all([
           supabase
             .from('request_posts')
-            .select('id, title, content, country_city, category, img_url')
+            .select(
+              'id, title, content, country_city, category, img_url, user_id',
+            )
             .eq('user_id', user.id),
           supabase
             .from('response_posts')
-            .select('id, title, content_html, created_at, request_id')
+            .select('id, title, content_html, request_id, user_id') 
             .eq('user_id', user.id),
         ]);
 
         if (requestData.error || responseData.error) {
           setError('데이터를 가져오는 중 문제가 발생했습니다.');
-          console.error(requestData.error || responseData.error);
           return;
         }
 
-        const formattedPosts = [
-          ...requestData.data.map((post) => ({
-            ...post,
-            category: '질문',
-            content_html: undefined,
-            request_id: undefined,
+        const formattedPosts: UnifiedPost[] = [
+          ...(requestData.data || []).map((post) => ({
+            id: post.id,
+            title: post.title,
+            content: post.content,
+            type: 'question' as const, 
+            img_url: post.img_url || [],
+            country_city: post.country_city || '',
+            category: post.category || [],
           })),
-          ...responseData.data.map((post) => ({
-            ...post,
-            category: '답변',
+          ...(responseData.data || []).map((post) => ({
+            id: post.id,
+            title: post.title,
             content: post.content_html || '',
-            country_city: '',
+            type: 'answer' as const, 
             img_url: [],
+            country_city: '',
+            category: [],
+            request_id: post.request_id, 
           })),
         ];
 
         setPosts(formattedPosts);
       } catch (err) {
+        console.error('데이터 가져오기 오류:', err);
         setError('알 수 없는 오류가 발생했습니다.');
-        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchPosts();
-  }, [user]);
+  }, [user?.id]);
 
   const filteredPosts = posts.filter((post) => {
     if (activeFilter === 'all') return true;
-    if (activeFilter === 'question') return post.category === '질문';
-    if (activeFilter === 'answer') return post.category === '답변';
-    return false;
+    return post.type === activeFilter;
   });
 
   if (loading) {
@@ -99,27 +108,16 @@ const RequestPage = () => {
 
   return (
     <div className="px-5 space-y-4 min-h-screen">
-      {/* 프로필 섹션 */}
+      {/* 프로필 섹션 추가 */}
       <UserProfileSection />
 
-      {/* 카테고리 탭 */}
       <CategoryTabs activeTab="written" />
-
-      {/* 작성글 필터링 탭 */}
       <FilterTabs
         activeFilter={activeFilter}
         onChangeFilter={setActiveFilter}
       />
-
-      {/* 게시글 목록 */}
       {filteredPosts.length > 0 ? (
-        filteredPosts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            type={post.category === '질문' ? 'request' : 'response'}
-          />
-        ))
+        filteredPosts.map((post) => <PostCard key={post.id} post={post} />)
       ) : (
         <div className="text-center text-gray-500">게시물이 없습니다.</div>
       )}
@@ -127,4 +125,4 @@ const RequestPage = () => {
   );
 };
 
-export default RequestPage;
+export default AllPostsPage;
