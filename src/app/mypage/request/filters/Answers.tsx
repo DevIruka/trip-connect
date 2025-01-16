@@ -6,68 +6,53 @@ import { useUserStore } from '@/store/userStore';
 import PostCard from '../../_components/PostCard';
 
 type ResponsePost = {
-  id: number;
+  id: string;
   title: string;
   content_html: string;
   created_at: string;
-  user_id: string | null;
-  request_id: string | null;
+  request_id: string | null; 
 };
 
 const Answers = () => {
-  const { user } = useUserStore(); 
+  const { user } = useUserStore();
   const [responsePosts, setResponsePosts] = useState<ResponsePost[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchResponses = async () => {
-      if (!user?.id) return; 
-
-      try {
-        const { data: responseData, error: responseError } = await supabase
-          .from('response_posts')
-          .select('id, title, content_html, created_at, user_id, request_id')
-          .eq('user_id', user.id); 
-
-        if (responseError) {
-          console.error('Error fetching response posts:', responseError);
-          setError('응답 글을 가져오는 중 문제가 발생했습니다.');
-          return;
-        }
-
-        setResponsePosts(responseData || []);
-      } catch (e) {
-        console.error('Unexpected error:', e);
-        setError('알 수 없는 오류가 발생했습니다.');
-      }
-    };
-
-    fetchResponses();
-  }, [user]); 
-
-  const handleDeleteResponse = async (responseId: number) => {
-    try {
-      const { error } = await supabase
-        .from('response_posts')
-        .delete()
-        .eq('id', responseId);
-
-      if (error) {
-        console.error('Error deleting response post:', error);
+    const fetchAnswers = async () => {
+      if (!user?.id) {
+        setError('사용자 정보가 없습니다.');
+        setLoading(false);
         return;
       }
 
-      setResponsePosts((prev) =>
-        prev.filter((response) => response.id !== responseId),
-      );
-    } catch (e) {
-      console.error('Unexpected error while deleting response post:', e);
-    }
-  };
+      try {
+        const { data, error } = await supabase
+          .from('response_posts')
+          .select('id, title, content_html, created_at, request_id')
+          .eq('user_id', user.id);
 
-  if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
-  }
+        if (error) {
+          setError('답변 글을 가져오는 중 문제가 발생했습니다.');
+          console.error('Error fetching answers:', error);
+        } else {
+          setResponsePosts(data || []);
+        }
+      } catch (err) {
+        setError('답변 글을 가져오는 중 알 수 없는 오류가 발생했습니다.');
+        console.error('Unexpected error fetching answers:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAnswers();
+  }, [user]);
+
+  if (loading)
+    return <div className="text-center text-gray-500">로딩 중...</div>;
+  if (error) return <div className="text-center text-red-500">{error}</div>;
 
   return (
     <div className="space-y-4">
@@ -76,18 +61,18 @@ const Answers = () => {
           <PostCard
             key={post.id}
             post={{
-              id: post.id.toString(),
+              id: post.id,
               title: post.title,
               content: post.content_html,
-              country_city: '',
               category: '답변',
               img_url: [],
+              request_id: post.request_id || undefined, 
             }}
-            onDelete={() => handleDeleteResponse(post.id)}
+            type="response"
           />
         ))
       ) : (
-        <div className="text-center text-gray-500">응답한 글이 없습니다.</div>
+        <div className="text-center text-gray-500">답변한 글이 없습니다.</div>
       )}
     </div>
   );
