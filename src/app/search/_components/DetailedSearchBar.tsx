@@ -4,12 +4,14 @@ import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Tabs, Tab, Box } from '@mui/material';
 import { KoreanCategory } from '@/utils/topics';
+import TabDetail from './TabDetail';
+import { convertToKorean } from '../_utils/convertTopictoKorean';
 
 type DetailedSearchBarProps = {
   inputRef: RefObject<HTMLInputElement>;
   inputOnclick: () => void;
   selectedCategory: string | null;
-  setSelectedCategory: Dispatch<SetStateAction<KoreanCategory | "👀전체">>;
+  setSelectedCategory: Dispatch<SetStateAction<KoreanCategory | "전체">>
 };
 
 const DetailedSearchBar = ({
@@ -18,9 +20,8 @@ const DetailedSearchBar = ({
   selectedCategory,
   setSelectedCategory,
 }: DetailedSearchBarProps) => {
-
   useEffect(() => {
-    setSelectedCategory('👀전체');
+    setSelectedCategory('전체');
   }, [setSelectedCategory]);
 
   const handleCategoryChange = (
@@ -28,10 +29,11 @@ const DetailedSearchBar = ({
     newValue: string | null,
   ) => {
     // 선택된 카테고리가 클릭된 것과 같으면 해제(null), 아니면 업데이트
-    setSelectedCategory((prev) => 
-      prev === newValue ? '👀전체' : (newValue as KoreanCategory | "👀전체")
+    setSelectedCategory((prev) =>
+      prev === newValue ? '전체' : (newValue as KoreanCategory | '전체'),
     );
   };
+
   return (
     <>
       <div className="flex flex-row items-center gap-2">
@@ -73,8 +75,8 @@ const DetailedSearchBar = ({
           {category.map((category) => (
             <Tab
               key={category}
-              label={category}
-              value={category} // Tab의 고유 값
+              label={<TabDetail category={category} />}
+              value={convertToKorean(category)} // Tab의 고유 값
               sx={{
                 height: '28',
                 padding: '4px 8px', // 위아래 간격 줄이기

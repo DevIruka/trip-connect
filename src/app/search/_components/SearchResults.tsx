@@ -5,9 +5,8 @@ import { EnglishCategory, KoreanCategory, topicMapping } from '@/utils/topics';
 // import bookmarkButton from '@/images/bookmark.svg';
 import Image from 'next/image';
 import RequestDetail from './RequestDetail';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserNicknames } from '@/utils/api/tanstack/search/useUserNickNames';
+import ResponseContent from './ResponseContent';
 
 type SearchResultsProps = {
   filteredPosts: ReqResPost[];
@@ -76,13 +75,14 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
         {filtered?.map((post) => {
           const bookmarked = isPostBookmarked(String(post.id));
           const nickname = nicknameMap?.[post.user_id!];
+
           return (
             <li
               key={post.id}
               className="w-full"
               onClick={() => onClickHandler(post)}
             >
-              <div className="flex border-b-4 p-2 cursor-pointer w-full mb-2">
+              <div className="flex border-b-2 border-[#F4F4F4] cursor-pointer w-full">
                 {'request_id' in post ? ( // `request_id`가 있으면 RequestPostData로 취급
                   <div className="w-full">
                     <div className="flex flex-row">
@@ -122,6 +122,7 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
                       )}
                     </div>
                     <span className="text-lg font-bold">{post.title}</span>
+                    <ResponseContent html={post.free_content!}/>
                   </div>
                 ) : (
                   <RequestDetail

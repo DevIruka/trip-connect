@@ -4,9 +4,9 @@ import { ReqResPost } from './SearchResults';
 import { UseMutationResult } from '@tanstack/react-query';
 import { EnglishCategory, KoreanCategory } from '@/utils/topics';
 
+
 const bookmarkButton = '/images/bookmark.svg';
-const q = '/images/q.png';
-const star = '/images/star.png';
+const coin = '/images/coin.svg';
 
 type RequestDetailProps = {
   post: ReqResPost;
@@ -36,16 +36,9 @@ const RequestDetail = ({
   return (
     <>
       <div className="w-full">
-        <div className="flex flex-row w-full relative">
-          <Image
-            width={35}
-            height={35}
-            src={q}
-            alt="question"
-            className="mr-1"
-          />
-          <div className="flex flex-row">
-            <div className="flex items-center justify-center min-w-11 bg-[#F7F7FB] rounded-md px-1 mr-2 my-1">
+        <div className="flex flex-row w-full h-[60px] relative">
+          <div className="flex flex-row mt-[20px] mb-[16px]">
+            <div className="flex items-center justify-center h-[22.017px] min-w-11 bg-[#FFECD4] text-[#FF810B] rounded-md px-[6px] mr-2 my-1">
               {post.country_city}
             </div>
             {post.category?.slice(0, 2).map((element, i) => {
@@ -53,13 +46,13 @@ const RequestDetail = ({
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-center min-w-11 bg-[#F7F7FB] rounded-md px-1 mr-2 my-1"
+                  className="flex items-center justify-center h-[22.017px] min-w-11 bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] mr-2 my-1"
                 >
                   {koreanCategory}
                 </div>
               );
             })}
-            <div className="absolute right-0">
+            <div className="absolute right-0 top-6">
               {bookmarked ? (
                 <button
                   onClick={(e) => {
@@ -93,14 +86,21 @@ const RequestDetail = ({
             </div>
           </div>
         </div>
-        <p className="text-sm text-gray-400">마감일 | {post.date_end}</p>
-        <p className="text-lg font-bold mb-2">{post.title}</p>
-        <p className="text-sm text-gray-400 font-bold">
-          {truncateText(post.content, 20)}
-        </p>
+        <div className="flex flex-row items-start">
+          <p className="text-[16px] font-[600] pt-[1px] text-[#0582FF]">Q.</p>
+          <div>
+            <p className="max-w-[315px] text-[16px] text-lg font-bold ml-[6px] overflow-hidden text-ellipsis">
+              {post.title}
+            </p>
+            <p className="text-[14px] max-w-[315px] text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis">
+              {post.content}
+            </p>
+          </div>
+        </div>
+
         <div className="flex flex-row items-center my-2">
-          <Image width={20} height={20} src={star} alt="bookmark button" />
-          <p className="text-xs text-gray-400 ml-1">{post.credit} C</p>
+          <Image width={18} height={18} src={coin} alt="credit icon" />
+          <p className="text-[12px] text-[#797C80] ml-1">{post.credit} C</p>
         </div>
       </div>
     </>

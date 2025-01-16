@@ -24,7 +24,7 @@ const SearchResultComponent = () => {
   const [countReq, setCountReq] = useState<number | null>(0);
   const [countRes, setCountRes] = useState<number | null>(0);
   const [noResResults, setNoResResults] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<KoreanCategory | '👀전체'>('👀전체');
+  const [selectedCategory, setSelectedCategory] = useState<KoreanCategory | '전체'>('전체');
   const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
   const route = useRouter();
   const [allPosts, setAllPosts] = useState<ReqResPost[] | []>([]);
@@ -90,7 +90,7 @@ const SearchResultComponent = () => {
   });
 
   const filteredPosts: ReqResPost[] =
-    selectedCategory === '👀전체' || !selectedCategory
+    selectedCategory === '전체' || !selectedCategory
       ? sortedPosts
       : sortedPosts?.filter(
           (post) =>
@@ -113,7 +113,7 @@ const SearchResultComponent = () => {
         {!(noReqResults && noResResults) && (
           <>
             {countReq! + countRes! !== 0 ? (
-              <div className="flex justify-between my-2">
+              <div className="flex justify-between mt-[20px] mb-[16px]">
                 <SearchResultCount
                   countReq={countReq}
                   countRes={countRes}
