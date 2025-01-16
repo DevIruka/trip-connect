@@ -19,6 +19,7 @@
     @apply bg-gray-400 rounded-3xl my-3 px-3;
   }
   :root {
+    --font-pretendard: 'Pretendard', sans-serif;
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;
@@ -71,6 +72,14 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  .ProseMirror {
+    word-wrap: break-word;
+  }
+
+  .ProseMirror:focus {
+    outline: none;
+  }
 }
 
 @layer utilities {
@@ -85,5 +94,6 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-pretendard);
   }
 }

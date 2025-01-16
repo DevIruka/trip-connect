@@ -6,6 +6,7 @@ import { useUserStore } from '@/store/userStore';
 import UserProfileSection from '../_components/UserProfileSection';
 import CategoryTabs from '../_components/CategoryTabs';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 type Post = {
   id: string;
@@ -16,23 +17,25 @@ type Post = {
 };
 
 type Bookmark = {
-  request_posts: Post;
+  request_posts: Post | Post[]; 
 };
 
 const BookmarkPage = () => {
   const { user } = useUserStore();
   const [bookmarkedPosts, setBookmarkedPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const router = useRouter(); 
 
   useEffect(() => {
     const fetchBookmarks = async () => {
       if (!user?.id) {
         setError('활성화된 세션이 없습니다. 로그인해주세요.');
+        setLoading(false);
         return;
       }
 
       try {
-        // 북마크 데이터 가져오기
         const { data: bookmarksData, error: bookmarksError } = await supabase
           .from('bookmarks')
           .select(
@@ -53,16 +56,28 @@ const BookmarkPage = () => {
             '북마크 데이터를 가져오는 중 오류가 발생했습니다:',
             bookmarksError,
           );
-          setBookmarkedPosts([]);
-        } else {
-          // 데이터 매핑
-          setBookmarkedPosts(
-            bookmarksData.map((bookmark: Bookmark) => bookmark.request_posts),
-          );
+          setError('북마크 데이터를 가져오는 중 문제가 발생했습니다.');
+          setLoading(false);
+          return;
         }
+
+        const mappedPosts = (bookmarksData || []).flatMap(
+          (bookmark: Bookmark) => {
+            if (Array.isArray(bookmark.request_posts)) {
+              return bookmark.request_posts;
+            } else if (bookmark.request_posts) {
+              return [bookmark.request_posts];
+            }
+            return [];
+          },
+        );
+
+        setBookmarkedPosts(mappedPosts);
       } catch (e) {
         console.error('예상치 못한 오류가 발생했습니다:', e);
         setError('오류가 발생했습니다. 다시 시도해주세요.');
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -90,6 +105,14 @@ const BookmarkPage = () => {
     }
   };
 
+  const handleCardClick = (postId: string) => {
+    router.push(`/post/${postId}`);
+  };
+
+  if (loading) {
+    return <div className="text-center text-gray-500">로딩 중...</div>;
+  }
+
   if (error) {
     return <div className="text-center text-red-500">{error}</div>;
   }
@@ -107,7 +130,8 @@ const BookmarkPage = () => {
         bookmarkedPosts.map((post) => (
           <div
             key={post.id}
-            className="relative p-4 border border-gray-300 rounded-lg flex justify-between items-start"
+            className="relative p-4 border border-gray-300 rounded-lg flex justify-between items-start cursor-pointer"
+            onClick={() => handleCardClick(post.id)}
           >
             {/* 게시글 정보 */}
             <div className="flex-1">
@@ -117,23 +141,34 @@ const BookmarkPage = () => {
                 </span>
               </div>
               <h2 className="text-md font-bold mb-1">{post.title}</h2>
-              <p className="text-sm text-gray-500">{post.content}</p>
+              <p className="text-sm text-gray-500">
+                {post.content
+                  ? post.content.length > 100
+                    ? `${post.content.substring(0, 100)}...`
+                    : post.content
+                  : '내용이 없습니다.'}
+              </p>
             </div>
 
             {/* 이미지 */}
-            {post.img_url && post.img_url.length > 0 && (
+            {post.img_url?.[0] && (
               <div className="w-20 h-20 ml-4 overflow-hidden rounded">
                 <Image
                   src={post.img_url[0]}
                   alt="Post Thumbnail"
                   className="object-cover w-full h-full"
+                  width={80}
+                  height={80}
                 />
               </div>
             )}
 
             {/* 북마크 해제 버튼 */}
             <button
-              onClick={() => handleRemoveBookmark(post.id)}
+              onClick={(e) => {
+                e.stopPropagation(); 
+                handleRemoveBookmark(post.id);
+              }}
               className="absolute top-2 right-2"
             >
               <Image

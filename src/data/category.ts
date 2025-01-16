@@ -1,6 +1,6 @@
 import { EnglishCategory, KoreanCategory, topicMapping } from '@/utils/topics';
 
-export const category = ['전체', ...Object.keys(topicMapping)];
+export const category = ['all', ...Object.values(topicMapping)] as EnglishCategory[]
 
 export const categoryMapping: Record<
   KoreanCategory | '전체',
