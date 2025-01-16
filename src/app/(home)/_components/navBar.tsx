@@ -1,19 +1,29 @@
+import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
 import { topicMapping } from '@/utils/topics';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useEffect, useState } from 'react';
-import { Modal } from './LocationModal';
 import Icon from '@/components/icons';
+
+import { Modal } from './LocationModal';
+import { nation } from '../_types/homeTypes';
+
+type Props = {
+  setFilterType: React.Dispatch<React.SetStateAction<string>>;
+  changeCategory: (category: string) => void;
+  setNationFilter: React.Dispatch<React.SetStateAction<nation | null>>;
+};
 
 const Navbar = ({
   setFilterType,
   changeCategory,
-  category,
+
   setNationFilter,
-}) => {
-  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태 관리
-  const [selectedCountry, setSelectedCountry] = useState(() => {
+}: Props) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
+  const [selectedCountry, setSelectedCountry] = useState<nation | null>(() => {
     return typeof window !== 'undefined'
-      ? JSON.parse(sessionStorage.getItem('selectedLocation'))
+      ? JSON.parse(sessionStorage.getItem('selectedLocation')!)
       : null;
   }); // 선택된 나라 관리
   const [isHydrated, setIsHydrated] = useState(false);
@@ -22,11 +32,13 @@ const Navbar = ({
   }, []);
   const topicArr = Object.entries(topicMapping);
 
-  const getSelectedCountryLabel = (selectedCountry) => {
+  const searchParams = useSearchParams();
+  const category = searchParams.get('category') || 'all';
+
+  const getSelectedCountryLabel = (selectedCountry: nation | null) => {
     if (!selectedCountry) {
       return '나라 선택하기';
     }
-
     if (!selectedCountry.city) {
       return selectedCountry.country;
     }
@@ -92,7 +104,7 @@ const Navbar = ({
         onClose={() => {
           setIsModalOpen(false);
         }}
-        setCountry={(country) => {
+        setCountry={(country: nation) => {
           setSelectedCountry(country); // 선택된 나라 업데이트
           setNationFilter(country);
         }}

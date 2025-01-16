@@ -1,29 +1,9 @@
+import { Post } from '@/app/(home)/_types/homeTypes';
 import { fetchPosts } from '@/app/(home)/_utils/fetchPosts';
 import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 
-// 게시물 데이터 타입 정의
-type Post = {
-  created_at: string;
-  id: string | number;
-  title: string;
-  user_id: string;
-
-  category?: string[] | null;
-  content?: string | null;
-  country_city?: string | null;
-  credit?: number | null;
-  date_end?: string | null;
-  img_url?: string | null;
-
-  content_html?: string | null;
-  free_content?: string | null;
-  request_id?: string;
-  request_posts?: { category: string[] } | null;
-  verified_country?: string | null;
-};
-
 // fetchPosts 함수의 반환값 타입 정의
-type FetchPostsResponse = {
+export type FetchPostsResponse = {
   data: Post[];
   nextPage: number | null; // 다음 페이지 번호 (없으면 null)
 };
