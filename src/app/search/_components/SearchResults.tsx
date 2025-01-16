@@ -1,13 +1,15 @@
 import { useUserStore } from '@/store/userStore';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
-import { EnglishCategory, KoreanCategory, topicMapping } from '@/utils/topics';
-import Image from 'next/image';
+import { EnglishCategory } from '@/utils/topics';
 import RequestDetail from './RequestDetail';
 import { useUserNicknames } from '@/utils/api/tanstack/search/useUserNickNames';
-import ResponseContent from './ResponseContent';
-import { getResponseCount } from '@/utils/api/supabase_api/search/getResponseCount';
-import { useResponseCounts } from '@/utils/api/tanstack/search/useResponseCounts';
+import {
+  useResponseCounts,
+  useReviewCounts,
+} from '@/utils/api/tanstack/search/useResponseCounts';
+import { useCredit } from '@/utils/api/tanstack/search/useCredit';
+import ResponseDetail from './ResponseDetail';
 
 type SearchResultsProps = {
   filteredPosts: ReqResPost[];
@@ -31,8 +33,6 @@ export type ReqResPost = {
   img_url?: string | null;
 };
 
-const a = '/images/a.png';
-
 const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
   const { user } = useUserStore();
   const userId = user ? user.id : '';
@@ -54,12 +54,18 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
     .map((post) => post.user_id)
     .filter((userId) => userId); // null 제외
 
-    const responseIds = filteredPosts
+  const postIds = filteredPosts
     .map((post) => post.id)
     .filter((postId) => postId); // null 제외
 
+  const requestIds = filteredPosts
+    .map((post) => post.request_id)
+    .filter((requestIds) => requestIds); // null 제외
+
   const { data: nicknameMap, isLoading, isError } = useUserNicknames(userIds);
-  const responseCounts = useResponseCounts(responseIds);
+  const responseCounts = useResponseCounts(postIds);
+  const creditResults = useCredit(requestIds);
+  const reviewCounts = useReviewCounts(postIds);
 
   const filtered = filteredPosts.filter((post) => {
     if (filter === 'all') return true;
@@ -68,14 +74,6 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
     return true;
   });
 
-  const reverseTopicMapping = Object.fromEntries(
-    Object.entries(topicMapping).map(([key, value]) => [value, key]),
-  );
-
-  const convertToKorean = (english: EnglishCategory): KoreanCategory =>
-    reverseTopicMapping[english] as KoreanCategory;
-
-
   return (
     <>
       <ul className="w-full">
@@ -83,9 +81,18 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
           const bookmarked = isPostBookmarked(String(post.id));
           const nickname = nicknameMap?.[post.user_id!];
           const responseCount =
-          responseCounts[index]?.data !== undefined
-            ? responseCounts[index]?.data
-            : 0;
+            responseCounts[index]?.data !== undefined
+              ? responseCounts[index]?.data
+              : 0;
+          const reviewCount =
+            reviewCounts[index]?.data !== undefined
+              ? reviewCounts[index]?.data
+              : 0;
+          const credit: number =
+            Array.isArray(creditResults[index]?.data) &&
+            creditResults[index]?.data.length > 0
+              ? creditResults[index]?.data[0]?.credit
+              : 0;
           return (
             <li
               key={post.id}
@@ -93,52 +100,19 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
               onClick={() => onClickHandler(post)}
             >
               <div className="flex border-b-2 border-[#F4F4F4] cursor-pointer w-full">
-                {'request_id' in post ? ( // `request_id`가 있으면 RequestPostData로 취급
-                  <div className="w-full">
-                    <div className="flex flex-row">
-                      <Image
-                        width={35}
-                        height={35}
-                        src={a}
-                        alt="answer"
-                        className="mr-1"
-                      />
-                      <div className="flex items-center justify-center min-w-11 bg-[#F7F7FB] rounded-md px-1 mr-2 my-1">
-                        {post.verified_country}
-                      </div>
-                      <div className="flex flex-row">
-                        {post.category?.slice(0, 2).map((element, i) => {
-                          const koreanCategory = convertToKorean(element);
-                          return (
-                            <div
-                              key={i}
-                              className="flex items-center justify-center min-w-11 bg-[#F7F7FB] rounded-md px-1 mr-2 my-1"
-                            >
-                              {koreanCategory}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                    <div>
-                      {isLoading ? (
-                        <p className="text-sm text-gray-400">닉네임 로딩 중</p>
-                      ) : isError ? (
-                        <p className="text-sm text-gray-400">
-                          닉네임 로딩 중 오류 발생
-                        </p>
-                      ) : (
-                        <p className="text-sm text-gray-400">{nickname}</p>
-                      )}
-                    </div>
-                    <span className="text-lg font-bold">{post.title}</span>
-                    <ResponseContent html={post.free_content!}/>
-                  </div>
+                {'request_id' in post ? (
+                  <ResponseDetail
+                    credit={credit}
+                    isError={isError}
+                    isLoading={isLoading}
+                    nickname={nickname}
+                    post={post}
+                    reviewCount={reviewCount}
+                  /> 
                 ) : (
                   <RequestDetail
                     addBookmarkMutation={addBookmarkMutation}
                     bookmarked={bookmarked}
-                    convertToKorean={convertToKorean}
                     deleteBookmarkMutation={deleteBookmarkMutation}
                     post={post}
                     responseCount={responseCount}

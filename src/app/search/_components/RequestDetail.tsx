@@ -1,11 +1,11 @@
-import { truncateText } from '@/utils/truncateText';
 import Image from 'next/image';
 import { ReqResPost } from './SearchResults';
 import { UseMutationResult } from '@tanstack/react-query';
-import { EnglishCategory, KoreanCategory } from '@/utils/topics';
 import TimeAgo from './TimeAgo';
+import { convertToKorean } from '../_utils/convertTopictoKorean';
 
-const bookmarkButton = '/images/bookmark.svg';
+const bookmarkButton = '/images/ic-bookmark.svg';
+const filledbookmarkButton = '/images/bookmark.svg';
 const coin = '/images/coin.svg';
 
 type RequestDetailProps = {
@@ -23,7 +23,6 @@ type RequestDetailProps = {
     string | number,
     unknown
   >;
-  convertToKorean: (english: EnglishCategory) => KoreanCategory;
   responseCount: number | string | null;
 };
 
@@ -32,7 +31,6 @@ const RequestDetail = ({
   bookmarked,
   deleteBookmarkMutation,
   addBookmarkMutation,
-  convertToKorean,
   responseCount,
 }: RequestDetailProps) => {
   return (
@@ -40,17 +38,17 @@ const RequestDetail = ({
       <div className="w-full">
         <div className="flex flex-row w-full h-[60px] relative">
           <div className="flex flex-row mt-[20px] mb-[16px]">
-            <div className="flex items-center justify-center h-[22.017px] min-w-11 bg-[#FFECD4] text-[#FF810B] rounded-md px-[6px] mr-2 my-1">
-              {post.country_city}
+            <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#FFECD4] text-[#FF810B] rounded-md py-[4px] px-[6px] mr-2 my-1">
+              <p className='text-[12px]'>{post.country_city}</p>
             </div>
             {post.category?.slice(0, 2).map((element, i) => {
               const koreanCategory = convertToKorean(element);
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-center h-[22.017px] min-w-11 bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] mr-2 my-1"
+                  className="flex items-center justify-center h-[22.017px] min-w-8 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-2 my-1"
                 >
-                  {koreanCategory}
+                  <p className='text-[12px]'>{koreanCategory}</p>
                 </div>
               );
             })}
@@ -65,7 +63,7 @@ const RequestDetail = ({
                   <Image
                     width={20}
                     height={20}
-                    src={bookmarkButton}
+                    src={filledbookmarkButton}
                     alt="bookmark button"
                     className="brightness-0 z-0"
                   />
@@ -100,8 +98,8 @@ const RequestDetail = ({
           </div>
         </div>
 
-        <div className="flex flex-row items-center my-2 justify-between">
-          <div className='flex flex-row items-center'>
+        <div className="flex flex-row items-center mt-[18px] mb-[20px] justify-between">
+          <div className="flex flex-row items-center">
             <Image width={18} height={18} src={coin} alt="credit icon" />
             <p className="text-[12px] text-[#797C80] ml-1">{post.credit} C</p>
             {responseCount && Number(responseCount) !== 0 ? (

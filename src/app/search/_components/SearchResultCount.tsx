@@ -13,7 +13,7 @@ const SearchResultCount = ({
     <>
       <div className="flex flex-row items-center h-[29px]">
         <p className="font-bold text-[18px]">검색 결과 </p>
-        <span className="ml-2 text-[18px] text-gray-500">
+        <span className="font-semibold ml-2 text-[16px] text-gray-500">
           {filter === 'all'
             ? countReq! + countRes!
             : filter === 'question'

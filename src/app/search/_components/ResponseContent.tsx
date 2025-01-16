@@ -1,5 +1,3 @@
-import { truncateText } from "@/utils/truncateText";
-
 const stripHtmlTags = (html: string | undefined) => {
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = html!;
@@ -8,7 +6,6 @@ const stripHtmlTags = (html: string | undefined) => {
 
 const ResponseContent = ({ html }: { html: string | undefined }) => {
   const textContent = stripHtmlTags(html);
-  const freeContent = truncateText(textContent, 20)
-  return <div>{freeContent}</div>;
+  return <p className="text-[14px] max-w-[315px] text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis">{textContent}</p>;
 };
 export default ResponseContent;
