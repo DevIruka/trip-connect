@@ -22,7 +22,7 @@ const Questions = () => {
   useEffect(() => {
     const fetchQuestions = async () => {
       if (!user?.id) {
-        console.error('User ID not found');
+        setError('사용자 정보가 없습니다. 로그인해주세요.');
         return;
       }
 
@@ -33,12 +33,10 @@ const Questions = () => {
           .eq('user_id', user.id);
 
         if (questionsError) {
-          console.error('Error fetching question posts:', questionsError);
           setError('질문 글을 가져오는 중 문제가 발생했습니다.');
           return;
         }
 
-        console.log('Questions Data:', questionsData);
         setQuestionPosts(questionsData || []);
       } catch (e) {
         console.error('Unexpected error:', e);
@@ -69,10 +67,6 @@ const Questions = () => {
     }
   };
 
-  if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
-  }
-
   return (
     <div className="space-y-4">
       {questionPosts.length > 0 ? (
@@ -87,11 +81,14 @@ const Questions = () => {
               category: post.category,
               img_url: post.img_url,
             }}
+            type="request"
             onDelete={() => handleDeleteQuestion(post.id)}
           />
         ))
       ) : (
-        <div className="text-center text-gray-500">질문한 글이 없습니다.</div>
+        <div className="text-center text-gray-500">
+          {error || '질문한 글이 없습니다.'}
+        </div>
       )}
     </div>
   );
