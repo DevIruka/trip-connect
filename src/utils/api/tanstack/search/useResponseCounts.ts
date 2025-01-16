@@ -1,11 +1,22 @@
 import { useQueries } from '@tanstack/react-query';
-import { getResponseCount } from '@/utils/api/supabase_api/search/getResponseCount';
+import { getResponseCount, getReviewCount } from '@/utils/api/supabase_api/search/getResponseCount';
 
 export const useResponseCounts = (postIds: (string | number)[]) => {
   const queries = postIds.map((postId) => ({
     queryKey: ['responseCount', postId],
-    queryFn: () => getResponseCount(String(postId)),
-    enabled: !!postId, // postId가 있을 때만 쿼리 실행
+    queryFn: () => getResponseCount(postId),
+    enabled: typeof postId === 'string' && !!postId,
+  }));
+
+  const results = useQueries({ queries });
+  return results;
+};
+
+export const useReviewCounts = (postIds: (string | number)[]) => {
+  const queries = postIds.map((postId) => ({
+    queryKey: ['reviewCount', postId],
+    queryFn: () => getReviewCount(postId),
+    enabled: typeof postId === 'number' && !!postId,
   }));
 
   const results = useQueries({ queries });
