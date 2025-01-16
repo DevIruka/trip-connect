@@ -84,11 +84,11 @@ const CreditPage: React.FC = () => {
       <h2 className="text-gray-600 text-lg font-medium mb-4">충전하기</h2>
       <PaymentOptions
         options={[
-          { amount: 1000, bonusRate: 0.05 },
-          { amount: 5000, bonusRate: 0.05 },
-          { amount: 10000, bonusRate: 0.05 },
-          { amount: 20000, bonusRate: 0.1 },
-          { amount: 50000, bonusRate: 0.1 },
+          { amount: 1000, bonusRate:0 },
+          { amount: 5000, bonusRate: 0.02 },
+          { amount: 10000, bonusRate: 0.02 },
+          { amount: 15000, bonusRate: 0.02 },
+          { amount: 20000, bonusRate: 0.02 },
         ]}
         onPayment={(amount, bonus) =>
           handlePayment(amount, bonus, user?.email || '')
