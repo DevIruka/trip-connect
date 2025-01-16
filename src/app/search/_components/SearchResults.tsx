@@ -2,11 +2,12 @@ import { useUserStore } from '@/store/userStore';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import { EnglishCategory, KoreanCategory, topicMapping } from '@/utils/topics';
-// import bookmarkButton from '@/images/bookmark.svg';
 import Image from 'next/image';
 import RequestDetail from './RequestDetail';
 import { useUserNicknames } from '@/utils/api/tanstack/search/useUserNickNames';
 import ResponseContent from './ResponseContent';
+import { getResponseCount } from '@/utils/api/supabase_api/search/getResponseCount';
+import { useResponseCounts } from '@/utils/api/tanstack/search/useResponseCounts';
 
 type SearchResultsProps = {
   filteredPosts: ReqResPost[];
@@ -53,7 +54,12 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
     .map((post) => post.user_id)
     .filter((userId) => userId); // null 제외
 
+    const responseIds = filteredPosts
+    .map((post) => post.id)
+    .filter((postId) => postId); // null 제외
+
   const { data: nicknameMap, isLoading, isError } = useUserNicknames(userIds);
+  const responseCounts = useResponseCounts(responseIds);
 
   const filtered = filteredPosts.filter((post) => {
     if (filter === 'all') return true;
@@ -69,13 +75,17 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
   const convertToKorean = (english: EnglishCategory): KoreanCategory =>
     reverseTopicMapping[english] as KoreanCategory;
 
+
   return (
     <>
       <ul className="w-full">
-        {filtered?.map((post) => {
+        {filtered?.map((post, index) => {
           const bookmarked = isPostBookmarked(String(post.id));
           const nickname = nicknameMap?.[post.user_id!];
-
+          const responseCount =
+          responseCounts[index]?.data !== undefined
+            ? responseCounts[index]?.data
+            : 0;
           return (
             <li
               key={post.id}
@@ -131,6 +141,7 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
                     convertToKorean={convertToKorean}
                     deleteBookmarkMutation={deleteBookmarkMutation}
                     post={post}
+                    responseCount={responseCount}
                   />
                 )}
               </div>
