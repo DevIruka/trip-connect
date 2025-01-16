@@ -77,8 +77,6 @@ const CategoryPage = () => {
     return true;
   });
 
-  console.log('nationFilter', nationFilter);
-
   return (
     <>
       <div className="h-full w-full mx-auto relative overflow-y-scroll">
@@ -158,7 +156,6 @@ const CategoryPage = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-
                           if (userId) {
                             addBookmarkMutation.mutate(post.id);
                           } else {
@@ -184,7 +181,9 @@ const CategoryPage = () => {
                   )}
                 </div>
                 <div>
-                  <h1 className="text-xl font-bold truncate">{post.title}</h1>
+                  <h1 className="text-xl font-bold truncate whitespace-nowrap overflow-hidden max-w-[250px]">
+                    {post.title}
+                  </h1>
                   <div>{post.content}</div>
                 </div>
               </li>

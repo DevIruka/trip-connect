@@ -1,20 +1,35 @@
-import { Tables } from '@/types/supabase';
-import Image from 'next/image';
-import React from 'react';
+'use client';
 
-const Profile = ({ user }: { user: Tables<'users'> }) => {
+import { getPostUser } from '@/utils/api/supabase_api/post/getPostUser';
+import Image from 'next/image';
+import React, { useEffect, useState } from 'react';
+
+const Profile = ({ postUserId }: { postUserId: string }) => {
+  const [user, setUser] = useState();
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (postUserId) {
+        const user = await getPostUser(postUserId);
+        setUser(user);
+      }
+    };
+    fetchUser();
+  }, [postUserId]);
+
+  if (!user || !postUserId) {
+    return <div>loading</div>;
+  }
+
   return (
     <div className="h-12 flex items-center gap-2">
       <div className="bg-gray-300 rounded-full w-10 h-10">
-        {user.profile_img ? (
+        {user.profile_img && (
           <Image
             width={100}
             height={100}
             src={`${user.profile_img}`}
             alt="profile_image"
           />
-        ) : (
-          ''
         )}
       </div>
       <div>
