@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { ReqResPost } from './SearchResults';
 import { UseMutationResult } from '@tanstack/react-query';
 import { EnglishCategory, KoreanCategory } from '@/utils/topics';
-
+import TimeAgo from './TimeAgo';
 
 const bookmarkButton = '/images/bookmark.svg';
 const coin = '/images/coin.svg';
@@ -24,6 +24,7 @@ type RequestDetailProps = {
     unknown
   >;
   convertToKorean: (english: EnglishCategory) => KoreanCategory;
+  responseCount: number | string | null;
 };
 
 const RequestDetail = ({
@@ -32,6 +33,7 @@ const RequestDetail = ({
   deleteBookmarkMutation,
   addBookmarkMutation,
   convertToKorean,
+  responseCount,
 }: RequestDetailProps) => {
   return (
     <>
@@ -98,9 +100,19 @@ const RequestDetail = ({
           </div>
         </div>
 
-        <div className="flex flex-row items-center my-2">
-          <Image width={18} height={18} src={coin} alt="credit icon" />
-          <p className="text-[12px] text-[#797C80] ml-1">{post.credit} C</p>
+        <div className="flex flex-row items-center my-2 justify-between">
+          <div className='flex flex-row items-center'>
+            <Image width={18} height={18} src={coin} alt="credit icon" />
+            <p className="text-[12px] text-[#797C80] ml-1">{post.credit} C</p>
+            {responseCount && Number(responseCount) !== 0 ? (
+              <p className="text-[12px] text-[#797C80] ml-1">
+                · {responseCount}명 답변
+              </p>
+            ) : null}
+          </div>
+          <div>
+            <TimeAgo createdAt={post.created_at} />
+          </div>
         </div>
       </div>
     </>
