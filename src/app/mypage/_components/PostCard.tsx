@@ -1,6 +1,7 @@
+'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; // Link import 추가
+import Link from 'next/link';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
 type Post = {
@@ -14,7 +15,7 @@ type Post = {
 
 type PostCardProps = {
   post: Post;
-  onDelete: (postId: string) => void; // 삭제 후 부모 컴포넌트에 알릴 콜백
+  onDelete: (postId: string) => void;
 };
 
 const PostCard = ({ post, onDelete }: PostCardProps) => {
@@ -30,7 +31,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
 
     try {
       const { error } = await supabase
-        .from('request_posts') // 삭제하려는 테이블 이름
+        .from('request_posts')
         .delete()
         .eq('id', post.id);
 
@@ -41,7 +42,7 @@ const PostCard = ({ post, onDelete }: PostCardProps) => {
       }
 
       alert('게시글이 성공적으로 삭제되었습니다.');
-      onDelete(post.id); // 삭제된 게시글의 ID를 부모 컴포넌트에 알림
+      onDelete(post.id);
     } catch (error) {
       console.error('Unexpected error:', error);
       alert('예기치 않은 오류가 발생했습니다.');

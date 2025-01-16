@@ -1,17 +1,44 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { supabase } from '@/utils/supabase/supabaseClient';
+import { useUserStore } from '@/store/userStore';
 
-type UserProfileSectionProps = {
-  profileImg: string;
-};
+const UserProfileSection = () => {
+  const { user } = useUserStore(); 
+  const [profileImg, setProfileImg] = useState<string | null>(null);
 
-const UserProfileSection = ({ profileImg }: UserProfileSectionProps) => {
+  useEffect(() => {
+    const fetchProfileImg = async () => {
+      if (!user?.id) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('users')
+          .select('profile_img')
+          .eq('id', user.id)
+          .single();
+
+        if (error) {
+          console.error('Error fetching profile image:', error);
+          setProfileImg(null);
+        } else {
+          setProfileImg(data?.profile_img || null);
+        }
+      } catch (e) {
+        console.error('Unexpected error:', e);
+        setProfileImg(null);
+      }
+    };
+
+    fetchProfileImg();
+  }, [user?.id]);
+
   return (
     <div
       className="flex items-center justify-between mb-6"
-      style={{ position: 'sticky', marginTop: '60px' }} // 헤더 아래 여백
+      style={{ position: 'sticky', marginTop: '60px' }}
     >
       <div className="flex items-center">
         <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
