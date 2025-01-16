@@ -4,35 +4,51 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import { useUserStore } from '@/store/userStore';
 
-type Post = {
+type UnifiedPost = {
   id: string;
   title: string;
-  content: string;
-  content_html?: string;
-  country_city?: string;
-  category: string;
+  content: string | null;
+  country_city: string;
+  category: string[];
   img_url: string[];
-  request_id?: string;
+  type: 'question' | 'answer';
+  user_id?: string; // 작성자 ID 추가
+  request_id?: string; // 답변글의 질문글 ID
 };
 
 type UnifiedCardProps = {
-  post: Post;
-  type: 'request' | 'response';
+  post: UnifiedPost;
   onDelete?: (postId: string) => void;
 };
 
-const PostCard = ({ post, type, onDelete }: UnifiedCardProps) => {
+const PostCard = ({ post, onDelete }: UnifiedCardProps) => {
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
+  const { user } = useUserStore(); // Zustand에서 로그인된 사용자 정보 가져오기
 
   const handleDelete = async () => {
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      return;
+    }
+
+    // 답변글 삭제 시 작성자와 현재 유저 비교
+    if (post.type === 'answer' && post.user_id !== user.id) {
+      alert('답변글은 작성자만 삭제할 수 있습니다.');
+      return;
+    }
+
     const confirmDelete = confirm('정말로 삭제하시겠습니까?');
     if (!confirmDelete) return;
 
     try {
+      const deleteFrom =
+        post.type === 'question' ? 'request_posts' : 'response_posts';
+
       const { error } = await supabase
-        .from(type === 'request' ? 'request_posts' : 'response_posts')
+        .from(deleteFrom)
         .delete()
         .eq('id', post.id);
 
@@ -51,10 +67,12 @@ const PostCard = ({ post, type, onDelete }: UnifiedCardProps) => {
   };
 
   const onClickHandler = () => {
-    const destination = post.request_id
-      ? `/post/${post.request_id}`
-      : `/post/${post.id}`;
-    router.push(destination);
+    const targetId = post.type === 'answer' ? post.request_id : post.id;
+    if (!targetId) {
+      alert('잘못된 게시물 데이터입니다.');
+      return;
+    }
+    router.push(`/post/${targetId}`);
   };
 
   return (
@@ -65,14 +83,14 @@ const PostCard = ({ post, type, onDelete }: UnifiedCardProps) => {
       <div className="flex-1">
         <h2 className="text-md font-bold mb-1">{post.title}</h2>
         <p className="text-sm text-gray-500">
-          {type === 'response'
-            ? post.content_html?.substring(0, 100)
-            : post.content.substring(0, 100)}
-          ...
+          {post.content ? post.content.substring(0, 100) : '내용이 없습니다'}...
         </p>
+        <div className="text-sm text-gray-500">
+          {post.category.length > 0 ? post.category.join(', ') : '기타'}
+        </div>
       </div>
 
-      {type === 'request' && post.img_url?.length > 0 && (
+      {post.img_url.length > 0 && (
         <div className="w-20 h-20 ml-4 overflow-hidden rounded">
           <Image
             src={post.img_url[0]}
@@ -84,39 +102,41 @@ const PostCard = ({ post, type, onDelete }: UnifiedCardProps) => {
         </div>
       )}
 
-      <div className="relative">
-        <button
-          className="text-gray-500 hover:text-black"
-          onClick={(e) => {
-            e.stopPropagation();
-            setMenuVisible((prev) => !prev);
-          }}
-        >
-          ⋮
-        </button>
-        {menuVisible && (
-          <div className="absolute right-0 mt-2 w-28 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-            <button
-              className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 hover:text-black"
-              onClick={(e) => {
-                e.stopPropagation();
-                console.log(`Edit ${type} post: ${post.id}`);
-              }}
-            >
-              수정하기
-            </button>
-            <button
-              className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 hover:text-black"
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete();
-              }}
-            >
-              삭제하기
-            </button>
-          </div>
-        )}
-      </div>
+      {user && (
+        <div className="relative">
+          <button
+            className="text-gray-500 hover:text-black"
+            onClick={(e) => {
+              e.stopPropagation();
+              setMenuVisible((prev) => !prev);
+            }}
+          >
+            ⋮
+          </button>
+          {menuVisible && (
+            <div className="absolute right-0 mt-2 w-28 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+              <button
+                className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 hover:text-black"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log(`Edit post: ${post.id}`);
+                }}
+              >
+                수정하기
+              </button>
+              <button
+                className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 hover:text-black"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete();
+                }}
+              >
+                삭제하기
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

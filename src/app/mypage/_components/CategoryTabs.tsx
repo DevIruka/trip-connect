@@ -17,7 +17,7 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
     purchased: 0,
     bookmark: 0,
   });
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchCounts = useCallback(async () => {
@@ -32,29 +32,28 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
         await Promise.all([
           supabase
             .from('request_posts')
-            .select('*', { count: 'exact' })
+            .select('id', { count: 'exact' })
             .eq('user_id', user.id),
           supabase
             .from('response_posts')
-            .select('*', { count: 'exact' })
+            .select('id', { count: 'exact' })
             .eq('user_id', user.id),
           supabase
             .from('purchased_users')
-            .select('*', { count: 'exact' })
+            .select('id', { count: 'exact' })
             .eq('user_id', user.id),
           supabase
             .from('bookmarks')
-            .select('*', { count: 'exact' })
+            .select('id', { count: 'exact' })
             .eq('user_id', user.id),
         ]);
 
-      // 결과 합산
       setCounts({
         written: (writtenRes.count || 0) + (responseRes.count || 0),
         purchased: purchasedRes.count || 0,
         bookmark: bookmarkRes.count || 0,
       });
-      setError(null); 
+      setError(null);
     } catch (err) {
       console.error('카운트 가져오기 실패:', err);
       setError('데이터를 가져오는 중 문제가 발생했습니다.');
@@ -86,7 +85,7 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
       key: 'written',
       label: '작성글',
       count: counts.written,
-      link: '/mypage/request',
+      link: '/mypage/filters/all',
     },
     {
       key: 'purchased',
@@ -103,10 +102,7 @@ const CategoryTabs = ({ activeTab, onUpdateCounts }: Props) => {
   ];
 
   return (
-    <div
-      className="flex justify-between items-center border-b border-[#D9D9D9] mb-6"
-      style={{ position: 'sticky', marginTop: '10px' }}
-    >
+    <div className="flex justify-between items-center border-b border-[#D9D9D9] mb-6">
       {tabs.map((tab) => (
         <Link key={tab.key} href={tab.link}>
           <button
