@@ -1,12 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import TiptapEditor from './_components/TiptapEditor';
+import TiptapEditor from '../_components/TiptapEditor';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import HeaderWithButton from './_components/HeaderButtons';
+import HeaderWithButton from '../_components/HeaderButtons';
 import { useQuery } from '@tanstack/react-query';
+import { useUserStore } from '@/store/userStore';
 
 type RequestDetails = {
   title: string;
@@ -14,12 +15,12 @@ type RequestDetails = {
 };
 
 const fetchRequestDetails = async (
-  requestId: string,
+  postId: string,
 ): Promise<RequestDetails> => {
   const { data, error } = await supabase
     .from('request_posts')
     .select('title, content')
-    .eq('id', requestId)
+    .eq('id', postId)
     .single();
 
   if (error) throw error;
@@ -27,12 +28,11 @@ const fetchRequestDetails = async (
   return data;
 };
 
-const ResponsePage: React.FC = () => {
+const ResponsePage = ({ params }: { params: { postId: string } }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const postId = searchParams.get('responseId') || '';
-  const userId = searchParams.get('userId') || '';
-
+  const { postId } = params;
+  const { user } = useUserStore();
+  
   const [data, setData] = useState({
     title: '',
     contentHtml: '',
@@ -40,22 +40,23 @@ const ResponsePage: React.FC = () => {
   });
   const [isVisible, setIsVisible] = useState(false);
 
-  const requestId = 'd5442544-fff0-4408-a496-4b3c7a52b194';
-
-  const {
-    data: request,
-    isLoading,
-    error,
-  } = useQuery<RequestDetails, Error>({
-    queryKey: ['requestDetails', requestId],
-    queryFn: () => fetchRequestDetails(requestId),
+  const { data: request, isLoading, error } = useQuery<RequestDetails, Error>({
+    queryKey: ['requestDetails', postId],
+    queryFn: () => fetchRequestDetails(postId),
+    enabled: !!postId,
   });
 
   const handleSubmit = async () => {
+    if (!user) {
+      alert('로그인이 필요합니다.');
+      router.push('/login');
+      return;
+    }
+
     try {
       const { error } = await supabase.from('response_posts').insert([
         {
-          user_id: userId,
+          user_id: user.id,
           request_id: postId,
           title: data.title,
           content_html: data.contentHtml,
