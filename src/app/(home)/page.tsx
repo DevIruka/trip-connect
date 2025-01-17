@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import QnaHeader from './_components/qnaHeader';
 import Navbar from './_components/navBar';
@@ -15,6 +15,7 @@ import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import { useUserStore } from '@/store/userStore';
 import { nation } from './_types/homeTypes';
+import { useSearchStore } from '@/store/useSearchStore';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -77,6 +78,12 @@ const CategoryPage = () => {
     // 유형이 일치하지 않으면 필터링에서 제외
     return true;
   });
+
+  //검색어 초기화
+  const setKeyword = useSearchStore((state) => state.setKeyword);
+  useEffect(() => {
+    setKeyword('');
+  }, [setKeyword]);
 
   return (
     <>
