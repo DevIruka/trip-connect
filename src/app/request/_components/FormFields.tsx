@@ -20,6 +20,7 @@ type Props = {
   control: Control<FormInputs>;
   errors: FieldErrors<FormInputs>;
   setValue: UseFormSetValue<FormInputs>;
+  disabled?: boolean
 };
 
 const FormFields: React.FC<Props> = ({

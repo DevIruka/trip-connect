@@ -35,6 +35,11 @@ const RequestPage: React.FC = () => {
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
+      if (!user) {
+        alert('로그인이 필요합니다.');
+        return;
+      }
+
       const selectedCategories = data.category as KoreanCategory[];
 
       // 유효성 검사
@@ -54,7 +59,7 @@ const RequestPage: React.FC = () => {
           ...data,
           category: selectedTopicsInEnglish, // 영어로 저장
           country_city: selectedLocation,
-          user_id: user?.id, 
+          user_id: user.id, 
         },
       ]);
 

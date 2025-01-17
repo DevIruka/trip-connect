@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { supabase } from '@/utils/supabase/supabaseClient';
@@ -34,6 +34,7 @@ const EditRequestPage: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedLocation, setSelectedLocation] = React.useState<string>('');
+  const [isRestricted, setIsRestricted] = useState(false);
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
   const handleLocationSelect = (location: string) => {
@@ -44,9 +45,17 @@ const EditRequestPage: React.FC = () => {
   };
 
   useEffect(() => {
-    // 기존 데이터 불러옴옴
     const fetchRequestDetails = async () => {
       try {
+        if (!id || typeof id !== 'string') {
+          throw new Error('유효하지 않은 요청 ID입니다.');
+        }
+
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(id)) {
+        throw new Error('ID가 올바른 UUID 형식이 아닙니다.');
+      }
+      
         const { data, error } = await supabase
           .from('request_posts')
           .select('*')
@@ -72,6 +81,18 @@ const EditRequestPage: React.FC = () => {
           country_city: data.country_city,
         });
         setSelectedLocation(data.country_city);
+
+        const { data: responseData, error: responseError } = await supabase
+          .from('response_posts')
+          .select('*')
+          .eq('request_id', id);
+
+        if (responseError) throw responseError;
+
+        // 답변이 있는 경우 제한
+        if (responseData && responseData.length > 0) {
+          setIsRestricted(true);
+        }
       } catch (error) {
         console.error('데이터 불러오기 오류:', error);
         alert('데이터를 불러오는 데 문제가 발생했습니다.');
@@ -126,6 +147,11 @@ const EditRequestPage: React.FC = () => {
       </div>
 
       <form className="p-4">
+        {isRestricted && (
+          <div className="text-[#80BFFF] text-[14px] font-semibold mb-2">
+            답변이 달린 질문은 기한 수정만 가능해요
+          </div>
+        )}
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2">나라/도시 선택</label>
           <div className="relative">
@@ -142,7 +168,7 @@ const EditRequestPage: React.FC = () => {
               } rounded focus:outline-none`}
               onClick={() => {
                 clearErrors('country_city');
-                toggleModal();
+                if (!isRestricted) toggleModal();
               }}
             />
             {errors.country_city && (
@@ -174,7 +200,13 @@ const EditRequestPage: React.FC = () => {
             ]}
             setValue={setValue}
             watch={watch}
+            disabled={isRestricted}
+            selectedButtonStyles={{
+              backgroundColor: '#DFE1E5',
+              color: '#797C80',
+            }}
           />
+
           <input
             type="hidden"
             {...register('category', {
@@ -195,6 +227,7 @@ const EditRequestPage: React.FC = () => {
           control={control}
           errors={errors}
           setValue={setValue}
+          disabled={isRestricted}
         />
 
         <LocationModal
