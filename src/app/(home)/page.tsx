@@ -87,12 +87,13 @@ const CategoryPage = () => {
 
   return (
     <>
-      <div className="h-full w-full mx-auto relative overflow-y-scroll">
+      <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51]">
         <QnaHeader />
         <Navbar
           setFilterType={setFilterType}
           changeCategory={changeCategory}
           setNationFilter={setNationFilter}
+          filterType={filterType}
         />
         <ul className="px-5">
           {nationfilteredPosts?.map((post) => {

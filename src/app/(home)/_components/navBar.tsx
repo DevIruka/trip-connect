@@ -7,18 +7,21 @@ import Icon from '@/components/icons';
 
 import { Modal } from './LocationModal';
 import { nation } from '../_types/homeTypes';
+import updown from '@/data/images/ic-up&down.svg';
+import Image from 'next/image';
 
 type Props = {
   setFilterType: React.Dispatch<React.SetStateAction<string>>;
   changeCategory: (category: string) => void;
   setNationFilter: React.Dispatch<React.SetStateAction<nation | null>>;
+  filterType: string;
 };
 
 const Navbar = ({
   setFilterType,
   changeCategory,
-
   setNationFilter,
+  filterType,
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
   const [selectedCountry, setSelectedCountry] = useState<nation | null>(() => {
@@ -37,7 +40,7 @@ const Navbar = ({
 
   const getSelectedCountryLabel = (selectedCountry: nation | null) => {
     if (!selectedCountry) {
-      return '나라 선택하기';
+      return '나라/도시';
     }
     if (!selectedCountry.city) {
       return selectedCountry.country;
@@ -48,11 +51,10 @@ const Navbar = ({
 
   return (
     <div className="grid sticky top-[0px] bg-white z-10">
-      <div className="w-full overflow-auto whitespace-nowrap border-b border-[#dee1e5] ">
-        {/* <div className="absolute bg-white w-5 h-12"></div> */}
+      <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b border-[#dee1e5] px-5">
         <Tabs
           defaultValue={category}
-          className="h-12 overflow-auto whitespace-nowrap flex px-5"
+          className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex"
         >
           <TabsList>
             <TabsTrigger value="all" onClick={() => changeCategory('all')}>
@@ -72,16 +74,28 @@ const Navbar = ({
           </TabsList>
         </Tabs>
       </div>
-      <div className="flex h-[68px] justify-between px-5">
-        <div className="flex gap-2">
-          <button className="menu-btn" onClick={() => setFilterType('latest')}>
+      <div className="flex h-[68px] justify-between px-5 py-4">
+        <div className="flex gap-1">
+          <button
+            className={
+              filterType === 'latest' ? 'menu-selected-btn' : 'menu-btn'
+            }
+            onClick={() => setFilterType('latest')}
+          >
             전체
           </button>
-          <button className="menu-btn" onClick={() => setFilterType('request')}>
+          <button
+            className={
+              filterType === 'request' ? 'menu-selected-btn' : 'menu-btn'
+            }
+            onClick={() => setFilterType('request')}
+          >
             질문
           </button>
           <button
-            className="menu-btn"
+            className={
+              filterType === 'response' ? 'menu-selected-btn' : 'menu-btn'
+            }
             onClick={() => setFilterType('response')}
           >
             답변
@@ -89,10 +103,17 @@ const Navbar = ({
         </div>
 
         <button
-          className="menu-btn"
+          className="menu-dropdown-btn"
           onClick={() => setIsModalOpen(true)} // 모달 열기
         >
           {isHydrated && getSelectedCountryLabel(selectedCountry)}
+          <Image
+            className=""
+            src={updown}
+            alt={'dropdown arrow'}
+            width={16}
+            height={16}
+          />
         </button>
       </div>
 
