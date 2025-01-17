@@ -5,17 +5,19 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
+import { convertTopicsToKorean } from '@/utils/topics';
+import { EnglishCategory } from '@/utils/topics';
 
 type UnifiedPost = {
   id: string;
   title: string;
   content: string | null;
   country_city: string;
-  category: string[];
+  category: string[]; // Supabase에서 받아오는 raw 데이터 타입
   img_url: string[];
   type: 'question' | 'answer';
-  user_id?: string; // 작성자 ID 추가
-  request_id?: string; // 답변글의 질문글 ID
+  user_id?: string;
+  request_id?: string;
 };
 
 type UnifiedCardProps = {
@@ -26,17 +28,11 @@ type UnifiedCardProps = {
 const PostCard = ({ post, onDelete }: UnifiedCardProps) => {
   const router = useRouter();
   const [menuVisible, setMenuVisible] = useState(false);
-  const { user } = useUserStore(); // Zustand에서 로그인된 사용자 정보 가져오기
+  const { user } = useUserStore();
 
   const handleDelete = async () => {
     if (!user) {
       alert('로그인이 필요합니다.');
-      return;
-    }
-
-    // 답변글 삭제 시 작성자와 현재 유저 비교
-    if (post.type === 'answer' && post.user_id !== user.id) {
-      alert('답변글은 작성자만 삭제할 수 있습니다.');
       return;
     }
 
@@ -75,6 +71,12 @@ const PostCard = ({ post, onDelete }: UnifiedCardProps) => {
     router.push(`/post/${targetId}`);
   };
 
+  // 카테고리를 EnglishCategory[]로 타입 변환
+  const englishCategories = post.category as EnglishCategory[];
+
+  // 변환된 한국어 카테고리
+  const koreanCategories = convertTopicsToKorean(englishCategories);
+
   return (
     <div
       className="relative p-4 border border-gray-300 rounded-lg flex justify-between items-start cursor-pointer"
@@ -86,7 +88,7 @@ const PostCard = ({ post, onDelete }: UnifiedCardProps) => {
           {post.content ? post.content.substring(0, 100) : '내용이 없습니다'}...
         </p>
         <div className="text-sm text-gray-500">
-          {post.category.length > 0 ? post.category.join(', ') : '기타'}
+          {koreanCategories.length > 0 ? koreanCategories.join(', ') : '기타'}
         </div>
       </div>
 
@@ -119,15 +121,7 @@ const PostCard = ({ post, onDelete }: UnifiedCardProps) => {
                 className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 hover:text-black"
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (!post.id) {
-                    alert('올바르지 않은 게시글 ID입니다.');
-                    return;
-                  }
-                  if (post.type === 'answer') {
-                    router.push(`/response-edit/${post.id}`);
-                  } else if (post.type === 'question') {
-                    router.push(`/request-edit/${post.id}`);
-                  }
+                  router.push(`/edit/${post.id}`);
                 }}
               >
                 수정하기
@@ -150,3 +144,4 @@ const PostCard = ({ post, onDelete }: UnifiedCardProps) => {
 };
 
 export default PostCard;
+
