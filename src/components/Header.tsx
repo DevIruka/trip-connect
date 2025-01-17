@@ -1,11 +1,11 @@
 'use client';
 
 import Image from 'next/image';
-import { GrSearch } from 'react-icons/gr';
-import { FiUser } from 'react-icons/fi';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-const logoImage = '/images/logo.png';
+import heylocal from '@/data/images/HeyLocal.svg';
+import search from '@/data/images/ic-Search.svg';
+import profile from '@/data/images/ic-Profile.svg';
 
 const Header = () => {
   const pathname = usePathname();
@@ -17,21 +17,16 @@ const Header = () => {
     <></>
   ) : (
     <>
-      <div className="flex flex-row sticky top-0 h-10 bg-white z-50 w-full justify-between">
-        <Link href="/" className="flex ml-3 mt-2">
-          <Image
-            src={logoImage}
-            alt="트립 커넥트 로고."
-            width={150}
-            height={50}
-          />
+      <div className="flex sticky top-0 h-[56px] bg-white z-50 w-full justify-between py-[13.5px] px-[20px]">
+        <Link href="/" className="flex place-content-center">
+          <Image src={heylocal} alt="헤이로컬 로고" width={115} height={29} />
         </Link>
-        <div className="flex flex-row items-center justify-center gap-4 mr-2">
-          <Link href="/search">
-            <GrSearch size={25} />
+        <div className="flex gap-[20px]">
+          <Link href="/search" className="flex place-content-center">
+            <Image src={search} alt="search" width={24} height={24} />
           </Link>
-          <Link href="/mypage">
-            <FiUser size={25} />
+          <Link href="/mypage" className="flex place-content-center">
+            <Image src={profile} alt="profile" width={24} height={24} />
           </Link>
         </div>
       </div>
