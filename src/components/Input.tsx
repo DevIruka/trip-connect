@@ -13,7 +13,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         type={type}
         placeholder={placeholder}
         ref={ref}
-        className={`border border-[E5E5EC] rounded-md h-10 w-64 mt-1 mb-1 p-2 ${className}`}
+        className={`border border-[#DFE1E5] rounded-md h-[52px] w-full px-[16px] py-[14px] ${className}`}
         {...props}
       />
     );

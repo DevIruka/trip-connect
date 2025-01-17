@@ -7,6 +7,7 @@ import BlackButton from '@/components/BlackBtn';
 import Input from '@/components/Input';
 import Link from 'next/link';
 import { IoIosArrowBack } from 'react-icons/io';
+import BlueButton from '@/components/BlueBtn';
 
 const SignupPage = () => {
   const [step, setStep] = useState(1); // 현재 단계 관리
@@ -35,7 +36,7 @@ const SignupPage = () => {
         <IoIosArrowBack size={30} />
       </Link>
       <div className="inner flex flex-col items-center">
-        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col ">
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col w-full">
           {step === 1 && (
             <>
               <div className="flex flex-col">
@@ -128,7 +129,7 @@ const SignupPage = () => {
             </>
           )}
           <div className="fixed bottom-8 w-[256px]">
-            <BlackButton>{step === 1 ? '다음' : '회원가입 완료'}</BlackButton>
+            <BlueButton>{step === 1 ? '다음' : '회원가입 완료'}</BlueButton>
           </div>
         </form>
       </div>

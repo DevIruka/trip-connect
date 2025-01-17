@@ -4,7 +4,7 @@ import { useSearchStore } from '@/store/useSearchStore';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { RxCross2 } from 'react-icons/rx';
 
@@ -26,9 +26,8 @@ const SearchPage = () => {
       : []; // 로컬 스토리지에서 recentSearches를 가져오고, 없으면 빈 공백으로 설정해요.
   const keyword = useSearchStore((state) => state.keyword);
   const setKeyword = useSearchStore((state) => state.setKeyword);
-  const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
 
-  const { register, handleSubmit, setValue, watch } = useForm({
+  const { register, handleSubmit, setValue, watch, setFocus } = useForm({
     defaultValues: {
       searchQuery: '',
       recentSearches: storedSearches,
@@ -38,15 +37,16 @@ const SearchPage = () => {
   const query = watch('searchQuery'); // 검색 입력값
 
   useEffect(() => {
-    if (keyword && inputRef.current) {
-      inputRef.current.value = keyword; // `keyword`가 있을 때만 자동으로 설정
+    if (keyword) {
+      setValue('searchQuery', keyword); // 검색창 값 업데이트
     }
-    inputRef.current?.focus();
-  }, [keyword, setValue, inputRef]); // `keyword`가 변경될 때마다 실행
+    setFocus('searchQuery');
+  }, [keyword, setValue, setFocus]);
 
   const handleSearch = () => {
     if (!query.trim()) return;
     setKeyword(query);
+
     // 최근 검색어 업데이트
     const updatedSearches = [
       query,
@@ -97,7 +97,6 @@ const SearchPage = () => {
         <div className="flex flex-row justify-center items-center relative">
           <input
             {...register('searchQuery')}
-            ref={inputRef}
             type="text"
             placeholder="나라와 카테고리 모두 검색할 수 있어요."
             className="bg-[#F9F9F9] rounded-[12px] text-[14px] h-[44px] w-[303px] mt-[6px] mb-[11px] py-[12px] px-[16px]"
