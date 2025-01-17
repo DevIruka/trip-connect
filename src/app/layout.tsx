@@ -5,20 +5,15 @@ import Header from '@/components/Header';
 import Providers from './providers';
 
 const pretendard = localFont({
-  src: './fonts/Pretendard-Regular.woff',
-  variable: '--pretendard',
-  weight: '400',
+  src: './fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '100 900',
+  variable: '--font-pretendard',
 });
 
-// const geistMono = localFont({
-//   src: './fonts/GeistMonoVF.woff',
-//   variable: '--font-geist-mono',
-//   weight: '100 900',
-// });
-
 export const metadata: Metadata = {
-  title: 'Trip Connector',
-  description: '트립 커넥터, 여행을 연결해줍니다.',
+  title: 'Hey!Local',
+  description: 'Hey!Local',
 };
 
 export default function RootLayout({
@@ -28,9 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      className={`${pretendard.variable} antialiased`}
-      >
+      <body className={pretendard.className}>
         <div className="bg-container">
           <Providers>
             <Header />
