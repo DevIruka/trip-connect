@@ -3,7 +3,14 @@
 import { GoogleMap, Marker, useLoadScript } from '@react-google-maps/api';
 import React from 'react';
 
-const MapComponent = ({ lat, lng, name, address }) => {
+type mapData = {
+  lat: string | undefined;
+  lng: string | undefined;
+  name: string | undefined;
+  address: string | undefined;
+};
+
+const MapComponent = ({ lat, lng, name, address }: mapData) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
@@ -13,12 +20,12 @@ const MapComponent = ({ lat, lng, name, address }) => {
   return (
     <div className="h-[300px] w-full">
       <GoogleMap
-        center={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
+        center={{ lat: parseFloat(lat!), lng: parseFloat(lng!) }}
         zoom={14}
         mapContainerStyle={{ width: '100%', height: '100%' }}
       >
         <Marker
-          position={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
+          position={{ lat: parseFloat(lat!), lng: parseFloat(lng!) }}
           title={name}
         />
       </GoogleMap>

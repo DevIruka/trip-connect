@@ -1,12 +1,21 @@
 import MapComponent from '@/app/post/_components/MapComponent2';
+import Image from 'next/image';
+import { parsedData } from '../_types/parsedData';
 
-export const ContentRenderer = ({ parsedArray }) => {
-  console.log(parsedArray);
+export const ContentRenderer = ({
+  parsedArray,
+}: {
+  parsedArray: parsedData[];
+}) => {
   return (
     <div className="content-container">
       {parsedArray.map((item, index) => {
         // `data-type="map"`인지 확인
-        if (item.type === 'element' && item.attributes['data-type'] === 'map') {
+        if (
+          item.type === 'element' &&
+          item.attributes &&
+          item.attributes['data-type'] === 'map'
+        ) {
           const { lat, lng, name, address } = item.attributes;
           return (
             <MapComponent
@@ -20,13 +29,19 @@ export const ContentRenderer = ({ parsedArray }) => {
         }
 
         // 일반 텍스트나 이미지 렌더링
-        if (item.type === 'element' && item.tag === 'img') {
+        if (
+          item.type === 'element' &&
+          item.tag === 'img' &&
+          item.attributes &&
+          item.attributes.src
+        ) {
           return (
-            <img
+            <Image
               key={index}
               src={item.attributes.src}
               alt="Content"
-              style={{ maxWidth: '100%', margin: '20px 0' }}
+              width={100}
+              height={100}
             />
           );
         }
@@ -43,10 +58,3 @@ export const ContentRenderer = ({ parsedArray }) => {
     </div>
   );
 };
-
-// // App 컴포넌트에서 사용
-// const App = () => {
-//   return <ContentRenderer parsedArray={parsedArray} />;
-// };
-
-// export default App;
