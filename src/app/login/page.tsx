@@ -75,40 +75,45 @@ const LoginPage = () => {
                 로그인하기
               </h2>
               <label className="text-[14px] mb-[8px]">이메일</label>
+              <div className="relative">
+                <Input
+                  id="email"
+                  placeholder="이메일"
+                  {...register('email', {
+                    required: '이메일을 입력해주세요.',
+                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  })}
+                  className="mb-[16px]"
+                />
+                {errors.email?.type === 'required' && (
+                  <span className="absolute top-[53px] left-0 text-[12px] text-red-600">
+                    이메일을 입력해 주세요
+                  </span>
+                )}
+                {errors.email?.type === 'pattern' && (
+                  <span className="absolute top-[53px] left-0 text-[12px] text-red-600">
+                    유효한 이메일 주소를 입력해주세요.
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <label className="text-[14px] mb-[8px]">비밀번호</label>
+            <div className="relative">
               <Input
-                id="email"
-                placeholder="이메일"
-                {...register('email', {
-                  required: '이메일을 입력해주세요.',
-                  pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                id="password"
+                placeholder="비밀번호"
+                type="password"
+                {...register('password', {
+                  required: '비밀번호를 입력해주세요.',
                 })}
-                className="mb-[16px]"
               />
-              {errors.email?.type === 'required' && (
-                <span className="text-sm text-red-600">
-                  이메일을 입력해 주세요.
-                </span>
-              )}
-              {errors.email?.type === 'pattern' && (
-                <span className="text-sm text-red-600">
-                  유효한 이메일 주소를 입력해주세요.
+              {errors.password?.type === 'required' && (
+                <span className="absolute top-[53px] left-0 text-[12px] text-red-600">
+                  비밀번호를 입력해 주세요
                 </span>
               )}
             </div>
-            <label className="text-[14px] mb-[8px]">비밀번호</label>
-            <Input
-              id="password"
-              placeholder="비밀번호"
-              type="password"
-              {...register('password', {
-                required: '비밀번호를 입력해주세요.',
-              })}
-            />
-            {errors.password?.type === 'required' && (
-              <span className="text-sm text-red-600">
-                비밀번호를 입력해 주세요
-              </span>
-            )}
             <BlueButton type="submit" className="mt-[40px] mb-[40px]">
               로그인
             </BlueButton>
