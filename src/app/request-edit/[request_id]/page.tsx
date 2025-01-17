@@ -4,10 +4,10 @@ import React, { useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { FormInputs } from '../_types/form';
-import FormFields from '../_components/FormFields';
+import { FormInputs } from '../../request/_types/form';
+import FormFields from '../../request/_components/FormFields';
 import LocationModal from '../../../components/LocationModal';
-import TopicSelector from '../_components/TopicSelector';
+import TopicSelector from '../../request/_components/TopicSelector';
 import { FaSearch } from 'react-icons/fa';
 import {
   convertTopicsToEnglish,
@@ -194,6 +194,7 @@ const EditRequestPage: React.FC = () => {
           watch={watch}
           control={control}
           errors={errors}
+          setValue={setValue}
         />
 
         <LocationModal

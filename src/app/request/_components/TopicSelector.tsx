@@ -11,6 +11,18 @@ type Props = {
 };
 
 const TopicSelector: React.FC<Props> = ({ topics = [], setValue, watch }) => {
+  const topicIcons: Record<string, string> = {
+    맛집: '🥘',
+    쇼핑: '🛍️',
+    숙소: '🛏️',
+    이벤트: '🎉',
+    '일정/경비': '💰️',
+    문화: '🌏️',
+    역사: '📚️',
+    액티비티: '🎿',
+    기타: '⁉️',
+  };
+
   const handleTopicClick = (topic: string, currentTopics: string[]) => {
     const updatedTopics = currentTopics.includes(topic)
       ? currentTopics.filter((t) => t !== topic)
@@ -32,7 +44,8 @@ const TopicSelector: React.FC<Props> = ({ topics = [], setValue, watch }) => {
           } hover:bg-black hover:text-white transition`}
           onClick={() => handleTopicClick(topic, watch('category') || [])}
         >
-          {topic}
+          <span className="mr-[4px]">{topicIcons[topic] || '❓'}</span>
+          <span>{topic}</span>
         </button>
       ))}
     </div>

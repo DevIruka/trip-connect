@@ -8,12 +8,12 @@ import { useFormState } from './_hooks/useFormState';
 import { SubmitHandler } from 'react-hook-form';
 import { FormInputs } from './_types/form';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { FaSearch } from 'react-icons/fa';
 import {
   convertTopicsToEnglish,
   KoreanCategory,
   topicMapping,
 } from '@/utils/topics';
+import { useUserStore } from '@/store/userStore';
 
 const RequestPage: React.FC = () => {
   const {
@@ -30,6 +30,8 @@ const RequestPage: React.FC = () => {
     handleLocationSelect,
     clearErrors,
   } = useFormState();
+
+  const { user } = useUserStore(); 
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
@@ -52,7 +54,7 @@ const RequestPage: React.FC = () => {
           ...data,
           category: selectedTopicsInEnglish, // 영어로 저장
           country_city: selectedLocation,
-          user_id: '0fdbd37c-1b2e-4142-b50b-e593f13487a7', // 로그인 연동하면 수정해야함
+          user_id: user?.id, 
         },
       ]);
 

@@ -147,6 +147,7 @@ const FormFields: React.FC<Props> = ({
                     className="text-[#333] font-medium"
                     modifiersClassNames={{
                       selected: 'selected-day',
+                      today: 'today-day',
                     }}
                     styles={{
                       head_cell: { color: '#A9A9A9' },
@@ -155,8 +156,14 @@ const FormFields: React.FC<Props> = ({
                         color: 'white',
                         borderRadius: '50%',
                       },
-                      day_today: { backgroundColor: '#E5E5EC' },
+                      day_today: {
+                        backgroundColor: '#EBF5FF',
+                        color: '#0582FF',
+                        fontWeight: 'bold',
+                        borderRadius: '50%',
+                      },
                     }}
+                    
                   />
                 </div>
 
