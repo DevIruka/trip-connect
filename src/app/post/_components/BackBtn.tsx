@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import backButton from '../../../../public/images/back.svg';
+import backButton from '@/data/images/back.svg';
 // import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 

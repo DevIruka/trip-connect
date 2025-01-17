@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { GPTTranslator } from '../GPTTranslator';
 
 // GPT 번역 로직을 위한 커스텀 훅
-export const useGPTTranslation = (key, input) => {
+export const useGPTTranslation = (key: string, input: string) => {
   return useQuery({
     queryKey: [key], // 캐싱 키
     queryFn: async () => {

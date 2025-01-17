@@ -4,9 +4,10 @@ import RenderTranslatedHTML from './RenderTranslatedHTML';
 import Profile from './profile';
 import { useEffect, useState } from 'react';
 import { useGPTTranslation } from '../_hooks/TranslatedText';
+import { Tables } from '@/types/supabase';
 
 const Responses = ({ postId }: { postId: string }) => {
-  const [resPosts, setResPosts] = useState();
+  const [resPosts, setResPosts] = useState<Tables<'response_posts'>[] | null>();
   useEffect(() => {
     const fetchPosts = async () => {
       const { data: response_posts } = await supabase
@@ -16,7 +17,7 @@ const Responses = ({ postId }: { postId: string }) => {
       setResPosts(response_posts);
     };
     fetchPosts();
-  }, []);
+  }, [postId]);
 
   const text = resPosts ? resPosts[0]?.content_html : '';
   const title = resPosts ? resPosts[0]?.title : '';
@@ -29,8 +30,6 @@ const Responses = ({ postId }: { postId: string }) => {
   if (isTextLoading || isTitleLoading) {
     return <p>Loading...</p>;
   }
-
-  console.log(translatedTitle);
 
   return (
     <>
@@ -48,7 +47,9 @@ const Responses = ({ postId }: { postId: string }) => {
                 <RenderTranslatedHTML data={JSON.parse(translatedTitle!)} />
                 <button className="border-2">원문보기</button>
               </div>
-              <div dangerouslySetInnerHTML={{ __html: post.free_content! }} />
+              <RenderTranslatedHTML
+                data={{ original: '', translated: post.free_content! }}
+              />
               <RenderTranslatedHTML data={JSON.parse(translatedText!)} />
             </div>
           </div>
