@@ -1,3 +1,4 @@
+import '@/app/i18n';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
@@ -5,15 +6,14 @@ import Header from '@/components/Header';
 import Providers from './providers';
 
 const pretendard = localFont({
-  src: './fonts/PretendardVariable.woff2',
-  display: 'swap',
-  weight: '100 900',
-  variable: '--font-pretendard',
+  src: './fonts/Pretendard-Regular.woff',
+  variable: '--pretendard',
+  weight: '400',
 });
 
 export const metadata: Metadata = {
-  title: 'Hey!Local',
-  description: 'Hey!Local',
+  title: 'Trip Connector',
+  description: '트립 커넥터, 여행을 연결해줍니다.',
 };
 
 export default function RootLayout({
@@ -21,9 +21,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  
   return (
-    <html lang="en">
-      <body className={pretendard.className}>
+    <html lang="ko">
+      <body className={`${pretendard.variable} antialiased`}>
         <div className="bg-container">
           <Providers>
             <Header />
