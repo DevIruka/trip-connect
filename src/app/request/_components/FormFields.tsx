@@ -20,12 +20,13 @@ type Props = {
   control: Control<FormInputs>;
   errors: FieldErrors<FormInputs>;
   setValue: UseFormSetValue<FormInputs>;
-  disabledFields: { 
+  disabledFields: {
     title: boolean;
     credit: boolean;
     content: boolean;
     date_end: boolean;
-  };};
+  };
+};
 
 const FormFields: React.FC<Props> = ({
   register,
@@ -36,9 +37,9 @@ const FormFields: React.FC<Props> = ({
   disabledFields,
 }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const selectedDate = watch('date_end')
-  ? new Date(String(watch('date_end')))
-  : undefined;
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+    watch('date_end') ? new Date(String(watch('date_end'))) : undefined,
+  );
 
   const toggleCalendar = () => {
     setIsCalendarOpen((prev) => !prev);
@@ -48,12 +49,25 @@ const FormFields: React.FC<Props> = ({
     setIsCalendarOpen(false);
   };
 
-  const handleConfirm = (date: Date | undefined) => {
+  const handleDateSelect = (date: Date | undefined) => {
     if (date) {
-      setValue('date_end', date);
+      setSelectedDate(date); 
+    }
+  };
+
+  const handleConfirm = () => {
+    if (selectedDate) {
+      setValue('date_end', selectedDate);
     }
     setIsCalendarOpen(false);
   };
+
+  React.useEffect(() => {
+    const dateEndValue = watch('date_end');
+    if (dateEndValue) {
+      setSelectedDate(new Date(String(dateEndValue)));
+    }
+  }, [watch('date_end')]); 
 
   const handleInputResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.target.style.height = 'auto'; // 높이를 초기화
@@ -69,7 +83,6 @@ const FormFields: React.FC<Props> = ({
           placeholder="제목을 입력해주세요"
           {...register('title', { required: '제목을 입력해주세요' })}
           disabled={disabledFields.title}
-
           className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
             disabledFields.title
               ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
@@ -94,7 +107,6 @@ const FormFields: React.FC<Props> = ({
             },
           })}
           disabled={disabledFields.credit}
-
           className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
             disabledFields.credit
               ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
@@ -168,7 +180,7 @@ const FormFields: React.FC<Props> = ({
                   <DayPicker
                     mode="single"
                     selected={selectedDate}
-                    onSelect={(date) => handleConfirm(date)}
+                    onSelect={handleDateSelect}
                     disabled={{ before: new Date() }}
                     className="text-[#333] font-medium"
                     modifiersClassNames={{
@@ -204,7 +216,7 @@ const FormFields: React.FC<Props> = ({
                   <button
                     type="button"
                     className="flex-1 h-[48px] px-[12px] py-[6px] bg-[#0582FF] rounded-[12px] text-white text-[14px] font-semibold"
-                    onClick={() => handleConfirm(selectedDate)}
+                    onClick={handleConfirm}
                   >
                     등록하기
                   </button>
