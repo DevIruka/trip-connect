@@ -84,6 +84,10 @@
   .selected-day {
     @apply bg-[#0582FF] text-white rounded-full;
   }
+
+  .today-day {
+    @apply bg-[#EBF5FF] text-[#0582FF] font-bold rounded-full;
+  }
 }
 
 @layer utilities {
