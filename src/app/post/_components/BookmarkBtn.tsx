@@ -4,7 +4,7 @@ import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import Image from 'next/image';
 import React from 'react';
-import bookmarkButton from '../../../../public/images/bookmark.svg';
+import bookmarkButton from '@/data/images/bookmark.svg';
 import { useUserStore } from '@/store/userStore';
 
 const BookmarkBtn = ({ postId }: { postId: string }) => {

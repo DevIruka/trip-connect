@@ -1,11 +1,12 @@
 'use client';
 
+import { Tables } from '@/types/supabase';
 import { getPostUser } from '@/utils/api/supabase_api/post/getPostUser';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 const Profile = ({ postUserId }: { postUserId: string }) => {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<Tables<'users'>>();
   useEffect(() => {
     const fetchUser = async () => {
       if (postUserId) {
