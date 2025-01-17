@@ -1,4 +1,4 @@
-import { ReadonlyURLSearchParams, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { topicMapping } from '@/utils/topics';
@@ -48,37 +48,34 @@ const Navbar = ({
 
   return (
     <div className="grid sticky top-[0px] bg-white z-10">
-      <Tabs
-        defaultValue={category}
-        className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex gap-5 pl-5"
-      >
-        <TabsList className="bg-transparent h-full border-0 flex gap-5">
-          <TabsTrigger
-            value="all"
-            onClick={() => changeCategory('all')}
-            className="rounded-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-black data-[state=active]:shadow-none"
-          >
-            <Icon type={'all'} size={20} />
-            전체보기
-          </TabsTrigger>
-          {topicArr.map(([key, value]) => (
-            <TabsTrigger
-              value={value}
-              onClick={() => changeCategory(value)}
-              className="rounded-none data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-black data-[state=active]:shadow-none"
-              key={key}
-            >
-              <Icon type={value} size={20} />
-              {key}
+      <div className="w-full overflow-auto whitespace-nowrap border-b border-[#dee1e5] ">
+        {/* <div className="absolute bg-white w-5 h-12"></div> */}
+        <Tabs
+          defaultValue={category}
+          className="h-12 overflow-auto whitespace-nowrap flex px-5"
+        >
+          <TabsList>
+            <TabsTrigger value="all" onClick={() => changeCategory('all')}>
+              <Icon type={'all'} size={20} />
+              전체
             </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
-
-      <div className="flex h-16 justify-between px-5">
+            {topicArr.map(([key, value]) => (
+              <TabsTrigger
+                value={value}
+                onClick={() => changeCategory(value)}
+                key={key}
+              >
+                <Icon type={value} size={20} />
+                {key}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+      </div>
+      <div className="flex h-[68px] justify-between px-5">
         <div className="flex gap-2">
           <button className="menu-btn" onClick={() => setFilterType('latest')}>
-            최신
+            전체
           </button>
           <button className="menu-btn" onClick={() => setFilterType('request')}>
             질문
