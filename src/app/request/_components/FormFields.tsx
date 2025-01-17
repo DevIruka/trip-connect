@@ -20,8 +20,12 @@ type Props = {
   control: Control<FormInputs>;
   errors: FieldErrors<FormInputs>;
   setValue: UseFormSetValue<FormInputs>;
-  disabled?: boolean
-};
+  disabledFields: { 
+    title: boolean;
+    credit: boolean;
+    content: boolean;
+    date_end: boolean;
+  };};
 
 const FormFields: React.FC<Props> = ({
   register,
@@ -29,20 +33,24 @@ const FormFields: React.FC<Props> = ({
   control,
   errors,
   setValue,
+  disabledFields,
 }) => {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const selectedDate = watch('date_end')
+  ? new Date(String(watch('date_end')))
+  : undefined;
 
-  const toggleCalendar = () => setIsCalendarOpen((prev) => !prev);
+  const toggleCalendar = () => {
+    setIsCalendarOpen((prev) => !prev);
+  };
 
   const handleCancel = () => {
-    setSelectedDate(undefined);
     setIsCalendarOpen(false);
   };
 
-  const handleConfirm = () => {
-    if (selectedDate) {
-      setValue('date_end', selectedDate);
+  const handleConfirm = (date: Date | undefined) => {
+    if (date) {
+      setValue('date_end', date);
     }
     setIsCalendarOpen(false);
   };
@@ -60,7 +68,13 @@ const FormFields: React.FC<Props> = ({
           type="text"
           placeholder="제목을 입력해주세요"
           {...register('title', { required: '제목을 입력해주세요' })}
-          className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] placeholder:text-[14px] placeholder:font-medium placeholder-[#A9A9A9] focus:outline-none"
+          disabled={disabledFields.title}
+
+          className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
+            disabledFields.title
+              ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
+              : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
+          }`}
         />
         {errors.title && (
           <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>
@@ -79,7 +93,13 @@ const FormFields: React.FC<Props> = ({
               message: '크레딧은 0 이상이어야 합니다.',
             },
           })}
-          className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] placeholder:text-[14px] placeholder:font-medium placeholder-[#A9A9A9] focus:outline-none"
+          disabled={disabledFields.credit}
+
+          className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
+            disabledFields.credit
+              ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
+              : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
+          }`}
         />
         {errors.credit && (
           <p className="text-sm text-red-500 mt-1">{errors.credit.message}</p>
@@ -93,8 +113,13 @@ const FormFields: React.FC<Props> = ({
           {...register('content', {
             required: '내용을 입력해주세요.',
           })}
+          disabled={disabledFields.content}
           onInput={handleInputResize} // 입력 시 높이 조정
-          className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] placeholder:text-[14px] placeholder:font-medium placeholder-[#A9A9A9] focus:outline-none resize-none overflow-hidden"
+          className={`w-full px-[16px] py-[14px] border rounded-[8px] resize-none overflow-hidden text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
+            disabledFields.content
+              ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
+              : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
+          }`}
           style={{ height: 'auto', minHeight: '156px' }} // 초기 높이 설정
         />
         {errors.content && (
@@ -143,7 +168,7 @@ const FormFields: React.FC<Props> = ({
                   <DayPicker
                     mode="single"
                     selected={selectedDate}
-                    onSelect={setSelectedDate}
+                    onSelect={(date) => handleConfirm(date)}
                     disabled={{ before: new Date() }}
                     className="text-[#333] font-medium"
                     modifiersClassNames={{
@@ -164,7 +189,6 @@ const FormFields: React.FC<Props> = ({
                         borderRadius: '50%',
                       },
                     }}
-                    
                   />
                 </div>
 
@@ -180,7 +204,7 @@ const FormFields: React.FC<Props> = ({
                   <button
                     type="button"
                     className="flex-1 h-[48px] px-[12px] py-[6px] bg-[#0582FF] rounded-[12px] text-white text-[14px] font-semibold"
-                    onClick={handleConfirm}
+                    onClick={() => handleConfirm(selectedDate)}
                   >
                     등록하기
                   </button>

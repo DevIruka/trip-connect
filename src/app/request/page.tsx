@@ -31,7 +31,7 @@ const RequestPage: React.FC = () => {
     clearErrors,
   } = useFormState();
 
-  const { user } = useUserStore(); 
+  const { user } = useUserStore();
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
@@ -59,7 +59,7 @@ const RequestPage: React.FC = () => {
           ...data,
           category: selectedTopicsInEnglish, // 영어로 저장
           country_city: selectedLocation,
-          user_id: user.id, 
+          user_id: user.id,
         },
       ]);
 
@@ -193,6 +193,12 @@ const RequestPage: React.FC = () => {
             control={control}
             errors={errors}
             setValue={setValue}
+            disabledFields={{
+              title: false,
+              credit: false,
+              content: false,
+              date_end: false,
+            }}
           />
 
           <LocationModal
