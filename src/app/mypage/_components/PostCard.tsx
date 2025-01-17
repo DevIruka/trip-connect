@@ -119,7 +119,15 @@ const PostCard = ({ post, onDelete }: UnifiedCardProps) => {
                 className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 hover:text-black"
                 onClick={(e) => {
                   e.stopPropagation();
-                  console.log(`Edit post: ${post.id}`);
+                  if (!post.id) {
+                    alert('올바르지 않은 게시글 ID입니다.');
+                    return;
+                  }
+                  if (post.type === 'answer') {
+                    router.push(`/response-edit/${post.id}`);
+                  } else if (post.type === 'question') {
+                    router.push(`/request-edit/${post.id}`);
+                  }
                 }}
               >
                 수정하기
