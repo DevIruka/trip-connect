@@ -12,7 +12,7 @@ import { FormInputs } from '../_types/form';
 import { format } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
-import { FaCalendarAlt } from 'react-icons/fa';
+import CalendarIcon from './icons/CalendarIcon';
 
 type Props = {
   register: UseFormRegister<FormInputs>;
@@ -51,7 +51,7 @@ const FormFields: React.FC<Props> = ({
 
   const handleDateSelect = (date: Date | undefined) => {
     if (date) {
-      setSelectedDate(date); 
+      setSelectedDate(date);
     }
   };
 
@@ -67,7 +67,7 @@ const FormFields: React.FC<Props> = ({
     if (dateEndValue) {
       setSelectedDate(new Date(String(dateEndValue)));
     }
-  }, [watch('date_end')]); 
+  }, [watch('date_end')]);
 
   const handleInputResize = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     e.target.style.height = 'auto'; // 높이를 초기화
@@ -152,10 +152,7 @@ const FormFields: React.FC<Props> = ({
             onClick={toggleCalendar}
             className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] placeholder:text-[14px] placeholder:font-medium placeholder-[#A9A9A9] focus:outline-none pr-[40px]"
           />
-          <FaCalendarAlt
-            className="absolute right-[16px] top-1/2 transform -translate-y-1/2 text-[#797C80] pointer-events-none"
-            size={20}
-          />
+          <CalendarIcon />
 
           {/* 모달 */}
           {isCalendarOpen && (
