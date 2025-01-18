@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { nations } from '../_constants/nation';
 import { nation } from '../_types/homeTypes';
+import close from '@/data/images/ic-Close.svg';
+import search from '@/data/images/ic-Search.svg';
+
+import Image from 'next/image';
 
 type Props = {
   isOpen: boolean;
@@ -23,7 +27,7 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
   if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
 
   // 검색 입력 변경 처리
-  const handleSearchChange = (e: any) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
 
@@ -75,94 +79,110 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
   return (
     <>
       <div
-        className="w-[375px] h-screen mx-auto flex justify-center overflow-hidden fixed inset-0 z-20 items-end bg-black bg-opacity-50"
+        className="w-[375px] h-full flex justify-center overflow-hidden fixed inset-y-0 z-[52] items-end bg-black bg-opacity-50 pt-10"
         onClick={onClose} // 뒷배경 클릭 시 모달 닫기
       >
         <div
-          className="bg-white w-full h-[90%] rounded-lg shadow-lg p-5 grid gap-4"
+          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[90%] px-5"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="flex place-content-between text-lg font-bold h-10">
+          <div className="h-14 py-2.5 flex place-content-between items-center text-lg font-bold">
             <button
               onClick={onClose}
-              className="w-16 flex justify-start items-center"
+              className="w-12 flex justify-start items-center"
             >
-              X
+              <Image
+                className=""
+                src={close}
+                alt={'close btn'}
+                width={24}
+                height={24}
+              />
             </button>
-            <h2 className="flex justify-start items-center">나라/도시 선택</h2>
+            <h2 className="flex justify-start items-center text-center text-black text-lg font-semibold">
+              나라/도시 선택
+            </h2>
             <button
               onClick={onClose}
-              className="bg-blue-600 py-2 w-16 rounded-md text-white"
+              className="bg-[#0582FF] h-8 py-1.5 px-3 rounded-md text-white text-sm font-semibold"
             >
               선택
             </button>
           </div>
-
-          {/* 검색창 */}
-          <form
-            className="relative w-full"
-            onSubmit={(e) => {
-              e.preventDefault(); // 기본 폼 제출 동작 방지
-            }}
-          >
-            <input
-              type="text"
-              className="w-full p-2 bg-gray-300 rounded-lg pr-10" // 오른쪽 여백 추가 (버튼 겹침 방지)
-              value={searchTerm}
-              onChange={handleSearchChange} // 검색어 업데이트
-            />
-            <button
-              type="submit" // 폼 제출 버튼으로 설정
-              className="absolute flex items-center px-2 "
+          <div className="grid gap-5">
+            {/* 검색창 */}
+            <form
+              className="relative my-2"
+              onSubmit={(e) => {
+                e.preventDefault(); // 기본 폼 제출 동작 방지
+              }}
             >
-              🔍
-            </button>
-          </form>
+              <input
+                type="text"
+                className="w-full h-11 px-4 py-3 bg-[#f9f9f9] rounded-lg placeholder:text-[#797c80] placeholder:text-sm placeholder:font-medium placeholder:leading-tight" // 오른쪽 여백 추가 (버튼 겹침 방지)
+                value={searchTerm}
+                onChange={handleSearchChange} // 검색어 업데이트
+                placeholder="나라 또는 도시를 검색해주세요"
+              />
+              <button
+                type="submit" // 폼 제출 버튼으로 설정
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center"
+              >
+                <Image
+                  className=""
+                  src={search}
+                  alt={'search btn'}
+                  width={20}
+                  height={20}
+                />
+              </button>
+            </form>
 
-          <div className="overflow-y-scroll grid gap-10 place-content-start">
-            {/* 필터링된 결과 */}
-            {searchTerm ? (
-              filteredResults.length > 0 ? (
-                <ul>
-                  {filteredResults.map((result, index) => (
-                    <li key={index}>
-                      <ul>
-                        <li
-                          onClick={() =>
-                            handleSelect(result.continent, result.country, '')
-                          }
-                        >
-                          {result.country}
-                        </li>
-                        {result.cities.map((city, idx) => (
+            <div className="h-[90%] overflow-y-auto menuscrollbar place-content-start">
+              {/* 필터링된 결과 */}
+              {searchTerm ? (
+                filteredResults.length > 0 ? (
+                  <ul>
+                    {filteredResults.map((result, index) => (
+                      <li key={index}>
+                        <ul>
                           <li
-                            key={idx}
                             onClick={() =>
-                              handleSelect(
-                                result.continent,
-                                result.country,
-                                city,
-                              )
+                              handleSelect(result.continent, result.country, '')
                             }
-                            style={{ cursor: 'pointer', color: 'blue' }}
                           >
-                            {result.country + ', ' + city}
+                            {result.country}
                           </li>
-                        ))}
-                      </ul>
-                    </li>
-                  ))}
-                </ul>
+                          {result.cities.map((city, idx) => (
+                            <li
+                              key={idx}
+                              onClick={() =>
+                                handleSelect(
+                                  result.continent,
+                                  result.country,
+                                  city,
+                                )
+                              }
+                              style={{ cursor: 'pointer', color: 'blue' }}
+                            >
+                              {result.country + ', ' + city}
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>{`"${searchTerm}"에 대한 검색 결과가 없어요.`}</p>
+                )
               ) : (
-                <p>{`"${searchTerm}"에 대한 검색 결과가 없어요.`}</p>
-              )
-            ) : (
-              // 대륙 > 나라 버튼 표시
-              nations.map((continent, idx) => (
-                <div key={idx}>
-                  <div className="grid gap-5">
-                    <h3 className="font-bold">{continent.continent}</h3>
-                    <div className="flex flex-wrap gap-3">
+                // 대륙 > 나라 버튼 표시
+                nations.map((continent, idx) => (
+                  <div key={idx} className="grid gap-2 min-h-[65px] mb-9">
+                    <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px]">
+                      {continent.continent}
+                    </h3>
+                    <div className="flex gap-[7px] flex-wrap">
                       {continent.countries.map((country) =>
                         country.cities.map((city, cityIndex) => (
                           <button
@@ -174,7 +194,7 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
                                 city,
                               )
                             }
-                            className="px-3 rounded-md border-2 bg-white cursor-pointer"
+                            className="h-7 px-3 py-[7px] bg-white rounded-[100px] border border-[#dee1e5] justify-center items-center inline-flex text-center text-[#797c80] text-xs font-medium"
                           >
                             {city}
                           </button>
@@ -182,9 +202,9 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
                       )}
                     </div>
                   </div>
-                </div>
-              ))
-            )}
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>

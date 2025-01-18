@@ -108,7 +108,7 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
                     nickname={nickname}
                     post={post}
                     reviewCount={reviewCount}
-                  /> 
+                  />
                 ) : (
                   <RequestDetail
                     addBookmarkMutation={addBookmarkMutation}
