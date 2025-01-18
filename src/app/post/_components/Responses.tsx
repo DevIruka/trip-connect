@@ -63,14 +63,14 @@ const Responses = ({ postId }: { postId: string }) => {
 
       {resPosts?.map((post) => {
         return (
-          <div key={post.id} className="pb-[76px]">
+          <div key={post.id} className="">
             <Profile postUserId={post.user_id} />
             <div className="px-5">
               <div>
                 <div className="grid my-2 text-black text-lg font-bold leading-[28.80px]">
                   {/* <RenderTranslatedHTML data={JSON.parse(translatedTitle!)} /> */}
                   타이틀
-                </div>{' '}
+                </div>
                 <button className="h-6 px-2 py-1 rounded-[14px] border border-[#c5c8cc] justify-center items-center gap-1 inline-flex text-[#44484c] text-xs font-medium mb-5">
                   <Image src={original} alt="original" height={14} width={14} />
                   원문보기
@@ -124,6 +124,7 @@ const Responses = ({ postId }: { postId: string }) => {
                 />
               </div>
             </div>
+            <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
           </div>
         );
       })}

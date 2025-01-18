@@ -24,7 +24,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
-    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar">
+    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar mb-[76px]">
       <div className="h-14 px-5 py-2.5 place-content-center flex justify-between sticky top-0 z-50 bg-white">
         <BackButton />
         <Image width={20} height={20} alt="MoreButton" src={MoreButton} />
