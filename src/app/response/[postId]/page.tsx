@@ -78,7 +78,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   if (error) return <p>요청 정보를 불러오는 중 오류가 발생했습니다.</p>;
 
   return (
-    <div className="p-0">
+    <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
       <HeaderWithButton buttonLabel="등록" onButtonClick={handleSubmit} />
 
       {/* 상단 Q {title} 영역 */}

@@ -14,7 +14,7 @@ const HeaderWithButton: React.FC<Props> = ({ buttonLabel, onButtonClick }) => {
   const router = useRouter();
 
   return (
-    <div className="flex justify-between items-center px-5 py-3 bg-white shadow-md border-b">
+    <div className="flex justify-between items-center px-[20px] py-[10px] bg-white shadow-md border-b">
       <button
         onClick={() => router.back()}
         className="text-lg font-bold text-black"
@@ -22,9 +22,12 @@ const HeaderWithButton: React.FC<Props> = ({ buttonLabel, onButtonClick }) => {
         ✕
       </button>
 
-      <BlackButton onClick={onButtonClick} className="w-auto px-3 py-1 text-sm">
+      <button
+        onClick={onButtonClick}
+        className="h-8 px-3 py-1.5 bg-[#0582FF] text-white text-sm font-semibold rounded-[6px]"
+      >
         {buttonLabel}
-      </BlackButton>
+      </button>
     </div>
   );
 };
