@@ -12,6 +12,7 @@ import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
 import location from '@/data/images/ic-location.svg';
 import coin from '@/data/images/coin.svg';
 import dot from '@/data/images/Ellipse 14.svg';
+import pencil from '@/data/images/ic-pencil.svg';
 
 import { topicMapping } from '@/utils/topics';
 import { usePosts } from '@/utils/api/tanstack/home/usePosts';
@@ -95,7 +96,7 @@ const CategoryPage = () => {
 
   return (
     <>
-      <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51]">
+      <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar">
         <QnaHeader />
         <Navbar
           setFilterType={setFilterType}
@@ -103,7 +104,7 @@ const CategoryPage = () => {
           setNationFilter={setNationFilter}
           filterType={filterType}
         />
-        <ul className="px-5">
+        <ul className="px-5 grid gap-2">
           {nationfilteredPosts?.map((post) => {
             const bookmarked = isPostBookmarked(post.id);
             return (
@@ -197,11 +198,11 @@ const CategoryPage = () => {
                     >
                       {post.request_id ? 'A.' : 'Q.'}
                     </div>
-                    <h1 className="text-black text-base font-semibold leading-snug grow truncate text-wrap break-all">
+                    <h1 className="text-black text-base font-semibold leading-snug grow line-clamp-2">
                       {post.title}
                     </h1>
                   </div>
-                  <div className="pl-[22px] text-[#797c80] text-sm font-medium leading-snug">
+                  <div className="pl-[22px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2">
                     {post.content}
                   </div>
                 </div>
@@ -213,7 +214,9 @@ const CategoryPage = () => {
                         {post.credit}
                       </div>
                       <Image width={2} height={2} src={dot} alt="dot" />
-                      <div>1명 답변</div>
+                      <div>
+                        {post.request_id ? '작성자 닉네임' : '1명 답변'}
+                      </div>
                     </div>
                   </div>
                   <div>1일 전</div>
@@ -231,12 +234,21 @@ const CategoryPage = () => {
                 fetchNextPage();
               }}
               disabled={isFetchingNextPage}
-              className="border-2 rounded-lg p-2 grid cursor-pointer w-full mb-2"
+              className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
             >
               {isFetchingNextPage ? '로딩 중...' : '더보기'}
             </button>
           )}
         </div>
+
+        <button
+          className="absolute sticky bottom-8 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
+          onClick={() => {
+            router.push('/request');
+          }}
+        >
+          <Image width={36} height={36} src={pencil} alt="pencil" />
+        </button>
       </div>
     </>
   );

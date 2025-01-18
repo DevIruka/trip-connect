@@ -4,7 +4,8 @@ import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import Image from 'next/image';
 import React from 'react';
-import bookmarkButton from '@/data/images/bookmark.svg';
+import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
+import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
 import { useUserStore } from '@/store/userStore';
 
 const BookmarkBtn = ({ postId }: { postId: string }) => {
@@ -24,13 +25,10 @@ const BookmarkBtn = ({ postId }: { postId: string }) => {
           }}
         >
           <Image
-            width={0}
-            height={0}
-            sizes="100vw"
-            style={{ width: '100%', height: 'auto' }}
-            src={bookmarkButton}
+            width={24}
+            height={24}
+            src={selectedBookmarkBtn}
             alt="bookmark button"
-            className="brightness-0"
           />
         </button>
       ) : (
@@ -43,8 +41,8 @@ const BookmarkBtn = ({ postId }: { postId: string }) => {
           }}
         >
           <Image
-            width={20}
-            height={20}
+            width={24}
+            height={24}
             src={bookmarkButton}
             alt="bookmark button"
           />

@@ -59,7 +59,7 @@ const Navbar = ({
           <TabsList>
             <TabsTrigger value="all" onClick={() => changeCategory('all')}>
               <Icon type={'all'} size={20} />
-              전체
+              <div className="pl-1">전체</div>
             </TabsTrigger>
             {topicArr.map(([key, value]) => (
               <TabsTrigger
@@ -68,7 +68,7 @@ const Navbar = ({
                 key={key}
               >
                 <Icon type={value} size={20} />
-                {key}
+                <div className="pl-1">{key}</div>
               </TabsTrigger>
             ))}
           </TabsList>
