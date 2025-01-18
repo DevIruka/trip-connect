@@ -1,17 +1,21 @@
 import { category } from '@/data/category';
 import Link from 'next/link';
 import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
-import { IoIosArrowBack } from 'react-icons/io';
 import { Tabs, Tab, Box } from '@mui/material';
 import { KoreanCategory } from '@/utils/topics';
-import TabDetail from './TabDetail';
-import { convertToKorean } from '../_utils/convertTopictoKorean';
+import Image from 'next/image';
+import TabDetail from '../../_components/TabDetail';
+import { convertToKorean } from '../../_utils/convertTopictoKorean';
+import { useSearchStore } from '@/store/useSearchStore';
+
+const iconLeft = '/images/ic-left.svg';
+const iconclose = '/images/ic-xmark.svg';
 
 type DetailedSearchBarProps = {
   inputRef: RefObject<HTMLInputElement>;
   inputOnclick: () => void;
   selectedCategory: string | null;
-  setSelectedCategory: Dispatch<SetStateAction<KoreanCategory | "전체">>
+  setSelectedCategory: Dispatch<SetStateAction<KoreanCategory | '전체'>>;
 };
 
 const DetailedSearchBar = ({
@@ -20,6 +24,7 @@ const DetailedSearchBar = ({
   selectedCategory,
   setSelectedCategory,
 }: DetailedSearchBarProps) => {
+    const setKeyword = useSearchStore((state) => state.setKeyword);
   useEffect(() => {
     setSelectedCategory('전체');
   }, [setSelectedCategory]);
@@ -28,32 +33,49 @@ const DetailedSearchBar = ({
     _: React.SyntheticEvent,
     newValue: string | null,
   ) => {
-    // 선택된 카테고리가 클릭된 것과 같으면 해제(null), 아니면 업데이트
     setSelectedCategory((prev) =>
       prev === newValue ? '전체' : (newValue as KoreanCategory | '전체'),
     );
   };
 
+  const handleClearInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = ''; // 입력 필드 초기화
+    }
+    setKeyword('')
+  };
+
   return (
     <>
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-row items-center">
         <Link href="/search">
-          <IoIosArrowBack size={30} />
+          <Image
+            src={iconLeft}
+            alt="left icon"
+            width={24}
+            height={24}
+            className="ml-[20px] mr-[8px]"
+          />
         </Link>
         <div className="flex flex-row justify-center items-center relative">
           <input
             type="text"
-            placeholder="검색어를 입력해주세요"
+            placeholder="나라와 카테고리 모두 검색할 수 있어요."
             ref={inputRef}
-            className="border border-black rounded-full h-8 w-72 mt-1 mb-1 px-4"
+            className="bg-[#F9F9F9] rounded-[12px] text-[14px] h-[44px] w-[303px] mt-[6px] mb-[11px] py-[12px] px-[16px]"
             onClick={inputOnclick}
           />
-          <Link href="/">
-            <span className="ml-2">닫기</span>
-          </Link>
+          <Image
+            src={iconclose}
+            alt="left icon"
+            width={24}
+            height={24}
+            className="absolute top-[16px] right-[10px]"
+            onClick={handleClearInput}
+          />
         </div>
       </div>
-      <Box className="flex items-center justify-center">
+      <Box>
         <Tabs
           value={selectedCategory}
           onChange={handleCategoryChange}
@@ -80,7 +102,7 @@ const DetailedSearchBar = ({
               sx={{
                 height: '28',
                 padding: '4px 8px', // 위아래 간격 줄이기
-                fontSize: '0.85rem', // 텍스트 크기 조정
+                fontSize: '16px', // 텍스트 크기 조정
                 '&.Mui-selected': {
                   color: '#000000',
                 },

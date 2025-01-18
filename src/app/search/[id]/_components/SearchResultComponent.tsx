@@ -5,16 +5,12 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import useInfiniteSearchRequestPosts from '@/utils/api/tanstack/search/useInfiniteSearchRequestPosts';
 import useInfiniteSearchResponsePosts from '@/utils/api/tanstack/search/useInfiniteSearchResponsePosts';
-import DetailedSearchBar from '../_components/DetailedSearchBar';
-import SearchResults, { ReqResPost } from '../_components/SearchResults';
-import {
-  ExtendedResponsePostData,
-  Params,
-  RequestPostData,
-} from '../[id]/_types/searchTypes';
-import SearchResultCount from './SearchResultCount';
-import SelectBox from './SelectBox';
+import { ExtendedResponsePostData, Params, RequestPostData } from '../_types/searchTypes';
 import { KoreanCategory, topicMapping } from '@/utils/topics';
+import SearchResults, { ReqResPost } from './SearchResults';
+import DetailedSearchBar from './DetailedSearchBar';
+import SearchResultCount from './SearchResultCount';
+import CustomSelectBox from './SelectBox';
 export type Post = ExtendedResponsePostData | RequestPostData;
 
 const SearchResultComponent = () => {
@@ -24,7 +20,9 @@ const SearchResultComponent = () => {
   const [countReq, setCountReq] = useState<number | null>(0);
   const [countRes, setCountRes] = useState<number | null>(0);
   const [noResResults, setNoResResults] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<KoreanCategory | '전체'>('전체');
+  const [selectedCategory, setSelectedCategory] = useState<
+    KoreanCategory | '전체'
+  >('전체');
   const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
   const route = useRouter();
   const [allPosts, setAllPosts] = useState<ReqResPost[] | []>([]);
@@ -108,7 +106,9 @@ const SearchResultComponent = () => {
       />
       <div className="inner">
         {noReqResults && noResResults && (
-          <p className='p-1'>{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>
+          <div className="flex justify-center items-center mt-[40px]">
+            <p className="text-[16px] font-[600] text-[#797C80]">{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>
+          </div>
         )}
         {!(noReqResults && noResResults) && (
           <>
@@ -119,7 +119,7 @@ const SearchResultComponent = () => {
                   countRes={countRes}
                   filter={filter}
                 />
-                <SelectBox filter={filter} setFilter={setFilter} />
+                <CustomSelectBox filter={filter} setFilter={setFilter} />
               </div>
             ) : (
               <p></p>
