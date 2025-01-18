@@ -31,6 +31,10 @@
     @apply h-[22px] pl-1 pr-1.5 bg-[#f4f6f9] rounded justify-start items-center gap-0.5 inline-flex text-center text-[#44484c] text-xs font-medium;
   }
 
+  .blue-btn {
+    @apply bg-[#0582ff] h-[52px] rounded-xl flex justify-center items-center mx-5 my-3 text-white text-base font-semibold;
+  }
+
   :root {
     --font-pretendard: 'Pretendard', sans-serif;
     --background: 0 0% 100%;

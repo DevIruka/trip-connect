@@ -18,21 +18,17 @@ const MapComponent = ({ lat, lng, name, address }: mapData) => {
   if (loadError) return <div>Error loading Google Maps</div>;
 
   return (
-    <div className="h-[300px] w-full">
+    <div className="">
       <GoogleMap
         center={{ lat: parseFloat(lat!), lng: parseFloat(lng!) }}
         zoom={14}
-        mapContainerStyle={{ width: '100%', height: '100%' }}
+        mapContainerStyle={{ width: '100%', height: '217px' }}
       >
         <Marker
           position={{ lat: parseFloat(lat!), lng: parseFloat(lng!) }}
           title={name}
         />
       </GoogleMap>
-      <p>
-        <strong>{name}</strong>
-      </p>
-      <p>{address}</p>
     </div>
   );
 };

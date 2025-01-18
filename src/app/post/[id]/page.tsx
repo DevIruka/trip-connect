@@ -30,11 +30,11 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
         <Image width={20} height={20} alt="MoreButton" src={MoreButton} />
       </div>
       {post ? (
-        <div className="mb-5">
+        <div className="relative">
           <Profile postUserId={post.user_id} />
           <div className="px-5 grid grid-cols-1 gap-4">
             <div className="grid gap-1">
-              <h1 className="text-black text-xl font-bold leading-loose">
+              <h1 className="text-black text-xl font-bold leading-[28.80px]">
                 {post.title}
               </h1>
               <div className="flex gap-2 flex-wrap">
@@ -61,7 +61,12 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               </div>
               <div className="text-black text-sm font-medium leading-tight grid gap-3">
                 <div>{post.country_city}</div>
-                <div>{post.date_end}</div>
+                <div className="flex gap-1">
+                  {post.date_end}
+                  <div className="px-1.5 bg-[#ffecd4] rounded justify-center items-center inline-flex text-center text-[#ff800a] text-xs font-medium">
+                    D-24
+                  </div>
+                </div>
                 <div>{post.credit} C</div>
               </div>
             </div>
@@ -89,11 +94,8 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
             </div>
           </div>
           <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
-          <div className="absolute bg-white z-50 fixed bottom-0 min-w-full">
-            <Link
-              className=" bg-[#0582ff] h-[52px] rounded-xl flex justify-center items-center mx-5 my-3 text-white text-base font-semibold"
-              href={`/response/${postId}`}
-            >
+          <div className="bg-white z-50 fixed bottom-0 w-[375px]">
+            <Link className="blue-btn" href={`/response/${postId}`}>
               답변하기
             </Link>
           </div>
@@ -103,7 +105,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
       )}
 
       {/* 답변 게시물 */}
-      <div className="">
+      <div>
         <Responses postId={postId} />
       </div>
     </div>
