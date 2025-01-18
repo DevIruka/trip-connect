@@ -5,7 +5,7 @@ import { topicMapping } from '@/utils/topics';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/icons';
 
-import { Modal } from './LocationModal';
+import { LocationModal } from '../../../components/LocationModalNew';
 import { nation } from '../_types/homeTypes';
 import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
@@ -103,7 +103,7 @@ const Navbar = ({
         </div>
 
         <button
-          className="menu-dropdown-btn"
+          className="menu-dropdown-btn max-w-[140px] overflow-hidden whitespace-nowrap text-ellipsis"
           onClick={() => setIsModalOpen(true)} // 모달 열기
         >
           {isHydrated && getSelectedCountryLabel(selectedCountry)}
@@ -117,7 +117,7 @@ const Navbar = ({
         </button>
       </div>
 
-      <Modal
+      <LocationModal
         isOpen={isModalOpen}
         onClose={() => {
           setIsModalOpen(false);
