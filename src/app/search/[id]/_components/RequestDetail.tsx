@@ -2,9 +2,9 @@ import Image from 'next/image';
 import { ReqResPost } from './SearchResults';
 import { UseMutationResult } from '@tanstack/react-query';
 import TimeAgo from './TimeAgo';
-import { convertToKorean } from '../_utils/convertTopictoKorean';
 import bookmarkButton from '@/data/images/bookmark.svg';
-import { calculateDDay } from '../_utils/calculateDDay';
+import { calculateDDay } from '../../_utils/calculateDDay';
+import { convertToKorean } from '../../_utils/convertTopictoKorean';
 
 const borderbookmarkButton = '/images/ic-bookmark.svg';
 const coin = '/images/coin.svg';

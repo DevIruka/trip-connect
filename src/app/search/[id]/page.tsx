@@ -1,4 +1,5 @@
-import SearchResultComponent from '../_components/SearchResultComponent';
+import SearchResultComponent from "./_components/SearchResultComponent";
+
 
 const SearchResultPage = async () => {
   return (

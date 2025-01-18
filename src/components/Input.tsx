@@ -8,14 +8,16 @@ type InputProps = InputHTMLAttributes<HTMLInputElement> & {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ id, placeholder, type = 'text', className = '', ...props }, ref) => {
     return (
-      <input
-        id={id}
-        type={type}
-        placeholder={placeholder}
-        ref={ref}
-        className={`border border-[#DFE1E5] rounded-md h-[52px] w-full px-[16px] py-[14px] ${className}`}
-        {...props}
-      />
+      <>
+        <input
+          id={id}
+          type={type}
+          placeholder={placeholder}
+          ref={ref}
+          className={`border border-[#DFE1E5] rounded-md h-[52px] w-full px-[16px] py-[14px] ${className}`}
+          {...props}
+        />
+      </>
     );
   },
 );

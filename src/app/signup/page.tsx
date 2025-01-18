@@ -72,15 +72,15 @@ const SignupPage = () => {
                       required: '이메일을 입력해주세요.',
                       pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                     })}
-                    className="mb-[16px]"
+                    className="mb-[32px]"
                   />
                   {errors.email?.type === 'required' && (
-                    <span className="absolute top-[53px] left-0 text-[12px] text-red-600">
+                    <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
                       이메일을 입력해 주세요.
                     </span>
                   )}
                   {errors.email?.type === 'pattern' && (
-                    <span className="absolute top-[53px] left-0 text-[12px] text-red-600">
+                    <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
                       유효한 이메일 주소를 입력해주세요.
                     </span>
                   )}
@@ -108,10 +108,10 @@ const SignupPage = () => {
                       message: '비밀번호는 최소 6자 이상이여야 합니다.',
                     },
                   })}
-                  className="mb-[16px]"
+                  className="mb-[32px]"
                 />
                 {errors.password && (
-                  <span className="absolute top-[53px] left-0 text-[12px] text-red-600">
+                  <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
                     {errors.password.message}
                   </span>
                 )}
@@ -138,7 +138,7 @@ const SignupPage = () => {
                   })}
                 />
                 {errors.passwordCheck && (
-                  <span className="absolute top-[53px] left-0 text-[12px] text-red-600">
+                  <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
                     {errors.passwordCheck.message}
                   </span>
                 )}
@@ -170,7 +170,7 @@ const SignupPage = () => {
                     })}
                   />
                   {errors.nickname && (
-                    <span className="text-sm text-red-600">
+                    <span className="text-sm text-[#FC828A]">
                       {errors.nickname.message}
                     </span>
                   )}

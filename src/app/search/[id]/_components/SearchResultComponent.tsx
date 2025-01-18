@@ -5,16 +5,12 @@ import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import useInfiniteSearchRequestPosts from '@/utils/api/tanstack/search/useInfiniteSearchRequestPosts';
 import useInfiniteSearchResponsePosts from '@/utils/api/tanstack/search/useInfiniteSearchResponsePosts';
-import DetailedSearchBar from '../_components/DetailedSearchBar';
-import SearchResults, { ReqResPost } from '../_components/SearchResults';
-import {
-  ExtendedResponsePostData,
-  Params,
-  RequestPostData,
-} from '../[id]/_types/searchTypes';
-import SearchResultCount from './SearchResultCount';
-import SelectBox from './SelectBox';
+import { ExtendedResponsePostData, Params, RequestPostData } from '../_types/searchTypes';
 import { KoreanCategory, topicMapping } from '@/utils/topics';
+import SearchResults, { ReqResPost } from './SearchResults';
+import DetailedSearchBar from './DetailedSearchBar';
+import SearchResultCount from './SearchResultCount';
+import CustomSelectBox from './SelectBox';
 export type Post = ExtendedResponsePostData | RequestPostData;
 
 const SearchResultComponent = () => {
@@ -123,7 +119,7 @@ const SearchResultComponent = () => {
                   countRes={countRes}
                   filter={filter}
                 />
-                <SelectBox filter={filter} setFilter={setFilter} />
+                <CustomSelectBox filter={filter} setFilter={setFilter} />
               </div>
             ) : (
               <p></p>

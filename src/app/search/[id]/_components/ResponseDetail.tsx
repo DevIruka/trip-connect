@@ -1,8 +1,9 @@
 import Image from 'next/image';
-import { convertToKorean } from '../_utils/convertTopictoKorean';
+
 import ResponseContent from './ResponseContent';
 import TimeAgo from './TimeAgo';
 import { ReqResPost } from './SearchResults';
+import { convertToKorean } from '../../_utils/convertTopictoKorean';
 
 type ResponseDetailProps = {
   post: ReqResPost;
