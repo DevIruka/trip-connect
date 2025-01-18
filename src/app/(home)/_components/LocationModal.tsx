@@ -83,7 +83,7 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
         onClick={onClose} // 뒷배경 클릭 시 모달 닫기
       >
         <div
-          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[90%] px-5 py-5"
+          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[90%] px-5"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="h-14 py-2.5 flex place-content-between items-center text-lg font-bold">
@@ -194,7 +194,7 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
                                 city,
                               )
                             }
-                            className="h-7 px-3 py-[7px] bg-white rounded-[100px] border border-[#dee1e5] justify-center items-center gap-1 inline-flex justify-center items-center gap-0.5 flex text-center text-[#797c80] text-xs font-medium"
+                            className="h-7 px-3 py-[7px] bg-white rounded-[100px] border border-[#dee1e5] justify-center items-center inline-flex text-center text-[#797c80] text-xs font-medium"
                           >
                             {city}
                           </button>

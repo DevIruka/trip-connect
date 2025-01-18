@@ -27,6 +27,10 @@
     @apply px-4 py-3 rounded-[100px] border border-[#dee1e5] bg-[#F9F9F9] gap-1 justify-center items-center flex overflow-hidden text-center text-sm font-normal leading-tight;
   }
 
+  .tag {
+    @apply h-[22px] pl-1 pr-1.5 bg-[#f4f6f9] rounded justify-start items-center gap-0.5 inline-flex text-center text-[#44484c] text-xs font-medium;
+  }
+
   :root {
     --font-pretendard: 'Pretendard', sans-serif;
     --background: 0 0% 100%;

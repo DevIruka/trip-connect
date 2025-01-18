@@ -7,8 +7,12 @@ import { useEffect, useState } from 'react';
 import QnaHeader from './_components/qnaHeader';
 import Navbar from './_components/navBar';
 
-import bookmarkButton from '@/data/images/bookmark.svg';
-import moreButton from '@/data/images/more-button.svg';
+import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
+import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
+import location from '@/data/images/ic-location.svg';
+import coin from '@/data/images/coin.svg';
+import dot from '@/data/images/Ellipse 14.svg';
+
 import { topicMapping } from '@/utils/topics';
 import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
@@ -24,6 +28,10 @@ const CategoryPage = () => {
   const category = searchParams.get('category') || 'all';
   const changeCategory = (category: string) => {
     router.push(`?category=${category}`); // URL 업데이트
+  };
+
+  const handleNavigation = (id: string | number) => {
+    router.push(`/post/${id}`); // '/about' 페이지로 이동
   };
 
   //카테고리 한글표시
@@ -100,49 +108,47 @@ const CategoryPage = () => {
             const bookmarked = isPostBookmarked(post.id);
             return (
               <li
-                onClick={() => {
-                  location.href = post.request_id
-                    ? `/post/${post.request_id}`
-                    : `/post/${post.id}`;
-                }}
+                onClick={() =>
+                  handleNavigation(post.request_id ? post.request_id : post.id)
+                }
                 key={post.id}
-                className="border-2 rounded-lg p-2 grid cursor-pointer w-full mb-2"
+                className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full"
               >
-                <div>{post.request_id ? '답변글' : '질문글'}</div>
-                <div className="flex justify-between">
-                  <div className="flex gap-2">
-                    <div className="bg-gray-300 rounded-md px-1 min-w-10 flex justify-center">
+                <div className="h-6 w-full justify-between items-center inline-flex gap-3">
+                  <div className="flex place-content-between items-center gap-1">
+                    <div className="h-[22px] px-1.5 bg-[#ffecd4] rounded justify-center items-center inline-flex text-center text-[#ff800a] text-xs font-medium">
+                      D-24
+                    </div>
+                    <div className="tag">
+                      <Image
+                        width={10}
+                        height={10}
+                        src={location}
+                        alt="location"
+                      />
                       {post.request_id
                         ? post.verified_country
                         : post.country_city}
                     </div>
-                    <div className="flex gap-2 min-w-10 overflow-x-hidden">
-                      {post.category
-                        ? topicArr
-                            .filter(([_, value]) =>
-                              post.category?.includes(value),
-                            )
-                            .map(([key, _]) => (
-                              <div
-                                className="bg-gray-300 rounded-md px-1"
-                                key={key}
-                              >
-                                {key}
-                              </div>
-                            ))
-                        : topicArr
-                            .filter(([_, value]) =>
-                              post.request_posts?.category.includes(value),
-                            )
-                            .map(([key, _]) => (
-                              <div
-                                className="bg-gray-300 rounded-md px-1"
-                                key={key}
-                              >
-                                {key}
-                              </div>
-                            ))}
-                    </div>
+                    {post.category
+                      ? topicArr
+                          .filter(([_, value]) =>
+                            post.category?.includes(value),
+                          )
+                          .map(([key, _]) => (
+                            <div className="tag" key={key}>
+                              {key}
+                            </div>
+                          ))
+                      : topicArr
+                          .filter(([_, value]) =>
+                            post.request_posts?.category.includes(value),
+                          )
+                          .map(([key, _]) => (
+                            <div className="tag" key={key}>
+                              {key}
+                            </div>
+                          ))}
                   </div>
                   {!post.request_id ? (
                     bookmarked ? (
@@ -155,9 +161,8 @@ const CategoryPage = () => {
                         <Image
                           width={20}
                           height={20}
-                          src={bookmarkButton}
+                          src={selectedBookmarkBtn}
                           alt="bookmark button"
-                          className="brightness-0 z-0"
                         />
                       </button>
                     ) : (
@@ -180,19 +185,38 @@ const CategoryPage = () => {
                       </button>
                     )
                   ) : (
-                    <Image
-                      width={20}
-                      height={20}
-                      src={moreButton}
-                      alt="more button"
-                    />
+                    ''
                   )}
                 </div>
-                <div>
-                  <h1 className="text-xl font-bold truncate whitespace-nowrap overflow-hidden max-w-[250px]">
-                    {post.title}
-                  </h1>
-                  <div>{post.content}</div>
+                <div className="grid gap-2">
+                  <div className="flex gap-1.5 max-w-full">
+                    <div
+                      className={`text-base font-semibold leading-snug w-[16px] ${
+                        post.request_id ? 'text-[#f94f5b]' : 'text-[#0582ff]'
+                      }`}
+                    >
+                      {post.request_id ? 'A.' : 'Q.'}
+                    </div>
+                    <h1 className="text-black text-base font-semibold leading-snug grow truncate text-wrap break-all">
+                      {post.title}
+                    </h1>
+                  </div>
+                  <div className="pl-[22px] text-[#797c80] text-sm font-medium leading-snug">
+                    {post.content}
+                  </div>
+                </div>
+                <div className="flex gap-4 items-center text-[#797c80] text-xs font-medium justify-between w-full">
+                  <div className="flex gap-4">
+                    <div className="flex gap-1.5 items-center">
+                      <div className="flex gap-1 items-center">
+                        <Image width={18} height={18} src={coin} alt="coin" />
+                        {post.credit}
+                      </div>
+                      <Image width={2} height={2} src={dot} alt="dot" />
+                      <div>1명 답변</div>
+                    </div>
+                  </div>
+                  <div>1일 전</div>
                 </div>
               </li>
             );
