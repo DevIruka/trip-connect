@@ -5,6 +5,11 @@ import BookmarkBtn from '../_components/BookmarkBtn';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import BackButton from '../_components/BackBtn';
 import Profile from '../_components/profile';
+import MoreButton from '@/data/images/ic-More.svg';
+import Image from 'next/image';
+import Icon from '@/components/icons';
+import Imoji from '@/data/images/ic-imoji.svg';
+import share from '@/data/images/ic-share.svg';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
@@ -19,64 +24,86 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
-    <div className="h-full w-full mx-auto relative overflow-y-scroll bg-gray-200">
-      <div className="h-12 place-content-center bg-white px-5">
+    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar">
+      <div className="h-14 px-5 py-2.5 place-content-center flex justify-between sticky top-0 z-50 bg-white">
         <BackButton />
+        <Image width={20} height={20} alt="MoreButton" src={MoreButton} />
       </div>
       {post ? (
-        <div className="bg-white px-5 pb-5 mb-5">
-          <div className="grid grid-cols-1 gap-4">
-            <Profile postUserId={post.user_id} />
-            <h1 className="text-xl font-bold place-content-center">
-              {post.title}
-            </h1>
-            <div className="flex gap-2">
-              {post.category
-                ? topicArr
-                    .filter(([_, value]) => post.category.includes(value))
-                    .map(([key, _]) => (
-                      <div
-                        className="bg-gray-300 rounded-2xl py-1 px-2"
-                        key={key}
-                      >
-                        {key}
-                      </div>
-                    ))
-                : ''}
+        <div className="mb-5">
+          <Profile postUserId={post.user_id} />
+          <div className="px-5 grid grid-cols-1 gap-4">
+            <div className="grid gap-1">
+              <h1 className="text-black text-xl font-bold leading-loose">
+                {post.title}
+              </h1>
+              <div className="flex gap-2 flex-wrap">
+                {post.category
+                  ? topicArr
+                      .filter(([_, value]) => post.category.includes(value))
+                      .map(([key, value]) => (
+                        <div
+                          className="h-8 px-3 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-1 inline-flex text-center text-black text-sm font-semibold"
+                          key={key}
+                        >
+                          <Icon type={value} size={20} />
+                          <div className="pl-1">{key}</div>
+                        </div>
+                      ))
+                  : ''}
+              </div>
             </div>
-            <div className="flex gap-4 items-center">
-              <div className="text-sm text-gray-400 grid gap-2">
+            <div className="flex gap-4 items-center py-1">
+              <div className="text-[#797c80] text-sm font-medium leading-tight grid gap-3">
                 <div>여행 지역</div>
                 <div>답변 기한</div>
                 <div>크레딧</div>
               </div>
-              <div className="text-sm grid gap-2">
+              <div className="text-black text-sm font-medium leading-tight grid gap-3">
                 <div>{post.country_city}</div>
                 <div>{post.date_end}</div>
-                <div>{post.credit}C</div>
+                <div>{post.credit} C</div>
               </div>
             </div>
-            <p>{post.content}</p>
-            <div className="text-sm text-gray-400">
+            <p className="text-[#44484c] text-base font-medium leading-relaxed">
+              {post.content}
+            </p>
+            <div className="text-[#7fbfff] text-xs font-medium leading-none py-1">
               한국어로 작성된 글이에요
             </div>
-            <div className="h-16 flex border-t-2 place-content-end">
-              <BookmarkBtn postId={postId} />
+            <div className="border-t border-[#dee1e5] py-4 flex place-content-between">
+              <button className="flex place-items-center text-[#797c80] text-xs font-medium border border-[#dee1e5] py-1.5 pl-2 pr-2.5 rounded-full">
+                <Image src={Imoji} alt="Imoji" height={20} width={20} />
+                <div className="pl-[3px] pr-[5px]">나도 궁금해요</div>
+                <div className="font-bold leading-none">0</div>
+              </button>
+              <div className="flex gap-5">
+                <BookmarkBtn postId={postId} />
+                <Image
+                  width={24}
+                  height={24}
+                  src={share}
+                  alt="bookmark button"
+                />
+              </div>
             </div>
           </div>
-          <Link
-            className="bg-gray-300 w-full h-12 rounded-lg flex justify-center items-center mb-5"
-            href={`/response/${postId}`}
-          >
-            답변하기
-          </Link>
+          <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
+          <div className="absolute bg-white z-50 fixed bottom-0 min-w-full">
+            <Link
+              className=" bg-[#0582ff] h-[52px] rounded-xl flex justify-center items-center mx-5 my-3 text-white text-base font-semibold"
+              href={`/response/${postId}`}
+            >
+              답변하기
+            </Link>
+          </div>
         </div>
       ) : (
         <div>게시물을 찾을 수 없습니다.</div>
       )}
 
       {/* 답변 게시물 */}
-      <div className="bg-white">
+      <div className="">
         <Responses postId={postId} />
       </div>
     </div>

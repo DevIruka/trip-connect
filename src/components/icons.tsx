@@ -11,7 +11,7 @@ import etcIcon from '@/data/images/⁉️ 느낌표와 물음표.svg';
 import eyes from '@/data/images/👀 왕눈이 눈알.svg';
 
 const Icon = ({ type, size = 20 }: { type: string; size: number }) => {
-  const iconStyle = { width: size, height: size, paddingRight: '4px' };
+  const iconStyle = { width: size, height: size };
 
   switch (type) {
     case 'food':

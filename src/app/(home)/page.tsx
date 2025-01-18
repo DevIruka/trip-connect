@@ -95,7 +95,7 @@ const CategoryPage = () => {
 
   return (
     <>
-      <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51]">
+      <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar">
         <QnaHeader />
         <Navbar
           setFilterType={setFilterType}
@@ -197,11 +197,11 @@ const CategoryPage = () => {
                     >
                       {post.request_id ? 'A.' : 'Q.'}
                     </div>
-                    <h1 className="text-black text-base font-semibold leading-snug grow truncate text-wrap break-all">
+                    <h1 className="text-black text-base font-semibold leading-snug grow line-clamp-2">
                       {post.title}
                     </h1>
                   </div>
-                  <div className="pl-[22px] text-[#797c80] text-sm font-medium leading-snug">
+                  <div className="pl-[22px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2">
                     {post.content}
                   </div>
                 </div>
@@ -237,6 +237,10 @@ const CategoryPage = () => {
             </button>
           )}
         </div>
+
+        <button className="absolute sticky bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg">
+          플로팅 버튼
+        </button>
       </div>
     </>
   );

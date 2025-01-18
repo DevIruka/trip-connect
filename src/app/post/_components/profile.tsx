@@ -4,6 +4,8 @@ import { Tables } from '@/types/supabase';
 import { getPostUser } from '@/utils/api/supabase_api/post/getPostUser';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import profileImage from '@/data/images/profile-default.svg';
+import location from '@/data/images/ic-location.svg';
 
 const Profile = ({ postUserId }: { postUserId: string }) => {
   const [user, setUser] = useState<Tables<'users'>>();
@@ -22,25 +24,31 @@ const Profile = ({ postUserId }: { postUserId: string }) => {
   }
 
   return (
-    <div className="h-12 flex items-center gap-2">
-      <div className="bg-gray-300 rounded-full w-10 h-10">
-        {user.profile_img && (
-          <Image
-            width={100}
-            height={100}
-            src={`${user.profile_img}`}
-            alt="profile_image"
-          />
-        )}
-      </div>
-      <div>
-        <div className="flex place-content-center gap-2">
-          <div>{user.nickname}</div>
-          <div className="text-sm bg-gray-300 rounded-md flex items-center px-1">
+    <div className="bg-white flex items-center gap-2 py-4 px-5">
+      {user.profile_img ? (
+        <Image
+          width={36}
+          height={36}
+          src={`${user.profile_img}`}
+          alt="profile_image"
+          className="rounded-full w-10 h-10"
+        />
+      ) : (
+        <Image width={36} height={36} src={profileImage} alt="profile_image" />
+      )}
+      <div className="grid gap-1">
+        <div className="flex place-content-center items-center gap-1">
+          <div className="text-center text-black text-sm font-semibold leading-tight">
+            {user.nickname}
+          </div>
+          <div className="h-[20px] pl-1 pr-1.5 bg-[#f4f6f9] rounded-full justify-start items-center gap-0.5 inline-flex text-center text-[#44484c] text-xs font-medium">
+            <Image width={10} height={10} src={location} alt="location" />
             {user.country}
           </div>
         </div>
-        <div className="text-sm text-gray-400">1시간 전</div>
+        <div className="text-[#797c80] text-xs font-medium leading-none">
+          1시간 전
+        </div>
       </div>
     </div>
   );
