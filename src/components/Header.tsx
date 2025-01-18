@@ -9,7 +9,7 @@ import profile from '@/data/images/ic-Profile.svg';
 
 const Header = () => {
   const pathname = usePathname();
-  const excludedPaths = ['/login', '/signup', '/search'];
+  const excludedPaths = ['/login', '/signup', '/search', '/mypage/credit'];
   const shouldHideHeader = excludedPaths.some((path) =>
     pathname.startsWith(path),
   );
