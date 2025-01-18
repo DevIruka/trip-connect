@@ -103,6 +103,10 @@
   }
 }
 
+input:focus {
+  outline: none; /* 기본 포커스 스타일 제거 */
+}
+
 @layer utilities {
   .menuscrollbar::-webkit-scrollbar {
     display: none;

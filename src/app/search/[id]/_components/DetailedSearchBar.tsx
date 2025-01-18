@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 import { Tabs, Tab, Box } from '@mui/material';
 import { KoreanCategory } from '@/utils/topics';
-import TabDetail from './TabDetail';
-import { convertToKorean } from '../_utils/convertTopictoKorean';
 import Image from 'next/image';
+import TabDetail from '../../_components/TabDetail';
+import { convertToKorean } from '../../_utils/convertTopictoKorean';
+import { useSearchStore } from '@/store/useSearchStore';
 
 const iconLeft = '/images/ic-left.svg';
 const iconclose = '/images/ic-xmark.svg';
@@ -23,6 +24,7 @@ const DetailedSearchBar = ({
   selectedCategory,
   setSelectedCategory,
 }: DetailedSearchBarProps) => {
+    const setKeyword = useSearchStore((state) => state.setKeyword);
   useEffect(() => {
     setSelectedCategory('전체');
   }, [setSelectedCategory]);
@@ -34,6 +36,13 @@ const DetailedSearchBar = ({
     setSelectedCategory((prev) =>
       prev === newValue ? '전체' : (newValue as KoreanCategory | '전체'),
     );
+  };
+
+  const handleClearInput = () => {
+    if (inputRef.current) {
+      inputRef.current.value = ''; // 입력 필드 초기화
+    }
+    setKeyword('')
   };
 
   return (
@@ -62,6 +71,7 @@ const DetailedSearchBar = ({
             width={24}
             height={24}
             className="absolute top-[16px] right-[10px]"
+            onClick={handleClearInput}
           />
         </div>
       </div>
