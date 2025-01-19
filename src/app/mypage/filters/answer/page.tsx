@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { useUserStore } from '@/store/userStore'; // 유저 스토어 추가
+import { useUserStore } from '@/store/userStore'; 
 import ResponseContent from '../../_components/ResponseContent';
 
 type UnifiedPost = {
@@ -17,7 +17,7 @@ type UnifiedPost = {
 };
 
 const AnswerPostsPage = () => {
-  const { user } = useUserStore(); // 유저 정보 가져오기
+  const { user } = useUserStore();
   const [posts, setPosts] = useState<UnifiedPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
