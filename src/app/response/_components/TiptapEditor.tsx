@@ -49,7 +49,7 @@ const TiptapEditor: React.FC<Props> = ({
 
   const editor = useEditor({
     extensions,
-    content: contentHtml||'',
+    content: contentHtml || '',
     onUpdate: ({ editor }) => {
       const updatedContentHtml = editor.getHTML();
       onChange({
@@ -68,7 +68,7 @@ const TiptapEditor: React.FC<Props> = ({
 
   const previewEditor = useEditor({
     extensions,
-    content: freeContent||'',
+    content: freeContent || '',
     onUpdate: ({ editor }) => {
       onChange({
         title: localTitle,
@@ -113,7 +113,7 @@ const TiptapEditor: React.FC<Props> = ({
       </div>
 
       <div className="mb-4">
-      <div className="relative">
+        <div className="relative">
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-gray-400">
             {!previewEditor?.getText() && '미리보기 답변을 작성해 주세요'}
           </div>
@@ -133,7 +133,7 @@ const TiptapEditor: React.FC<Props> = ({
 
       <div className="mb-4">
         <MenuBar editor={activeEditor} />
-      <div className="relative">
+        <div className="relative">
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center text-gray-400">
             {!editor?.getText() && '유료 분량의 답변을 작성해 주세요'}
           </div>
