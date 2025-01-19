@@ -1,6 +1,7 @@
 import { Database } from '@/types/supabase';
-import { ReqResPost } from '../../_components/SearchResults';
+
 import { EnglishCategory } from '@/utils/topics';
+import { ReqResPost } from '../_components/SearchResults';
 
 export type Params = {
   id: string;

@@ -25,9 +25,10 @@ const Navbar = ({
 }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
   const [selectedCountry, setSelectedCountry] = useState<nation | null>(() => {
-    return typeof window !== 'undefined'
-      ? JSON.parse(sessionStorage.getItem('selectedLocation')!)
-      : null;
+    return typeof window !== 'undefined' &&
+    sessionStorage.getItem('selectedLocation') !== null
+    ? JSON.parse(sessionStorage.getItem('selectedLocation')!)
+    : null
   }); // 선택된 나라 관리
   const [isHydrated, setIsHydrated] = useState(false);
   useEffect(() => {
