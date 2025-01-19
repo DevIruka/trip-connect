@@ -197,6 +197,12 @@ const RequestPage: React.FC = () => {
             control={control}
             errors={errors}
             setValue={setValue}
+            disabledFields={{
+              title: false,
+              credit: false,
+              content: false,
+              date_end: false,
+            }}
           />
 
           <LocationModal

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import TiptapEditor from '../_components/TiptapEditor';
@@ -14,9 +14,7 @@ type RequestDetails = {
   content: string;
 };
 
-const fetchRequestDetails = async (
-  postId: string,
-): Promise<RequestDetails> => {
+const fetchRequestDetails = async (postId: string): Promise<RequestDetails> => {
   const { data, error } = await supabase
     .from('request_posts')
     .select('title, content')
@@ -32,7 +30,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   const router = useRouter();
   const { postId } = params;
   const { user } = useUserStore();
-  
+
   const [data, setData] = useState({
     title: '',
     contentHtml: '',
@@ -40,7 +38,11 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   });
   const [isVisible, setIsVisible] = useState(false);
 
-  const { data: request, isLoading, error } = useQuery<RequestDetails, Error>({
+  const {
+    data: request,
+    isLoading,
+    error,
+  } = useQuery<RequestDetails, Error>({
     queryKey: ['requestDetails', postId],
     queryFn: () => fetchRequestDetails(postId),
     enabled: !!postId,
@@ -77,27 +79,55 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   if (isLoading) return <p>로딩 중...</p>;
   if (error) return <p>요청 정보를 불러오는 중 오류가 발생했습니다.</p>;
 
+  const title = request?.title || '';
+  const maxVisibleChars = 20;
+  const visibleTitle =
+    title.length > maxVisibleChars
+      ? title.slice(0, maxVisibleChars) + '...'
+      : title;
+
   return (
-    <div className="p-0">
+    <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
       <HeaderWithButton buttonLabel="등록" onButtonClick={handleSubmit} />
 
-      {/* 상단 Q {title} 영역 */}
-      <div className="bg-[#EFEFEF] w-full mb-4 border-b pb-2 px-5 py-5">
-        <div className="flex justify-between items-center">
-          <h1 className="text-lg font-bold">Q {request?.title}</h1>
-          <button
-            onClick={() => setIsVisible(!isVisible)}
-            className="text-gray-500 hover:text-gray-700"
-          >
-            {isVisible ? (
-              <FaChevronUp size={20} />
-            ) : (
-              <FaChevronDown size={20} />
-            )}
-          </button>
+      <div className="bg-[#F5F7FA] w-full mb-4 px-[20px] py-[16px]">
+        <div className="flex flex-col gap-[8px]">
+          {/* Q와 제목 */}
+          <div className="flex justify-between items-center gap-[8px]">
+            <div
+              className="flex items-center gap-[8px] overflow-hidden"
+              style={{
+                maxWidth: 'calc(100% - 40px)',
+              }}
+            >
+              <span style={{ color: '#0582FF', flexShrink: 0 }}>Q</span>
+              <span className="text-black text-[16px] font-semibold">
+                {!isVisible ? visibleTitle : title}
+              </span>
+            </div>
+            <button
+              onClick={() => setIsVisible(!isVisible)}
+              className="text-[#797C80] flex-shrink-0"
+              style={{
+                width: '20px',
+                height: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {isVisible ? (
+                <FaChevronUp width="9" height="5" />
+              ) : (
+                <FaChevronDown width="9" height="5" />
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* 본문 내용 */}
         {isVisible && (
-          <p className="mt-2 text-gray-700 whitespace-pre-line">
+          <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line">
             {request?.content}
           </p>
         )}
