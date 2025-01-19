@@ -60,7 +60,9 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
                 <div>크레딧</div>
               </div>
               <div className="text-black text-sm font-medium leading-tight grid gap-3">
-                <div>{post.country_city}</div>
+                <div>{`${JSON.parse(post.country_city).country} / ${
+                  JSON.parse(post.country_city).city
+                }`}</div>
                 <div className="flex gap-1">
                   {post.date_end}
                   <div className="px-1.5 bg-[#ffecd4] rounded justify-center items-center inline-flex text-center text-[#ff800a] text-xs font-medium">
