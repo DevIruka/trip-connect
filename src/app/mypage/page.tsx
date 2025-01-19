@@ -5,6 +5,10 @@ import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import Link from 'next/link';
 import Image from 'next/image';
+import search from '@/data/images/ic-Search.svg';
+const lefticon = '/images/ic-left.svg';
+const marker = '/images/ic-location.svg';
+const coin = '/images/goldcoin.svg';
 
 const MyPage = () => {
   const user = useUserStore((state) => state.user);
@@ -129,46 +133,62 @@ const MyPage = () => {
   };
 
   return (
-    <div className="px-5 overflow-y-scroll">
-      <h1 className="text-black font-[Pretendard] text-[20px] font-semibold leading-none mb-7">
-        마이페이지
-      </h1>
+    <div className="inner overflow-y-scroll">
+      <div className="flex flex-row justify-between items-center h-[56px]">
+        <Image src={lefticon} width={24} height={24} alt="back" />
+        <h1 className="text-black text-[20px] font-semibold leading-none">
+          마이페이지
+        </h1>
+        <Image src={search} width={24} height={24} alt="search" />
+      </div>
 
       {/* 프로필 카드 */}
-      <div className="mb-6">
-        <div className="flex items-center mb-4 gap-[8px]">
-          {/* 프로필 사진 */}
-          <div className="w-[52px] h-[52px] rounded-full bg-gray-200 overflow-hidden">
-            {userProfile.profileImg ? (
-              <Image
-                src={userProfile.profileImg}
-                alt="Profile"
-                width={52}
-                height={52}
-                className="object-cover"
-              />
-            ) : (
-              <Image
-                src="/images/default-profile.svg"
-                alt="Default Profile"
-                width={52}
-                height={52}
-                className="object-cover"
-              />
-            )}
-          </div>
+      <div className="mb-[16px]">
+        <div className="flex flex-row justify-between items-center">
+          <div className="flex items-center">
+            {/* 프로필 사진 */}
+            <div className="w-[52px] h-[52px] rounded-full bg-gray-200 overflow-hidden">
+              {userProfile.profileImg ? (
+                <Image
+                  src={userProfile.profileImg}
+                  alt="Profile"
+                  width={52}
+                  height={52}
+                  className="object-cover"
+                />
+              ) : (
+                <Image
+                  src="/images/default-profile.svg"
+                  alt="Default Profile"
+                  width={52}
+                  height={52}
+                  className="object-cover"
+                />
+              )}
+            </div>
 
-          {/* 닉네임, 국가 정보 */}
-          <div className="flex-1">
-            <h2 className="text-lg font-bold flex items-center">
-              {userProfile.nickname}
-            </h2>
-            <p className="text-sm text-gray-600">{userProfile.country}</p>
+            {/* 닉네임, 국가 정보 */}
+            <div className="flex flex-col ml-[8px]">
+              <h2 className="text-[16px] font-[600] mb-[2px] flex items-center">
+                {userProfile.nickname}
+              </h2>
+              {userProfile.country ? (
+                <div className="flex items-center justify-center h-[20.03px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] pl-[4px] pr-[5px]">
+                  <Image src={marker} width={10} height={10} alt="marker" />
+                  <p className="text-[12px] font-[500] tracking-[-0.24px]">
+                    {userProfile.country}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-[#45484D] text-[12px]">
+                  국가 인증 전이에요!
+                </p>
+              )}
+            </div>
           </div>
-
           {/* 프로필 편집 버튼 */}
           <button
-            className="flex justify-center items-center gap-[10px] px-[12px] py-[3px] rounded-full bg-[#E5E5EC] text-sm text-gray-600"
+            className="flex justify-center items-center gap-[10px] px-[12px] py-[6px] rounded-full bg-[#F5F7FA] text-[12px] text-[#45484D]"
             onClick={() => setIsModalOpen(true)}
           >
             프로필 편집
@@ -177,102 +197,103 @@ const MyPage = () => {
       </div>
 
       {/* 자기소개 */}
-      <div className="mb-6">
-        <div className="text-gray-700">{userProfile.introduction}</div>
+      <div className="pb-[16px] border-b border-[#F4F4F4]">
+        <div className="text-black font-[500]">{userProfile.introduction}</div>
       </div>
 
       {/* 크레딧 섹션 */}
-      <Link
-        href="/mypage/credit"
-        className="flex items-center justify-between mb-6 p-4 bg-[#F9F9F9] rounded-lg"
-      >
-        <div className="flex items-center">
-          <div className="w-8 h-8 rounded bg-gray-200 flex items-center justify-center mr-3"></div>
-          <span className="text-sm text-gray-700">크레딧</span>
-        </div>
-        <div className="text-lg font-bold text-gray-800">
-          {new Intl.NumberFormat().format(Number(userProfile.credit))} C
+      <Link href="/mypage/credit">
+        <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center mt-[20px] mb-[28px]">
+          <div className="flex flex-row justify-center items-center">
+            <Image src={coin} width={24} height={24} alt="coin" />
+            <p className="text-[18px] pt-[1px] ml-[8px] font-[600]">
+              {new Intl.NumberFormat().format(Number(userProfile.credit))} C
+            </p>
+          </div>
         </div>
       </Link>
 
       {/* 셀러 인증 */}
-      <div className="mb-6">
-        <h2 className="text-lg font-bold mb-4">셀러 인증</h2>
+      <div className="mb-[24px]">
+        <h2 className="text-lg font-bold mb-[12px]">셀러 인증</h2>
         <Link
           href="/mypage/seller-auth"
           className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
         >
-          <span>인증하러 가기</span>
+          <span className="text-[16px] text-[#45484D] font-[500]">
+            인증하러 가기
+          </span>
           <Image
             src="/images/right arrow.svg"
             alt="Arrow Right"
-            width={20}
-            height={20}
+            width={18}
+            height={18}
           />
         </Link>
       </div>
 
-      <div className="h-[1px] w-full bg-[#D9D9D9] mb-7"></div>
-
       {/* 활동 내역 */}
-      <div className="mb-6">
-        <h2 className="text-lg font-bold mb-4">활동 내역</h2>
-        <div className="space-y-2 mt-2">
+      <div className="mb-[24px]">
+        <h2 className="text-lg font-bold mb-[12px]">활동 내역</h2>
+        <div className="mt-2">
           <Link
             href="/mypage/filters/all"
-            className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+            className="flex justify-between items-center gap-[23px] p-[16px] rounded-t-[8px] bg-[#F9F9F9] w-full"
           >
-            <span>내가 작성한 게시물</span>
+            <span className='text-[16px] text-[#45484D] font-[500]'>내가 작성한 게시물</span>
             <Image
               src="/images/right arrow.svg"
               alt="Arrow Right"
-              width={20}
-              height={20}
-              className="ml-2"
+              width={18}
+              height={18}
+              className=""
             />
           </Link>
+          <div className='flex flex-row justify-center items-center border-b w-[90%] border-[#EBEBEB] mx-auto'></div>
           <Link
             href="/mypage/purchase"
-            className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+            className="flex justify-between items-center gap-[23px] p-[16px] bg-[#F9F9F9] w-full"
           >
-            <span>내가 구매한 게시물</span>
+            <span className='text-[16px] text-[#45484D] font-[500]'>내가 구매한 게시물</span>
             <Image
               src="/images/right arrow.svg"
               alt="Arrow Right"
-              width={20}
-              height={20}
+              width={18}
+              height={18}
               className="ml-2"
             />
           </Link>
+          <div className='flex flex-row justify-center items-center border-b w-[90%] border-[#EBEBEB] mx-auto'></div>
           <Link
             href="/mypage/bookmark"
-            className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+            className="flex justify-between items-center gap-[23px] p-[16px] rounded-b-[8px] bg-[#F9F9F9] w-full"
           >
-            <span>북마크한 게시물</span>
+            <span className='text-[16px] text-[#45484D] font-[500]'>북마크한 게시물</span>
             <Image
               src="/images/right arrow.svg"
               alt="Arrow Right"
-              width={20}
-              height={20}
+              width={18}
+              height={18}
               className="ml-2"
             />
           </Link>
         </div>
       </div>
 
-      <div className="h-[1px] w-full bg-[#D9D9D9] mb-7"></div>
+
 
       {/* 설정 */}
+      <h2 className="text-lg font-bold mb-[12px]">언어 설정</h2>
       <Link
         href="/mypage/language"
         className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
       >
-        <span>언어 설정</span>
+        <span className='text-[16px] text-[#45484D] font-[500]'>언어 설정</span>
         <Image
           src="/images/right arrow.svg"
           alt="Arrow Right"
-          width={20}
-          height={20}
+          width={18}
+          height={18}
           className="ml-2"
         />
       </Link>
