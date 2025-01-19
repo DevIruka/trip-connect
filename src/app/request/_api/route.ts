@@ -1,8 +1,9 @@
-import { createServerClient } from '@supabase/ssr';
+
+import { supabase } from '@/utils/supabase/supabaseClient';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-  const supabase = await createServerClient();
+
   const body = await req.json();
 
   const { content, title, date_end, category, credit, country_city, user_id } = body;

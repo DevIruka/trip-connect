@@ -13,11 +13,11 @@ export const useBookmarkMutations = (userId: string | undefined) => {
       if (userId) {
         return addBookmark(postId, userId);
       } else {
-        return;
+        return Promise.reject(new Error('User ID가 정의되지 않았습니다.'))
       }
     },
     onSuccess: (_, postId) => {
-      queryClient.setQueryData<Array<{ request_id: string }>>(
+      queryClient.setQueryData<Array<{ request_id: string | number }>>(
         ['bookmarks', userId],
         (old) => [...(old || []), { request_id: postId }],
       );

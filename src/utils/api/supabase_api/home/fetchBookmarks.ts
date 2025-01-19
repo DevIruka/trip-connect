@@ -21,7 +21,7 @@ export const addBookmark = async (postId: string | number, userId: string) => {
 // 북마크 삭제
 export const deleteBookmark = async (
   postId: string | number,
-  userId: string,
+  userId: string | undefined,
 ) => {
   const { error } = await supabase
     .from('bookmarks')
