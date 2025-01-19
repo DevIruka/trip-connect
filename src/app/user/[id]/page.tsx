@@ -4,18 +4,27 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
+type UserData = {
+  profile_img: string;
+  nickname: string;
+  country_verified: string;
+  introduction: string;
+};
+
+type UserPost = {
+  id: string;
+  title: string;
+  content: string;
+  content_html?: string;
+};
+
 const UserPage = () => {
   const { id } = useParams();
-  const [userData, setUserData] = useState<null | {
-    profile_img: string;
-    nickname: string;
-    country_verified: string;
-    introduction: string;
-  }>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [userPosts, setUserPosts] = useState<{
-    responses: any[];
-    requests: any[];
-    reviews: any[];
+    responses: UserPost[];
+    requests: UserPost[];
+    reviews: UserPost[];
   }>({ responses: [], requests: [], reviews: [] });
 
   useEffect(() => {
