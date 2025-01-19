@@ -25,7 +25,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar mb-[76px]">
-      <BackHeader image={MoreButton} text="" />
+      <BackHeader image={MoreButton} text="" imagesize={20} />
       {post ? (
         <div className="relative">
           <Profile postUserId={post.user_id} />
