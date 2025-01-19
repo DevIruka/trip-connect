@@ -22,7 +22,10 @@ const MapComponent = ({ lat, lng, name, address }: mapData) => {
       <GoogleMap
         center={{ lat: parseFloat(lat!), lng: parseFloat(lng!) }}
         zoom={14}
-        mapContainerStyle={{ width: '100%', height: '217px' }}
+        options={{
+          disableDefaultUI: true,
+        }}
+        mapContainerStyle={{ width: '100%', height: '217px', borderRadius: 8 }}
       >
         <Marker
           position={{ lat: parseFloat(lat!), lng: parseFloat(lng!) }}
