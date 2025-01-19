@@ -2,7 +2,7 @@
 
 import { useSearchStore } from '@/store/useSearchStore';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import useSearchHandlers from './_hooks/useSearchHandlers';
 import SearchBar from './_components/SearchBar';
@@ -11,10 +11,18 @@ import RecentSearchList from './_components/RecentSearchList';
 
 const SearchPage = () => {
   const router = useRouter();
-  const storedSearches =
-    typeof window !== 'undefined'
-      ? JSON.parse(localStorage.getItem('recentSearches') || '[]')
-      : []; // 로컬 스토리지에서 recentSearches를 가져오고, 없으면 빈 공백으로 설정해요.
+
+  const [storedSearches, setStoredSearches] = useState<string[]>([]);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const searches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+      setStoredSearches(searches);
+      setRecentSearches(searches)
+    }
+  }, []);
+      
   const keyword = useSearchStore((state) => state.keyword);
 
   const { register, handleSubmit, setValue, watch, setFocus } = useForm({
@@ -23,7 +31,7 @@ const SearchPage = () => {
       recentSearches: storedSearches as string[],
     },
   });
-  const recentSearches: string[] = watch('recentSearches', storedSearches); // 최근 검색어 리스트
+  // const recentSearches: string[] = watch('recentSearches', storedSearches); // 최근 검색어 리스트
   const query = watch('searchQuery'); // 검색 입력값
 
   useEffect(() => {
@@ -38,7 +46,7 @@ const SearchPage = () => {
     handleRecentSearchClick,
     handleRecentSearchDelete,
     handleSearch,
-  } = useSearchHandlers({ query, recentSearches, router, setValue });
+  } = useSearchHandlers({ query, recentSearches, router, setValue , setRecentSearches });
 
   return (
     <>
