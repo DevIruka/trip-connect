@@ -196,7 +196,7 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
                           {result.cities.map((city, idx) => (
                             <li key={idx} className="py-[9px] flex gap-2">
                               <label
-                                className={`flex gap-2 cursor-pointer ${
+                                className={`flex gap-2 cursor-pointer items-center ${
                                   JSON.stringify(crntNation) ===
                                   `{"continent":"${result.continent}","country":"${result.country}","city":"${city}"}`
                                     ? 'text-black'

@@ -49,9 +49,9 @@ const Responses = ({ postId }: { postId: string }) => {
   );
   const { data: translatedTitle, isPending: isTitleLoading } =
     useGPTTranslation(`${postId}title`, title);
-  if (isTextLoading || isTitleLoading) {
-    return <p>Loading...</p>;
-  }
+  // if (isTextLoading || isTitleLoading) {
+  //   return <p>Loading...</p>;
+  // }
 
   return (
     <>
@@ -61,73 +61,88 @@ const Responses = ({ postId }: { postId: string }) => {
       </div>
       <div className="border-b border-[#f3f3f3]"></div>
 
-      {resPosts?.map((post) => {
-        return (
-          <div key={post.id} className="">
-            <Profile postUserId={post.user_id} />
-            <div className="px-5">
-              <div>
-                <div className="grid my-2 text-black text-lg font-bold leading-[28.80px]">
-                  {/* <RenderTranslatedHTML data={JSON.parse(translatedTitle!)} /> */}
-                  타이틀
-                </div>
-                <button className="h-6 px-2 py-1 rounded-[14px] border border-[#c5c8cc] justify-center items-center gap-1 inline-flex text-[#44484c] text-xs font-medium mb-5">
-                  <Image src={original} alt="original" height={14} width={14} />
-                  원문보기
-                </button>
-                <div className="text-[#44484c] text-base font-medium leading-relaxed">
-                  <RenderTranslatedHTML
-                    data={{ original: '', translated: post.free_content! }}
-                  />
-                </div>
-                {isContentVisible && (
-                  <div className="text-[#44484c] text-base font-medium leading-relaxed pb-[18px]">
-                    <RenderTranslatedHTML data={JSON.parse(translatedText!)} />
+      {resPosts
+        ? resPosts.map((post) => {
+            return (
+              <div key={post.id} className="">
+                <Profile postUserId={post.user_id} />
+                <div className="px-5">
+                  <div>
+                    <div className="grid my-2 text-black text-lg font-bold leading-[28.80px]">
+                      {/* <RenderTranslatedHTML data={JSON.parse(translatedTitle!)} /> */}
+                      타이틀
+                    </div>
+                    <button className="h-6 px-2 py-1 rounded-[14px] border border-[#c5c8cc] justify-center items-center gap-1 inline-flex text-[#44484c] text-xs font-medium mb-5">
+                      <Image
+                        src={original}
+                        alt="original"
+                        height={14}
+                        width={14}
+                      />
+                      원문보기
+                    </button>
+                    <div className="text-[#44484c] text-base font-medium leading-relaxed">
+                      <RenderTranslatedHTML
+                        data={{ original: '', translated: post.free_content! }}
+                      />
+                    </div>
+                    {isContentVisible && (
+                      <div className="text-[#44484c] text-base font-medium leading-relaxed pb-[18px]">
+                        <RenderTranslatedHTML
+                          data={JSON.parse(translatedText!)}
+                        />
+                      </div>
+                    )}
+                    {!isPurchased ? (
+                      // 구매 버튼
+                      <button
+                        onClick={handlePurchase}
+                        className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center gap-2.5 inline-flex my-2.5 text-[#0079f2] text-sm font-semibold"
+                      >
+                        구매하고 전체보기
+                      </button>
+                    ) : (
+                      // 콘텐츠 보기 버튼
+                      <button
+                        onClick={toggleContent}
+                        className="w-full h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-1 inline-flex my-2.5 text-center text-[#44484c] text-sm font-semibold"
+                      >
+                        {isContentVisible ? '접기' : '펼쳐 보기'}
+                        <Image
+                          width={18}
+                          height={18}
+                          src={updown}
+                          alt="updown"
+                          className={`transform ${
+                            isContentVisible ? 'rotate-180' : ''
+                          }`}
+                        />
+                      </button>
+                    )}
                   </div>
-                )}
-                {!isPurchased ? (
-                  // 구매 버튼
-                  <button
-                    onClick={handlePurchase}
-                    className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center gap-2.5 inline-flex my-2.5 text-[#0079f2] text-sm font-semibold"
-                  >
-                    구매하고 전체보기
-                  </button>
-                ) : (
-                  // 콘텐츠 보기 버튼
-                  <button
-                    onClick={toggleContent}
-                    className="w-full h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-1 inline-flex my-2.5 text-center text-[#44484c] text-sm font-semibold"
-                  >
-                    {isContentVisible ? '접기' : '펼쳐 보기'}
+                  <div className="border-t border-[#dee1e5] p-4 flex place-content-between">
+                    <div className="flex gap-1 text-[#44484c] text-xs font-bold leading-none items-center">
+                      <Image
+                        width={20}
+                        height={20}
+                        src={comment}
+                        alt="comment"
+                      />
+                      0
+                    </div>
                     <Image
-                      width={18}
-                      height={18}
-                      src={updown}
-                      alt="updown"
-                      className={`transform ${
-                        isContentVisible ? 'rotate-180' : ''
-                      }`}
+                      width={20}
+                      height={20}
+                      src={MoreButton}
+                      alt="MoreButton"
                     />
-                  </button>
-                )}
-              </div>
-              <div className="border-t border-[#dee1e5] p-4 flex place-content-between">
-                <div className="flex gap-1 text-[#44484c] text-xs font-bold leading-none items-center">
-                  <Image width={20} height={20} src={comment} alt="comment" />0
+                  </div>
                 </div>
-                <Image
-                  width={20}
-                  height={20}
-                  src={MoreButton}
-                  alt="MoreButton"
-                />
+                <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
               </div>
-            </div>
-            <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
-          </div>
-        );
-      })}
+            );
+          })
+        : '게시물이 없어요'}
     </>
   );
 };
