@@ -1,5 +1,6 @@
 import { useSearchStore } from '@/store/useSearchStore';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import { Dispatch, SetStateAction } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 
 type useSearchHandlersProps = {
@@ -10,6 +11,7 @@ type useSearchHandlersProps = {
   }>;
   query: string;
   recentSearches: string[];
+  setRecentSearches: Dispatch<SetStateAction<string[]>>;
 };
 
 const useSearchHandlers = ({
@@ -17,6 +19,7 @@ const useSearchHandlers = ({
   setValue,
   query,
   recentSearches,
+  setRecentSearches,
 }: useSearchHandlersProps) => {
   const setKeyword = useSearchStore((state) => state.setKeyword);
 
@@ -49,14 +52,13 @@ const useSearchHandlers = ({
     const updatedSearches = recentSearches.filter((item) => {
       return item !== term;
     });
-    setValue('recentSearches', updatedSearches);
+    setRecentSearches(updatedSearches);
     localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
   };
 
   const handleClearRecentSearches = () => {
-    const updatedSearches = [] as string[];
-    setValue('recentSearches', updatedSearches);
-    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+    setRecentSearches([]); // 상태 업데이트
+    localStorage.setItem('recentSearches', JSON.stringify([]));
   };
 
   return {

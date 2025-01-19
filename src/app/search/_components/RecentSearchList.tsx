@@ -22,6 +22,7 @@ const RecentSearchList = ({
   handleRecentSearchClick,
   handleRecentSearchDelete,
 }: RecentSearchListProps) => {
+  console.log(recentSearches)
   return (
     <>
       <ul className="flex flex-row gap-[4px] items-center overflow-x-auto whitespace-nowrap">
