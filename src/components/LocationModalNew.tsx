@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { nations } from '../data/nation';
-import { nation } from '../app/(home)/_types/homeTypes';
+import { nation } from '../app/home/_types/homeTypes';
 import close from '@/data/images/ic-Close.svg';
 import search from '@/data/images/ic-Search.svg';
 import radioBtn from '@/data/images/radio_btn.svg';
