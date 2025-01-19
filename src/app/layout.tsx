@@ -3,13 +3,14 @@ import './globals.css';
 import Header from '@/components/Header';
 import Providers from './providers';
 //import '@/app/i18n';
+import localFont from 'next/font/local';
 
-// const pretendard = localFont({
-//   src: './fonts/PretendardVariable.woff2',
-//   display: 'swap',
-//   weight: '100 900',
-//   variable: '--font-pretendard',
-// });
+const pretendard = localFont({
+  src: './fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '100 900',
+  variable: '--font-pretendard',
+});
 
 export const metadata: Metadata = {
   title: 'Hey!Local',
@@ -23,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={pretendard.className}>
         <div className="bg-container">
           <Providers>
             <Header />
