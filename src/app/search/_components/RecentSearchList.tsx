@@ -58,7 +58,7 @@ const RecentSearchList = ({
           ))
         ) : (
           <div className="flex flex-col justify-center items-center w-full">
-            <p className="text-xl font-bold pt-10 text-center">
+            <p className="text-[#797C80] text-[16px] font-[600] pt-10 text-center">
               검색어를 입력해주세요.
             </p>
           </div>
