@@ -61,7 +61,8 @@ const CategoryPage = () => {
 
   //nation filter
   const [nationFilter, setNationFilter] = useState<nation | null>(
-    typeof window !== 'undefined'
+    typeof window !== 'undefined' &&
+      sessionStorage.getItem('selectedLocation') !== null
       ? JSON.parse(sessionStorage.getItem('selectedLocation')!)
       : null,
   );
