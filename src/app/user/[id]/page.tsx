@@ -3,6 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import Header from '../_components/Header';
+import ProfileSection from '../_components/ProfileSection';
+import TabNavigation from '../_components/TabNavigation';
+import PostList from '../_components/PostList';
 
 type UserData = {
   profile_img: string;
@@ -26,6 +30,10 @@ const UserPage = () => {
     requests: UserPost[];
     reviews: UserPost[];
   }>({ responses: [], requests: [], reviews: [] });
+
+  const [activeTab, setActiveTab] = useState<
+    'responses' | 'requests' | 'reviews'
+  >('responses');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -72,73 +80,22 @@ const UserPage = () => {
   if (!userData) return <div>로딩 중...</div>;
 
   return (
-    <div className="p-4">
-      {/* 유저 프로필 */}
-      <div className="flex items-center mb-4">
-        <img
-          src={userData.profile_img}
-          alt="프로필 이미지"
-          className="w-16 h-16 rounded-full"
-        />
-        <div className="ml-4">
-          <div className="text-lg font-bold">{userData.nickname}</div>
-          <div className="text-sm text-gray-500">{userData.country_verified}</div>
-          <p className="text-gray-700">{userData.introduction}</p>
-        </div>
-      </div>
-
-      {/* 유저 게시물 정보 */}
-      <div className="flex justify-around border-t border-b py-4">
-        <div>
-          <div className="text-lg font-bold">{userPosts.responses.length}</div>
-          <div className="text-sm text-gray-500">답변</div>
-        </div>
-        <div>
-          <div className="text-lg font-bold">{userPosts.requests.length}</div>
-          <div className="text-sm text-gray-500">질문</div>
-        </div>
-        <div>
-          <div className="text-lg font-bold">{userPosts.reviews.length}</div>
-          <div className="text-sm text-gray-500">리뷰</div>
-        </div>
-      </div>
-
-      {/* 게시물 목록 */}
-      <div className="mt-4">
-        <h2 className="text-lg font-bold mb-2">답변</h2>
-        {userPosts.responses.map((post) => (
-          <div
-            key={post.id}
-            className="mb-4 p-4 border border-gray-300 rounded-lg"
-          >
-            <h3 className="text-md font-bold">{post.title}</h3>
-            <p className="text-sm text-gray-500">{post.content_html}</p>
-          </div>
-        ))}
-
-        <h2 className="text-lg font-bold mt-6 mb-2">질문</h2>
-        {userPosts.requests.map((post) => (
-          <div
-            key={post.id}
-            className="mb-4 p-4 border border-gray-300 rounded-lg"
-          >
-            <h3 className="text-md font-bold">{post.title}</h3>
-            <p className="text-sm text-gray-500">{post.content}</p>
-          </div>
-        ))}
-
-        <h2 className="text-lg font-bold mt-6 mb-2">리뷰</h2>
-        {userPosts.reviews.map((review) => (
-          <div
-            key={review.id}
-            className="mb-4 p-4 border border-gray-300 rounded-lg"
-          >
-            <p className="text-sm text-gray-500">{review.content}</p>
-          </div>
-        ))}
-      </div>
+    <div className="h-screen overflow-y-auto bg-white">
+      <Header />
+      <ProfileSection userData={userData} />
+      <TabNavigation
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        counts={{
+          responses: userPosts.responses.length,
+          requests: userPosts.requests.length,
+          reviews: userPosts.reviews.length,
+        }}
+      />
+      <PostList activeTab={activeTab} userPosts={userPosts} />
     </div>
   );
 };
+
 
 export default UserPage;

@@ -90,7 +90,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
     <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
       <HeaderWithButton buttonLabel="등록" onButtonClick={handleSubmit} />
 
-      <div className="bg-[#F5F7FA] w-full mb-4 px-[20px] py-[16px]">
+      <div className="bg-[#F5F7FA] w-full mb-[16px] px-[20px] py-[16px]">
         <div className="flex flex-col gap-[8px]">
           {/* Q와 제목 */}
           <div className="flex justify-between items-center gap-[8px]">
@@ -100,7 +100,17 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
                 maxWidth: 'calc(100% - 40px)',
               }}
             >
-              <span style={{ color: '#0582FF', flexShrink: 0 }}>Q</span>
+              <span
+                style={{
+                  color: '#0582FF',
+                  flexShrink: 0,
+                  fontWeight: 600,
+                  fontSize: '16px',
+                }}
+              >
+                Q
+              </span>
+
               <span className="text-black text-[16px] font-semibold">
                 {!isVisible ? visibleTitle : title}
               </span>
