@@ -76,9 +76,147 @@
 //   ),
 // );
 
+'use client';
+
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+
+import React, { useState } from 'react';
+const lefticon = '/images/ic-left.svg';
+
 const LanguagePage = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState<'ko' | 'en'>('ko');
+
+  const handleLanguageChange = (language: 'ko' | 'en') => {
+    setSelectedLanguage(language);
+    // 언어 변경 로직 추가 (예: i18n 설정 변경)
+  };
+    const router = useRouter();
+
   return (
-    <div>LanguagePage</div>
-  )
-}
-export default LanguagePage
+    <div className="min-h-screen px-5 py-4 bg-white">
+      {/* 헤더 섹션 */}
+      <div
+        className="flex flex-row justify-between items-center"
+        style={{
+          height: '56px',
+          padding: '10px 20px',
+        }}
+      >
+        <button
+          onClick={() => router.push('/mypage')}
+          className="flex items-center justify-center"
+        >
+          <Image src={lefticon} width={24} height={24} alt="back" />
+        </button>
+      </div>
+
+      <div
+        className="flex items-center"
+        style={{
+          height: '48px',
+          padding: '8px 20px',
+        }}
+      >
+        <h2
+          className="text-[20px] font-[700] text-[#45484D]"
+          style={{
+            textAlign: 'left',
+            lineHeight: '32px',
+            letterSpacing: '-0.4px',
+            fontFamily: 'Pretendard',
+          }}
+        >
+          언어설정
+        </h2>
+      </div>
+
+      {/* 언어 선택 */}
+      <div className="w-full max-w-[335px]">
+        {/* 한국어 */}
+        <div
+          className={`flex items-center gap-[55px] border-b cursor-pointer ${
+            selectedLanguage === 'ko' ? 'text-black font-bold' : 'text-gray-500'
+          }`}
+          onClick={() => handleLanguageChange('ko')}
+          style={{
+            display: 'flex',
+            padding: '16px 16px 0px 16px',
+            alignItems: 'center',
+            alignSelf: 'stretch',
+            borderBottom: '1px solid var(--Grayscale-Gray-7-line, #EBEBEB)',
+            justifyContent: 'space-between',
+          }}
+        >
+          <span
+            style={{
+              fontSize: '16px',
+              fontFamily: 'Pretendard',
+              fontWeight: 500,
+              lineHeight: '160%',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            한국어
+          </span>
+          {selectedLanguage === 'ko' && (
+            <span
+              style={{
+                color: 'var(--Primary-Blue, #0582FF)',
+                fontSize: '16px',
+                fontWeight: 'bold',
+              }}
+            >
+              ✔
+            </span>
+          )}
+        </div>
+
+        {/* 영어 */}
+        <div
+          className={`flex items-center gap-[55px] border-b cursor-pointer ${
+            selectedLanguage === 'en' ? 'text-black font-bold' : 'text-gray-500'
+          }`}
+          onClick={() => handleLanguageChange('en')}
+          style={{
+            display: 'flex',
+            padding: '16px',
+            alignItems: 'center',
+            alignSelf: 'stretch',
+            borderBottom: '1px solid var(--Grayscale-Gray-7-line, #EBEBEB)',
+            justifyContent: 'space-between', 
+          }}
+        >
+          <span
+            style={{
+              fontSize: '16px',
+              fontFamily: 'Pretendard',
+              fontWeight: 500,
+              lineHeight: '160%',
+              letterSpacing: '-0.32px',
+            }}
+          >
+            English
+          </span>
+          {selectedLanguage === 'en' && (
+            <span
+              style={{
+                color: 'var(--Primary-Blue, #0582FF)',
+                fontSize: '16px',
+                fontWeight: 'bold',
+              }}
+            >
+              ✔
+            </span>
+          )}
+        </div>
+      </div>
+
+      <p className="mt-6 text-gray-500 text-sm">
+        다른 언어들은 나중에 추가될 예정이에요.
+      </p>
+    </div>
+  );
+};
+
+export default LanguagePage;

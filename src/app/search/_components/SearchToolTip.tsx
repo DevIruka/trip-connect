@@ -6,9 +6,13 @@ const iconHelp = '/images/ic-help.svg';
 
 type SearchToolTip = {
   handleClearRecentSearches: () => void;
+  recentSearches: string[];
 };
 
-const SearchToolTip = ({ handleClearRecentSearches }: SearchToolTip) => {
+const SearchToolTip = ({
+  handleClearRecentSearches,
+  recentSearches,
+}: SearchToolTip) => {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const handleTooltipToggle = () => {
     setIsTooltipVisible(!isTooltipVisible); // 클릭 시 메시지 박스 표시/숨기기
@@ -28,11 +32,13 @@ const SearchToolTip = ({ handleClearRecentSearches }: SearchToolTip) => {
           />
         </div>
         <div>
-          <button onClick={handleClearRecentSearches}>
-            <span className="text-[12px] text-[#45484D] tracking-[-0.24] underline underline-offset-[1px]">
-              전체 삭제
-            </span>
-          </button>
+          {recentSearches.length > 0 && (
+            <button onClick={handleClearRecentSearches}>
+              <span className="text-[12px] text-[#45484D] tracking-[-0.24px] underline underline-offset-[1px]">
+                전체 삭제
+              </span>
+            </button>
+          )}
         </div>
       </div>
       {isTooltipVisible && (

@@ -60,6 +60,7 @@ const SearchPage = () => {
         <div className="flex flex-col">
           <SearchToolTip
             handleClearRecentSearches={handleClearRecentSearches}
+            recentSearches={recentSearches}
           />
           <RecentSearchList
             handleRecentSearchClick={handleRecentSearchClick}

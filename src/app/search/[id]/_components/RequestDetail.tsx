@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { ReqResPost } from './SearchResults';
 import { UseMutationResult } from '@tanstack/react-query';
 import TimeAgo from './TimeAgo';
-import bookmarkButton from '@/data/images/bookmark.svg';
+import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
 import { calculateDDay } from '../../_utils/calculateDDay';
 import { convertToKorean } from '../../_utils/convertTopictoKorean';
 
@@ -40,12 +40,12 @@ const RequestDetail = ({
     <>
       <div className="w-full">
         <div className="flex flex-row w-full">
-          <div className="flex flex-row w-full items-center justify-between mt-[12px] mb-[12.99px]">
+          <div className="flex flex-row w-full items-center justify-between mt-[12px] mb-[12px]">
             <div className="flex flex-row items-center justify-center">
-              <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#FFECD4] text-[#FF810B] rounded-md py-[4px] px-[6px] mr-2">
+              <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#FFECD4] text-[#FF810B] rounded-md py-[4px] px-[6px] mr-[4px]">
                 <p className="text-[12px]">{calculateDDay(post.date_end)}</p>
               </div>
-              <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-2">
+              <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]">
                 <Image src={marker} width={10} height={10} alt="marker" />
                 <p className="text-[12px]">{JSON.parse(post.country_city!).country}</p>
               </div>
@@ -54,7 +54,7 @@ const RequestDetail = ({
                 return (
                   <div
                     key={i}
-                    className="flex items-center justify-center h-[22.017px] min-w-8 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-2"
+                    className="flex items-center justify-center h-[22.017px] min-w-8 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
                   >
                     <p className="text-[12px]">{koreanCategory}</p>
                   </div>
@@ -72,9 +72,9 @@ const RequestDetail = ({
                 <Image
                   width={24}
                   height={24}
-                  src={bookmarkButton}
+                  src={selectedBookmarkBtn}
                   alt="bookmark button"
-                  className="brightness-0 z-0"
+
                 />
               </button>
             ) : (
@@ -89,7 +89,6 @@ const RequestDetail = ({
                   height={24}
                   src={borderbookmarkButton}
                   alt="bookmark button"
-                  className=""
                 />
               </button>
             )}
@@ -98,16 +97,16 @@ const RequestDetail = ({
         <div className="flex flex-row items-start">
           <p className="text-[16px] font-[600] pt-[1px] text-[#0582FF]">Q.</p>
           <div>
-            <p className="max-w-[315px] text-[16px] text-lg font-bold ml-[6px] overflow-hidden text-ellipsis">
+            <p className="max-w-[315px] text-[16px] font-[600] ml-[6px] mb-[6px] overflow-hidden text-ellipsis">
               {post.title}
             </p>
-            <p className="text-[14px] max-w-[315px] text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis">
+            <p className="text-[14px] max-w-[295px] text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis">
               {post.content}
             </p>
           </div>
         </div>
 
-        <div className="flex flex-row items-center mt-[18px] mb-[26px] justify-between">
+        <div className="flex flex-row items-center mt-[12px] mb-[24px] justify-between">
           <div className="flex flex-row items-center">
             <Image width={18} height={18} src={coin} alt="credit icon" />
             <p className="text-[12px] text-[#797C80] ml-1">{post.credit} C</p>

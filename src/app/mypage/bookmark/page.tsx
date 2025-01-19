@@ -5,26 +5,40 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
 import CategoryTabs from '../_components/CategoryTabs';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import TimeAgo from '../_components/TimeAgo'; 
 
-type Post = {
+type BookmarkedPost = {
   id: string;
   title: string;
-  content: string;
-  img_url: string[];
+  content: string | null;
   country_city: string;
+  category: string[];
+  img_url: string[];
+  date_end?: string | null;
+  credit?: number | null;
+  created_at: string | null;
 };
 
-type Bookmark = {
-  request_posts: Post | Post[];
+const convertTopicsToKorean = (topics: string[]): string[] => {
+  const topicMapping: Record<string, string> = {
+    food: '맛집',
+    shopping: '쇼핑',
+    lodging: '숙소',
+    event: '이벤트',
+    'schedule-expenses': '일정/경비',
+    culture: '문화',
+    history: '역사',
+    activity: '액티비티',
+    etc: '기타',
+  };
+  return topics.map((topic) => topicMapping[topic] || topic);
 };
 
 const BookmarkPage = () => {
   const { user } = useUserStore();
-  const [bookmarkedPosts, setBookmarkedPosts] = useState<Post[]>([]);
+  const [bookmarkedPosts, setBookmarkedPosts] = useState<BookmarkedPost[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter();
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -43,8 +57,12 @@ const BookmarkPage = () => {
               id,
               title,
               content,
+              country_city,
+              category,
               img_url,
-              country_city
+              date_end,
+              credit,
+              created_at
             )
           `,
           )
@@ -60,15 +78,13 @@ const BookmarkPage = () => {
           return;
         }
 
-        const mappedPosts = (bookmarksData || []).flatMap(
-          (bookmark: Bookmark) => {
-            if (Array.isArray(bookmark.request_posts)) {
-              return bookmark.request_posts;
-            } else if (bookmark.request_posts) {
-              return [bookmark.request_posts];
-            }
-            return [];
-          },
+        const mappedPosts: BookmarkedPost[] = (bookmarksData || []).flatMap(
+          (bookmark: { request_posts: BookmarkedPost | BookmarkedPost[] }) =>
+            Array.isArray(bookmark.request_posts)
+              ? bookmark.request_posts
+              : bookmark.request_posts
+              ? [bookmark.request_posts]
+              : [],
         );
 
         setBookmarkedPosts(mappedPosts);
@@ -100,12 +116,8 @@ const BookmarkPage = () => {
         prevPosts.filter((post) => post.id !== postId),
       );
     } catch (e) {
-      console.error('북마크를 삭제하는 중 예상치 못한 오류가 발생했습니다:', e);
+      console.error('북마크 해제 중 예상치 못한 오류 발생:', e);
     }
-  };
-
-  const handleCardClick = (postId: string) => {
-    router.push(`/post/${postId}`);
   };
 
   if (loading) {
@@ -116,72 +128,141 @@ const BookmarkPage = () => {
     return <div className="text-center text-red-500">{error}</div>;
   }
 
-  return (
-    <div className="px-5 space-y-4 min-h-screen">
-      {/* 카테고리 탭 */}
-      <CategoryTabs activeTab="bookmark" />
+return (
+  <div className="px-5 space-y-4 min-h-screen">
+    <CategoryTabs activeTab="bookmark" />
 
-      {/* 북마크된 게시글 */}
+    <div
+      className="overflow-y-auto"
+      style={{
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none', 
+        height: 'calc(100vh - 120px)',
+        paddingBottom: '50px', 
+      }}
+    >
+      <style jsx>{`
+        div::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
+
       {bookmarkedPosts.length > 0 ? (
         bookmarkedPosts.map((post) => (
           <div
             key={post.id}
-            className="relative p-4 border border-gray-300 rounded-lg flex justify-between items-start cursor-pointer"
-            onClick={() => handleCardClick(post.id)}
+            className="flex flex-col items-start gap-3 border-b bg-white w-full relative"
+            style={{
+              padding: '12px 20px 24px 20px',
+              borderBottom: '1px solid #F4F4F4',
+              background: '#FFF',
+            }}
           >
-            {/* 게시글 정보 */}
-            <div className="flex-1">
-              <div className="flex items-center mb-2">
-                <span className="text-sm text-gray-500 mr-2">
-                  {post.country_city}
-                </span>
+            <div className="flex flex-row items-center gap-[4px]">
+              <div
+                className="flex items-center text-[#45484D] text-[12px]"
+                style={{
+                  height: '22px',
+                  padding: '0px 6px 0px 4px',
+                  alignItems: 'center',
+                  gap: '2px',
+                  borderRadius: '4px',
+                  background: '#F5F7FA',
+                }}
+              >
+                <Image
+                  src="/images/ic-location.svg"
+                  alt="Location"
+                  width={12}
+                  height={12}
+                />
+                <p className="text-[12px]">
+                  {post.country_city
+                    ? JSON.parse(post.country_city).country
+                    : ''}
+                </p>
               </div>
-              <h2 className="text-md font-bold mb-1">{post.title}</h2>
-              <p className="text-sm text-gray-500">
-                {post.content
-                  ? post.content.length > 100
-                    ? `${post.content.substring(0, 100)}...`
-                    : post.content
-                  : '내용이 없습니다.'}
-              </p>
+              {post.category.slice(0, 2).map((cat: string, i: number) => {
+                const koreanCategory = convertTopicsToKorean([cat])[0];
+                return (
+                  <div
+                    key={i}
+                    className="flex items-center text-[#45484D] text-[12px]"
+                    style={{
+                      height: '22px',
+                      padding: '0px 6px 0px 4px',
+                      alignItems: 'center',
+                      gap: '2px',
+                      borderRadius: '4px',
+                      background: '#F5F7FA',
+                    }}
+                  >
+                    {koreanCategory}
+                  </div>
+                );
+              })}
             </div>
 
-            {/* 이미지 */}
-            {post.img_url?.[0] && (
-              <div className="w-20 h-20 ml-4 overflow-hidden rounded">
-                <Image
-                  src={post.img_url[0]}
-                  alt="Post Thumbnail"
-                  className="object-cover w-full h-full"
-                  width={80}
-                  height={80}
-                />
-              </div>
-            )}
+            <div className="flex items-start gap-[6px]">
+              <p className="text-[16px] font-[600] text-[#0582FF] leading-[22.4px]">
+                Q.
+              </p>
 
-            {/* 북마크 해제 버튼 */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRemoveBookmark(post.id);
-              }}
-              className="absolute top-2 right-2"
-            >
-              <Image
-                src="/images/bookmark.svg"
-                alt="북마크 해제"
-                width={24}
-                height={24}
-                className="hover:opacity-70 cursor-pointer"
+              <div className="flex flex-col">
+                <div className="mb-[8px]">
+                  <p className="text-[16px] font-bold text-black leading-[22.4px] max-w-[315px] line-clamp-2">
+                    {post.title}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[14px] text-[#797C80] line-clamp-2">
+                    {post.content || ''}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between text-[12px] text-[#797C80] w-full">
+              <div className="flex items-center gap-[6px]">
+                <div className="flex items-center gap-[6px]">
+                  <Image
+                    src="/images/coin.svg"
+                    alt="Credit Icon"
+                    width={14}
+                    height={14}
+                  />
+                  <span>{post.credit} C</span>
+                </div>
+              </div>
+
+              <TimeAgo
+                createdAt={post.created_at || new Date().toISOString()}
               />
-            </button>
+            </div>
+
+            <div className="absolute top-3 right-3">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemoveBookmark(post.id);
+                }}
+              >
+                <Image
+                  src="/images/ic-selectedbookmark.svg"
+                  alt="북마크 아이콘"
+                  width={24}
+                  height={24}
+                />
+              </button>
+            </div>
           </div>
         ))
       ) : (
         <div className="text-center text-gray-500">북마크한 글이 없습니다.</div>
       )}
     </div>
-  );
+  </div>
+);
 };
 
 export default BookmarkPage;
