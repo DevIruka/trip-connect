@@ -3,18 +3,17 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
-import UserProfileSection from '../_components/UserProfileSection';
 import CategoryTabs from '../_components/CategoryTabs';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
 type ResponsePost = {
-  id: number; 
+  id: number;
   title: string;
   content_html: string;
   created_at: string;
   user_id: string;
-  request_id: string; 
+  request_id: string;
 };
 
 const PurchasedPage = () => {
@@ -54,9 +53,6 @@ const PurchasedPage = () => {
 
   return (
     <div className="px-5 space-y-4 min-h-screen">
-      {/* 프로필 섹션 */}
-      <UserProfileSection />
-
       {/* 카테고리 탭 */}
       <CategoryTabs activeTab="purchased" />
 

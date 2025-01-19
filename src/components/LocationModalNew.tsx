@@ -3,6 +3,8 @@ import { nations } from '../data/nation';
 import { nation } from '../app/(home)/_types/homeTypes';
 import close from '@/data/images/ic-Close.svg';
 import search from '@/data/images/ic-Search.svg';
+import radioBtn from '@/data/images/radio_btn.svg';
+import radioBtnSlctd from '@/data/images/radio_btn_slctd.svg';
 
 import Image from 'next/image';
 
@@ -153,20 +155,31 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
               {/* 필터링된 결과 */}
               {searchTerm ? (
                 filteredResults.length > 0 ? (
-                  <ul>
+                  <ul className="grid gap-3 text-[#44484c] text-sm font-medium leading-tight">
                     {filteredResults.map((result, index) => (
                       <li key={index}>
-                        <ul>
+                        <ul className="grid gap-3">
                           <label
-                            className="flex"
-                            // className={`cursor-pointer border px-4 py-2 rounded ${
-                            //   selectedValue ===
-                            //   `{"continent":"${result.continent}","country":"${result.country}","city":""}`
-                            //     ? 'bg-blue-500 text-white' // 선택된 상태
-                            //     : 'bg-gray-200 text-gray-800' // 기본 상태
-                            // }`}
+                            className={`flex gap-2 cursor-pointer ${
+                              JSON.stringify(crntNation) ===
+                              `{"continent":"${result.continent}","country":"${result.country}","city":""}`
+                                ? 'text-black'
+                                : ''
+                            }`}
                           >
+                            <Image
+                              src={
+                                JSON.stringify(crntNation) ===
+                                `{"continent":"${result.continent}","country":"${result.country}","city":""}`
+                                  ? radioBtnSlctd
+                                  : radioBtn
+                              }
+                              alt={'radio btn'}
+                              width={22}
+                              height={22}
+                            />
                             <input
+                              className="hidden"
                               type="radio"
                               name="options"
                               value={selectedValue}
@@ -178,23 +191,44 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
                                 )
                               }
                             />
-                            <li>{result.country}</li>
+                            <li className="py-[9px] ">{result.country}</li>
                           </label>
                           {result.cities.map((city, idx) => (
-                            <li key={idx}>
-                              <input
-                                type="radio"
-                                name="options"
-                                value={selectedValue}
-                                onChange={() =>
-                                  handleTempSelect(
-                                    result.continent,
-                                    result.country,
-                                    city,
-                                  )
-                                }
-                              />
-                              {result.country + ', ' + city}
+                            <li key={idx} className="py-[9px] flex gap-2">
+                              <label
+                                className={`flex gap-2 cursor-pointer ${
+                                  JSON.stringify(crntNation) ===
+                                  `{"continent":"${result.continent}","country":"${result.country}","city":"${city}"}`
+                                    ? 'text-black'
+                                    : ''
+                                }`}
+                              >
+                                <Image
+                                  src={
+                                    JSON.stringify(crntNation) ===
+                                    `{"continent":"${result.continent}","country":"${result.country}","city":"${city}"}`
+                                      ? radioBtnSlctd
+                                      : radioBtn
+                                  }
+                                  alt={'radio btn'}
+                                  width={22}
+                                  height={22}
+                                />
+                                <input
+                                  className="hidden"
+                                  type="radio"
+                                  name="options"
+                                  value={selectedValue}
+                                  onChange={() =>
+                                    handleTempSelect(
+                                      result.continent,
+                                      result.country,
+                                      city,
+                                    )
+                                  }
+                                />
+                                {result.country + ', ' + city}
+                              </label>
                             </li>
                           ))}
                         </ul>
@@ -202,7 +236,7 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
                     ))}
                   </ul>
                 ) : (
-                  <p>{`"${searchTerm}"에 대한 검색 결과가 없어요.`}</p>
+                  <p className="pt-10 text-center text-[#797c80] text-base font-semibold leading-snug">{`"${searchTerm}"에 대한 검색 결과가 없어요.`}</p>
                 )
               ) : (
                 // 대륙 > 나라 버튼 표시
