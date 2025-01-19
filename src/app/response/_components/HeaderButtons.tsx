@@ -2,7 +2,6 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import BlackButton from '@/components/BlackBtn';
 
 type Props = {
   buttonLabel: string; // 버튼 이름

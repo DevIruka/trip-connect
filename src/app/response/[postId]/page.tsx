@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import TiptapEditor from '../_components/TiptapEditor';
@@ -79,82 +79,59 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   if (isLoading) return <p>로딩 중...</p>;
   if (error) return <p>요청 정보를 불러오는 중 오류가 발생했습니다.</p>;
 
+  const title = request?.title || '';
+  const maxVisibleChars = 20;
+  const visibleTitle =
+    title.length > maxVisibleChars
+      ? title.slice(0, maxVisibleChars) + '...'
+      : title;
+
   return (
     <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
       <HeaderWithButton buttonLabel="등록" onButtonClick={handleSubmit} />
 
-      {/* 상단 Q {title} 영역 */}
       <div className="bg-[#F5F7FA] w-full mb-4 px-[20px] py-[16px]">
-  <div className="flex flex-col gap-[8px]">
-    <div className="flex justify-between items-start gap-[8px]">
-      {/* 제목 앞부분 */}
-      <div
-        className="flex items-center gap-[8px] overflow-hidden"
-        style={{
-          maxWidth: 'calc(100% - 40px)', // 버튼 자리 제외
-        }}
-      >
-        <span style={{ color: '#0582FF', flexShrink: 0 }}>Q</span>
-        <span
-          className="text-black text-[16px] font-semibold overflow-hidden text-ellipsis whitespace-nowrap"
-          style={{
-            display: '-webkit-box',
-            WebkitLineClamp: 1, // 기본적으로 한 줄로 제한
-            WebkitBoxOrient: 'vertical',
-          }}
-        >
-          {request?.title} {/* 앞부분 표시 */}
-        </span>
-      </div>
+        <div className="flex flex-col gap-[8px]">
+          {/* Q와 제목 */}
+          <div className="flex justify-between items-center gap-[8px]">
+            <div
+              className="flex items-center gap-[8px] overflow-hidden"
+              style={{
+                maxWidth: 'calc(100% - 40px)',
+              }}
+            >
+              <span style={{ color: '#0582FF', flexShrink: 0 }}>Q</span>
+              <span className="text-black text-[16px] font-semibold">
+                {!isVisible ? visibleTitle : title}
+              </span>
+            </div>
+            <button
+              onClick={() => setIsVisible(!isVisible)}
+              className="text-[#797C80] flex-shrink-0"
+              style={{
+                width: '20px',
+                height: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              {isVisible ? (
+                <FaChevronUp width="9" height="5" />
+              ) : (
+                <FaChevronDown width="9" height="5" />
+              )}
+            </button>
+          </div>
+        </div>
 
-      {/* 펼치기 버튼 */}
-      <button
-        onClick={() => setIsVisible(!isVisible)}
-        className="text-[#797C80] flex-shrink-0"
-        style={{
-          width: '20px',
-          height: '20px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {isVisible ? (
-          <div className="w-[20px] h-[20px] flex items-center justify-center">
-            <FaChevronUp width="9" height="5" />
-          </div>
-        ) : (
-          <div className="w-[20px] h-[20px] flex items-center justify-center">
-            <FaChevronDown width="9" height="5" />
-          </div>
+        {/* 본문 내용 */}
+        {isVisible && (
+          <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line">
+            {request?.content}
+          </p>
         )}
-      </button>
-    </div>
-
-    {/* 제목 뒷부분 */}
-    {isVisible && (
-      <div className="mt-2">
-        <p
-          className="text-black text-[16px] font-semibold"
-          style={{
-            wordBreak: 'break-word', // 단어 줄바꿈
-          }}
-        >
-          {request?.title} {/* 숨겨진 제목 부분 표시 */}
-        </p>
       </div>
-    )}
-  </div>
-
-  {/* 본문 내용 */}
-  {isVisible && (
-    <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line">
-      {request?.content}
-    </p>
-  )}
-</div>
-
-
 
       <TiptapEditor
         title={data.title}
