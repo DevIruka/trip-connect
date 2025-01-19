@@ -23,6 +23,18 @@ const useSearchHandlers = ({
   const handleSearch = () => {
     if (!query.trim()) return;
     setKeyword(query);
+    const storedSearches = JSON.parse(
+      localStorage.getItem('recentSearches') || '[]',
+    );
+
+    // 새 검색어를 배열에 추가 (중복 방지하고 최신 검색어가 앞에 오도록)
+    const updatedSearches = [
+      query,
+      ...storedSearches.filter((item: string) => item !== query),
+    ].slice(0, 10); // 최대 10개까지만 유지
+
+    // localStorage에 저장
+    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
     router.push(`/search/${query}`);
   };
 

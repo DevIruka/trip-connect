@@ -11,10 +11,12 @@ import RecentSearchList from './_components/RecentSearchList';
 
 const SearchPage = () => {
   const router = useRouter();
+
   const storedSearches =
     typeof window !== 'undefined'
       ? JSON.parse(localStorage.getItem('recentSearches') || '[]')
       : []; // 로컬 스토리지에서 recentSearches를 가져오고, 없으면 빈 공백으로 설정해요.
+      
   const keyword = useSearchStore((state) => state.keyword);
 
   const { register, handleSubmit, setValue, watch, setFocus } = useForm({

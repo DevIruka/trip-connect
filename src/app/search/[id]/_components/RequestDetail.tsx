@@ -47,7 +47,7 @@ const RequestDetail = ({
               </div>
               <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-2">
                 <Image src={marker} width={10} height={10} alt="marker" />
-                <p className="text-[12px]">{post.country_city}</p>
+                <p className="text-[12px]">{JSON.parse(post.country_city!).country}</p>
               </div>
               {post.category?.slice(0, 2).map((element, i) => {
                 const koreanCategory = convertToKorean(element);
