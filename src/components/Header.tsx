@@ -13,6 +13,7 @@ const Header = () => {
     '/login',
     '/signup',
     '/search',
+    '/mypage/credit',
     '/post',
     '/response-list',
     '/request',
