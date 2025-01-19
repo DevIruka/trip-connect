@@ -18,7 +18,7 @@ import {
 } from '@/utils/topics';
 
 const EditRequestPage: React.FC = () => {
-  const { id } = useParams();
+  const { request_id } = useParams();
   const router = useRouter();
 
   const {
@@ -47,24 +47,21 @@ const EditRequestPage: React.FC = () => {
   useEffect(() => {
     const fetchRequestDetails = async () => {
       try {
-        if (!id || typeof id !== 'string') {
+        if (!request_id || typeof request_id !== 'string') {
           throw new Error('유효하지 않은 요청 ID입니다.');
         }
 
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-      if (!uuidRegex.test(id)) {
-        throw new Error('ID가 올바른 UUID 형식이 아닙니다.');
-      }
-      
-        const { data, error } = await supabase
+        const { data: requestData, error: requestError } = await supabase
           .from('request_posts')
           .select('*')
-          .eq('id', id)
+          .eq('id', request_id)
           .single();
 
-        if (error) throw error;
+        if (requestError || !requestData) {
+          throw new Error('요청 데이터를 불러오는 데 실패했습니다.');
+        }
 
-        const categories = (data.category || []) as string[];
+        const categories = (requestData.category || []) as string[];
         const validCategories = categories.filter(
           (cat): cat is EnglishCategory =>
             Object.values(topicMapping).includes(cat as EnglishCategory),
@@ -73,19 +70,21 @@ const EditRequestPage: React.FC = () => {
         const koreanCategories = convertTopicsToKorean(validCategories);
 
         reset({
-          title: data.title,
-          credit: data.credit,
-          content: data.content,
-          date_end: data.date_end,
+          title: requestData.title,
+          credit: requestData.credit,
+          content: requestData.content,
+          date_end: requestData.date_end
+            ? new Date(requestData.date_end)
+            : undefined,
           category: koreanCategories,
-          country_city: data.country_city,
+          country_city: requestData.country_city,
         });
-        setSelectedLocation(data.country_city);
+        setSelectedLocation(requestData.country_city);
 
         const { data: responseData, error: responseError } = await supabase
           .from('response_posts')
           .select('*')
-          .eq('request_id', id);
+          .eq('request_id', request_id);
 
         if (responseError) throw responseError;
 
@@ -101,10 +100,14 @@ const EditRequestPage: React.FC = () => {
     };
 
     fetchRequestDetails();
-  }, [id, reset, router]);
+  }, [request_id, reset, router]);
 
   const onSubmit = async (data: FormInputs) => {
     try {
+      if (!request_id || typeof request_id !== 'string') {
+        throw new Error('유효하지 않은 요청 ID입니다.');
+      }
+
       const englishCategories = convertTopicsToEnglish(
         data.category as KoreanCategory[],
       );
@@ -116,7 +119,7 @@ const EditRequestPage: React.FC = () => {
           category: englishCategories,
           country_city: selectedLocation,
         })
-        .eq('id', id);
+        .eq('id', request_id);
 
       if (error) throw error;
 
@@ -137,7 +140,7 @@ const EditRequestPage: React.FC = () => {
         >
           ✕
         </button>
-        <h1 className="text-lg font-bold">질문 수정하기</h1>
+        <h1 className="text-lg font-bold">질문하기</h1>
         <button
           onClick={handleSubmit(onSubmit)}
           className="bg-black text-white py-1 px-4 rounded hover:bg-gray-800"
@@ -165,11 +168,7 @@ const EditRequestPage: React.FC = () => {
               })}
               className={`w-full px-3 py-2 border ${
                 errors.country_city ? 'border-red-500' : 'border-gray-300'
-              } rounded focus:outline-none`}
-              onClick={() => {
-                clearErrors('country_city');
-                if (!isRestricted) toggleModal();
-              }}
+              }   rounded focus:outline-none text-[#797C80] cursor-not-allowed`}
             />
             {errors.country_city && (
               <p className="text-red-500 text-sm mt-1">
@@ -198,13 +197,8 @@ const EditRequestPage: React.FC = () => {
               '액티비티',
               '기타',
             ]}
-            setValue={setValue}
-            watch={watch}
-            disabled={isRestricted}
-            selectedButtonStyles={{
-              backgroundColor: '#DFE1E5',
-              color: '#797C80',
-            }}
+            disabled={true}
+            selectedCategories={watch('category')}
           />
 
           <input
@@ -227,7 +221,12 @@ const EditRequestPage: React.FC = () => {
           control={control}
           errors={errors}
           setValue={setValue}
-          disabled={isRestricted}
+          disabledFields={{
+            title: isRestricted,
+            credit: isRestricted,
+            content: isRestricted,
+            date_end: false, // 기한 수정은 항상 가능
+          }}
         />
 
         <LocationModal
