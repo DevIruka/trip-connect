@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Editor, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import MenuBar from './MenuBar';
@@ -31,7 +31,7 @@ const TiptapEditor: React.FC<Props> = ({
 }) => {
   const [localTitle, setLocalTitle] = useState(title);
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
-
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const extensions = [
     StarterKit,
     Placeholder.configure({
@@ -86,12 +86,18 @@ const TiptapEditor: React.FC<Props> = ({
 
   useEffect(() => {
     if (editor) {
-      setActiveEditor(editor); // 초기 activeEditor 설정
+      setActiveEditor(editor);
     }
   }, [editor]);
 
-  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setLocalTitle(e.target.value);
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+
     onChange({
       title: e.target.value,
       contentHtml,
@@ -100,49 +106,53 @@ const TiptapEditor: React.FC<Props> = ({
   };
 
   return (
-    <div className="p-4 pb-16">
-      <div className="mb-[24px]">
-        <label className="sr-only">제목</label>
-        <input
-          type="text"
-          value={localTitle}
-          onChange={handleTitleChange}
-          placeholder="제목"
-          className="w-full px-3 py-2 bg-transparent border-0 border-b text-[#A9A9A9] focus:outline-none focus:ring-0 focus:border-[#DFE1E5] text-[18px] font-bold text-[#000000]"
-        />
-      </div>
+    <>
+      <div className="px-5 pb-0">
+        <div className="mb-[24px]">
+          <label className="sr-only">제목</label>
+          <textarea
+            ref={textareaRef}
+            value={localTitle}
+            onChange={handleTitleChange}
+            placeholder="제목"
+            className="w-full py-2 bg-transparent border-0 border-b focus:outline-none focus:ring-0 focus:border-[#DFE1E5] placeholder:text-[#A9A9A9] text-[18px] font-bold resize-none"
+            style={{ color: '#000000', lineHeight: '1.5', overflow: 'hidden' }}
+            rows={1}
+          />
+        </div>
 
-      <div className="mb-[24px]">
-        <div className="relative rounded-[8px] border border-[#DFE1E5]">
-          <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
-            {!previewEditor?.getText() && '미리보기 답변을 작성해 주세요'}
+        <div className="mb-[24px]">
+          <div className=" relative rounded-[8px] border border-[#DFE1E5]">
+            <div className=" px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
+              {!previewEditor?.getText() && '미리보기 답변을 작성해 주세요'}
+            </div>
+            <div className="rounded-[8px] ">
+              <EditorContent editor={previewEditor} />
+            </div>
           </div>
-          <div className="rounded-[8px]">
-            <EditorContent editor={previewEditor} />
+        </div>
+
+        <div className="relative my-[16px] flex items-center justify-center">
+          <div className="flex-grow border-t border-[#DFE1E5]"></div>
+          <p className="px-4 text-sm whitespace-nowrap bg-white text-[#80BFFF]">
+            이후로는 유료 결제자만 볼 수 있어요
+          </p>
+          <div className="flex-grow border-t border-[#DFE1E5]"></div>
+        </div>
+
+        <div className="mb-4">
+          <div className="relative rounded-[8px] border border-[#DFE1E5] ">
+            <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
+              {!editor?.getText() && '유료 분량의 답변을 작성해 주세요'}
+            </div>
+            <div className="rounded-[8px] ">
+              <EditorContent editor={editor} />
+            </div>
           </div>
         </div>
       </div>
-
-      <div className="relative my-[16px] flex items-center justify-center">
-        <div className="flex-grow border-t border-[#DFE1E5]"></div>
-        <p className="px-4 text-sm whitespace-nowrap bg-white text-[#80BFFF]">
-          이후로는 유료 결제자만 볼 수 있어요
-        </p>
-        <div className="flex-grow border-t border-[#DFE1E5]"></div>
-      </div>
-
-      <div className="mb-4">
-        <MenuBar editor={activeEditor} />
-        <div className="relative rounded-[8px] border border-[#DFE1E5]">
-          <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
-            {!editor?.getText() && '유료 분량의 답변을 작성해 주세요'}
-          </div>
-          <div className="rounded-[8px]">
-            <EditorContent editor={editor} />
-          </div>
-        </div>
-      </div>
-    </div>
+      <MenuBar editor={activeEditor} />
+    </>
   );
 };
 
