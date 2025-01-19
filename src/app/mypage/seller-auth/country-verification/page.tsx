@@ -5,16 +5,18 @@ import { useRouter } from 'next/navigation';
 import { useLoadScript, GoogleMap, Marker } from '@react-google-maps/api';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
+import BackButton from '@/app/post/_components/BackBtn';
+import LocationText from '../_components/locationText';
 
 const CountryVerification = () => {
   const router = useRouter();
-  const { user } = useUserStore(); 
+  const { user } = useUserStore();
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
   }>({ lat: 0, lng: 0 });
   const [locationDescription, setLocationDescription] = useState('');
-  const [country, setCountry] = useState(''); 
+  const [country, setCountry] = useState('');
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
   });
@@ -41,28 +43,24 @@ const CountryVerification = () => {
     );
     const data = await response.json();
 
-  if (data.status === 'OK') {
-    const addressComponents: Array<{
-      long_name: string;
-      short_name: string;
-      types: string[];
-    }> = data.results[0]?.address_components || []; 
+    if (data.status === 'OK') {
+      const addressComponents: Array<{
+        long_name: string;
+        short_name: string;
+        types: string[];
+      }> = data.results[0]?.address_components || [];
 
-    const countryComponent = addressComponents.find((component) =>
-      component.types.includes('country'),
-    );
-    const cityComponent = addressComponents.find((component) =>
-      component.types.includes('locality'),
-    );
+      const countryComponent = addressComponents.find((component) =>
+        component.types.includes('country'),
+      );
+      const cityComponent = addressComponents.find((component) =>
+        component.types.includes('locality'),
+      );
 
-    // 국가와 도시 정보 설정
-    setCountry(countryComponent?.long_name || '알 수 없는 국가');
-    setLocationDescription(
-      `현재 위치가 내 국가로 설정한 ${
-        countryComponent?.long_name || '알 수 없는 국가'
-      } > ${cityComponent?.long_name || '알 수 없는 도시'}에 있습니다`,
-    );
-  }
+      // 국가와 도시 정보 설정
+      setCountry(countryComponent?.long_name || '알 수 없는 국가');
+      setLocationDescription(cityComponent?.long_name || '알 수 없는 도시');
+    }
   };
 
   const handleVerificationComplete = async () => {
@@ -83,23 +81,21 @@ const CountryVerification = () => {
     }
 
     alert('국가 인증이 완료되었습니다.');
-    router.push('/mypage/seller-auth'); 
+    router.push('/mypage/seller-auth');
   };
 
   if (!isLoaded) return <div>Loading Google Maps...</div>;
   if (loadError) return <div>Error loading Google Maps</div>;
 
   return (
-    <div className="min-h-screen px-5 py-4 bg-white">
-      <button
-        className="text-black text-lg font-medium mb-4"
-        style={{ position: 'sticky', marginTop: '30px' }}
-        onClick={() => router.back()}
-      >
-        ←
-      </button>
-
-      <h1 className="text-black text-xl font-semibold mb-6">국가 인증</h1>
+    <div className="h-full w-full px-5 bg-white">
+      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
+        <BackButton />
+        <h1 className="text-center text-black text-lg font-semibold">
+          국가 인증
+        </h1>
+        <div className="w-6"></div>
+      </div>
 
       <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
         {userLocation.lat && userLocation.lng ? (
@@ -117,12 +113,13 @@ const CountryVerification = () => {
         )}
       </div>
 
-      <p className="mt-4 text-sm text-gray-600">
-        <strong>{locationDescription || '위치 확인 중...'}</strong>
-      </p>
+      <LocationText
+        locationDescription={locationDescription}
+        country={country}
+      />
 
       <button
-        className="mt-48 w-full py-3 bg-black text-white rounded-lg text-center text-lg font-medium"
+        className="bg-[#0582ff] h-[52px] rounded-xl text-center my-3 text-white text-base font-semibold absolute bottom-0 w-[335px]"
         onClick={handleVerificationComplete}
         disabled={!locationDescription || !country} // 국가 정보가 없으면 버튼 비활성화
       >
