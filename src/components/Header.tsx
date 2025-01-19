@@ -13,10 +13,13 @@ const Header = () => {
     '/login',
     '/signup',
     '/search',
+    '/mypage',
     '/mypage/credit',
     '/post',
     '/response-list',
     '/request',
+    '/review',
+    '/mypage/seller-auth',
   ];
   const shouldHideHeader = excludedPaths.some((path) =>
     pathname.startsWith(path),
