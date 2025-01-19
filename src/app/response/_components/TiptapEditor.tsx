@@ -109,13 +109,13 @@ const TiptapEditor: React.FC<Props> = ({
           onChange={handleTitleChange}
           placeholder="제목"
           className="w-full px-3 py-2 bg-transparent border-0 border-b text-[#A9A9A9] focus:outline-none focus:ring-0 focus:border-[#DFE1E5] text-[18px] font-bold text-[#000000]"
-          />
+        />
       </div>
 
       <div className="mb-[24px]">
         <div className="relative rounded-[8px] border border-[#DFE1E5]">
-        <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
-        {!previewEditor?.getText() && '미리보기 답변을 작성해 주세요'}
+          <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
+            {!previewEditor?.getText() && '미리보기 답변을 작성해 주세요'}
           </div>
           <div className="rounded-[8px]">
             <EditorContent editor={previewEditor} />
@@ -134,7 +134,7 @@ const TiptapEditor: React.FC<Props> = ({
       <div className="mb-4">
         <MenuBar editor={activeEditor} />
         <div className="relative rounded-[8px] border border-[#DFE1E5]">
-        <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
+          <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
             {!editor?.getText() && '유료 분량의 답변을 작성해 주세요'}
           </div>
           <div className="rounded-[8px]">

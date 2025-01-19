@@ -3,13 +3,13 @@ import { topicMapping } from '@/utils/topics';
 import Responses from '../_components/Responses';
 import BookmarkBtn from '../_components/BookmarkBtn';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import BackButton from '../_components/BackBtn';
 import Profile from '../_components/profile';
 import MoreButton from '@/data/images/ic-More.svg';
 import Image from 'next/image';
 import Icon from '@/components/icons';
 import Imoji from '@/data/images/ic-imoji.svg';
 import share from '@/data/images/ic-share.svg';
+import BackHeader from '../../../components/backHeader';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
@@ -25,10 +25,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar mb-[76px]">
-      <div className="h-14 px-5 py-2.5 place-content-center flex justify-between sticky top-0 z-50 bg-white">
-        <BackButton />
-        <Image width={20} height={20} alt="MoreButton" src={MoreButton} />
-      </div>
+      <BackHeader image={MoreButton} text="" />
       {post ? (
         <div className="relative">
           <Profile postUserId={post.user_id} />
@@ -60,7 +57,9 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
                 <div>크레딧</div>
               </div>
               <div className="text-black text-sm font-medium leading-tight grid gap-3">
-                <div>{post.country_city}</div>
+                <div>{`${JSON.parse(post.country_city).country} / ${
+                  JSON.parse(post.country_city).city
+                }`}</div>
                 <div className="flex gap-1">
                   {post.date_end}
                   <div className="px-1.5 bg-[#ffecd4] rounded justify-center items-center inline-flex text-center text-[#ff800a] text-xs font-medium">

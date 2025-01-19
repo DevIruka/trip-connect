@@ -4,9 +4,6 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import QnaHeader from './_components/qnaHeader';
-import Navbar from './_components/navBar';
-
 import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
 import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
 import location from '@/data/images/ic-location.svg';
@@ -19,8 +16,10 @@ import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import { useUserStore } from '@/store/userStore';
-import { nation } from './_types/homeTypes';
 import { useSearchStore } from '@/store/useSearchStore';
+import { nation } from '../_types/homeTypes';
+import QnaHeader from './qnaHeader';
+import Navbar from './navBar';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분

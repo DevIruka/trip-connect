@@ -8,6 +8,10 @@ const nextConfig = {
       },
     ],
   },
+
+  experimental: {
+    appDir: true, // App Directory 활성화
+  },
 };
 
 export default nextConfig;

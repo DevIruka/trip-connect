@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { FormInputs } from '../_types/form';
-import { nation } from '@/app/(home)/_types/homeTypes';
+import { nation } from '@/app/home/_types/homeTypes';
 
 export const useFormState = () => {
   const {
