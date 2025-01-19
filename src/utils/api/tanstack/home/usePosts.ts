@@ -1,5 +1,5 @@
-import { Post } from '@/app/(home)/_types/homeTypes';
-import { fetchPosts } from '@/app/(home)/_utils/fetchPosts';
+import { Post } from '@/app/home/_types/homeTypes';
+import { fetchPosts } from '@/app/home/_utils/fetchPosts';
 import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 
 // fetchPosts 함수의 반환값 타입 정의
