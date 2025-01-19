@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { nations } from '../_constants/nation';
-import { nation } from '../_types/homeTypes';
+import { nations } from '../data/nation';
+import { nation } from '../app/(home)/_types/homeTypes';
 import close from '@/data/images/ic-Close.svg';
 import search from '@/data/images/ic-Search.svg';
 
@@ -19,11 +19,14 @@ type nationProps = {
 };
 
 // 모달 컴포넌트
-export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
+export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredResults, setFilteredResults] = useState<nationProps[] | []>(
     [],
   );
+  const [selectedValue, setSelectedValue] = useState(''); // 선택된 값 저장
+  const [crntNation, setCrntNation] = useState<nation>();
+
   if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
 
   // 검색 입력 변경 처리
@@ -64,14 +67,19 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
   };
 
   // 위치 선택
-  const handleSelect = (
+  const handleSelect = (): void => {
+    setCountry(crntNation!);
+    setSelectedValue(JSON.stringify(crntNation));
+    sessionStorage.setItem('selectedLocation', JSON.stringify(crntNation));
+  };
+
+  const handleTempSelect = (
     continent: string,
     country: string,
     city: string,
   ): void => {
     const location = { continent, country, city };
-    setCountry(location);
-    sessionStorage.setItem('selectedLocation', JSON.stringify(location));
+    setCrntNation(location);
   };
 
   if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
@@ -103,7 +111,10 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
               나라/도시 선택
             </h2>
             <button
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                handleSelect();
+              }}
               className="bg-[#0582FF] h-8 py-1.5 px-3 rounded-md text-white text-sm font-semibold"
             >
               선택
@@ -146,25 +157,43 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
                     {filteredResults.map((result, index) => (
                       <li key={index}>
                         <ul>
-                          <li
-                            onClick={() =>
-                              handleSelect(result.continent, result.country, '')
-                            }
+                          <label
+                            className="flex"
+                            // className={`cursor-pointer border px-4 py-2 rounded ${
+                            //   selectedValue ===
+                            //   `{"continent":"${result.continent}","country":"${result.country}","city":""}`
+                            //     ? 'bg-blue-500 text-white' // 선택된 상태
+                            //     : 'bg-gray-200 text-gray-800' // 기본 상태
+                            // }`}
                           >
-                            {result.country}
-                          </li>
-                          {result.cities.map((city, idx) => (
-                            <li
-                              key={idx}
-                              onClick={() =>
-                                handleSelect(
+                            <input
+                              type="radio"
+                              name="options"
+                              value={selectedValue}
+                              onChange={() =>
+                                handleTempSelect(
                                   result.continent,
                                   result.country,
-                                  city,
+                                  '',
                                 )
                               }
-                              style={{ cursor: 'pointer', color: 'blue' }}
-                            >
+                            />
+                            <li>{result.country}</li>
+                          </label>
+                          {result.cities.map((city, idx) => (
+                            <li key={idx}>
+                              <input
+                                type="radio"
+                                name="options"
+                                value={selectedValue}
+                                onChange={() =>
+                                  handleTempSelect(
+                                    result.continent,
+                                    result.country,
+                                    city,
+                                  )
+                                }
+                              />
                               {result.country + ', ' + city}
                             </li>
                           ))}
@@ -187,13 +216,14 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
                         country.cities.map((city, cityIndex) => (
                           <button
                             key={cityIndex}
-                            onClick={() =>
-                              handleSelect(
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleTempSelect(
                                 continent.continent,
                                 country.name,
                                 city,
-                              )
-                            }
+                              );
+                            }}
                             className="h-7 px-3 py-[7px] bg-white rounded-[100px] border border-[#dee1e5] justify-center items-center inline-flex text-center text-[#797c80] text-xs font-medium"
                           >
                             {city}
@@ -204,6 +234,7 @@ export const Modal = ({ isOpen, onClose, setCountry }: Props) => {
                   </div>
                 ))
               )}
+              <div className="pb-[400px]"></div>
             </div>
           </div>
         </div>

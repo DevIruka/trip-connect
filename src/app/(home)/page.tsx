@@ -129,7 +129,7 @@ const CategoryPage = () => {
                       />
                       {post.request_id
                         ? post.verified_country
-                        : post.country_city}
+                        : JSON.parse(post.country_city!).country}
                     </div>
                     {post.category
                       ? topicArr
@@ -242,7 +242,7 @@ const CategoryPage = () => {
         </div>
 
         <button
-          className="absolute sticky bottom-8 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
+          className="sticky bottom-8 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
           onClick={() => {
             router.push('/request');
           }}
