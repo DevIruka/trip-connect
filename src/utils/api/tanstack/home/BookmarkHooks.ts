@@ -13,7 +13,7 @@ export const useBookmarkMutations = (userId: string | undefined) => {
       if (userId) {
         return addBookmark(postId, userId);
       } else {
-        return Promise.reject(new Error('User ID is not defined'));
+        return Promise.reject(new Error('User ID가 정의되지 않았습니다.'));
       }
     },
     onSuccess: (_, postId) => {

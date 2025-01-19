@@ -4,7 +4,7 @@ import { fetchSearchRequestPosts } from '../../supabase_api/search/fetchSearchRe
 import {
   FetchRequestPostsResult,
 } from '@/app/search/[id]/_types/searchTypes';
-import { ReqResPost } from '@/app/search/_components/SearchResults';
+import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
 const PAGE_SIZE = 5; // 페이지 사이즈
 
 const useInfiniteSearchRequestPosts = (

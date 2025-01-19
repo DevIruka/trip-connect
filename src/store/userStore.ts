@@ -10,6 +10,7 @@ type UserState = {
   userTable: Tables<'users'> | null;
   isLogin: boolean;
   fetchUser: () => Promise<void>;
+  signOut : () => Promise<void>
 };
 
 export const useUserStore = create<UserState>((set) => ({
@@ -66,6 +67,7 @@ export const useUserStore = create<UserState>((set) => ({
           introduction: data.introduction,
           nickname: data.nickname,
           profile_img: data.profile_img,
+          country_verified : data.country_verified
         };
 
         set({ userTable: userData, isLogin: true });
