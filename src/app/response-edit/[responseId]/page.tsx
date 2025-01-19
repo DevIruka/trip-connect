@@ -87,15 +87,14 @@ const EditResponsePage: React.FC = () => {
       : title;
 
   return (
-    <div className="p-0">
+    <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
       <HeaderWithButton
         buttonLabel="수정"
         onButtonClick={handleSubmit}
         disabled={!data.title || !data.contentHtml}
       />
 
-      {/* 상단 Q {title} 영역 */}
-      <div className="bg-[#F5F7FA] w-full mb-4 px-[20px] py-[16px]">
+      <div className="bg-[#F5F7FA] w-full mb-[16px] px-[20px] py-[16px]">
         <div className="flex flex-col gap-[8px]">
           {/* Q와 제목 */}
           <div className="flex justify-between items-center gap-[8px]">
@@ -105,7 +104,17 @@ const EditResponsePage: React.FC = () => {
                 maxWidth: 'calc(100% - 40px)',
               }}
             >
-              <span style={{ color: '#0582FF', flexShrink: 0 }}>Q</span>
+              <span
+                style={{
+                  color: '#0582FF',
+                  flexShrink: 0,
+                  fontWeight: 600,
+                  fontSize: '16px',
+                }}
+              >
+                Q
+              </span>
+
               <span className="text-black text-[16px] font-semibold">
                 {!isVisible ? visibleTitle : title}
               </span>
@@ -130,13 +139,20 @@ const EditResponsePage: React.FC = () => {
           </div>
         </div>
 
-        <TiptapEditor
-          title={data.title}
-          contentHtml={data.contentHtml}
-          freeContent={data.freeContent}
-          onChange={(updatedData) => setData(updatedData)}
-        />
+        {/* 본문 내용 */}
+        {isVisible && (
+          <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line">
+            {request?.content}
+          </p>
+        )}
       </div>
+
+      <TiptapEditor
+        title={data.title}
+        contentHtml={data.contentHtml}
+        freeContent={data.freeContent}
+        onChange={(updatedData) => setData(updatedData)}
+      />
     </div>
   );
 };

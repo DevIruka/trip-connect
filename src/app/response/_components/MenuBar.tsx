@@ -83,14 +83,14 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
   const handleTextStyleClick = (style: 'bold' | 'italic') => {
     if (activeTextStyle === style) {
-      editor?.chain().focus().unsetMark(style).run(); 
+      editor?.chain().focus().unsetMark(style).run();
       setActiveTextStyle(null);
     } else {
       const chain = editor?.chain().focus();
       if (activeTextStyle) {
-        chain?.unsetMark(activeTextStyle); 
+        chain?.unsetMark(activeTextStyle);
       }
-      chain?.setMark(style).run(); 
+      chain?.setMark(style).run();
       setActiveTextStyle(style);
     }
   };
@@ -131,7 +131,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
                   <ItalicIcon color={getTextStyleColor('italic')} />
                 </button>
               </div>
-              <div className="grow shrink basis-0 h-[0px] origin-top-left rotate-90 border border-[#eaeaea]"></div>
+              <div className="w-[1px] h-full bg-[#EBEBEB]"></div>
               <div className="justify-start items-center gap-6 flex">
                 <button
                   className="w-6 h-6 flex items-center justify-center"
@@ -196,7 +196,6 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
         onSelectLocation={handleInsertMap} // Callback for selecting a location
       />
     </div>
-
   );
 };
 
