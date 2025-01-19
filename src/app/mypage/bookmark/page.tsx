@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
-import UserProfileSection from '../_components/UserProfileSection';
 import CategoryTabs from '../_components/CategoryTabs';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -17,7 +16,7 @@ type Post = {
 };
 
 type Bookmark = {
-  request_posts: Post | Post[]; 
+  request_posts: Post | Post[];
 };
 
 const BookmarkPage = () => {
@@ -25,7 +24,7 @@ const BookmarkPage = () => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState<Post[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const router = useRouter(); 
+  const router = useRouter();
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -119,9 +118,6 @@ const BookmarkPage = () => {
 
   return (
     <div className="px-5 space-y-4 min-h-screen">
-      {/* 프로필 섹션 */}
-      <UserProfileSection />
-
       {/* 카테고리 탭 */}
       <CategoryTabs activeTab="bookmark" />
 
@@ -166,7 +162,7 @@ const BookmarkPage = () => {
             {/* 북마크 해제 버튼 */}
             <button
               onClick={(e) => {
-                e.stopPropagation(); 
+                e.stopPropagation();
                 handleRemoveBookmark(post.id);
               }}
               className="absolute top-2 right-2"
