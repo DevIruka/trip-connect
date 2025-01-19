@@ -8,7 +8,7 @@ export const ContentRenderer = ({
   parsedArray: parsedData[];
 }) => {
   return (
-    <div className="content-container">
+    <div className="grid gap-5">
       {parsedArray.map((item, index) => {
         // `data-type="map"`인지 확인
         if (
@@ -40,8 +40,10 @@ export const ContentRenderer = ({
               key={index}
               src={item.attributes.src}
               alt="Content"
-              width={100}
-              height={100}
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }}
             />
           );
         }

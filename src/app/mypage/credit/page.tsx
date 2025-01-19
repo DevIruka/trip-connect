@@ -8,6 +8,9 @@ import { useUserStore } from '@/store/userStore';
 import { useHandlePayment } from './_hooks/useHandlePayment';
 import CreditBalance from './_components/CreditBalance';
 import PaymentOptions from './_components/PaymentOptions';
+import Image from 'next/image';
+
+const leftIcon = '/images/ic-left.svg';
 
 const fetchCredit = async (userId: string) => {
   const { data, error } = await supabase
@@ -41,7 +44,6 @@ const CreditPage: React.FC = () => {
     retry: 1, // 실패 시 1회 재시도
   });
 
-  
   useEffect(() => {
     if (!user) {
       router.push('/login');
@@ -50,7 +52,10 @@ const CreditPage: React.FC = () => {
     const urlParams = new URLSearchParams(window.location.search);
     const status = urlParams.get('status');
 
-    if  ((status === 'success' || status === 'fail') && !paymentProcessedRef.current) {
+    if (
+      (status === 'success' || status === 'fail') &&
+      !paymentProcessedRef.current
+    ) {
       paymentProcessedRef.current = true; // Alert 중복 방지
       processPaymentResult(user.id, urlParams);
     }
@@ -69,22 +74,26 @@ const CreditPage: React.FC = () => {
   }
 
   return (
-    <div className="p-4 bg-white h-screen">
+    <div className="inner bg-white h-screen">
       {/* 상단 제목 및 뒤로가기 */}
-      <div className="flex items-center mb-4">
-        <button className="text-gray-500" onClick={() => router.back()}>
-          ←
-        </button>
+      <div className="flex items-center my-[10px]">
+        <Image
+          src={leftIcon}
+          width={24}
+          height={24}
+          alt="back"
+          onClick={() => router.back()}
+        />
       </div>
 
       {/* 보유 크레딧 */}
       <CreditBalance credit={credit} />
 
       {/* 충전하기 */}
-      <h2 className="text-gray-600 text-lg font-medium mb-4">충전하기</h2>
+      <h2 className="text-black text-[20px] font-[700] mb-[16px]">충전하기</h2>
       <PaymentOptions
         options={[
-          { amount: 1000, bonusRate:0 },
+          { amount: 1000, bonusRate: 0 },
           { amount: 5000, bonusRate: 0.02 },
           { amount: 10000, bonusRate: 0.02 },
           { amount: 15000, bonusRate: 0.02 },

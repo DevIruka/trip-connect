@@ -2,7 +2,6 @@ import { useUserStore } from '@/store/userStore';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import { EnglishCategory } from '@/utils/topics';
-import RequestDetail from './RequestDetail';
 import { useUserNicknames } from '@/utils/api/tanstack/search/useUserNickNames';
 import {
   useResponseCounts,
@@ -10,6 +9,7 @@ import {
 } from '@/utils/api/tanstack/search/useResponseCounts';
 import { useCredit } from '@/utils/api/tanstack/search/useCredit';
 import ResponseDetail from './ResponseDetail';
+import RequestDetail from './RequestDetail';
 
 type SearchResultsProps = {
   filteredPosts: ReqResPost[];
@@ -108,7 +108,7 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
                     nickname={nickname}
                     post={post}
                     reviewCount={reviewCount}
-                  /> 
+                  />
                 ) : (
                   <RequestDetail
                     addBookmarkMutation={addBookmarkMutation}

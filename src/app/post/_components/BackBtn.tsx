@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import backButton from '@/data/images/back.svg';
+import backButton from '@/data/images/ic-left.svg';
 // import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -9,16 +9,9 @@ const BackButton = () => {
   // const router = useRouter();
 
   return (
-    <button>
+    <button className="h-full">
       <Link href={'/'}>
-        <Image
-          width={0}
-          height={0}
-          sizes="100vw"
-          style={{ width: '100%', height: 'auto' }}
-          src={backButton}
-          alt="back button"
-        />
+        <Image width={24} height={24} src={backButton} alt="back button" />
       </Link>
     </button>
   );

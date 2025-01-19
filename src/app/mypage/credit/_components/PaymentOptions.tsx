@@ -22,24 +22,29 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-[12px] mb-[33px]">
       {options.map(({ amount, bonusRate }) => {
         const bonus = Math.floor(amount * (bonusRate || 0));
         return (
           <div
             key={amount}
-            className="bg-gray-100 rounded-lg p-4 flex items-center justify-between"
+            className="bg-white rounded-[12px] border-[1px] border-[#DFE1E5] p-4 flex items-center justify-between"
           >
             <div>
               <p className="text-xl font-bold">{amount.toLocaleString()}C</p>
               {bonus > 0 && (
-                <p className="text-blue-500 text-sm font-medium mt-1">
-                  +{bonus.toLocaleString()} 추가 크레딧
-                </p>
+                <div className="flex flex-row items-center">
+                  <p className="text-[#0582FF] text-[14px] font-[500] mt-[2px] mr-[2px]">
+                    +{bonus.toLocaleString()}
+                  </p>
+                  <span className="text-[14px] font-[500] mt-[2px] font-[#45484D]">
+                    추가 크레딧
+                  </span>
+                </div>
               )}
             </div>
             <button
-              className="bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-lg"
+              className="bg-[#EBF5FF] text-[#0582FF] text-[14px] font-[500] px-[19px] py-[8px] rounded-[8px]"
               onClick={() => openModal(amount)}
             >
               {amount.toLocaleString()}원

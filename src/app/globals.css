@@ -16,8 +16,25 @@
   }
 
   .menu-btn {
-    @apply bg-gray-400 rounded-3xl my-3 px-3;
+    @apply px-4 py-3 rounded-[100px] border border-[#dee1e5] justify-center items-center flex overflow-hidden text-center text-sm font-normal leading-tight;
   }
+
+  .menu-selected-btn {
+    @apply px-4 py-3 rounded-[100px] border border-black bg-black justify-center items-center flex overflow-hidden text-center text-sm text-white font-normal leading-tight;
+  }
+
+  .menu-dropdown-btn {
+    @apply px-4 py-3 rounded-[100px] border border-[#dee1e5] bg-[#F9F9F9] gap-1 justify-center items-center flex overflow-hidden text-center text-sm font-normal leading-tight;
+  }
+
+  .tag {
+    @apply h-[22px] pl-1 pr-1.5 bg-[#f4f6f9] rounded justify-start items-center gap-0.5 inline-flex text-center text-[#44484c] text-xs font-medium;
+  }
+
+  .blue-btn {
+    @apply bg-[#0582ff] h-[52px] rounded-xl flex justify-center items-center mx-5 my-3 text-white text-base font-semibold;
+  }
+
   :root {
     --font-pretendard: 'Pretendard', sans-serif;
     --background: 0 0% 100%;
@@ -88,6 +105,10 @@
   .today-day {
     @apply bg-[#EBF5FF] text-[#0582FF] font-bold rounded-full;
   }
+}
+
+input:focus {
+  outline: none; /* 기본 포커스 스타일 제거 */
 }
 
 @layer utilities {

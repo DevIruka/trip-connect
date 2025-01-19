@@ -3,7 +3,6 @@
 import React from 'react';
 import TopicSelector from './_components/TopicSelector';
 import FormFields from './_components/FormFields';
-import LocationModal from '../../components/LocationModal';
 import { useFormState } from './_hooks/useFormState';
 import { SubmitHandler } from 'react-hook-form';
 import { FormInputs } from './_types/form';
@@ -14,6 +13,7 @@ import {
   topicMapping,
 } from '@/utils/topics';
 import { useUserStore } from '@/store/userStore';
+import { LocationModal } from '../../components/LocationModalNew';
 
 const RequestPage: React.FC = () => {
   const {
@@ -77,7 +77,7 @@ const RequestPage: React.FC = () => {
 
   return (
     <>
-      <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
+      <div className="w-full h-screen bg-white flex flex-col overflow-y-auto menuscrollbar">
         <div className="h-[56px] w-full flex justify-between items-center px-[20px] py-[10px]">
           <button
             className="w-[24px] h-[24px] text-black flex items-center justify-center"
@@ -118,7 +118,11 @@ const RequestPage: React.FC = () => {
               <div className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] flex items-center bg-white">
                 <input
                   type="text"
-                  value={selectedLocation}
+                  value={
+                    selectedLocation.country
+                      ? `${selectedLocation.country}, ${selectedLocation.city}`
+                      : ''
+                  }
                   placeholder="나라/도시를 선택해 주세요"
                   readOnly
                   {...register('country_city', {
@@ -203,10 +207,10 @@ const RequestPage: React.FC = () => {
 
           <LocationModal
             isOpen={isModalOpen}
-            toggleModal={toggleModal}
-            handleLocationSelect={(location) => {
+            onClose={toggleModal}
+            setCountry={(location) => {
               handleLocationSelect(location); // 기존 로직 수행
-              setValue('country_city', location); // react-hook-form에 선택된 값 설정
+              setValue('country_city', location.country); // react-hook-form에 선택된 값 설정
               clearErrors('country_city'); // 에러 메시지 제거
             }}
           />
