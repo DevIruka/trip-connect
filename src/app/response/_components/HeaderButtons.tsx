@@ -14,7 +14,7 @@ const HeaderWithButton: React.FC<Props> = ({ buttonLabel, onButtonClick }) => {
   const router = useRouter();
 
   return (
-    <div className="flex justify-between items-center px-[20px] py-[10px] bg-white shadow-md border-b">
+    <div className="flex justify-between items-center px-[20px] py-[10px] bg-white shadow-md">
       <button
         onClick={() => router.back()}
         className="text-lg font-bold text-black"
