@@ -10,12 +10,12 @@ export type UnifiedPost = {
   img_url: string[];
   created_at: string;
   user_id: string;
-  type: 'question' | 'answer'; // 고정된 타입으로 정의
+  type: 'question' | 'answer'; 
 };
 
 export const fetchFilterPost = async (
   filter: 'all' | 'question' | 'answer',
-  userId: string | undefined, // 사용자 ID 추가
+  userId: string | undefined,
 ): Promise<UnifiedPost[]> => {
   if (!userId) {
     console.error('User ID is missing.');
@@ -31,7 +31,7 @@ export const fetchFilterPost = async (
       const { data: questionData, error: questionError } = await supabase
         .from('request_posts')
         .select('*')
-        .eq('user_id', userId); // 사용자 ID로 필터링
+        .eq('user_id', userId);
 
       if (questionError) throw questionError;
 
@@ -44,7 +44,7 @@ export const fetchFilterPost = async (
         img_url: item.img_url || [],
         created_at: item.created_at,
         user_id: item.user_id,
-        type: 'question', // 'question'으로 고정
+        type: 'question', 
       }));
     }
 
@@ -53,7 +53,7 @@ export const fetchFilterPost = async (
       const { data: answerData, error: answerError } = await supabase
         .from('response_posts')
         .select('*, request_posts(category)')
-        .eq('user_id', userId); // 사용자 ID로 필터링
+        .eq('user_id', userId);
 
       if (answerError) throw answerError;
 
@@ -66,7 +66,7 @@ export const fetchFilterPost = async (
         img_url: [],
         created_at: item.created_at,
         user_id: item.user_id,
-        type: 'answer', // 'answer'으로 고정
+        type: 'answer', 
       }));
     }
 
