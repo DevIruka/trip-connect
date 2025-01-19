@@ -28,8 +28,8 @@ const ResponseDetail = ({
   return (
     <div className="w-full">
       <div className="flex flex-row w-full">
-        <div className="flex flex-row w-full items-center mt-[12px] mb-[12.99px]">
-          <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-2">
+        <div className="flex flex-row w-full items-center mt-[12px] mb-[12px]">
+          <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]">
             <Image src={marker} width={10} height={10} alt="marker" />
             <p className="text-[12px]">{post.verified_country}</p>
           </div>
@@ -39,7 +39,7 @@ const ResponseDetail = ({
               return (
                 <div
                   key={i}
-                  className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-2"
+                  className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
                 >
                   <p className="text-[12px]">{koreanCategory}</p>
                 </div>
@@ -50,16 +50,16 @@ const ResponseDetail = ({
       </div>
 
       <div className="flex flex-row items-start">
-        <p className="text-[16px] font-[600] pt-[1px] text-[#FA505B]">A.</p>
+        <p className="text-[16px] font-[600] text-[#FA505B]">A.</p>
         <div>
-          <p className="max-w-[315px] text-[16px] font-bold ml-[6px] overflow-hidden text-ellipsis">
+          <p className="max-w-[295px] text-[16px] font-bold ml-[6px] mb-[6px] overflow-hidden text-ellipsis">
             {post.title}
           </p>
           <ResponseContent html={post.free_content!} />
         </div>
       </div>
 
-      <div className="flex flex-row items-center mt-[14px] mb-[26px] justify-between">
+      <div className="flex flex-row items-center mt-[12px] mb-[24px] justify-between">
         <div className="flex flex-row items-center">
           <Image width={18} height={18} src={coin} alt="credit icon" />
           <p className="text-[12px] text-[#797C80] ml-1">{credit} C</p>
