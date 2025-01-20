@@ -7,21 +7,13 @@ import Header from '../_components/Header';
 import ProfileSection from '../_components/ProfileSection';
 import TabNavigation from '../_components/TabNavigation';
 import PostList from '../_components/PostList';
-import { RequestPost, ResponsePost, UserPostData } from '../_types/user';
-
-type UserData = {
-  profile_img: string;
-  nickname: string;
-  country_verified: string;
-  introduction: string;
-};
-
-type UserPost = {
-  id: string;
-  title: string;
-  content: string;
-  content_html?: string;
-};
+import {
+  UserPostData,
+  UserData,
+  ReviewPost,
+  ResponsePost,
+  RequestPost,
+} from '../_types/user';
 
 type BaseResponsePost = Omit<
   ResponsePost,
@@ -115,18 +107,41 @@ const UserPage = () => {
 
         const { data: requests } = await supabase
           .from('request_posts')
-          .select('id, title, content, country_city, category, date_end, created_at, credit')
+          .select(
+            'id, title, content, country_city, category, date_end, created_at, credit',
+          )
           .eq('user_id', id);
 
-        const { data: reviews } = await supabase
+          const { data: reviews, error: reviewsError } = await supabase
           .from('reviews')
-          .select('*')
+          .select('id, review, user_id, response_id')
           .eq('user_id', id);
+
+        if (reviewsError) throw reviewsError;
+
+        const { data: purchasedUsers, error: purchasedError } = await supabase
+          .from('purchased_users')
+          .select('response_id, created_at');
+
+        if (purchasedError) throw purchasedError;
+
+        console.log('Purchased Users:', purchasedUsers);
+        console.log('Reviews:', reviews);
+
+        const formattedReviews = (reviews || []).map((review) => {
+          const purchasedUser = purchasedUsers?.find(
+            (user) => user.response_id === review.response_id,
+          );
+          return {
+            ...review,
+            purchasedAt: purchasedUser?.created_at || null,
+          };
+        });
 
         setUserPosts({
           responses: enhancedResponses as ResponsePost[],
           requests: (requests || []) as RequestPost[],
-          reviews: (reviews || []) as UserPost[],
+          reviews: formattedReviews as ReviewPost[],
         });
       } catch (error) {
         console.error('데이터 불러오기 오류:', error);
@@ -151,7 +166,11 @@ const UserPage = () => {
           reviews: userPosts.reviews.length,
         }}
       />
-      <PostList activeTab={activeTab} userPosts={userPosts} />
+      <PostList
+        activeTab={activeTab}
+        userPosts={userPosts}
+        userProfile={userData}
+      />
     </div>
   );
 };
