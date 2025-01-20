@@ -187,22 +187,31 @@ const MyPage = () => {
               </div>
 
               {/* 닉네임, 국가 정보 */}
-              <div className="flex flex-col ml-[8px]">
-                <h2 className="text-[16px] font-[600] mb-[2px] flex items-center">
-                  {userProfile.nickname}
-                </h2>
-                {userProfile.country ? (
-                  <div className="flex items-center justify-center h-[20.03px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] pl-[4px] pr-[5px]">
-                    <Image src={marker} width={10} height={10} alt="marker" />
-                    <p className="text-[12px] font-[500] tracking-[-0.24px]">
-                      {userProfile.country}
-                    </p>
+              <div className="relative">
+                <div className="flex flex-col ml-[8px]">
+                  <h2 className="text-[16px] font-[600] mb-[2px] flex items-center">
+                    {userProfile.nickname}
+                  </h2>
+                  <div className="absolute top-full left-[8px]">
+                    {userProfile.country ? (
+                      <div className="flex items-center justify-center h-[20.03px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] pl-[4px] pr-[5px]">
+                        <Image
+                          src={marker}
+                          width={10}
+                          height={10}
+                          alt="marker"
+                        />
+                        <p className="text-[12px] font-[500] tracking-[-0.24px]">
+                          {userProfile.country}
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-[#45484D] text-[12px]">
+                        국가 인증 전이에요!
+                      </p>
+                    )}
                   </div>
-                ) : (
-                  <p className="text-[#45484D] text-[12px]">
-                    국가 인증 전이에요!
-                  </p>
-                )}
+                </div>
               </div>
             </div>
             {/* 프로필 편집 버튼 */}
@@ -556,14 +565,14 @@ const MyPage = () => {
       </div>
       {/* 로그아웃 버튼 */}
       <div className="w-full h-[12px] bg-[#f4f6f9]"></div>
-        <div className="h-[92px]">
-          <button
-            className="text-[#44484c] text-sm font-medium ml-[28px] mt-[32px] mb-[43px] cursor-pointer"
-            onClick={handleLogout}
-          >
-            로그아웃
-          </button>
-        </div>
+      <div className="h-[92px]">
+        <button
+          className="text-[#44484c] text-sm font-medium ml-[28px] mt-[32px] mb-[43px] cursor-pointer"
+          onClick={handleLogout}
+        >
+          로그아웃
+        </button>
+      </div>
     </div>
   );
 };
