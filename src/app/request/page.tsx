@@ -209,8 +209,8 @@ const RequestPage: React.FC = () => {
             isOpen={isModalOpen}
             onClose={toggleModal}
             setCountry={(location) => {
-              handleLocationSelect(location); // 기존 로직 수행
-              setValue('country_city', location.country); // react-hook-form에 선택된 값 설정
+              handleLocationSelect(location!); // 기존 로직 수행
+              setValue('country_city', location!.country); // react-hook-form에 선택된 값 설정
               clearErrors('country_city'); // 에러 메시지 제거
             }}
           />

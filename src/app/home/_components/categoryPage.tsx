@@ -21,6 +21,7 @@ import { nation } from '../_types/homeTypes';
 import QnaHeader from './qnaHeader';
 import Navbar from './navBar';
 import PostDday from './dDay';
+import LoginModal from '@/components/loginModal';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -94,6 +95,9 @@ const CategoryPage = () => {
     setKeyword('');
   }, [setKeyword]);
 
+  //로그인해주세요 모달
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
+
   return (
     <>
       <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar">
@@ -104,7 +108,7 @@ const CategoryPage = () => {
           setNationFilter={setNationFilter}
           filterType={filterType}
         />
-        <ul className="px-5 grid gap-2 min-h-[460px] items-start">
+        <ul className="px-5 grid gap-2 items-start">
           {nationfilteredPosts?.map((post) => {
             const bookmarked = isPostBookmarked(post.id);
             return (
@@ -173,7 +177,7 @@ const CategoryPage = () => {
                           if (userId) {
                             addBookmarkMutation.mutate(post.id);
                           } else {
-                            alert('로그인해주세요');
+                            setIsModalOpen(true);
                           }
                         }}
                       >
@@ -250,6 +254,12 @@ const CategoryPage = () => {
           <Image width={36} height={36} src={pencil} alt="pencil" />
         </button>
       </div>
+      <LoginModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+      />
     </>
   );
 };
