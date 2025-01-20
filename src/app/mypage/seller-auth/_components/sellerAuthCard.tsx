@@ -26,7 +26,7 @@ const SellerAuthCard = ({
             </div>
           )}
         </div>
-        <p className="text-[#797c80] text-xs font-medium">{content}</p>
+        <p className="text-[#797c80] text-sm font-medium">{content}</p>
       </div>
       <Button isVerified={isVerified} text={title} link={link} />
     </div>
