@@ -10,13 +10,13 @@ import location from '@/data/images/ic-location.svg';
 import coin from '@/data/images/coin.svg';
 import dot from '@/data/images/Ellipse 14.svg';
 import pencil from '@/data/images/ic-pencil.svg';
-
 import { topicMapping } from '@/utils/topics';
 import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 import { useUserStore } from '@/store/userStore';
 import { useSearchStore } from '@/store/useSearchStore';
+
 import { nation } from '../_types/homeTypes';
 import QnaHeader from './qnaHeader';
 import Navbar from './navBar';
@@ -31,7 +31,7 @@ const CategoryPage = () => {
   };
 
   const handleNavigation = (id: string | number) => {
-    router.push(`/post/${id}`); // '/about' 페이지로 이동
+    router.push(`/post/${id}`);
   };
 
   //카테고리 한글표시
@@ -103,7 +103,7 @@ const CategoryPage = () => {
           setNationFilter={setNationFilter}
           filterType={filterType}
         />
-        <ul className="px-5 grid gap-2">
+        <ul className="px-5 grid gap-2 min-h-[460px] items-start">
           {nationfilteredPosts?.map((post) => {
             const bookmarked = isPostBookmarked(post.id);
             return (
