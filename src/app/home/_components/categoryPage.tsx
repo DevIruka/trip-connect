@@ -20,6 +20,7 @@ import { useSearchStore } from '@/store/useSearchStore';
 import { nation } from '../_types/homeTypes';
 import QnaHeader from './qnaHeader';
 import Navbar from './navBar';
+import PostDday from './data';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -106,6 +107,7 @@ const CategoryPage = () => {
         <ul className="px-5 grid gap-2 min-h-[460px] items-start">
           {nationfilteredPosts?.map((post) => {
             const bookmarked = isPostBookmarked(post.id);
+            console.log(post);
             return (
               <li
                 onClick={() =>
@@ -116,9 +118,9 @@ const CategoryPage = () => {
               >
                 <div className="h-6 w-full justify-between items-center inline-flex gap-3">
                   <div className="flex place-content-between items-center gap-1">
-                    <div className="h-[22px] px-1.5 bg-[#ffecd4] rounded justify-center items-center inline-flex text-center text-[#ff800a] text-xs font-medium">
-                      D-24
-                    </div>
+                    {post.date_end ? (
+                      <PostDday postDateEnd={post.date_end} />
+                    ) : null}
                     <div className="tag">
                       <Image
                         width={10}
