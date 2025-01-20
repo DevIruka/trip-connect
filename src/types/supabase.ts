@@ -13,20 +13,20 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          request_id: string | null
-          user_id: string | null
+          request_id: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
-          request_id?: string | null
-          user_id?: string | null
+          request_id: string
+          user_id: string
         }
         Update: {
           created_at?: string
           id?: number
-          request_id?: string | null
-          user_id?: string | null
+          request_id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -49,20 +49,20 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          request_id: string | null
-          user_id: string | null
+          request_id: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          request_id?: string | null
-          user_id?: string | null
+          request_id: string
+          user_id: string
         }
         Update: {
           created_at?: string
           id?: string
-          request_id?: string | null
-          user_id?: string | null
+          request_id?: string
+          user_id?: string
         }
         Relationships: [
           {
@@ -85,20 +85,20 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          response_id: number | null
-          user_id: string | null
+          response_id: number
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: string
-          response_id?: number | null
-          user_id?: string | null
+          response_id: number
+          user_id?: string
         }
         Update: {
           created_at?: string
           id?: string
-          response_id?: number | null
-          user_id?: string | null
+          response_id?: number
+          user_id?: string
         }
         Relationships: [
           {
@@ -119,36 +119,36 @@ export type Database = {
       }
       request_posts: {
         Row: {
-          category: string[] | null
-          content: string | null
+          category: string[]
+          content: string
           country_city: string
           created_at: string
           credit: number
-          date_end: string
+          date_end: string | null
           id: string
           img_url: string | null
           title: string
           user_id: string
         }
         Insert: {
-          category?: string[] | null
-          content?: string | null
+          category: string[]
+          content: string
           country_city: string
           created_at?: string
           credit: number
-          date_end: string
+          date_end?: string | null
           id?: string
           img_url?: string | null
           title: string
           user_id: string
         }
         Update: {
-          category?: string[] | null
-          content?: string | null
+          category?: string[]
+          content?: string
           country_city?: string
           created_at?: string
           credit?: number
-          date_end?: string
+          date_end?: string | null
           id?: string
           img_url?: string | null
           title?: string
@@ -166,9 +166,9 @@ export type Database = {
       }
       response_posts: {
         Row: {
-          content_html: string
+          content_html: string | null
           created_at: string
-          free_content: string | null
+          free_content: string
           id: number
           request_id: string
           title: string
@@ -176,9 +176,9 @@ export type Database = {
           verified_country: string | null
         }
         Insert: {
-          content_html: string
+          content_html?: string | null
           created_at?: string
-          free_content?: string | null
+          free_content: string
           id?: number
           request_id?: string
           title: string
@@ -186,9 +186,9 @@ export type Database = {
           verified_country?: string | null
         }
         Update: {
-          content_html?: string
+          content_html?: string | null
           created_at?: string
-          free_content?: string | null
+          free_content?: string
           id?: number
           request_id?: string
           title?: string
@@ -216,26 +216,26 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          rating: number | null
-          response_id: number | null
-          review: string | null
-          user_id: string | null
+          rating: number
+          response_id: number
+          review: string
+          user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
-          rating?: number | null
-          response_id?: number | null
-          review?: string | null
-          user_id?: string | null
+          rating: number
+          response_id: number
+          review: string
+          user_id: string
         }
         Update: {
           created_at?: string
           id?: number
-          rating?: number | null
-          response_id?: number | null
-          review?: string | null
-          user_id?: string | null
+          rating?: number
+          response_id?: number
+          review?: string
+          user_id?: string
         }
         Relationships: [
           {
