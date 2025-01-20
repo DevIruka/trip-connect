@@ -23,6 +23,18 @@ type UserPost = {
   content_html?: string;
 };
 
+type BaseResponsePost = Omit<
+  ResponsePost,
+  'user_nickname' | 'comment_count'
+> & {
+  request_posts: {
+    country_city: string;
+    category: string;
+    credit: number;
+    user_id: string;
+  }[];
+};
+
 const UserPage = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -59,21 +71,32 @@ const UserPage = () => {
         free_content, 
         request_id, 
         created_at,
-request_posts:request_posts!inner(
-      country_city, 
-      category, 
-      credit, 
-      user_id
+        request_posts!inner(
+          country_city, 
+          category, 
+          credit, 
+          user_id
     )
-      `)
+      `,
+          )
           .eq('user_id', id);
 
         const enhancedResponses = await Promise.all(
-          (responses as any[] || []).map(async (response) => {
-            const userQuery = await supabase
+          ((responses || []) as BaseResponsePost[]).map(async (response) => {
+            const requestPost = response.request_posts?.[0];
+
+            if (!requestPost) {
+              return {
+                ...response,
+                user_nickname: '',
+                comment_count: 0, 
+              };
+            }
+
+                        const userQuery = await supabase
               .from('users')
               .select('nickname')
-              .eq('id', response.request_posts.user_id)
+              .eq('id', requestPost.user_id)
               .single();
 
             const reviewsQuery = await supabase
@@ -83,6 +106,7 @@ request_posts:request_posts!inner(
 
             return {
               ...response,
+              request_posts: requestPost, 
               user_nickname: userQuery?.data?.nickname || '',
               comment_count: reviewsQuery?.count || 0,
             };
