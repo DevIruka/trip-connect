@@ -40,7 +40,7 @@ const RequestItem: React.FC<{ post: RequestPost }> = ({ post }) => {
 
   useEffect(() => {
     const fetchResponseCount = async () => {
-      const { data, error, count } = await supabase
+      const { error, count } = await supabase
         .from('response_posts')
         .select('*', { count: 'exact' })
         .eq('request_id', post.id);
