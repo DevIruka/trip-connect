@@ -13,24 +13,34 @@ export type UserPost = {
 };
 
 export type ResponsePost = {
-    id: string;
-    title: string;
-    free_content: string;
-    request_id: string;
-    created_at: string;
-    request_posts: {
-      country_city: string;
-      category: string;
-      credit: number;
-      user_id: string;
-    };
-    user_nickname: string; 
-    comment_count: number; 
+  id: string;
+  title: string;
+  free_content: string;
+  request_id: string;
+  created_at: string;
+  request_posts: {
+    country_city: string;
+    category: string;
+    credit: number;
+    user_id: string;
   };
-  
+  user_nickname: string;
+  comment_count: number;
+};
 
 export type UserPostData = {
   responses: ResponsePost[];
-  requests: UserPost[];
+  requests: RequestPost[];
   reviews: UserPost[];
+};
+
+export type RequestPost = {
+  id: string;
+  title: string;
+  content: string;
+  country_city: string;
+  category: string;
+  date_end: string;
+  credit: number; 
+  created_at: string;
 };

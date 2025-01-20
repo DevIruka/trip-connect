@@ -1,12 +1,9 @@
-import React from 'react';
-import { useRouter } from 'next/navigation';
-import { ResponsePost } from '../_types/user';
+import React, { useEffect, useState } from 'react';
+import { RequestPost } from '../_types/user';
 import { convertTopicsToKorean, EnglishCategory } from '@/utils/topics';
 import TimeAgo from './TimeAgo';
-
-type ResponseItemProps = {
-  post: ResponsePost;
-};
+import { supabase } from '@/utils/supabase/supabaseClient';
+import { useRouter } from 'next/navigation';
 
 const categoryIconMapping: Record<string, string> = {
   맛집: '🥘',
@@ -20,25 +17,44 @@ const categoryIconMapping: Record<string, string> = {
   기타: '⁉️',
 };
 
-const extractContentFromParagraph = (html: string): string => {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(html, 'text/html');
-  const paragraphs = Array.from(doc.querySelectorAll('p'));
-  return paragraphs.map((p) => p.textContent || '').join('\n');
+const calculateDday = (dateEnd: string): string => {
+  const today = new Date();
+  const endDate = new Date(dateEnd);
+  const diffTime = endDate.getTime() - today.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays > 0 ? `D-${diffDays}` : 'D-00';
 };
 
-const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
+const RequestItem: React.FC<{ post: RequestPost }> = ({ post }) => {
   const router = useRouter();
+  const { date_end, country_city, category, title, content, created_at } = post;
+  const dDay = calculateDday(date_end);
+  const country = JSON.parse(country_city)?.country || '';
 
-  const country = JSON.parse(post.request_posts.country_city)?.country || '';
   const categoryKorean = convertTopicsToKorean([
-    post.request_posts.category as EnglishCategory,
+    category as EnglishCategory,
   ])[0];
   const categoryIcon = categoryIconMapping[categoryKorean] || '❓';
-  const freeContentText = extractContentFromParagraph(post.free_content);
+
+  const [responseCount, setResponseCount] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchResponseCount = async () => {
+      const { data, error, count } = await supabase
+        .from('response_posts')
+        .select('*', { count: 'exact' })
+        .eq('request_id', post.id);
+
+      if (!error) {
+        setResponseCount(count || 0);
+      }
+    };
+
+    fetchResponseCount();
+  }, [post.id]);
 
   const handleNavigate = () => {
-    router.push(`/post/${post.request_id}`); // 이동할 경로
+    router.push(`/post/${post.id}`); // 라우팅 설정
   };
 
   return (
@@ -58,34 +74,53 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
         }}
       ></div>
 
-      <div className="flex gap-2 text-xs text-gray-500 mb-2">
+      <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
         <div
-          className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] px-1.5 py-0.5"
+          className="text-[12px] font-medium text-[#FF810B] bg-[#FFF8DC] rounded-[4px] flex items-center justify-center"
           style={{
-            paddingLeft: '4px',
-            paddingRight: '6px',
+            padding: '0 6px',
+            minHeight: '24px',
           }}
         >
-          <img
-            src="/images/ic-location.svg"
-            alt="location"
-            className="w-[10px] h-[10px]"
-          />
-          <span className="text-[12px] font-medium text-[#45484D]">
-            {country}
-          </span>
-        </div>
+          {dDay}
+        </div>{' '}
+        <div className="flex gap-2 text-xs text-gray-500">
+          <div
+            className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] px-1.5 py-0.5"
+            style={{
+              paddingLeft: '4px',
+              paddingRight: '6px',
+            }}
+          >
+            <img
+              src="/images/ic-location.svg"
+              alt="location"
+              className="w-[10px] h-[10px]"
+            />
+            <span className="text-[12px] font-medium text-[#45484D]">
+              {country}
+            </span>
+          </div>
 
-        <div className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] px-[6px] py-[5px]">
-          <span>{categoryIcon}</span>
-          <span className="text-[12px] font-medium text-[#45484D]">
-            {categoryKorean}
-          </span>
+          <div
+            className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] flex items-center justify-center"
+            style={{
+              padding: '0 6px',
+              minHeight: '24px',
+            }}
+          >
+            {' '}
+            <span>{categoryIcon}</span>
+            <span className="text-[12px] font-medium text-[#45484D]">
+              {categoryKorean}
+            </span>
+          </div>
         </div>
       </div>
+
       <h3 className="flex items-start gap-[6px] mb-[8px]">
-        <span className="text-[#FA505B] text-[16px] font-semibold leading-[1.25]">
-          A.
+        <span className="text-[#0582ff] text-[16px] font-semibold leading-[1.25]">
+          Q.
         </span>
         <span
           className="text-[#000] text-[16px] font-semibold leading-tight line-clamp-2"
@@ -96,7 +131,7 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
             WebkitLineClamp: 2, // 두 줄까지만 표시
           }}
         >
-          {post.title}
+          {title}
         </span>
       </h3>
       <p
@@ -106,9 +141,9 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
           lineHeight: '1.25',
         }}
       >
-        {freeContentText}
+        {content}
       </p>
-      
+
       <div className="flex justify-between items-center text-xs text-gray-500">
         <div className="flex items-center gap-[6px]">
           <div className="flex items-center gap-[4px]">
@@ -133,7 +168,7 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
               />
             </svg>
             <span className="text-[12px] font-medium text-[#797C80]">
-              {post.request_posts.credit?.toLocaleString()}
+              {post.credit?.toLocaleString()} 크레딧
             </span>
           </div>
           <span
@@ -147,33 +182,18 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
               margin: '0',
               padding: '0',
             }}
-          ></span>{' '}
-          <span className="text-[12px] font-semibold text-[#797C80]">
-            작성자 {post.user_nickname}
-          </span>
-          <span
-            className="mx-[6px]"
-            style={{
-              display: 'inline-block',
-              width: '2px',
-              height: '2px',
-              backgroundColor: '#797C80',
-              borderRadius: '50%',
-              margin: '0',
-              padding: '0',
-            }}
           ></span>
           <span className="text-[12px] font-semibold text-[#797C80]">
-            댓글 {post.comment_count}
+            {responseCount}명 답변
           </span>
         </div>
 
         <div className="text-[12px] font-medium text-[#808080]">
-          <TimeAgo createdAt={post.created_at} />
+          <TimeAgo createdAt={created_at} />
         </div>
       </div>
     </div>
   );
 };
 
-export default ResponseItem;
+export default RequestItem;

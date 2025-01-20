@@ -2,6 +2,7 @@ import React from 'react';
 import PostItem from './PostItem';
 import { UserPostData } from '../_types/user';
 import ResponseItem from './ResponseItem';
+import RequestItem from './RequestItem';
 
 type PostListProps = {
   activeTab: 'responses' | 'requests' | 'reviews';
@@ -13,7 +14,7 @@ const PostList: React.FC<PostListProps> = ({ activeTab, userPosts }) => (
     {activeTab === 'responses' &&
       userPosts.responses.map((post) => <ResponseItem key={post.id} post={post} />)}
     {activeTab === 'requests' &&
-      userPosts.requests.map((post) => <PostItem key={post.id} post={post} />)}
+      userPosts.requests.map((post) => <RequestItem key={post.id} post={post} />)}
     {activeTab === 'reviews' &&
       userPosts.reviews.map((review) => <PostItem key={review.id} post={review} />)}
   </div>

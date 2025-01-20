@@ -7,7 +7,7 @@ import Header from '../_components/Header';
 import ProfileSection from '../_components/ProfileSection';
 import TabNavigation from '../_components/TabNavigation';
 import PostList from '../_components/PostList';
-import { ResponsePost, UserPostData } from '../_types/user';
+import { RequestPost, ResponsePost, UserPostData } from '../_types/user';
 
 type UserData = {
   profile_img: string;
@@ -89,11 +89,11 @@ const UserPage = () => {
               return {
                 ...response,
                 user_nickname: '',
-                comment_count: 0, 
+                comment_count: 0,
               };
             }
 
-                        const userQuery = await supabase
+            const userQuery = await supabase
               .from('users')
               .select('nickname')
               .eq('id', requestPost.user_id)
@@ -106,7 +106,7 @@ const UserPage = () => {
 
             return {
               ...response,
-              request_posts: requestPost, 
+              request_posts: requestPost,
               user_nickname: userQuery?.data?.nickname || '',
               comment_count: reviewsQuery?.count || 0,
             };
@@ -115,7 +115,7 @@ const UserPage = () => {
 
         const { data: requests } = await supabase
           .from('request_posts')
-          .select('*')
+          .select('id, title, content, country_city, category, date_end, created_at, credit')
           .eq('user_id', id);
 
         const { data: reviews } = await supabase
@@ -125,7 +125,7 @@ const UserPage = () => {
 
         setUserPosts({
           responses: enhancedResponses as ResponsePost[],
-          requests: (requests || []) as UserPost[],
+          requests: (requests || []) as RequestPost[],
           reviews: (reviews || []) as UserPost[],
         });
       } catch (error) {
