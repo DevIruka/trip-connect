@@ -38,8 +38,13 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
     fetchResponseCount();
   }, [fetchResponseCount]);
 
+    const handleCardClick = () => {
+      router.push(`/post/${post.id}`); // 게시물 ID를 기반으로 상세 페이지 이동
+  };
+  
   return (
     <div
+      onClick={handleCardClick}
       className="flex flex-col items-start gap-3 border-b bg-white w-full"
       style={{
         padding: '12px 20px 24px 20px',

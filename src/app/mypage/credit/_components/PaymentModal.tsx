@@ -41,7 +41,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       ></div>
 
       <div className="absolute bottom-0 left-0 w-full bg-white rounded-t-[20px] pt-[18px] px-[20px] z-50">
-        <div className="flex relative items-center justify-center mb-[16px]">
+        <div className="flex relative items-center justify-center mb-[28px]">
           <Image
             src={xbutton}
             width={24}
@@ -54,7 +54,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
           <h2 className="text-[18px] font-[600]">결제하기</h2>
         </div>
 
-        <div className="space-y-[16px]">
+        <div className="space-y-[24px]">
           <div className="flex items-center">
             <input
               type="radio"
@@ -115,7 +115,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             </span>
           </div>
         </div>
-        <BlueButton className="my-[12px]" onClick={handleConfirm}>
+        <BlueButton className="mt-[28px] mb-[16px]" onClick={handleConfirm}>
           {amount.toLocaleString()}원 결제하기
         </BlueButton>
       </div>

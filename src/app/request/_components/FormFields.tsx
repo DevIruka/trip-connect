@@ -31,7 +31,6 @@ type Props = {
 const FormFields: React.FC<Props> = ({
   register,
   watch,
-  control,
   errors,
   setValue,
   disabledFields,

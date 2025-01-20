@@ -10,17 +10,19 @@ import { useRouter } from 'next/navigation';
 const lefticon = '/images/ic-left.svg';
 const marker = '/images/ic-location.svg';
 const coin = '/images/goldcoin.svg';
+const badge = '/images/verified badge.svg';
 
 const MyPage = () => {
-  const route = useRouter();
+  const router = useRouter();
   const user = useUserStore((state) => state.user);
-  const signOut = useUserStore((state) => state.signOut); // signOut 함수 가져오기
+  const signOut = useUserStore((state) => state.signOut);
   const [userProfile, setUserProfile] = useState({
     nickname: '',
     introduction: '',
     profileImg: '',
     credit: '',
     country: '',
+    authenticated: false, // 인증 상태 추가
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nicknameInput, setNicknameInput] = useState('');
@@ -35,7 +37,9 @@ const MyPage = () => {
       try {
         const { data: profileData, error: profileError } = await supabase
           .from('users')
-          .select('nickname, introduction, profile_img, credit, country')
+          .select(
+            'nickname, introduction, profile_img, credit, country, authenticated',
+          )
           .eq('id', user.id)
           .single();
 
@@ -51,6 +55,7 @@ const MyPage = () => {
           profileImg: profileData?.profile_img || '',
           credit: profileData?.credit || '0',
           country: profileData?.country || '국가 정보 없음',
+          authenticated: profileData?.authenticated || false, // 인증 상태 반영
         });
 
         setNicknameInput(profileData?.nickname || '');
@@ -86,7 +91,7 @@ const MyPage = () => {
           .from('profile-images')
           .upload(filePath, selectedImage, {
             cacheControl: '3600',
-            upsert: true, // 동일 이름의 파일 덮어쓰기 허용
+            upsert: true,
           });
 
         if (uploadError) {
@@ -94,7 +99,6 @@ const MyPage = () => {
           return;
         }
 
-        // 업로드된 파일의 Public URL 가져오기
         const publicUrl = supabase.storage
           .from('profile-images')
           .getPublicUrl(filePath).data.publicUrl;
@@ -102,7 +106,6 @@ const MyPage = () => {
         profileImageUrl = publicUrl;
       }
 
-      // 사용자 프로필 정보 업데이트
       const { error: updateError } = await supabase
         .from('users')
         .update({
@@ -145,7 +148,7 @@ const MyPage = () => {
             alt="back"
             className="cursor-pointer"
             onClick={() => {
-              route.back();
+              router.push('/');
             }}
           />
           <h1 className="text-black text-[20px] font-semibold leading-none">
@@ -187,31 +190,41 @@ const MyPage = () => {
               </div>
 
               {/* 닉네임, 국가 정보 */}
-              <div className="relative">
-                <div className="flex flex-col ml-[8px]">
-                  <h2 className="text-[16px] min-w-[80px] font-[600] mb-[2px] flex items-center">
-                    {userProfile.nickname}
-                  </h2>
-                  <div className="absolute top-full left-[8px]">
-                    {userProfile.country ? (
-                      <div className="flex items-center justify-center h-[20.03px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] pl-[4px] pr-[5px]">
-                        <Image
-                          src={marker}
-                          width={10}
-                          height={10}
-                          alt="marker"
-                        />
-                        <p className="text-[12px] font-[500] tracking-[-0.24px]">
-                          {userProfile.country}
-                        </p>
-                      </div>
-                    ) : (
-                      <p className="text-[#45484D] text-[12px]">
-                        국가 인증 전이에요!
-                      </p>
-                    )}
+              <div className="flex flex-col ml-[8px] relative">
+                <h2
+                  className="text-[16px] font-semibold mb-[2px] flex items-center"
+                  style={{
+                    minWidth: '120px',
+                    maxWidth: '200px', 
+                    whiteSpace: 'nowrap', 
+                    overflow: 'hidden', 
+                    textOverflow: 'ellipsis', 
+                  }}
+                >
+                  {userProfile.nickname}
+                  {/* 인증 뱃지 */}
+                  {userProfile.authenticated && (
+                    <Image
+                      src={badge}
+                      width={16}
+                      height={16}
+                      alt="badge"
+                      className="ml-[4px]"
+                    />
+                  )}
+                </h2>
+                {userProfile.country ? (
+                  <div className="absolute top-[24px] left-0 flex items-center justify-center h-[20px] min-w-[80px] bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] px-[4px]">
+                    <Image src={marker} width={10} height={10} alt="marker" />
+                    <p className="text-[12px] font-medium tracking-[-0.24px] ml-[4px]">
+                      {userProfile.country}
+                    </p>
                   </div>
-                </div>
+                ) : (
+                  <p className="absolute top-[24px] left-0 text-[#45484D] text-[12px]">
+                    국가 인증 전이에요!
+                  </p>
+                )}
               </div>
             </div>
             {/* 프로필 편집 버튼 */}
@@ -225,21 +238,24 @@ const MyPage = () => {
         </div>
         {/* 자기소개 */}
         <div className="pb-[16px] border-b border-[#F4F4F4]">
-          <div className="text-black font-[500]">
+          <div className="text-black text-[14px] font-[500]">
             {userProfile.introduction}
           </div>
         </div>
         {/* 크레딧 섹션 */}
-        <Link href="/mypage/credit">
-          <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center mt-[20px] mb-[28px]">
-            <div className="flex flex-row justify-center items-center">
-              <Image src={coin} width={24} height={24} alt="coin" />
-              <p className="text-[18px] pt-[1px] ml-[8px] font-[600]">
-                {new Intl.NumberFormat().format(Number(userProfile.credit))} C
-              </p>
-            </div>
+
+        <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center mt-[20px] mb-[28px]">
+          <div className="flex flex-row justify-between items-center">
+            <Image src={coin} width={24} height={24} alt="coin" />
+            <p className="w-[205px] text-[18px] pt-[1px] ml-[8px] font-[600]">
+              {new Intl.NumberFormat().format(Number(userProfile.credit))} C
+            </p>
+            <Link href="/mypage/credit" className="ml-[16px]">
+              <p className="text-[#0582ff] text-sm font-medium ">충전하기</p>
+            </Link>
           </div>
-        </Link>
+        </div>
+
         {/* 셀러 인증 */}
         <div className="mb-[24px]">
           <h2 className="text-lg font-[700] mb-[12px]">셀러 인증</h2>
@@ -332,7 +348,7 @@ const MyPage = () => {
         {isModalOpen && (
           <div
             style={{
-              position: 'fixed', // 화면에 고정
+              position: 'fixed',
               top: '0',
               left: '0',
               width: '100vw',
@@ -340,7 +356,7 @@ const MyPage = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              background: 'rgba(0, 0, 0, 0.5)', // 반투명 배경
+              background: 'rgba(0, 0, 0, 0.5)',
               zIndex: '50',
             }}
           >
@@ -361,11 +377,11 @@ const MyPage = () => {
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center',
-                  gap: '90px', // 텍스트와 버튼 사이 간격
+                  gap: '90px',
                   padding: '8px 0px',
-                  position: 'relative', // 버튼을 배치하기 위한 기준
-                  width: '100%', // 부모 디브의 너비를 기준으로 가운데 정렬
-                  height: '50px', // 원하는 높이 설정
+                  position: 'relative',
+                  width: '100%',
+                  height: '50px',
                 }}
               >
                 {/* 프로필 편집 텍스트 */}
@@ -375,13 +391,13 @@ const MyPage = () => {
                     left: '50%',
                     transform: 'translateX(-50%)',
                     margin: '0',
-                    color: 'var(--Grayscale-Black, #000)', // 텍스트 색상
-                    fontFamily: 'Pretendard', // 폰트
-                    fontSize: '16px', // 글자 크기
-                    fontStyle: 'normal', // 글자 스타일
-                    fontWeight: '600', // 글자 굵기
-                    lineHeight: '140%', // 줄 높이
-                    letterSpacing: '-0.32px', // 글자 간격
+                    color: 'var(--Grayscale-Black, #000)',
+                    fontFamily: 'Pretendard',
+                    fontSize: '16px',
+                    fontStyle: 'normal',
+                    fontWeight: '600',
+                    lineHeight: '140%',
+                    letterSpacing: '-0.32px',
                   }}
                 >
                   프로필 편집
@@ -392,9 +408,9 @@ const MyPage = () => {
                   onClick={() => setIsModalOpen(false)}
                   style={{
                     position: 'absolute',
-                    right: '0', // 부모 디브 오른쪽에 위치
+                    right: '0',
                     top: '50%',
-                    transform: 'translateY(-50%)', // 수직 중앙 정렬
+                    transform: 'translateY(-50%)',
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
@@ -413,24 +429,24 @@ const MyPage = () => {
                 {/* 프로필 이미지 */}
                 <div
                   style={{
-                    width: '295px', // 부모 직사각형의 가로 크기
-                    height: '100px', // 부모 직사각형의 세로 크기
+                    width: '295px',
+                    height: '100px',
                     display: 'flex',
-                    justifyContent: 'center', // 수평 중앙 정렬
-                    alignItems: 'center', // 수직 중앙 정렬
-                    marginBottom: '16px', // 프로필 이미지와 닉네임 입력 필드 사이 간격
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginBottom: '16px',
                   }}
                 >
                   <div
                     style={{
                       width: '103px',
                       height: '100px',
-                      display: 'flex', // 내부 콘텐츠 정렬을 위한 플렉스 레이아웃
-                      justifyContent: 'center', // 수평 중앙 정렬
-                      alignItems: 'center', // 수직 중앙 정렬
-                      position: 'relative', // 둥근 모양 프로필의 절대 위치를 기준으로 설정
-                      overflow: 'hidden', // 부모 박스를 넘어가는 이미지 숨김
-                      borderRadius: '50%', // 둥근 모양 설정
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      position: 'relative',
+                      overflow: 'hidden',
+                      borderRadius: '50%',
                     }}
                   >
                     <label
@@ -486,8 +502,8 @@ const MyPage = () => {
     overflow-hidden whitespace-nowrap mb-[12px]
   "
                   style={{
-                    height: '48px', // px 단위로 지정
-                    padding: '14px 16px', // px 단위로 지정
+                    height: '48px',
+                    padding: '14px 16px',
                   }}
                 />
 
@@ -511,17 +527,17 @@ const MyPage = () => {
     overflow-hidden whitespace-nowrap
   "
                   style={{
-                    height: '140px', // px 단위로 지정
-                    padding: '14px 16px', // px 단위로 지정
+                    height: '140px',
+                    padding: '14px 16px',
                   }}
                 ></textarea>
 
                 <div
                   className="flex items-center"
                   style={{
-                    width: '295px', // 부모 컨테이너 너비
-                    padding: '8px 0px', // 상하 여백
-                    gap: '8px', // 버튼 간 간격
+                    width: '295px',
+                    padding: '8px 0px',
+                    gap: '8px',
                   }}
                 >
                   {/* 취소하기 버튼 */}
@@ -532,11 +548,11 @@ const MyPage = () => {
       bg-[#DFE1E5] rounded-[12px]
     "
                     style={{
-                      width: '72px', // 취소하기 버튼 너비
-                      height: '48px', // 버튼 높이
-                      padding: '6px 12px', // 내부 여백
+                      width: '72px',
+                      height: '48px',
+                      padding: '6px 12px',
                     }}
-                    onClick={() => setIsModalOpen(false)} // 모달 창 닫기
+                    onClick={() => setIsModalOpen(false)}
                   >
                     취소
                   </button>
@@ -549,9 +565,9 @@ const MyPage = () => {
       bg-[#0582FF] rounded-[12px]
     "
                     style={{
-                      width: '215px', // 저장하기 버튼 너비
-                      height: '48px', // 버튼 높이
-                      padding: '6px 12px', // 내부 여백
+                      width: '215px',
+                      height: '48px',
+                      padding: '6px 12px',
                     }}
                     onClick={handleSaveProfile}
                   >
