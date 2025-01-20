@@ -12,16 +12,13 @@ export async function login(data: LoginInputs) {
   // type-casting here for convenience
   // in practice, you should validate your inputs
 
-  const { error } = await supabase.auth.signInWithPassword(
-    data,
-  );
+  const { error } = await supabase.auth.signInWithPassword(data);
 
   if (error) {
-    console.log(error);
-    redirect('/error');
+    return { success: false, message: error.message };
   }
-  revalidatePath('/', 'layout');
-  redirect('/')
+
+  return { success: true };
 }
 
 export async function signup(data: Signup) {
@@ -51,6 +48,3 @@ export const logout = async (): Promise<void> => {
   await supabase.auth.signOut();
   redirect('/login');
 };
-
-
-

@@ -12,23 +12,52 @@ export async function GET(request: Request) {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     console.log('error', error);
+
     if (!error) {
       const forwardedHost = request.headers.get('x-forwarded-host'); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === 'development';
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
       if (isLocalEnv) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        console.log('isLocalEnv', isLocalEnv);
-        return NextResponse.redirect(`${origin}${next}`);
+        if (user) {
+          const { data: profile } = await supabase
+            .from('users') // 유저 정보를 저장하는 테이블 (예: profiles)
+            .select('nickname')
+            .eq('id', user.id) // user.id를 기준으로 검색
+            .single();
+
+          if (profile?.nickname === 'guest') {
+            // 닉네임이 없으면 설정 페이지로 이동
+            return NextResponse.redirect(`${origin}/auth`);
+          }
+          return NextResponse.redirect(`${origin}${next}`);
+        }
       } else if (forwardedHost) {
-        console.log('forwardedHost', forwardedHost);
-        return NextResponse.redirect(`https://${forwardedHost}${next}`);
+        if (user) {
+          const { data: profile } = await supabase
+            .from('users') // 유저 정보를 저장하는 테이블 (예: profiles)
+            .select('nickname')
+            .eq('id', user.id) // user.id를 기준으로 검색
+            .single();
+
+          if (!profile?.nickname) {
+            // 닉네임이 없으면 설정 페이지로 이동
+            return NextResponse.redirect(
+              `https://${forwardedHost}${next}/auth`,
+            );
+          }
+          return NextResponse.redirect(`https://${forwardedHost}${next}/auth`);
+        }
       } else {
         console.log('elseisLocalEnv', isLocalEnv);
-        return NextResponse.redirect(`${origin}${next}`);
+        return NextResponse.redirect(`${origin}${next}/auth`);
       }
     }
   }
-
   // return the user to an error page with instructions
   return NextResponse.redirect(`${origin}/auth/auth-code-error`);
 }
