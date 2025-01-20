@@ -191,23 +191,38 @@ const MyPage = () => {
               </div>
 
               {/* 닉네임, 국가 정보 */}
-              <div className="flex flex-col ml-[8px]">
-                <h2 className="text-[16px] font-[600] mb-[2px] flex items-center">
+              <div className="flex flex-col ml-[8px] relative">
+                <h2
+                  className="text-[16px] font-semibold mb-[2px] flex items-center"
+                  style={{
+                    minWidth: '120px',
+                    maxWidth: '200px', 
+                    whiteSpace: 'nowrap', 
+                    overflow: 'hidden', 
+                    textOverflow: 'ellipsis', 
+                  }}
+                >
                   {userProfile.nickname}
                   {/* 인증 뱃지 */}
                   {userProfile.authenticated && (
-                    <Image src={badge} width={16} height={16} alt="badge" />
+                    <Image
+                      src={badge}
+                      width={16}
+                      height={16}
+                      alt="badge"
+                      className="ml-[4px]"
+                    />
                   )}
                 </h2>
                 {userProfile.country ? (
-                  <div className="flex items-center justify-center h-[20.03px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] pl-[4px] pr-[5px]">
+                  <div className="absolute top-[24px] left-0 flex items-center justify-center h-[20px] min-w-[80px] bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] px-[4px]">
                     <Image src={marker} width={10} height={10} alt="marker" />
-                    <p className="text-[12px] font-[500] tracking-[-0.24px]">
+                    <p className="text-[12px] font-medium tracking-[-0.24px] ml-[4px]">
                       {userProfile.country}
                     </p>
                   </div>
                 ) : (
-                  <p className="text-[#45484D] text-[12px]">
+                  <p className="absolute top-[24px] left-0 text-[#45484D] text-[12px]">
                     국가 인증 전이에요!
                   </p>
                 )}
