@@ -4,7 +4,7 @@ import CategoryPage from './_components/categoryPage';
 const Homepage = () => {
   return (
     <>
-      <Suspense>
+      <Suspense fallback={<div>loading...</div>}>
         <CategoryPage />
       </Suspense>
     </>
