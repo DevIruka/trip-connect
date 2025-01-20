@@ -12,7 +12,6 @@ const marker = '/images/ic-location.svg';
 const coin = '/images/goldcoin.svg';
 const badge = '/images/verified badge.svg';
 
-
 const MyPage = () => {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
@@ -239,21 +238,24 @@ const MyPage = () => {
         </div>
         {/* 자기소개 */}
         <div className="pb-[16px] border-b border-[#F4F4F4]">
-          <div className="text-black font-[500]">
+          <div className="text-black text-[14px] font-[500]">
             {userProfile.introduction}
           </div>
         </div>
         {/* 크레딧 섹션 */}
-        <Link href="/mypage/credit">
-          <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center mt-[20px] mb-[28px]">
-            <div className="flex flex-row justify-center items-center">
-              <Image src={coin} width={24} height={24} alt="coin" />
-              <p className="text-[18px] pt-[1px] ml-[8px] font-[600]">
-                {new Intl.NumberFormat().format(Number(userProfile.credit))} C
-              </p>
-            </div>
+
+        <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center mt-[20px] mb-[28px]">
+          <div className="flex flex-row justify-between items-center">
+            <Image src={coin} width={24} height={24} alt="coin" />
+            <p className="w-[205px] text-[18px] pt-[1px] ml-[8px] font-[600]">
+              {new Intl.NumberFormat().format(Number(userProfile.credit))} C
+            </p>
+            <Link href="/mypage/credit" className="ml-[16px]">
+              <p className="text-[#0582ff] text-sm font-medium ">충전하기</p>
+            </Link>
           </div>
-        </Link>
+        </div>
+
         {/* 셀러 인증 */}
         <div className="mb-[24px]">
           <h2 className="text-lg font-[700] mb-[12px]">셀러 인증</h2>
