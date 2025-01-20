@@ -189,7 +189,7 @@ const MyPage = () => {
               {/* 닉네임, 국가 정보 */}
               <div className="relative">
                 <div className="flex flex-col ml-[8px]">
-                  <h2 className="text-[16px] font-[600] mb-[2px] flex items-center">
+                  <h2 className="text-[16px] min-w-[80px] font-[600] mb-[2px] flex items-center">
                     {userProfile.nickname}
                   </h2>
                   <div className="absolute top-full left-[8px]">
