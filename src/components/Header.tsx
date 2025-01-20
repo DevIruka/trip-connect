@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import heylocal from '@/data/images/HeyLocal.svg';
 import search from '@/data/images/ic-Search.svg';
 import profile from '@/data/images/ic-Profile.svg';
+import { useUserStore } from '@/store/userStore';
 
 const Header = () => {
   const pathname = usePathname();
@@ -25,6 +26,7 @@ const Header = () => {
   const shouldHideHeader = excludedPaths.some((path) =>
     pathname.startsWith(path),
   );
+  const { user } = useUserStore();
   return shouldHideHeader ? (
     <></>
   ) : (
@@ -49,15 +51,17 @@ const Header = () => {
               style={{ width: 24, height: 24 }}
             />
           </Link>
-          <Link href="/mypage" className="flex place-content-center">
-            <Image
-              src={profile}
-              alt="profile"
-              width={24}
-              height={24}
-              style={{ width: 24, height: 24 }}
-            />
-          </Link>
+          {user ? (
+            <Link href="/mypage" className="flex place-content-center">
+              <Image
+                src={profile}
+                alt="profile"
+                width={24}
+                height={24}
+                style={{ width: 24, height: 24 }}
+              />
+            </Link>
+          ) : null}
         </div>
       </div>
     </>
