@@ -188,7 +188,7 @@ const PurchasedPage = () => {
                         }}
                       />
                       {/* 댓글 수 (임의 값) */}
-                      <span>댓글 10</span>
+                      <span>댓글 1</span>
                     </div>
                     {/* 작성 시간 */}
                     <TimeAgo createdAt={post.created_at} />
@@ -198,7 +198,7 @@ const PurchasedPage = () => {
             })}
           </ul>
         ) : (
-          <p className="text-gray-500">구매한 답변이 없습니다.</p>
+          <p className="text-center text-gray-500">구매한 글이 없습니다.</p>
         )}
       </div>
     </div>
