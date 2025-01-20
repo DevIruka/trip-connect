@@ -21,6 +21,7 @@ import { nation } from '../_types/homeTypes';
 import QnaHeader from './qnaHeader';
 import Navbar from './navBar';
 import PostDday from './dDay';
+import LoginModal from '@/components/loginModal';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -93,6 +94,9 @@ const CategoryPage = () => {
   useEffect(() => {
     setKeyword('');
   }, [setKeyword]);
+
+  //로그인해주세요 모달
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
 
   return (
     <>
@@ -173,7 +177,7 @@ const CategoryPage = () => {
                           if (userId) {
                             addBookmarkMutation.mutate(post.id);
                           } else {
-                            alert('로그인해주세요');
+                            setIsModalOpen(true);
                           }
                         }}
                       >
@@ -250,6 +254,12 @@ const CategoryPage = () => {
           <Image width={36} height={36} src={pencil} alt="pencil" />
         </button>
       </div>
+      <LoginModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+      />
     </>
   );
 };
