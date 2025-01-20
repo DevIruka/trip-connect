@@ -4,8 +4,9 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
-import BackButton from '@/app/post/_components/BackBtn';
 import SellerAuthCard from './_components/sellerAuthCard';
+import Image from 'next/image';
+const lefticon = '/images/ic-left.svg';
 
 const SellerPage = () => {
   const { user } = useUserStore();
@@ -44,10 +45,23 @@ const SellerPage = () => {
 
   return (
     <div className="h-full w-full px-5">
-      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
-        <BackButton />
+      {/* 헤더 섹션 */}
+      <div
+        className="flex flex-row justify-between items-center"
+        style={{
+          height: '56px',
+          padding: '10px',
+        }}
+      >
+        <button
+          onClick={() => router.push('/mypage')}
+          className="flex items-center justify-center"
+        >
+          <Image src={lefticon} width={24} height={24} alt="back" />
+        </button>
       </div>
-      <h1 className="py-2 text-[#44484c] text-xl font-bold leading-loose">
+
+      <h1 className="w-full py-[20px]  text-left text-black font-semibold text-[18px] leading-normal tracking-[-0.36px]">
         셀러 인증하기
       </h1>
 
