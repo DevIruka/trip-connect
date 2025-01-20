@@ -83,11 +83,9 @@ const ReviewPage = () => {
     // user_id를 key로, country를 value로 하는 객체 생성
     const userCountryMap: Record<string, string> = {};
 
-    countryData
-      ? countryData.forEach((user) => {
-          userCountryMap[user.id] = user.country;
-        })
-      : null;
+    countryData?.forEach((user) => {
+      userCountryMap[user.id] = user.country;
+    });
 
     // 3️⃣ user_id를 기준으로 purchaseData 매칭
     const purchaseMap = purchaseData.reduce((acc, cur) => {
@@ -234,7 +232,7 @@ const ReviewPage = () => {
                         <p className="text-sm mt-[12px]">{r.review}</p>
                       </div>
                       {/* 내 리뷰에만 표시되는 '...' 버튼 */}
-                      {!(r.user_id === user?.id) && (
+                      {(r.user_id === user?.id) && (
                         <div className="absolute top-0 right-0">
                           <button className="text-gray-500 hover:text-gray-700">
                             <Image
