@@ -15,6 +15,9 @@ const pretendard = localFont({
 export const metadata: Metadata = {
   title: 'Hey!Local',
   description: 'Hey!Local',
+  icons: {
+    icon: '/heylocalfavicon.svg',
+  },
 };
 
 export default function RootLayout({
