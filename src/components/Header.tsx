@@ -20,6 +20,7 @@ const Header = () => {
     '/request',
     '/review',
     '/mypage/seller-auth',
+    '/auth',
   ];
   const shouldHideHeader = excludedPaths.some((path) =>
     pathname.startsWith(path),

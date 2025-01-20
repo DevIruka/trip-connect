@@ -9,6 +9,8 @@ import BlueButton from '@/components/BlueBtn';
 import { login } from '../action';
 import { googleLogin, kakaoLogin } from '../_auth/oauth';
 import ErrorMessage from './ErrorMessage';
+import { useState } from 'react';
+import WarningModal from './Warning';
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
@@ -21,8 +23,15 @@ const Login = () => {
     formState: { errors },
   } = useForm<LoginInputs>({ mode: 'onChange' });
 
+  const [errorMessage, setErrorMessage] = useState<string | undefined | null>(
+    null,
+  );
+
   const onSubmit = async (data: LoginInputs) => {
-    await login(data);
+    const response = await login(data);
+    if (!response.success) {
+      setErrorMessage(response.message); // 에러 메시지 상태 업데이트
+    }
   };
 
   return (
@@ -122,6 +131,12 @@ const Login = () => {
             </Link>
           </div>
         </div>
+        {/* 에러 발생 시 모달 표시 */}
+        {errorMessage && (
+          <WarningModal
+            onClose={() => setErrorMessage(null)}
+          />
+        )}
       </div>
     </>
   );
