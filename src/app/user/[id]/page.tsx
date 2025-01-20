@@ -7,6 +7,7 @@ import Header from '../_components/Header';
 import ProfileSection from '../_components/ProfileSection';
 import TabNavigation from '../_components/TabNavigation';
 import PostList from '../_components/PostList';
+import { ResponsePost, UserPostData } from '../_types/user';
 
 type UserData = {
   profile_img: string;
@@ -25,11 +26,11 @@ type UserPost = {
 const UserPage = () => {
   const { id } = useParams();
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [userPosts, setUserPosts] = useState<{
-    responses: UserPost[];
-    requests: UserPost[];
-    reviews: UserPost[];
-  }>({ responses: [], requests: [], reviews: [] });
+  const [userPosts, setUserPosts] = useState<UserPostData>({
+    responses: [],
+    requests: [],
+    reviews: [],
+  });
 
   const [activeTab, setActiveTab] = useState<
     'responses' | 'requests' | 'reviews'
@@ -51,8 +52,42 @@ const UserPage = () => {
         // 유저 게시물 불러오기
         const { data: responses } = await supabase
           .from('response_posts')
-          .select('*')
+          .select(
+            `
+        id, 
+        title, 
+        free_content, 
+        request_id, 
+        created_at,
+request_posts:request_posts!inner(
+      country_city, 
+      category, 
+      credit, 
+      user_id
+    )
+      `)
           .eq('user_id', id);
+
+        const enhancedResponses = await Promise.all(
+          (responses as any[] || []).map(async (response) => {
+            const userQuery = await supabase
+              .from('users')
+              .select('nickname')
+              .eq('id', response.request_posts.user_id)
+              .single();
+
+            const reviewsQuery = await supabase
+              .from('reviews')
+              .select('*', { count: 'exact' })
+              .eq('response_id', response.id);
+
+            return {
+              ...response,
+              user_nickname: userQuery?.data?.nickname || '',
+              comment_count: reviewsQuery?.count || 0,
+            };
+          }),
+        );
 
         const { data: requests } = await supabase
           .from('request_posts')
@@ -65,9 +100,9 @@ const UserPage = () => {
           .eq('user_id', id);
 
         setUserPosts({
-          responses: responses || [],
-          requests: requests || [],
-          reviews: reviews || [],
+          responses: enhancedResponses as ResponsePost[],
+          requests: (requests || []) as UserPost[],
+          reviews: (reviews || []) as UserPost[],
         });
       } catch (error) {
         console.error('데이터 불러오기 오류:', error);
@@ -96,6 +131,5 @@ const UserPage = () => {
     </div>
   );
 };
-
 
 export default UserPage;

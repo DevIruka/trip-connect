@@ -1,20 +1,36 @@
 export type UserData = {
-    profile_img: string;
-    nickname: string;
-    country_verified: string;
-    introduction: string;
-  };
-  
-  export type UserPost = {
+  profile_img: string;
+  nickname: string;
+  country_verified: string;
+  introduction: string;
+};
+
+export type UserPost = {
+  id: string;
+  title: string;
+  content: string;
+  content_html?: string;
+};
+
+export type ResponsePost = {
     id: string;
     title: string;
-    content: string;
-    content_html?: string;
+    free_content: string;
+    request_id: string;
+    created_at: string;
+    request_posts: {
+      country_city: string;
+      category: string;
+      credit: number;
+      user_id: string;
+    };
+    user_nickname: string; 
+    comment_count: number; 
   };
   
-  export type UserPostData = {
-    responses: UserPost[];
-    requests: UserPost[];
-    reviews: UserPost[];
-  };
-  
+
+export type UserPostData = {
+  responses: ResponsePost[];
+  requests: UserPost[];
+  reviews: UserPost[];
+};
