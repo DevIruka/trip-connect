@@ -5,14 +5,12 @@ type Props = {
 };
 
 const TimeAgo = ({ createdAt }: Props) => {
-  if (!createdAt) {
-    return;
-  }
+
   const [timeAgo, setTimeAgo] = useState('');
 
   useEffect(() => {
     const calculateTimeAgo = () => {
-      const createdDate = new Date(createdAt);
+      const createdDate = new Date(createdAt!);
       const now = new Date();
 
       const diffMs = now.getTime() - createdDate.getTime(); // 밀리초 차이 계산
@@ -33,6 +31,10 @@ const TimeAgo = ({ createdAt }: Props) => {
 
     setTimeAgo(calculateTimeAgo());
   }, [createdAt]);
+
+  if (!createdAt) {
+    return;
+  }
 
   return <p className="text-xs text-[#797C80]">{timeAgo} 구매</p>;
 };
