@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { supabase } from '@/utils/supabase/supabaseClient'; 
+import { supabase } from '@/utils/supabase/supabaseClient'; // Supabase 임포트
 import TimeAgo from './TimeAgo'; 
-
+import { useRouter } from 'next/navigation';
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
 
@@ -27,14 +27,15 @@ type ResponsePostCardProps = {
 };
 
 const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
+    const router = useRouter(); 
   const [nickname, setNickname] = useState<string | null>(null);
   const [commentCount, setCommentCount] = useState<number | null>(null);
-
+  const [showActions, setShowActions] = useState<boolean>(false);
 
   const fetchUserNickname = async (userId: string) => {
     try {
       const { data, error } = await supabase
-        .from('users') 
+        .from('users')
         .select('nickname')
         .eq('id', userId)
         .single();
@@ -51,13 +52,14 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
     }
   };
 
-  // 댓글 수를 가져오는 함수(완성된 게 아니라 추후 수정예정..)
+  // 댓글 수와 관련된 로직 주석 처리
+  /*
   const fetchCommentCount = async (postId: string) => {
     try {
       const { count, error } = await supabase
-        .from('comments') 
+        .from('comments')
         .select('*', { count: 'exact' })
-        .eq('post_id', postId); 
+        .eq('post_id', postId);
 
       if (error) {
         console.error('댓글 수 가져오기 오류:', error);
@@ -70,14 +72,17 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
       setCommentCount(0);
     }
   };
+  */
+
 
   useEffect(() => {
     if (post.user_id) {
       fetchUserNickname(post.user_id);
     }
-    if (post.id) {
-      fetchCommentCount(post.id);
-    }
+    // 댓글 수와 관련된 부분 주석 처리 
+    // if (post.id) {
+    //   fetchCommentCount(post.id);
+    // }
   }, [post.user_id, post.id]);
 
   return (
@@ -90,23 +95,122 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
       }}
     >
       {/* 상단 - 위치와 카테고리 */}
-      <div className="flex items-center gap-[8px]">
-        {/* 위치 */}
-        <div className="flex items-center gap-[4px] bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] py-[4px] text-[12px]">
-          <Image src={markerIcon} alt="location" width={12} height={12} />
-          {post.country_city && (
-            <span>{JSON.parse(post.country_city)?.country || ''}</span>
+      <div className="flex items-center justify-between w-full gap-[8px]">
+        {/* 왼쪽 - 위치와 카테고리 */}
+        <div className="flex items-center gap-[8px]">
+          {/* 위치 */}
+          <div className="flex items-center gap-[4px] bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] py-[4px] text-[12px]">
+            <Image src={markerIcon} alt="location" width={12} height={12} />
+            {post.country_city && (
+              <span>{JSON.parse(post.country_city)?.country || ''}</span>
+            )}
+          </div>
+          {/* 카테고리 */}
+          {post.category.slice(0, 2).map((cat, i) => (
+            <div
+              key={i}
+              className="bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] py-[4px] text-[12px]"
+            >
+              {cat}
+            </div>
+          ))}
+        </div>
+
+        {/* 오른쪽 - More 버튼 */}
+        <div className="relative">
+          <button
+            onClick={() => setShowActions((prev) => !prev)}
+            className="p-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="14"
+              height="14"
+              fill="none"
+            >
+              <circle cx="12" cy="5" r="2" fill="#797C80" />
+              <circle cx="12" cy="12" r="2" fill="#797C80" />
+              <circle cx="12" cy="19" r="2" fill="#797C80" />
+            </svg>
+          </button>
+          {showActions && (
+            <div
+              className="absolute top-full right-0"
+              style={{
+                display: 'flex',
+                width: '129px',
+                padding: '8px',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '10px',
+                borderRadius: '8px',
+                border: '1px solid var(--Grayscale-Gray-8-line, #F4F4F4)',
+                background: '#FFF',
+                boxShadow: '0px 4px 12px 0px rgba(0, 0, 0, 0.05)',
+              }}
+            >
+              {/* 수정하기 버튼 */}
+              <button
+                className="w-full text-left"
+                style={{
+                  display: 'flex',
+                  padding: '6px 10px',
+                  alignItems: 'center',
+                  gap: '10px',
+                  alignSelf: 'stretch',
+                  borderRadius: '8px',
+                  color: 'var(--Grayscale-Gray-1, #45484D)',
+                  textAlign: 'center',
+                  fontFamily: 'Pretendard',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: 'normal',
+                  letterSpacing: '-0.28px',
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  console.log(`Edit post: ${post.id}`);
+                  if (!post.id) {
+                    alert('올바르지 않은 게시글 ID입니다.');
+                    return;
+                  }
+                  if (post.type === 'answer') {
+                    router.push(`/response-edit/${post.id}`);
+                  } else if (post.type === 'question') {
+                    router.push(`/request-edit/${post.id}`);
+                  }
+                }}
+              >
+                수정하기
+              </button>
+              {/* 삭제하기 버튼 */}
+              <button
+                className="w-full text-left"
+                style={{
+                  display: 'flex',
+                  padding: '6px 10px',
+                  alignItems: 'center',
+                  gap: '10px',
+                  alignSelf: 'stretch',
+                  borderRadius: '8px',
+                  color: 'var(--Grayscale-Gray-1, #45484D)',
+                  textAlign: 'center',
+                  fontFamily: 'Pretendard',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: 'normal',
+                  letterSpacing: '-0.28px',
+                }}
+                onClick={() => console.log(`Delete post: ${post.id}`)}
+              >
+                삭제하기
+              </button>
+            </div>
           )}
         </div>
-        {/* 카테고리 */}
-        {post.category.slice(0, 2).map((cat, i) => (
-          <div
-            key={i}
-            className="bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] py-[4px] text-[12px]"
-          >
-            {cat}
-          </div>
-        ))}
       </div>
 
       {/* 제목 및 내용 */}
