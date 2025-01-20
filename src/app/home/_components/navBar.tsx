@@ -104,7 +104,7 @@ const Navbar = ({
 
         <button
           className={`menu-dropdown-btn max-w-[122px] font-semibold text-sm ${
-            selectedCountry ? 'text-[#0079f2]' : 'text-[#797c80]'
+            isHydrated && selectedCountry ? 'text-[#0079f2]' : 'text-[#797c80]'
           }`}
           onClick={() => setIsModalOpen(true)} // 모달 열기
         >
@@ -130,6 +130,7 @@ const Navbar = ({
           setSelectedCountry(country); // 선택된 나라 업데이트
           setNationFilter(country);
         }}
+        selectedCountry={selectedCountry}
       />
     </div>
   );

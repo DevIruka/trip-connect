@@ -12,6 +12,7 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   setCountry: (country: nation | null) => void;
+  selectedCountry?: nation | null;
 };
 
 type nationProps = {
@@ -21,7 +22,12 @@ type nationProps = {
 };
 
 // 모달 컴포넌트
-export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
+export const LocationModal = ({
+  isOpen,
+  onClose,
+  setCountry,
+  selectedCountry,
+}: Props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredResults, setFilteredResults] = useState<nationProps[] | []>(
     [],
@@ -152,11 +158,11 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
             </form>
 
             {/* 현재 선택 국가, 선택 해제 */}
-            {crntNation ? (
+            {selectedCountry ? (
               <div className="flex place-content-between">
                 <div className="flex gap-1 items-center text-center text-[#0582ff] text-sm font-semibold">
                   <Image src={location} width={14} height={14} alt="location" />
-                  {`${crntNation?.country}/${crntNation?.city}`}
+                  {`${selectedCountry.country}/${selectedCountry.city}`}
                 </div>
                 <button
                   className="h-[29px] px-3 py-1.5 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-xs font-medium leading-none"
@@ -276,7 +282,7 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
                                 city,
                               );
                             }}
-                            className={`h-7 px-3 py-[7px] bg-white rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium ${
+                            className={`h-7 px-3 py-[7px] rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium ${
                               JSON.stringify(crntNation) ===
                               `{"continent":"${continent.continent}","country":"${country.name}","city":"${city}"}`
                                 ? 'bg-[#f4f6f9] text-[#0582ff] border-[#0582ff]'
