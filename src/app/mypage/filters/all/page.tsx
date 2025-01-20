@@ -210,6 +210,6 @@ const AllPostsPage = () => {
       </div>
     </div>
   );
-};
+}; 
 
 export default AllPostsPage;

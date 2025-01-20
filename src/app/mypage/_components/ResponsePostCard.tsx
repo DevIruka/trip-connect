@@ -79,7 +79,7 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
     if (post.user_id) {
       fetchUserNickname(post.user_id);
     }
-    // 댓글 수와 관련된 부분 주석 처리
+    // 댓글 수와 관련된 부분 주석 처리 
     // if (post.id) {
     //   fetchCommentCount(post.id);
     // }
