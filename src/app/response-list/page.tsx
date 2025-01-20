@@ -1,11 +1,24 @@
+'use client';
 import React from 'react';
 import BackHeader from '@/components/backHeader';
 import search from '@/data/images/ic-Search.svg';
 import PostCard from './_components/postCard';
 import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
+import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
 
-const responseListPage = () => {
+const ResponseListPage = () => {
+  const {
+    ReqPosts,
+    isPending,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useReqPosts();
+  if (isPending) {
+    return <div>loading...</div>;
+  }
+
   return (
     <div className="h-full w-full relative overflow-y-scroll menuscrollbar">
       <BackHeader image={search} text="답변하기" imagesize={24} />
@@ -17,16 +30,13 @@ const responseListPage = () => {
           </button>
         </div>
         <ul>
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
-          <PostCard />
+          {ReqPosts?.map((post) => (
+            <PostCard key={post!.id} post={post!} />
+          ))}
         </ul>
       </div>
     </div>
   );
 };
 
-export default responseListPage;
+export default ResponseListPage;
