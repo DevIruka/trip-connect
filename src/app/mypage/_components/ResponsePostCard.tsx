@@ -85,8 +85,18 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
     // }
   }, [post.user_id, post.id]);
 
+  
+  const handleCardClick = () => {
+    if (post.request_id) {
+      router.push(`/post/${post.request_id}`);
+    } else {
+      console.error('Request ID가 존재하지 않습니다.');
+    }
+  }
+  
   return (
     <div
+      onClick={handleCardClick}
       className="flex flex-col items-start gap-3 border-b bg-white w-full"
       style={{
         padding: '12px 20px 24px 20px',

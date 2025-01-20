@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { useUserStore } from '@/store/userStore'; 
+import { useUserStore } from '@/store/userStore';
+import Image from 'next/image';
+const lefticon = '/images/ic-left.svg';
 
 const VerificationCodePage = () => {
-  const { user } = useUserStore(); 
+  const { user } = useUserStore();
   const router = useRouter();
   const [verificationCode, setVerificationCode] = useState('');
 
@@ -57,8 +59,50 @@ const VerificationCodePage = () => {
 
   return (
     <div className="px-5 py-4 min-h-screen bg-white">
-      <h1 className="text-black text-xl font-bold mb-6">본인 인증</h1>
-      <p className="text-gray-600 text-sm mb-6">인증 코드를 입력해 주세요</p>
+      {/* 상단 헤더 */}
+      <div className="flex flex-row justify-between items-center h-[56px] mb-[16px] relative">
+        <Image
+          src={lefticon}
+          width={24}
+          height={24}
+          alt="back"
+          className="cursor-pointer absolute left-0"
+          onClick={() => {
+            router.back();
+          }}
+        />
+        <h1
+          style={{
+            color: '#000',
+            textAlign: 'center',
+            fontFamily: 'Pretendard',
+            fontSize: '18px',
+            fontStyle: 'normal',
+            fontWeight: 600,
+            lineHeight: 'normal',
+            letterSpacing: '-0.36px',
+          }}
+          className="w-full flex justify-center"
+        >
+          본인 인증
+        </h1>
+      </div>
+
+      {/* 안내 텍스트 */}
+      <p
+        style={{
+          color: 'var(--Grayscale-Gray-1, #45484D)',
+          fontFamily: 'Pretendard',
+          fontSize: '18px',
+          fontStyle: 'normal',
+          fontWeight: 700,
+          lineHeight: '160%',
+          letterSpacing: '-0.36px',
+        }}
+        className="flex items-start gap-[10px] self-stretch py-[16px] mb-6 h-[56px]"
+      >
+        인증 코드를 입력해 주세요.
+      </p>
 
       {/* 인증 코드 입력 필드 */}
       <div className="mb-4">
@@ -66,29 +110,37 @@ const VerificationCodePage = () => {
         <input
           type="text"
           value={verificationCode}
-          readOnly // 사용자가 수정하지 못하도록 설정
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+          readOnly
+          className="flex w-[315px] h-[52px] px-[16px] py-[14px] flex-col items-start gap-[10px] self-stretch rounded-lg border border-gray-300 bg-white text-black text-sm"
         />
       </div>
 
       {/* 재전송 버튼 */}
-      <button
-        className="text-sm text-black font-medium underline mb-6"
-        onClick={handleResendCode}
-      >
-        재전송
-      </button>
+      <div className="px-[20px] flex justify-end mb-[24px]">
+        <button
+          className="flex px-0 py-[4px] justify-center items-center gap-[10px] overflow-hidden text-[#0582FF] text-[14px] font-medium tracking-[-0.28px]"
+          onClick={handleResendCode}
+        >
+          재전송
+        </button>
+      </div>
 
       {/* 이전 및 제출 버튼 */}
-      <div className="flex justify-between">
+      <div className="flex justify-between mt-[315px]">
+        {/* 이전 버튼 */}
         <button
-          className="w-[48%] py-3 text-center bg-gray-200 text-black rounded-lg text-lg font-medium"
+          className="flex h-[52px] px-[12px] py-[6px] justify-center items-center gap-[10px] flex-1 rounded-[12px] bg-[#F5F7FA] text-black text-[16px] font-semibold tracking-[-0.32px]"
           onClick={() => router.back()}
         >
           이전
         </button>
+
+        {/* 버튼 간격 */}
+        <div className="w-[20px]"></div>
+
+        {/* 제출 버튼 */}
         <button
-          className="w-[48%] py-3 text-center bg-black text-white rounded-lg text-lg font-medium"
+          className="flex h-[52px] px-[12px] py-[6px] justify-center items-center gap-[10px] flex-1 rounded-[12px] bg-[#0582FF] text-white text-[16px] font-semibold tracking-[-0.32px]"
           onClick={handleSubmit}
         >
           제출
