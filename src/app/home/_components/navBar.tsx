@@ -103,10 +103,14 @@ const Navbar = ({
         </div>
 
         <button
-          className="menu-dropdown-btn max-w-[140px] overflow-hidden whitespace-nowrap text-ellipsis"
+          className={`menu-dropdown-btn max-w-[122px] font-semibold text-sm ${
+            selectedCountry ? 'text-[#0079f2]' : 'text-[#797c80]'
+          }`}
           onClick={() => setIsModalOpen(true)} // 모달 열기
         >
-          {isHydrated && getSelectedCountryLabel(selectedCountry)}
+          <div className="truncate max-w-[68px]">
+            {isHydrated && getSelectedCountryLabel(selectedCountry)}
+          </div>
           <Image
             className=""
             src={updown}
