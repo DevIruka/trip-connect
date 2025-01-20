@@ -31,20 +31,22 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
             className="bg-white rounded-[12px] border-[1px] border-[#DFE1E5] p-4 flex items-center justify-between"
           >
             <div>
-              <p className="text-xl font-bold">{amount.toLocaleString()}C</p>
+              <p className="text-[#44484c] text-base font-semibold ">
+                {amount.toLocaleString()}C
+              </p>
               {bonus > 0 && (
                 <div className="flex flex-row items-center">
-                  <p className="text-[#0582FF] text-[14px] font-[500] mt-[2px] mr-[2px]">
+                  <p className="text-[#0582ff] text-sm font-medium font-['Pretendard'] leading-tight mt-[2px] mr-[2px]">
                     +{bonus.toLocaleString()}
                   </p>
-                  <span className="text-[14px] font-[500] mt-[2px] font-[#45484D]">
+                  <span className="text-[#44484c] text-sm font-medium leading-tightmt-[2px]">
                     추가 크레딧
                   </span>
                 </div>
               )}
             </div>
             <button
-              className="bg-[#EBF5FF] text-[#0582FF] text-[14px] font-[500] px-[19px] py-[8px] rounded-[8px]"
+              className="bg-[#EBF5FF] text-center text-[#0582ff] text-sm font-medium font-['Pretendard'] px-[19px] py-[8px] rounded-[8px]"
               onClick={() => openModal(amount)}
             >
               {amount.toLocaleString()}원
