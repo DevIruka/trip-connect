@@ -198,7 +198,7 @@ const PurchasedPage = () => {
             })}
           </ul>
         ) : (
-          <p className="text-gray-500">구매한 답변이 없습니다.</p>
+          <p className="text-center text-gray-500">구매한 글이 없습니다.</p>
         )}
       </div>
     </div>
