@@ -5,13 +5,6 @@ export type UserData = {
   introduction: string;
 };
 
-export type UserPost = {
-  id: string;
-  title: string;
-  content: string;
-  content_html?: string;
-};
-
 export type ResponsePost = {
   id: string;
   title: string;
@@ -31,7 +24,7 @@ export type ResponsePost = {
 export type UserPostData = {
   responses: ResponsePost[];
   requests: RequestPost[];
-  reviews: UserPost[];
+  reviews: ReviewPost[];
 };
 
 export type RequestPost = {
@@ -41,6 +34,14 @@ export type RequestPost = {
   country_city: string;
   category: string;
   date_end: string;
-  credit: number; 
+  credit: number;
   created_at: string;
+};
+
+export type ReviewPost = {
+  id: string;
+  review: string;
+  user_id: string;
+  response_id: string;
+  purchasedAt?: string | null;
 };
