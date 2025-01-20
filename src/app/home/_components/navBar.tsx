@@ -46,7 +46,7 @@ const Navbar = ({
       return selectedCountry.country;
     }
 
-    return `${selectedCountry.country}, ${selectedCountry.city}`;
+    return `${selectedCountry.country}/${selectedCountry.city}`;
   };
 
   return (
@@ -122,7 +122,7 @@ const Navbar = ({
         onClose={() => {
           setIsModalOpen(false);
         }}
-        setCountry={(country: nation) => {
+        setCountry={(country: nation | null) => {
           setSelectedCountry(country); // 선택된 나라 업데이트
           setNationFilter(country);
         }}

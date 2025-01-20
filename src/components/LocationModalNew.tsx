@@ -5,13 +5,13 @@ import close from '@/data/images/ic-Close.svg';
 import search from '@/data/images/ic-Search.svg';
 import radioBtn from '@/data/images/radio_btn.svg';
 import radioBtnSlctd from '@/data/images/radio_btn_slctd.svg';
-
+import location from '@/data/images/ic-location.svg';
 import Image from 'next/image';
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  setCountry: (country: nation) => void;
+  setCountry: (country: nation | null) => void;
 };
 
 type nationProps = {
@@ -27,7 +27,7 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
     [],
   );
   const [selectedValue, setSelectedValue] = useState(''); // 선택된 값 저장
-  const [crntNation, setCrntNation] = useState<nation>();
+  const [crntNation, setCrntNation] = useState<nation | null>();
 
   if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
 
@@ -73,6 +73,12 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
     setCountry(crntNation!);
     setSelectedValue(JSON.stringify(crntNation));
     sessionStorage.setItem('selectedLocation', JSON.stringify(crntNation));
+  };
+
+  const handleDeselect = (): void => {
+    setCrntNation(null);
+    setCountry(null);
+    sessionStorage.removeItem('selectedLocation');
   };
 
   const handleTempSelect = (
@@ -141,15 +147,27 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
                 type="submit" // 폼 제출 버튼으로 설정
                 className="absolute right-4 top-1/2 transform -translate-y-1/2 flex items-center"
               >
-                <Image
-                  className=""
-                  src={search}
-                  alt={'search btn'}
-                  width={20}
-                  height={20}
-                />
+                <Image src={search} alt={'search btn'} width={20} height={20} />
               </button>
             </form>
+
+            {/* 현재 선택 국가, 선택 해제 */}
+            {crntNation ? (
+              <div className="flex place-content-between">
+                <div className="flex gap-1 items-center text-center text-[#0582ff] text-sm font-semibold">
+                  <Image src={location} width={14} height={14} alt="location" />
+                  {`${crntNation?.country}/${crntNation?.city}`}
+                </div>
+                <button
+                  className="h-[29px] px-3 py-1.5 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-xs font-medium leading-none"
+                  onClick={handleDeselect}
+                >
+                  선택 초기화
+                </button>
+              </div>
+            ) : (
+              ''
+            )}
 
             <div className="h-[90%] overflow-y-auto menuscrollbar place-content-start">
               {/* 필터링된 결과 */}
@@ -258,7 +276,12 @@ export const LocationModal = ({ isOpen, onClose, setCountry }: Props) => {
                                 city,
                               );
                             }}
-                            className="h-7 px-3 py-[7px] bg-white rounded-[100px] border border-[#dee1e5] justify-center items-center inline-flex text-center text-[#797c80] text-xs font-medium"
+                            className={`h-7 px-3 py-[7px] bg-white rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium ${
+                              JSON.stringify(crntNation) ===
+                              `{"continent":"${continent.continent}","country":"${country.name}","city":"${city}"}`
+                                ? 'bg-[#f4f6f9] text-[#0582ff] border-[#0582ff]'
+                                : 'bg-white text-[#797c80] border-[#dee1e5]'
+                            }`}
                           >
                             {city}
                           </button>

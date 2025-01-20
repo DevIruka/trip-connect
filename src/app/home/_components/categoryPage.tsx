@@ -104,7 +104,7 @@ const CategoryPage = () => {
           setNationFilter={setNationFilter}
           filterType={filterType}
         />
-        <ul className="px-5 grid gap-2 min-h-[460px] items-start">
+        <ul className="px-5 grid gap-2 items-start">
           {nationfilteredPosts?.map((post) => {
             const bookmarked = isPostBookmarked(post.id);
             return (
