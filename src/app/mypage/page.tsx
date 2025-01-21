@@ -138,7 +138,7 @@ const MyPage = () => {
   };
 
   return (
-    <div className="h-full w-full mx-auto relative overflow-y-scroll">
+    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar">
       <div className="px-5">
         <div className="flex flex-row justify-between items-center h-[56px] mb-[16px]">
           <Image
@@ -195,10 +195,10 @@ const MyPage = () => {
                   className="text-[16px] font-semibold mb-[2px] flex items-center"
                   style={{
                     minWidth: '120px',
-                    maxWidth: '200px', 
-                    whiteSpace: 'nowrap', 
-                    overflow: 'hidden', 
-                    textOverflow: 'ellipsis', 
+                    maxWidth: '200px',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
                   }}
                 >
                   {userProfile.nickname}
