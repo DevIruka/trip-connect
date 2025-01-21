@@ -4,9 +4,9 @@ import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
-import { FaPaperPlane } from 'react-icons/fa';
+import React, { useState } from 'react';
 import TimeAgo from './_components/TimeAgo';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 const lefticon = '/images/ic-left.svg';
 const marker = '/images/ic-location.svg';
@@ -33,134 +33,120 @@ type SupabaseReview = {
   } | null;
 };
 
-const ReviewPage = () => {
-  const { user } = useUserStore();
-  const [review, setReview] = useState('');
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [loading, setLoading] = useState(false);
-  const { response_id } = useParams();
-  const router = useRouter();
-
-  const fetchReviews = async () => {
-    if (!response_id) return;
-
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('reviews')
-      .select(
-        `
+const fetchReviews = async (response_id: string): Promise<Review[]> => {
+  const { data, error } = await supabase
+    .from('reviews')
+    .select(
+      `
       id, review, user_id,
       users (
         nickname,
         profile_img
       )
     `,
-      )
-      .eq('response_id', response_id);
+    )
+    .eq('response_id', response_id);
 
-    if (error) {
-      console.error('리뷰 가져오기 실패:', error.message);
-      return;
-    }
+  if (error) throw new Error(`리뷰 가져오기 실패:${error.message}`);
 
-    const userIds = data.map((r) => r.user_id);
+  const userIds = data.map((r) => r.user_id);
 
-    const { data: purchaseData, error: purchaseError } = await supabase
-      .from('purchased_users')
-      .select('user_id, created_at')
-      .in('user_id', userIds); // user_id 배열로 검색
+  const { data: purchaseData, error: purchaseError } = await supabase
+    .from('purchased_users')
+    .select('user_id, created_at')
+    .in('user_id', userIds); // user_id 배열로 검색
 
-    if (purchaseError) {
-      console.error('구매 정보 가져오기 실패:', purchaseError.message);
-      return;
-    }
+  if (purchaseError)
+    throw new Error(`구매 정보 가져오기 실패: ${purchaseError.message}`);
 
-    const { data: countryData } = await supabase
-      .from('users')
-      .select('id, country')
-      .in('id', userIds);
+  const { data: countryData } = await supabase
+    .from('users')
+    .select('id, country')
+    .in('id', userIds);
 
-    // user_id를 key로, country를 value로 하는 객체 생성
-    const userCountryMap: Record<string, string> = {};
+  // user_id를 key로, country를 value로 하는 객체 생성
+  const userCountryMap: Record<string, string> = {};
 
-    countryData?.forEach((user) => {
-      userCountryMap[user.id] = user.country;
-    });
+  countryData?.forEach((user) => {
+    userCountryMap[user.id] = user.country;
+  });
 
-    // 3️⃣ user_id를 기준으로 purchaseData 매칭
-    const purchaseMap = purchaseData.reduce((acc, cur) => {
-      acc[cur.user_id] = cur.created_at;
-      return acc;
-    }, {} as Record<string, string>);
+  // 3️⃣ user_id를 기준으로 purchaseData 매칭
+  const purchaseMap = purchaseData.reduce((acc, cur) => {
+    acc[cur.user_id] = cur.created_at;
+    return acc;
+  }, {} as Record<string, string>);
 
-    const formattedReviews: Review[] = (
-      data as unknown as SupabaseReview[]
-    ).map((r) => ({
-      id: r.id,
-      review: r.review,
-      user_id: r.user_id,
-      nickname: r.users?.nickname || '익명 사용자',
-      profile_img: r.users?.profile_img || null,
-      purchased_at: purchaseMap[r.user_id] || null,
-      country: userCountryMap[r.user_id],
-    }));
+  return (data as unknown as SupabaseReview[]).map((r) => ({
+    id: r.id,
+    review: r.review,
+    user_id: r.user_id,
+    nickname: r.users?.nickname || '익명 사용자',
+    profile_img: r.users?.profile_img || null,
+    purchased_at: purchaseMap[r.user_id] || null,
+    country: userCountryMap[r.user_id],
+  }));
+};
 
-    setReviews(formattedReviews);
-    setLoading(false);
-  };
+const ReviewPage = () => {
+  const { user } = useUserStore();
+  const [review, setReview] = useState('');
+  const { response_id } = useParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
 
-  const handleSubmit = async () => {
+  const { data: reviews = [], isLoading } = useQuery({
+    queryKey: ['reviews', response_id],
+    queryFn: () => fetchReviews(response_id as string),
+    enabled: !!response_id,
+  });
+
+  const addReviewMutation = useMutation<void, Error, string, unknown>({
+    mutationFn: async (newReview: string) => {
+      if (!user) throw new Error('로그인이 필요합니다.');
+      const { error } = await supabase.from('reviews').insert([
+        {
+          response_id,
+          review: newReview,
+          user_id: user.id,
+        },
+      ]);
+      if (error) throw new Error(`리뷰 작성 실패: ${error.message}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews', response_id] });
+      setReview('');
+    },
+  });
+
+  const deleteReviewMutation = useMutation<void, Error, string, unknown>({
+    mutationFn: async (reviewId: string) => {
+      const { error } = await supabase
+        .from('reviews')
+        .delete()
+        .eq('id', reviewId);
+      if (error) throw new Error(`리뷰 삭제 실패: ${error.message}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews', response_id] });
+    },
+  });
+
+  const handleSubmit = () => {
     if (!review.trim()) {
       alert('리뷰를 입력해주세요!');
       return;
     }
-
-    if (!user) {
-      alert('로그인이 필요합니다.');
-      router.push('/login');
-      return;
-    }
-
-    const { error } = await supabase.from('reviews').insert([
-      {
-        response_id,
-        review,
-        user_id: user.id,
-      },
-    ]);
-
-    if (error) {
-      console.error('리뷰 작성 실패:', error.message);
-      alert('리뷰 작성 중 문제가 발생했습니다.');
-      return;
-    }
-
-    setReview('');
-    fetchReviews(); // 리뷰 목록 갱신
+    addReviewMutation.mutate(review);
   };
 
   const handleDelete = async (reviewId: string) => {
-    const { error } = await supabase
-      .from('reviews')
-      .delete()
-      .eq('id', reviewId);
-
-    if (error) {
-      console.error('리뷰 삭제 실패:', error.message);
-      alert('리뷰 삭제 중 문제가 발생했습니다.');
-      return;
-    }
-
-    fetchReviews();
+    deleteReviewMutation.mutate(reviewId);
   };
 
   const handleBack = () => {
     router.back();
   };
-
-  useEffect(() => {
-    fetchReviews();
-  }, [response_id]);
 
   return (
     <div>
@@ -174,9 +160,6 @@ const ReviewPage = () => {
               height={24}
               alt="back"
               className="cursor-pointer"
-              onClick={() => {
-                router.back();
-              }}
             />
           </button>
           <h1 className="text-lg font-bold">리뷰</h1>
@@ -188,7 +171,7 @@ const ReviewPage = () => {
         </div>
 
         <div className="flex-grow overflow-auto">
-          {loading ? (
+          {isLoading ? (
             <div className="text-center text-gray-500">로딩 중...</div>
           ) : reviews.length > 0 ? (
             reviews.map((r, index) => (
@@ -232,7 +215,7 @@ const ReviewPage = () => {
                         <p className="text-sm mt-[12px]">{r.review}</p>
                       </div>
                       {/* 내 리뷰에만 표시되는 '...' 버튼 */}
-                      {(r.user_id === user?.id) && (
+                      {r.user_id === user?.id && (
                         <div className="absolute top-0 right-0">
                           <button className="text-gray-500 hover:text-gray-700">
                             <Image
