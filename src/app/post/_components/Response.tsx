@@ -16,6 +16,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isPurchased, setIsPurchased] = useState(false); // 구매 여부 상태
   const [credits, setCredits] = useState(10); // 사용자 크레딧
   const [isHydrated, setIsHydrated] = useState(false);
+  const [isOriginal, setIsOriginal] = useState(false);
   useEffect(() => {
     setIsHydrated(true);
   }, []);
@@ -55,38 +56,53 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
       <div className="px-5">
         <div>
           <div className="grid my-2 text-black text-lg font-bold leading-[28.80px]">
-            {translatedTitle ? (
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(translatedTitle).translated,
-                }}
-              />
+            {!isOriginal ? (
+              translatedTitle ? (
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.parse(translatedTitle).translated,
+                  }}
+                />
+              ) : (
+                '제목로딩중'
+              )
             ) : (
-              '제목로딩중'
+              post.title
             )}
           </div>
-          <button className="h-6 px-2 py-1 rounded-[14px] border border-[#c5c8cc] justify-center items-center gap-1 inline-flex text-[#44484c] text-xs font-medium mb-5">
+          <button
+            onClick={() => setIsOriginal(!isOriginal)}
+            className="h-6 px-2 py-1 rounded-[14px] border border-[#c5c8cc] justify-center items-center gap-1 inline-flex text-[#44484c] text-xs font-medium mb-5"
+          >
             <Image src={original} alt="original" height={14} width={14} />
-            원문보기
+            {!isOriginal ? '원문보기' : '번역보기'}
           </button>
           <div className="grid gap-4">
             <div className="text-[#44484c] text-base font-medium leading-relaxed">
-              {translatedFreeText ? (
-                <>
+              {!isOriginal ? (
+                translatedFreeText ? (
                   <RenderTranslatedHTML data={JSON.parse(translatedFreeText)} />
-                </>
+                ) : (
+                  '공짜내용로딩중'
+                )
               ) : (
-                '공짜내용로딩중'
+                <RenderTranslatedHTML
+                  data={{ original: '', translated: post.free_content }}
+                />
               )}
             </div>
             {isContentVisible && (
               <div className="text-[#44484c] text-base font-medium leading-relaxed pb-[18px]">
-                {translatedText ? (
-                  <>
+                {!isOriginal ? (
+                  translatedText ? (
                     <RenderTranslatedHTML data={JSON.parse(translatedText)} />
-                  </>
+                  ) : (
+                    '유료내용로딩중'
+                  )
                 ) : (
-                  '유료내용로딩중'
+                  <RenderTranslatedHTML
+                    data={{ original: '', translated: post.content_html }}
+                  />
                 )}
               </div>
             )}
