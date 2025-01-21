@@ -6,10 +6,16 @@ import { useRouter } from 'next/navigation';
 
 const siren = '/images/siren.svg';
 
-const ErrorPage = () => {
+const ErrorPage = ({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) => {
   const route = useRouter();
   return (
-    <div className="inner">
+    <div className="inner menuscrollbar">
       <div className="w-full h-[257px] flex-col justify-start items-center inline-flex">
         <div className="mt-[128px] self-stretch h-[125px] flex-col justify-start items-center flex">
           <Image src={siren} width={100} height={100} alt="warning" />

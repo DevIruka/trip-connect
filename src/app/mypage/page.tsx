@@ -138,7 +138,7 @@ const MyPage = () => {
   };
 
   return (
-    <div className="h-full w-full mx-auto relative overflow-y-scroll">
+    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar">
       <div className="px-5">
         <div className="flex flex-row justify-between items-center h-[56px] mb-[16px]">
           <Image
