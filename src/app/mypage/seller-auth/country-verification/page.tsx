@@ -3,10 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLoadScript, GoogleMap, Marker } from '@react-google-maps/api';
-import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
 import BackButton from '@/app/post/_components/BackBtn';
 import LocationText from '../_components/locationText';
+import { supabase } from '@/utils/supabase/supabaseClient';
 
 const CountryVerification = () => {
   const router = useRouter();
@@ -80,8 +80,8 @@ const CountryVerification = () => {
       return;
     }
 
-    alert('국가 인증이 완료되었습니다.');
-    router.push('/mypage/seller-auth');
+    // 인증 완료 시 인증 상태를 전달하며 페이지 이동
+    router.push('/mypage/seller-auth?newlyVerified=true');
   };
 
   if (!isLoaded) return <div>Loading Google Maps...</div>;
@@ -121,7 +121,7 @@ const CountryVerification = () => {
       <button
         className="bg-[#0582ff] h-[52px] rounded-xl text-center my-3 text-white text-base font-semibold absolute bottom-0 w-[335px]"
         onClick={handleVerificationComplete}
-        disabled={!locationDescription || !country} // 국가 정보가 없으면 버튼 비활성화
+        disabled={!locationDescription || !country}
       >
         인증 완료하기
       </button>
