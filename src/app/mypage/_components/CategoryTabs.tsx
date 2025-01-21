@@ -7,6 +7,7 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import search from '@/data/images/ic-Search.svg';
+
 const lefticon = '/images/ic-left.svg';
 
 type Props = {
@@ -23,7 +24,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
   const router = useRouter();
 
   const fetchCounts = useCallback(async () => {
-    if (!user?.id) return;
+    if (!user?.id) return
 
     try {
       const [writtenRes, responseRes, purchasedRes, bookmarkRes] =
@@ -92,7 +93,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
         }}
       >
         <button
-          onClick={() => router.push('/mypage')} 
+          onClick={() => router.push('/mypage')}
           className="flex items-center justify-center"
         >
           <Image src={lefticon} width={24} height={24} alt="back" />
@@ -121,32 +122,19 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
         </h2>
       </div>
 
-      <div
-        className="flex items-center justify-center"
-        style={{
-          marginTop: '16px',
-          width: '375px',
-          borderBottom: '1px solid #DFE1E5',
-        }}
-      >
+      <div className="flex items-center justify-center mt-4 w-[335px] border-b border-[#DFE1E5]">
         {tabs.map((tab) => (
           <Link key={tab.key} href={tab.link}>
             <button
-              className={`flex items-center justify-center ${
+              className={`flex items-center justify-center w-[109px] py-[12px] h-full ${
                 activeTab === tab.key
                   ? 'border-b-2 border-black'
                   : 'border-b-2 border-transparent'
               }`}
-              style={{
-                width: '109px',
-                padding: '12px 10px',
-                height: '100%',
-                borderBottom: activeTab === tab.key ? '2px solid #000' : 'none',
-              }}
             >
               <span
-                className={`text-[16px] font-[600] ${
-                  activeTab === tab.key ? 'text-[#000]' : 'text-[#45484D]'
+                className={`text-[16px] font-semibold ${
+                  activeTab === tab.key ? 'text-black' : 'text-[#A9A9A9]'
                 }`}
                 style={{
                   fontFamily: 'Pretendard',
@@ -157,12 +145,13 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
                 {tab.label}
               </span>
               <span
-                className="text-[16px] font-[600] text-[#80BFFF]"
+                className={`text-[16px] font-semibold ml-[4px] ${
+                  activeTab === tab.key ? 'text-[#80BFFF]' : 'text-[#A9A9A9]'
+                }`}
                 style={{
                   fontFamily: 'Pretendard',
                   lineHeight: 'normal',
                   letterSpacing: '-0.32px',
-                  marginLeft: '4px',
                 }}
               >
                 {tab.count}
