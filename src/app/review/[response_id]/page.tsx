@@ -33,6 +33,21 @@ type SupabaseReview = {
   } | null;
 };
 
+const checkUserCommented = async (
+  response_id: string,
+  user_id: string,
+): Promise<boolean> => {
+  const { data, error } = await supabase
+    .from('reviews')
+    .select('id')
+    .eq('response_id', response_id)
+    .eq('user_id', user_id);
+
+  if (error) throw new Error(`댓글 확인 실패: ${error.message}`);
+
+  return data.length > 0;
+};
+
 const fetchReviews = async (response_id: string): Promise<Review[]> => {
   const { data, error } = await supabase
     .from('reviews')
@@ -94,6 +109,15 @@ const ReviewPage = () => {
   const { response_id } = useParams();
   const router = useRouter();
   const queryClient = useQueryClient();
+  const [visibleDropdown, setVisibleDropdown] = useState<string | null>(null);
+
+  const { data: hasCommented = false, isLoading: isCheckingComment } = useQuery(
+    {
+      queryKey: ['hasCommented', response_id, user?.id],
+      queryFn: () => checkUserCommented(response_id as string, user!.id),
+      enabled: !!response_id && !!user?.id,
+    },
+  );
 
   const { data: reviews = [], isLoading } = useQuery({
     queryKey: ['reviews', response_id],
@@ -115,6 +139,11 @@ const ReviewPage = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', response_id] });
+      queryClient.invalidateQueries({
+        queryKey: ['hasCommented', response_id, user?.id].filter(
+          Boolean,
+        ) as string[],
+      });
       setReview('');
     },
   });
@@ -137,11 +166,32 @@ const ReviewPage = () => {
       alert('리뷰를 입력해주세요!');
       return;
     }
+
+    if (hasCommented) {
+      alert('이미 댓글을 작성하셨습니다.');
+      return;
+    }
+
     addReviewMutation.mutate(review);
   };
 
   const handleDelete = async (reviewId: string) => {
-    deleteReviewMutation.mutate(reviewId);
+    if (!response_id || !user?.id) {
+      console.error('response_id 또는 user.id가 정의되지 않았습니다.');
+      return;
+    }
+
+    deleteReviewMutation.mutate(reviewId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ['reviews', response_id],
+        });
+
+        queryClient.invalidateQueries({
+          queryKey: ['hasCommented', response_id, user.id],
+        });
+      },
+    });
   };
 
   const handleBack = () => {
@@ -149,75 +199,80 @@ const ReviewPage = () => {
   };
 
   return (
-    <div>
-      <div className="min-h-screen bg-white px-[20px] py-[10px] flex flex-col">
-        {/* 상단 헤더 */}
-        <header className="flex justify-between items-center py-4">
-          <button onClick={handleBack} className="text-xl">
-            <Image
-              src={lefticon}
-              width={24}
-              height={24}
-              alt="back"
-              className="cursor-pointer"
-            />
-          </button>
-          <h1 className="text-lg font-bold">리뷰</h1>
-          <div></div>
-        </header>
+    <div className="min-h-screen bg-white flex flex-col">
+      <header className="relative flex items-center py-2.5 px-5">
+        <button onClick={handleBack} className="absolute left-5 text-xl">
+          <Image
+            src={lefticon}
+            width={24}
+            height={24}
+            alt="back"
+            className="cursor-pointer"
+          />
+        </button>
+        <h1 className="text-lg font-bold mx-auto">리뷰</h1>
+      </header>
 
-        <div className="pt-[20px] pb-[16px] text-black text-[16px] font-semibold">
+      <div className="flex-grow overflow-y-auto">
+        <div className="px-[20px] pb-[16px] pt-[20px] text-black text-[16px] font-semibold">
           {reviews.length}개의 리뷰
         </div>
 
-        <div className="flex-grow overflow-auto">
-          {isLoading ? (
-            <div className="text-center text-gray-500">로딩 중...</div>
-          ) : reviews.length > 0 ? (
-            reviews.map((r, index) => (
-              <div key={r.id}>
-                <div className="flex flex-col p-4">
-                  <div className="flex flex-col">
-                    <div className="flex items-start relative">
-                      {r.profile_img ? (
-                        <img
-                          src={r.profile_img}
-                          alt="Profile"
-                          className="w-[36px] h-[36px] rounded-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-[36px] h-[36px] rounded-full bg-gray-300 flex items-center justify-center">
-                          {/* 기본 프로필 이미지가 없는 경우 회색 원 */}
-                        </div>
-                      )}
-                      <div className="ml-3">
-                        <div className="flex items-center">
-                          <div className="text-sm font-medium flex flex-row justify-center items-center">
-                            <span className="text-sm font-medium mr-[4px]">
-                              {r.nickname}
-                            </span>
-                            {r.country ? (
-                              <div className="flex items-center justify-center h-[20px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md pl-[3px] pr-[4px] px-[6px]">
-                                <Image
-                                  src={marker}
-                                  width={10}
-                                  height={10}
-                                  alt="marker"
-                                />
-                                <p className="text-[12px]">{r.country}</p>
-                              </div>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
-                        </div>
-                        <TimeAgo createdAt={r.purchased_at} />
-                        <p className="text-sm mt-[12px]">{r.review}</p>
+        {isLoading ? (
+          <div className="text-center text-gray-500">로딩 중...</div>
+        ) : reviews.length > 0 ? (
+          reviews.map((r, index) => (
+            <div key={r.id}>
+              <div className="flex flex-col p-[20px]">
+                <div className="flex flex-col">
+                  <div className="flex items-start gap-[8px] h-[36px] relative">
+                    {r.profile_img ? (
+                      <img
+                        src={r.profile_img}
+                        alt="Profile"
+                        className="w-[36px] h-[36px] rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-[36px] h-[36px] rounded-full bg-gray-300 flex items-center justify-center">
+                        {/* 기본 프로필 이미지가 없는 경우 회색 원 */}
                       </div>
-                      {/* 내 리뷰에만 표시되는 '...' 버튼 */}
-                      {r.user_id === user?.id && (
-                        <div className="absolute top-0 right-0">
-                          <button className="text-gray-500 hover:text-gray-700">
+                    )}
+                    <div className="ml-3 flex-grow">
+                      <div className="flex items-center">
+                        <div className="text-sm font-medium flex flex-row justify-center items-center">
+                          <span className="text-sm font-medium mr-[4px]">
+                            {r.nickname}
+                          </span>
+                          {r.country ? (
+                            <div className="flex items-center justify-center h-[20px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md pl-[3px] pr-[4px] px-[6px]">
+                              <Image
+                                src={marker}
+                                width={10}
+                                height={10}
+                                alt="marker"
+                              />
+                              <p className="text-[12px]">{r.country}</p>
+                            </div>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </div>
+                      <TimeAgo createdAt={r.purchased_at} />
+                      <p className="text-sm mt-[12px]">{r.review}</p>
+                    </div>
+
+                    {r.user_id === user?.id && (
+                      <div className="relative flex items-center h-full">
+                        <div className="relative">
+                          <button
+                            onClick={() =>
+                              setVisibleDropdown((prev) =>
+                                prev === r.id ? null : r.id,
+                              )
+                            }
+                            className="text-gray-500 hover:text-gray-700"
+                          >
                             <Image
                               src={threedot}
                               width={20}
@@ -225,48 +280,55 @@ const ReviewPage = () => {
                               alt="edit"
                             />
                           </button>
-                          <div className="hidden group-hover:block absolute bg-white border rounded shadow-md right-0">
-                            <button
-                              onClick={() => handleDelete(r.id)}
-                              className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                            >
-                              삭제하기
-                            </button>
-                          </div>
+
+                          {visibleDropdown === r.id && (
+                            <div className="absolute bg-white border border-gray-300 rounded shadow-md right-0 z-10 w-32">
+                              <button
+                                onClick={() => handleDelete(r.id)}
+                                className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                              >
+                                삭제하기
+                              </button>
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-                {index < reviews.length - 1 && (
-                  <hr className="border-gray-200" />
-                )}
               </div>
-            ))
-          ) : (
-            <div className="flex items-center justify-center text-gray-500">
-              아직 작성된 리뷰가 없어요
+
+              {index < reviews.length - 1 && (
+                <div className="px-[20px]">
+                  <hr className="border-[#f2f2f2]" />
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div className="flex items-center border-t border-gray-300 pt-[12px] pb-[2px]">
-          <input
-            type="text"
-            value={review}
-            onChange={(e) => setReview(e.target.value)}
-            placeholder="답변이 마음에 드셨다면 리뷰를 남겨주세요"
-            className="flex-grow border border-gray-300 rounded-lg px-4 py-2 text-sm outline-none placeholder-gray-500 mr-[4px]"
-            style={{
-              fontSize: '12px', // placeholder 텍스트 크기
-            }}
-          />
-          <button
-            onClick={handleSubmit}
-            // className="p-2 rounded-full flex items-center justify-center hover:bg-gray-200"
-          >
-            <Image src={arrowbtn} width={32} height={32} alt="send" />
-          </button>
-        </div>
+          ))
+        ) : (
+          <div className="flex items-center justify-center text-gray-500">
+            아직 작성된 리뷰가 없어요
+          </div>
+        )}
+      </div>
+
+      <div className="sticky bottom-0 bg-white flex items-center border-t border-[#f2f2f2] px-5 py-3">
+        <input
+          type="text"
+          value={review}
+          onChange={(e) => setReview(e.target.value)}
+          placeholder="답변이 마음에 드셨다면 리뷰를 남겨주세요"
+          className="flex-grow border border-[#f2f2f2] rounded-lg px-[16px] py-[14px] text-sm outline-none placeholder-[#A9A9A9]"
+          style={{
+            fontSize: '12px', // placeholder 텍스트 크기
+          }}
+        />
+        <button
+          onClick={handleSubmit}
+          className="ml-[4px] flex items-center justify-center"
+        >
+          <Image src={arrowbtn} width={32} height={32} alt="send" />
+        </button>
       </div>
     </div>
   );
