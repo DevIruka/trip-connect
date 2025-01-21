@@ -131,9 +131,9 @@ const CategoryPage = () => {
                         src={location}
                         alt="location"
                       />
-                      {/* {post.request_id
+                      {post.request_id
                         ? post.verified_country
-                        : JSON.parse(post.country_city).country} */}
+                        : JSON.parse(post.country_city!).country}
                     </div>
                     {post.category
                       ? topicArr
