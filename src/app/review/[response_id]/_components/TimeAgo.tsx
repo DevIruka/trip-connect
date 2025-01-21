@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
 
 type Props = {
   createdAt: string | null; // ISO 8601 날짜 문자열
