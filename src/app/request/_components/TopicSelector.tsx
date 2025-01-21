@@ -10,6 +10,7 @@ type Props = {
   watch?: UseFormWatch<FormInputs>;
   selectedCategories?: string[];
   disabled?: boolean;
+  isSingleSelect?: boolean;
 };
 
 const TopicSelector: React.FC<Props> = ({
@@ -18,6 +19,7 @@ const TopicSelector: React.FC<Props> = ({
   watch,
   selectedCategories = [],
   disabled = false,
+  isSingleSelect = false,
 }) => {
   const topicIcons: Record<string, string> = {
     맛집: '🥘',
@@ -33,19 +35,23 @@ const TopicSelector: React.FC<Props> = ({
 
   const handleTopicClick = (topic: string, currentTopics: string[]) => {
     if (disabled || !setValue || !watch) return;
-    const updatedTopics = currentTopics.includes(topic)
+
+    const updatedTopics = isSingleSelect
+      ? [topic]
+      : currentTopics.includes(topic)
       ? currentTopics.filter((t) => t !== topic)
       : [...currentTopics, topic];
 
     setValue('category', updatedTopics, { shouldValidate: true });
   };
 
-  const currentCategories = watch ? watch('category') || [] : selectedCategories;
-
+  const currentCategories = watch
+    ? watch('category') || selectedCategories
+    : selectedCategories;
 
   return (
     <div className="flex flex-wrap gap-[8px]">
-       {topics.map((topic) => {
+      {topics.map((topic) => {
         const isSelected = currentCategories.includes(topic);
 
         return (
@@ -53,13 +59,11 @@ const TopicSelector: React.FC<Props> = ({
             key={topic}
             type="button"
             disabled={disabled} // 버튼 비활성화 여부
-            onClick={() =>
-              handleTopicClick(topic, currentCategories || [])
-            } // 클릭 처리
+            onClick={() => handleTopicClick(topic, currentCategories || [])} // 클릭 처리
             className={`px-3 py-1.5 border rounded-full font-semibold text-sm ${
               isSelected
-              ? 'bg-black text-white cursor-pointer' // 선택된 상태
-              : disabled
+                ? 'bg-black text-white cursor-pointer' // 선택된 상태
+                : disabled
                 ? 'bg-white text-[#797C80] border-gray-300 cursor-not-allowed' // 비활성화 상태
                 : 'bg-white text-[#797C80] border-gray-300 hover:bg-black hover:text-white' // 활성화 상태
             }`}
