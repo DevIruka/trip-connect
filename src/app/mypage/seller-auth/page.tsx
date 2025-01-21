@@ -3,7 +3,7 @@
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import SellerAuthCard from './_components/sellerAuthCard';
 import Image from 'next/image';
 const lefticon = '/images/ic-left.svg';
@@ -11,8 +11,10 @@ const lefticon = '/images/ic-left.svg';
 const SellerPage = () => {
   const { user } = useUserStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isIdentityVerified, setIsIdentityVerified] = useState(false);
   const [isCountryVerified, setIsCountryVerified] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   useEffect(() => {
     const fetchAuthenticationStatus = async () => {
@@ -35,16 +37,24 @@ const SellerPage = () => {
 
         setIsIdentityVerified(userRecord?.authenticated || false);
         setIsCountryVerified(userRecord?.country_verified || false);
+
+        if (searchParams.get('newlyVerified') === 'true') {
+          setShowAlert(true);
+          setTimeout(() => setShowAlert(false), 2000);
+          const url = new URL(window.location.href);
+          url.searchParams.delete('newlyVerified');
+          window.history.replaceState({}, '', url.toString());
+        }
       } catch (err) {
         console.error('예기치 않은 오류 발생:', err);
       }
     };
 
     fetchAuthenticationStatus();
-  }, [user, router]);
+  }, [user, router, searchParams]);
 
   return (
-    <div className="h-full w-full px-5">
+    <div className="h-full w-full px-5 relative">
       {/* 헤더 섹션 */}
       <div
         className="flex flex-row justify-between items-center"
@@ -61,13 +71,12 @@ const SellerPage = () => {
         </button>
       </div>
 
-      <h1 className="w-full py-[20px]  text-left text-black font-semibold text-[18px] leading-normal tracking-[-0.36px]">
+      <h1 className="w-full py-[20px] text-left text-black font-semibold text-[18px] leading-normal tracking-[-0.36px]">
         셀러 인증하기
       </h1>
 
       {/* 인증 섹션 */}
       <div className="mt-4 space-y-3">
-        {/* 국가 인증 */}
         <SellerAuthCard
           isVerified={isCountryVerified}
           title={'국가'}
@@ -76,8 +85,6 @@ const SellerPage = () => {
           }
           link={'country-verification'}
         />
-
-        {/* 본인 인증 */}
         <SellerAuthCard
           isVerified={isIdentityVerified}
           title={'본인'}
@@ -86,8 +93,6 @@ const SellerPage = () => {
           }
           link={'identity-verification'}
         />
-
-        {/* 계좌 인증 */}
         <div className="h-[140px] p-4 rounded-xl grid gap-3">
           <div className="grid gap-2">
             <div className="flex space-x-1.5">
@@ -101,6 +106,21 @@ const SellerPage = () => {
           </div>
         </div>
       </div>
+
+      {/* 알림 메시지 */}
+      {showAlert && (
+        <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 flex w-[335px] p-[12px] justify-center items-center gap-[4px] rounded-[8px] bg-black bg-opacity-50 z-50">
+          {/* <Image
+            src="/images/ic-notice.svg"
+            alt="Notice"
+            width={16}
+            height={16}
+          /> */}
+          <span className="text-center text-[14px] font-semibold leading-normal tracking-[-0.28px] text-white">
+            국가 인증이 완료되었습니다!
+          </span>
+        </div>
+      )}
     </div>
   );
 };
