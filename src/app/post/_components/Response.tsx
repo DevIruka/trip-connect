@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Profile from '../_components/profile';
+import Profile from './profile';
 import Image from 'next/image';
 
 import original from '@/data/images/original.svg';
@@ -8,9 +8,10 @@ import comment from '@/data/images/ic-comment.svg';
 import updown from '@/data/images/ic-up&down.svg';
 import MoreButton from '@/data/images/ic-More.svg';
 import { useGPTTranslation } from '../_hooks/TranslatedText';
-import RenderTranslatedHTML from '../_components/RenderTranslatedHTML';
+import RenderTranslatedHTML from './RenderTranslatedHTML';
+import { Tables } from '@/types/supabase';
 
-const Response = () => {
+const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false); // 구매 여부 상태
   const [credits, setCredits] = useState(10); // 사용자 크레딧
@@ -18,18 +19,6 @@ const Response = () => {
   useEffect(() => {
     setIsHydrated(true);
   }, []);
-  const post = {
-    id: 1,
-    created_at: '2025-01-20',
-    user_id: 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac',
-    request_id: 2,
-    content_html:
-      '<p>hello</p><div data-type="map" lat="25.2048493" lng="55.2707828" name="Dubai" address="Dubai - United Arab Emirates"></div>',
-    title: 'i hate you',
-    free_content:
-      '<p>i love you</p><div data-type="map" lat="25.2048493" lng="55.2707828" name="Dubai" address="Dubai - United Arab Emirates"></div>',
-    verified_country: 'korea',
-  };
 
   const { data: translatedTitle } = useGPTTranslation(
     `${post.id}title`,
@@ -80,26 +69,28 @@ const Response = () => {
             <Image src={original} alt="original" height={14} width={14} />
             원문보기
           </button>
-          <div className="text-[#44484c] text-base font-medium leading-relaxed">
-            {translatedFreeText ? (
-              <>
-                <RenderTranslatedHTML data={JSON.parse(translatedFreeText)} />
-              </>
-            ) : (
-              '공짜내용로딩중'
-            )}
-          </div>
-          {isContentVisible && (
-            <div className="text-[#44484c] text-base font-medium leading-relaxed pb-[18px]">
-              {translatedText ? (
+          <div className="grid gap-4">
+            <div className="text-[#44484c] text-base font-medium leading-relaxed">
+              {translatedFreeText ? (
                 <>
-                  <RenderTranslatedHTML data={JSON.parse(translatedText)} />
+                  <RenderTranslatedHTML data={JSON.parse(translatedFreeText)} />
                 </>
               ) : (
-                '유료내용로딩중'
+                '공짜내용로딩중'
               )}
             </div>
-          )}
+            {isContentVisible && (
+              <div className="text-[#44484c] text-base font-medium leading-relaxed pb-[18px]">
+                {translatedText ? (
+                  <>
+                    <RenderTranslatedHTML data={JSON.parse(translatedText)} />
+                  </>
+                ) : (
+                  '유료내용로딩중'
+                )}
+              </div>
+            )}
+          </div>
           {!isPurchased ? (
             // 구매 버튼
             <button
