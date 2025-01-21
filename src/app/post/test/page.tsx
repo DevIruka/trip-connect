@@ -29,13 +29,19 @@ const Response = () => {
     verified_country: 'korea',
   };
 
-  const text = post.content_html;
-  const { data: translatedText, isPending: isTextLoading } = useGPTTranslation(
-    `${post.id}text`,
-    text,
+  const { data: translatedTitle } = useGPTTranslation(
+    `${post.id}title`,
+    `${post.title}`,
   );
-  const { data: translatedTitle, isPending: isTitleLoading } =
-    useGPTTranslation(`${post.id}title`, `${post.title}`);
+  const { data: translatedFreeText } = useGPTTranslation(
+    `
+  ${post.id}freetext`,
+    `${post.free_content}`,
+  );
+  const { data: translatedText } = useGPTTranslation(
+    `${post.id}text`,
+    post.content_html,
+  );
 
   const handlePurchase = () => {
     if (credits > 0) {
@@ -73,13 +79,27 @@ const Response = () => {
             원문보기
           </button>
           <div className="text-[#44484c] text-base font-medium leading-relaxed">
-            <RenderTranslatedHTML
-              data={{ original: '', translated: post.free_content! }}
-            />
+            {translatedFreeText ? (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: JSON.parse(translatedFreeText).translated,
+                }}
+              />
+            ) : (
+              '공짜내용로딩중'
+            )}
           </div>
           {isContentVisible && (
             <div className="text-[#44484c] text-base font-medium leading-relaxed pb-[18px]">
-              <RenderTranslatedHTML data={JSON.parse(translatedText!)} />
+              {translatedText ? (
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.parse(translatedText).translated,
+                  }}
+                />
+              ) : (
+                '유료내용로딩중'
+              )}
             </div>
           )}
           {!isPurchased ? (
