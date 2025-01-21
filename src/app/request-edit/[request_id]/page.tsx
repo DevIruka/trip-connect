@@ -83,15 +83,14 @@ const EditRequestPage: React.FC = () => {
 
         const { data: responseData, error: responseError } = await supabase
           .from('response_posts')
-          .select('*')
+          .select('id')
           .eq('request_id', request_id);
 
         if (responseError) throw responseError;
 
         // 답변이 있는 경우 제한
-        if (responseData && responseData.length > 0) {
-          setIsRestricted(true);
-        }
+        setIsRestricted(responseData && responseData.length > 0);
+
       } catch (error) {
         console.error('데이터 불러오기 오류:', error);
         alert('데이터를 불러오는 데 문제가 발생했습니다.');
@@ -132,7 +131,7 @@ const EditRequestPage: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="h-screen overflow-y-auto bg-white">
       <div className="flex justify-between items-center p-4 border-b border-gray-300">
         <button
           className="text-lg font-bold text-gray-800"
@@ -162,24 +161,30 @@ const EditRequestPage: React.FC = () => {
               type="text"
               value={selectedLocation}
               placeholder="나라/도시를 선택하세요"
-              readOnly
+              readOnly={isRestricted}
               {...register('country_city', {
                 required: '나라/도시를 선택하세요.',
               })}
               className={`w-full px-3 py-2 border ${
                 errors.country_city ? 'border-red-500' : 'border-gray-300'
-              }   rounded focus:outline-none text-[#797C80] cursor-not-allowed`}
+              } rounded focus:outline-none text-[#797C80] ${
+                isRestricted ? 'cursor-not-allowed bg-gray-100' : ''
+              }`}
+              onClick={!isRestricted ? toggleModal : undefined}
             />
             {errors.country_city && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.country_city.message}
               </p>
             )}
+                {!isRestricted && (
+
             <FaSearch
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               style={{ color: 'black' }}
               size={18}
-            />
+            />    )}
+
           </div>
         </div>
 
@@ -197,17 +202,12 @@ const EditRequestPage: React.FC = () => {
               '액티비티',
               '기타',
             ]}
-            disabled={true}
+            disabled={isRestricted}
+            setValue={setValue}
             selectedCategories={watch('category')}
+            isSingleSelect
           />
 
-          <input
-            type="hidden"
-            {...register('category', {
-              validate: (value) =>
-                value?.length > 0 ? true : '최소 하나의 주제를 선택하세요.',
-            })}
-          />
           {errors.category && (
             <p className="text-red-500 text-sm mt-1">
               {errors.category.message}
@@ -239,7 +239,7 @@ const EditRequestPage: React.FC = () => {
           }}
         />
       </form>
-    </>
+    </div>
   );
 };
 

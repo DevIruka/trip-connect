@@ -176,14 +176,9 @@ const RequestPage: React.FC = () => {
               ]}
               setValue={setValue}
               watch={watch}
+              isSingleSelect={true}
             />
-            <input
-              type="hidden"
-              {...register('category', {
-                validate: (value) =>
-                  value?.length > 0 ? true : '최소 하나의 주제를 선택하세요.',
-              })}
-            />
+            
             {errors.category && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.category.message}
