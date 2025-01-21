@@ -106,6 +106,7 @@ const Responses = ({ postId }: { postId: string }) => {
                       <button
                         onClick={toggleContent}
                         className="w-full h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-1 inline-flex my-2.5 text-center text-[#44484c] text-sm font-semibold"
+                        disabled={!translatedText}
                       >
                         {isContentVisible ? '접기' : '펼쳐 보기'}
                         <Image
