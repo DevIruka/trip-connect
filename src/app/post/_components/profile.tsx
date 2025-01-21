@@ -6,9 +6,14 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import profileImage from '@/data/images/profile-default.svg';
 import location from '@/data/images/ic-location.svg';
+import { useUserStore } from '@/store/userStore';
+import { useRouter } from 'next/navigation';
 
 const Profile = ({ postUserId }: { postUserId: string }) => {
   const [user, setUser] = useState<Tables<'users'>>();
+  const { user: logginedUser } = useUserStore();
+  const router = useRouter();
+
   useEffect(() => {
     const fetchUser = async () => {
       if (postUserId) {
@@ -22,9 +27,16 @@ const Profile = ({ postUserId }: { postUserId: string }) => {
   if (!user || !postUserId) {
     return <div>loading</div>;
   }
-
+  const handleClick = () => {
+    if (!logginedUser || logginedUser.id !== user.id) {
+      router.push(`/user/${user.id}`);
+    } else if (logginedUser.id === user.id) router.push('/mypage');
+  };
   return (
-    <div className="bg-white flex items-center gap-2 py-4 px-5">
+    <div
+      onClick={handleClick}
+      className="bg-white flex items-center gap-2 py-4 px-5"
+    >
       {user.profile_img ? (
         <Image
           width={36}
