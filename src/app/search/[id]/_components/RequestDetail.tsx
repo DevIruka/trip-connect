@@ -97,10 +97,10 @@ const RequestDetail = ({
         <div className="flex flex-row items-start">
           <p className="text-[16px] font-[600] pt-[1px] text-[#0582FF]">Q.</p>
           <div>
-            <p className="max-w-[315px] text-[16px] font-[600] ml-[6px] mb-[6px] overflow-hidden text-ellipsis">
+            <p className="max-w-[315px] text-[16px] font-[600] ml-[6px] mb-[6px] overflow-hidden text-ellipsis line-clamp-2">
               {post.title}
             </p>
-            <p className="text-[14px] max-w-[295px] text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis">
+            <p className="text-[14px] max-w-[315px] text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis line-clamp-2">
               {post.content}
             </p>
           </div>
