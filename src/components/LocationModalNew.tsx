@@ -134,7 +134,7 @@ export const LocationModal = ({
               선택
             </button>
           </div>
-          <div className="grid gap-5">
+          <div className="grid">
             {/* 검색창 */}
             <form
               className="relative my-2"
@@ -158,8 +158,8 @@ export const LocationModal = ({
             </form>
 
             {/* 현재 선택 국가, 선택 해제 */}
-            {selectedCountry ? (
-              <div className="flex place-content-between">
+            {selectedCountry && (
+              <div className="flex place-content-between my-1">
                 <div className="flex gap-1 items-center text-center text-[#0582ff] text-sm font-semibold">
                   <Image src={location} width={14} height={14} alt="location" />
                   {`${selectedCountry.country}/${selectedCountry.city}`}
@@ -171,11 +171,9 @@ export const LocationModal = ({
                   선택 초기화
                 </button>
               </div>
-            ) : (
-              ''
             )}
 
-            <div className="h-[90%] overflow-y-auto menuscrollbar place-content-start">
+            <div className="h-[90%] overflow-y-auto menuscrollbar place-content-start mt-5">
               {/* 필터링된 결과 */}
               {searchTerm ? (
                 filteredResults.length > 0 ? (

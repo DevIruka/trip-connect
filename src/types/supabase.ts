@@ -126,7 +126,6 @@ export type Database = {
           credit: number
           date_end: string | null
           id: string
-          img_url: string | null
           title: string
           user_id: string
         }
@@ -138,7 +137,6 @@ export type Database = {
           credit: number
           date_end?: string | null
           id?: string
-          img_url?: string | null
           title: string
           user_id: string
         }
@@ -150,7 +148,6 @@ export type Database = {
           credit?: number
           date_end?: string | null
           id?: string
-          img_url?: string | null
           title?: string
           user_id?: string
         }
@@ -216,7 +213,6 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          rating: number
           response_id: number
           review: string
           user_id: string
@@ -224,7 +220,6 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: number
-          rating: number
           response_id: number
           review: string
           user_id: string
@@ -232,7 +227,6 @@ export type Database = {
         Update: {
           created_at?: string
           id?: number
-          rating?: number
           response_id?: number
           review?: string
           user_id?: string
