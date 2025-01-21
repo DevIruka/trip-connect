@@ -23,9 +23,11 @@ const Response = () => {
     created_at: '2025-01-20',
     user_id: 'f7b9a432-75f7-4f6b-9fc6-fb429bdb32ac',
     request_id: 2,
-    content_html: '<div>hello</div>',
+    content_html:
+      '<p>hello</p><div data-type="map" lat="25.2048493" lng="55.2707828" name="Dubai" address="Dubai - United Arab Emirates"></div>',
     title: 'i hate you',
-    free_content: '<div>i love you</div>',
+    free_content:
+      '<p>i love you</p><div data-type="map" lat="25.2048493" lng="55.2707828" name="Dubai" address="Dubai - United Arab Emirates"></div>',
     verified_country: 'korea',
   };
 
@@ -80,11 +82,9 @@ const Response = () => {
           </button>
           <div className="text-[#44484c] text-base font-medium leading-relaxed">
             {translatedFreeText ? (
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(translatedFreeText).translated,
-                }}
-              />
+              <>
+                <RenderTranslatedHTML data={JSON.parse(translatedFreeText)} />
+              </>
             ) : (
               '공짜내용로딩중'
             )}
@@ -92,11 +92,9 @@ const Response = () => {
           {isContentVisible && (
             <div className="text-[#44484c] text-base font-medium leading-relaxed pb-[18px]">
               {translatedText ? (
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: JSON.parse(translatedText).translated,
-                  }}
-                />
+                <>
+                  <RenderTranslatedHTML data={JSON.parse(translatedText)} />
+                </>
               ) : (
                 '유료내용로딩중'
               )}
