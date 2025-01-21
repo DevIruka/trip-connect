@@ -104,7 +104,7 @@ const SearchResultComponent = () => {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
-      <div className="inner">
+      <div className="inner menuscrollbar">
         {noReqResults && noResResults && (
           <div className="flex justify-center items-center mt-[40px]">
             <p className="text-[16px] font-[600] text-[#797C80]">{keyword}에 대한 검색 결과가 존재하지 않습니다.</p>

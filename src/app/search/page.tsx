@@ -56,7 +56,7 @@ const SearchPage = () => {
         register={register}
         setValue={setValue}
       />
-      <div className="inner">
+      <div className="inner menuscrollbar">
         <div className="flex flex-col">
           <SearchToolTip
             handleClearRecentSearches={handleClearRecentSearches}
