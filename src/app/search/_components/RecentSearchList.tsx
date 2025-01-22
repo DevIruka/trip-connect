@@ -22,10 +22,9 @@ const RecentSearchList = ({
   handleRecentSearchClick,
   handleRecentSearchDelete,
 }: RecentSearchListProps) => {
-  console.log(recentSearches)
   return (
     <>
-      <ul className="flex flex-row gap-[4px] items-center overflow-x-auto whitespace-nowrap">
+      <ul className="flex flex-row gap-[4px] items-center overflow-x-auto whitespace-nowrap menuscrollbar">
         {recentSearches && recentSearches.length > 0 ? (
           recentSearches.map((term, index) => (
             <li
