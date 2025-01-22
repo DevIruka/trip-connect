@@ -47,26 +47,18 @@ const ListReqPost = ({
     >
       <div className="h-6 w-full justify-between items-center inline-flex gap-3">
         <div className="flex place-content-between items-center gap-1">
-          {post.date_end ? <PostDday postDateEnd={post.date_end} /> : null}
+          <PostDday postDateEnd={post.date_end!} />
           <div className="tag">
             <Image width={10} height={10} src={location} alt="location" />
             {JSON.parse(post.country_city!).country}
           </div>
-          {post.category
-            ? topicArr
-                .filter(([_, value]) => post.category?.includes(value))
-                .map(([key, _]) => (
-                  <div className="tag" key={key}>
-                    {key}
-                  </div>
-                ))
-            : topicArr
-                .filter(([_, value]) => post.category!.includes(value))
-                .map(([key, _]) => (
-                  <div className="tag" key={key}>
-                    {key}
-                  </div>
-                ))}
+          {topicArr
+            .filter(([_, value]) => post.category?.includes(value))
+            .map(([key, _]) => (
+              <div className="tag" key={key}>
+                {key}
+              </div>
+            ))}
         </div>
         {bookmarked ? (
           <button

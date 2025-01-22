@@ -21,6 +21,7 @@ export type Post = {
   content_html?: string;
   free_content?: string;
   request_id?: string;
-  request_posts?: { category: string[] };
+  request_posts?: { category: string[]; credit: number };
   verified_country?: string | null;
+  users?: { nickname: string };
 };
