@@ -12,9 +12,9 @@ import { useSearchStore } from '@/store/useSearchStore';
 import { nation } from '../_types/homeTypes';
 import QnaHeader from './qnaHeader';
 import Navbar from './navBar';
-import LoginModal from '@/components/LoginModal';
-import ListReqPost from '@/components/ListReqPost';
-import ListResPost from '@/components/ListResPost';
+import ListReqPost from '@/components/listReqPost';
+import ListResPost from '@/components/listResPost';
+import LoginModal from '@/components/loginModal';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분

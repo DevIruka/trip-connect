@@ -1,23 +1,15 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ResponsePost } from '../_types/user';
+import { ResponsePost, UserData } from '../_types/user';
 import { convertTopicsToKorean, EnglishCategory } from '@/utils/topics';
 import TimeAgo from './TimeAgo';
+import { convertToKorean } from '@/app/search/_utils/convertTopictoKorean';
+import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
 
 type ResponseItemProps = {
-  post: ResponsePost;
-};
-
-const categoryIconMapping: Record<string, string> = {
-  맛집: '🥘',
-  쇼핑: '🛍️',
-  숙소: '🛏️',
-  이벤트: '🎉',
-  '일정/경비': '💰️',
-  문화: '🌏️',
-  역사: '📚️',
-  액티비티: '🎿',
-  기타: '⁉️',
+  post: ReqResPost;
+  review: number;
+  userData: UserData;
 };
 
 const extractContentFromParagraph = (html: string): string => {
@@ -27,15 +19,15 @@ const extractContentFromParagraph = (html: string): string => {
   return paragraphs.map((p) => p.textContent || '').join('\n');
 };
 
-const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
+const ResponseItem: React.FC<ResponseItemProps> = ({
+  post,
+  review,
+  userData,
+}) => {
   const router = useRouter();
-
-  const country = JSON.parse(post.request_posts.country_city)?.country || '';
-  const categoryKorean = convertTopicsToKorean([
-    post.request_posts.category as EnglishCategory,
-  ])[0];
-  const categoryIcon = categoryIconMapping[categoryKorean] || '❓';
-  const freeContentText = extractContentFromParagraph(post.free_content);
+  const freeContentText = post.free_content
+    ? extractContentFromParagraph(post.free_content)
+    : '';
 
   const handleNavigate = () => {
     router.push(`/post/${post.request_id}`); // 이동할 경로
@@ -71,17 +63,21 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
             alt="location"
             className="w-[10px] h-[10px]"
           />
-          <span className="text-[12px] font-medium text-[#45484D]">
-            {country}
-          </span>
+          {/* <span className="text-[12px] font-medium text-[#45484D]">
+            {post.country_city?.country}
+          </span> */}
         </div>
-
-        <div className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] px-[6px] py-[5px]">
-          <span>{categoryIcon}</span>
-          <span className="text-[12px] font-medium text-[#45484D]">
-            {categoryKorean}
-          </span>
-        </div>
+        {post.category?.slice(0, 3).map((element, i) => {
+          const koreanCategory = convertToKorean(element);
+          return (
+            <div
+              key={i}
+              className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
+            >
+              <p className="text-[12px]">{koreanCategory}</p>
+            </div>
+          );
+        })}
       </div>
       <h3 className="flex items-start gap-[6px] mb-[8px]">
         <span className="text-[#FA505B] text-[16px] font-semibold leading-[1.25]">
@@ -108,7 +104,7 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
       >
         {freeContentText}
       </p>
-      
+
       <div className="flex justify-between items-center text-xs text-gray-500">
         <div className="flex items-center gap-[6px]">
           <div className="flex items-center gap-[4px]">
@@ -133,7 +129,7 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
               />
             </svg>
             <span className="text-[12px] font-medium text-[#797C80]">
-              {post.request_posts.credit?.toLocaleString()}
+              {post.credit?.toLocaleString()}
             </span>
           </div>
           <span
@@ -149,7 +145,7 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
             }}
           ></span>{' '}
           <span className="text-[12px] font-semibold text-[#797C80]">
-            작성자 {post.user_nickname}
+            작성자 {userData.nickname}
           </span>
           <span
             className="mx-[6px]"
@@ -164,7 +160,7 @@ const ResponseItem: React.FC<ResponseItemProps> = ({ post }) => {
             }}
           ></span>
           <span className="text-[12px] font-semibold text-[#797C80]">
-            댓글 {post.comment_count}
+            댓글 {review}
           </span>
         </div>
 

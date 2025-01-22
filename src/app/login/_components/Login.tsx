@@ -11,12 +11,14 @@ import { googleLogin, kakaoLogin } from '../_auth/oauth';
 import ErrorMessage from './ErrorMessage';
 import { useState } from 'react';
 import WarningModal from './Warning';
+import { useTranslation } from 'react-i18next';
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
 const leftIcon = '/images/ic-left.svg';
 
 const Login = () => {
+  const { t } = useTranslation('login');
   const {
     register,
     handleSubmit,
@@ -53,51 +55,51 @@ const Login = () => {
           >
             <div className="flex flex-col">
               <h2 className="text-[20px] font-[600] mt-[22px] mb-[28px]">
-                로그인하기
+                {t('login')}
               </h2>
-              <label className="text-[14px] mb-[8px]">이메일</label>
+              <label className="text-[14px] mb-[8px]">{t('email')}</label>
               <div className="relative mb-[16px]">
                 <Input
                   id="email"
-                  placeholder="이메일"
+                  placeholder={t('email')}
                   {...register('email', {
                     required: '이메일을 입력해주세요.',
                     pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   })}
                 />
                 {errors.email?.type === 'required' && (
-                  <ErrorMessage>이메일을 입력해주세요.</ErrorMessage>
+                  <ErrorMessage>{t('erroremailrequired')}</ErrorMessage>
                 )}
                 {errors.email?.type === 'pattern' && (
                   <ErrorMessage>
-                    유효한 이메일 주소를 입력해주세요.
+                    {t('erroremailpattern')}
                   </ErrorMessage>
                 )}
               </div>
             </div>
 
-            <label className="text-[14px] mb-[8px]">비밀번호</label>
+            <label className="text-[14px] mb-[8px]">{t('password')}</label>
             <div className="relative">
               <Input
                 id="password"
-                placeholder="비밀번호"
+                placeholder={t('password')}
                 type="password"
                 {...register('password', {
                   required: '비밀번호를 입력해주세요.',
                 })}
               />
               {errors.password?.type === 'required' && (
-                <ErrorMessage>비밀번호를 입력해주세요.</ErrorMessage>
+                <ErrorMessage>{t('errorpwrequired')}</ErrorMessage>
               )}
             </div>
             <BlueButton type="submit" className="mt-[40px] mb-[40px]">
-              로그인
+            {t('login')}
             </BlueButton>
           </form>
           <div className="flex items-center w-full">
             <div className="flex-grow border-t border-[E5E5EC]"></div>
             <span className="mx-[8px] text-[#808080] text-[14px]">
-              간편 로그인
+            {t('easyLogin')}
             </span>
             <div className="flex-grow border-t border-[#D9D9D9]"></div>
           </div>
@@ -121,22 +123,18 @@ const Login = () => {
           </div>
           <div className="flex flex-row">
             <p className="text-[14px] text-[#505050]">
-              아직 회원이 아니신가요?
+            {t('stillNot')}
             </p>
             <Link
               href={'/signup'}
               className="text-[14px] text-[#45484D] underline underline-offset-[1px] ml-1 cursor-pointer"
             >
-              회원가입
+              {t('signup')}
             </Link>
           </div>
         </div>
         {/* 에러 발생 시 모달 표시 */}
-        {errorMessage && (
-          <WarningModal
-            onClose={() => setErrorMessage(null)}
-          />
-        )}
+        {errorMessage && <WarningModal onClose={() => setErrorMessage(null)} />}
       </div>
     </>
   );
