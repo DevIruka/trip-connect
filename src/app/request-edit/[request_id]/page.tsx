@@ -6,7 +6,6 @@ import { useForm } from 'react-hook-form';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { FormInputs } from '../../request/_types/form';
 import FormFields from '../../request/_components/FormFields';
-import LocationModal from '../../../components/LocationModal';
 import TopicSelector from '../../request/_components/TopicSelector';
 import { FaSearch } from 'react-icons/fa';
 import {
@@ -16,6 +15,13 @@ import {
   KoreanCategory,
   topicMapping,
 } from '@/utils/topics';
+import { LocationModal } from '@/components/LocationModalNew';
+
+type nation = {
+  continent: string;
+  country: string;
+  city: string;
+};
 
 const EditRequestPage: React.FC = () => {
   const { request_id } = useParams();
@@ -33,16 +39,44 @@ const EditRequestPage: React.FC = () => {
   } = useForm<FormInputs>();
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [selectedLocation, setSelectedLocation] = React.useState<string>('');
+  const [selectedLocation, setSelectedLocation] = useState<{
+    continent: string;
+    country: string;
+    city: string;
+  }>({ continent: '', country: '', city: '' });
   const [isRestricted, setIsRestricted] = useState(false);
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
-  const handleLocationSelect = (location: string) => {
-    setSelectedLocation(location);
-    setIsModalOpen(false);
-    setValue('country_city', location);
-    clearErrors('country_city');
+
+  const handleLocationSelect = (location: nation | null) => {
+    if (location) {
+      const { continent, country, city } = location;
+      setSelectedLocation({ continent, country, city });
+      setValue('country_city', `${country}, ${city}`);
+      clearErrors('country_city');
+      sessionStorage.setItem(
+        'selectedLocation',
+        JSON.stringify({ continent, country, city }),
+      ); // 선택된 값 저장
+    } else {
+      setSelectedLocation({ continent: '', country: '', city: '' });
+      setValue('country_city', '');
+      sessionStorage.removeItem('selectedLocation');
+    }
+    toggleModal();
   };
+
+  useEffect(() => {
+    const savedLocation = sessionStorage.getItem('selectedLocation');
+    if (savedLocation) {
+      const parsedLocation = JSON.parse(savedLocation);
+      setSelectedLocation(parsedLocation);
+      setValue(
+        'country_city',
+        `${parsedLocation.country}, ${parsedLocation.city}`,
+      );
+    }
+  }, [setValue]);
 
   useEffect(() => {
     const fetchRequestDetails = async () => {
@@ -69,6 +103,16 @@ const EditRequestPage: React.FC = () => {
 
         const koreanCategories = convertTopicsToKorean(validCategories);
 
+        const countryCity = requestData.country_city
+          ? JSON.parse(requestData.country_city)
+          : { continent: '', country: '', city: '' };
+
+        setSelectedLocation({
+          continent: countryCity.continent || '',
+          country: countryCity.country || '',
+          city: countryCity.city || '',
+        });
+
         reset({
           title: requestData.title,
           credit: requestData.credit,
@@ -77,9 +121,8 @@ const EditRequestPage: React.FC = () => {
             ? new Date(requestData.date_end)
             : undefined,
           category: koreanCategories,
-          country_city: requestData.country_city,
+          country_city: `${countryCity.country}, ${countryCity.city}`,
         });
-        setSelectedLocation(requestData.country_city);
 
         const { data: responseData, error: responseError } = await supabase
           .from('response_posts')
@@ -90,7 +133,6 @@ const EditRequestPage: React.FC = () => {
 
         // 답변이 있는 경우 제한
         setIsRestricted(responseData && responseData.length > 0);
-
       } catch (error) {
         console.error('데이터 불러오기 오류:', error);
         alert('데이터를 불러오는 데 문제가 발생했습니다.');
@@ -142,103 +184,117 @@ const EditRequestPage: React.FC = () => {
         <h1 className="text-lg font-bold">질문하기</h1>
         <button
           onClick={handleSubmit(onSubmit)}
-          className="bg-black text-white py-1 px-4 rounded hover:bg-gray-800"
+          disabled={
+            isRestricted ||
+            !watch('country_city') ||
+            !watch('category') ||
+            !watch('title') ||
+            !watch('content')
+          }
+          className={`py-1 px-4 rounded ${
+            isRestricted ||
+            !watch('country_city') ||
+            !watch('category') ||
+            !watch('title') ||
+            !watch('content')
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-black text-white hover:bg-gray-800'
+          }`}
         >
           수정
         </button>
       </div>
 
-      <form className="p-4">
-        {isRestricted && (
-          <div className="text-[#80BFFF] text-[14px] font-semibold mb-2">
-            답변이 달린 질문은 기한 수정만 가능해요
-          </div>
-        )}
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2">나라/도시 선택</label>
-          <div className="relative">
-            <input
-              type="text"
-              value={selectedLocation}
-              placeholder="나라/도시를 선택하세요"
-              readOnly={isRestricted}
-              {...register('country_city', {
-                required: '나라/도시를 선택하세요.',
-              })}
-              className={`w-full px-3 py-2 border ${
-                errors.country_city ? 'border-red-500' : 'border-gray-300'
-              } rounded focus:outline-none text-[#797C80] ${
-                isRestricted ? 'cursor-not-allowed bg-gray-100' : ''
-              }`}
-              onClick={!isRestricted ? toggleModal : undefined}
-            />
-            {errors.country_city && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.country_city.message}
-              </p>
-            )}
-                {!isRestricted && (
-
+      {isRestricted && (
+        <div className="text-[#80BFFF] text-[14px] font-semibold mb-2">
+          답변이 달린 질문은 기한 수정만 가능해요
+        </div>
+      )}
+      <div className="mb-4">
+        <label className="block text-sm font-bold mb-2">나라/도시 선택</label>
+        <div className="relative">
+          <input
+            type="text"
+            value={`${selectedLocation.country}, ${selectedLocation.city}`}
+            readOnly
+            placeholder="나라/도시를 선택하세요"
+            {...register('country_city', {
+              required: '나라/도시를 선택하세요.',
+            })}
+            className={`w-full px-3 py-2 border ${
+              errors.country_city ? 'border-red-500' : 'border-gray-300'
+            } rounded focus:outline-none ${
+              isRestricted
+                ? 'cursor-not-allowed bg-gray-100 text-gray-500'
+                : 'bg-white text-black'
+            }`}
+            onClick={!isRestricted ? toggleModal : undefined}
+          />
+          {errors.country_city && (
+            <p className="text-red-500 text-sm mt-1">
+              {errors.country_city.message}
+            </p>
+          )}
+          {!isRestricted && (
             <FaSearch
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
               style={{ color: 'black' }}
               size={18}
-            />    )}
-
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2">주제 선택</label>
-          <TopicSelector
-            topics={[
-              '맛집',
-              '쇼핑',
-              '숙소',
-              '이벤트',
-              '일정/경비',
-              '문화',
-              '역사',
-              '액티비티',
-              '기타',
-            ]}
-            disabled={isRestricted}
-            setValue={setValue}
-            selectedCategories={watch('category')}
-            isSingleSelect
-          />
-
-          {errors.category && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.category.message}
-            </p>
+            />
           )}
         </div>
+      </div>
 
-        <FormFields
-          register={register}
-          watch={watch}
-          control={control}
-          errors={errors}
+      <div className="mb-4">
+        <label className="block text-sm font-bold mb-2">주제 선택</label>
+        <TopicSelector
+          topics={[
+            '맛집',
+            '쇼핑',
+            '숙소',
+            '이벤트',
+            '일정/경비',
+            '문화',
+            '역사',
+            '액티비티',
+            '기타',
+          ]}
+          disabled={isRestricted}
           setValue={setValue}
-          disabledFields={{
-            title: isRestricted,
-            credit: isRestricted,
-            content: isRestricted,
-            date_end: false, // 기한 수정은 항상 가능
-          }}
+          selectedCategories={watch('category')}
+          isSingleSelect
         />
 
-        <LocationModal
-          isOpen={isModalOpen}
-          toggleModal={toggleModal}
-          handleLocationSelect={(location) => {
-            handleLocationSelect(location);
-            setValue('country_city', location);
-            clearErrors('country_city');
-          }}
-        />
-      </form>
+        {errors.category && (
+          <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
+        )}
+      </div>
+
+      <FormFields
+        register={register}
+        watch={watch}
+        control={control}
+        errors={errors}
+        setValue={setValue}
+        disabledFields={{
+          title: isRestricted,
+          credit: isRestricted,
+          content: isRestricted,
+          date_end: false, // 기한 수정은 항상 가능
+        }}
+      />
+
+      <LocationModal
+        isOpen={isModalOpen}
+        onClose={() => {
+          toggleModal();
+        }}
+        setCountry={(location) => {
+          handleLocationSelect(location);
+          toggleModal();
+        }}
+        selectedCountry={selectedLocation}
+      />
     </div>
   );
 };
