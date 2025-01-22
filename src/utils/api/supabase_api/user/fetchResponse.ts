@@ -1,4 +1,4 @@
-import { ExtendedResponsePostData } from '@/app/search/[id]/_types/searchTypes';
+import { ExtendedResponsePostData } from '@/app/[locale]/search/[id]/_types/searchTypes';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
 type FetchUserResponsePostsResult = {

@@ -3,13 +3,13 @@ import { useRouter } from 'next/navigation';
 import { ResponsePost, UserData } from '../_types/user';
 import { convertTopicsToKorean, EnglishCategory } from '@/utils/topics';
 import TimeAgo from './TimeAgo';
-import { convertToKorean } from '@/app/search/_utils/convertTopictoKorean';
-import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
+import { convertToKorean } from '@/app/[locale]/search/_utils/convertTopictoKorean';
+import { ReqResPost } from '@/app/[locale]/search/[id]/_components/SearchResults';
 
 type ResponseItemProps = {
   post: ReqResPost;
-  review : number
-  userData : UserData
+  review: number;
+  userData: UserData;
 };
 
 const extractContentFromParagraph = (html: string): string => {
@@ -19,9 +19,15 @@ const extractContentFromParagraph = (html: string): string => {
   return paragraphs.map((p) => p.textContent || '').join('\n');
 };
 
-const ResponseItem: React.FC<ResponseItemProps> = ({ post, review, userData }) => {
+const ResponseItem: React.FC<ResponseItemProps> = ({
+  post,
+  review,
+  userData,
+}) => {
   const router = useRouter();
-  const freeContentText = post.free_content ? extractContentFromParagraph(post.free_content) : ''
+  const freeContentText = post.free_content
+    ? extractContentFromParagraph(post.free_content)
+    : '';
 
   const handleNavigate = () => {
     router.push(`/post/${post.request_id}`); // 이동할 경로

@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
-import { continents } from '@/data/continents';
-import { FaSearch } from 'react-icons/fa';
+import { continents } from "@/data/continents";
+import { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 
 type Props = {
   isOpen: boolean;

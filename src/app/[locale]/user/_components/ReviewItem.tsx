@@ -1,6 +1,6 @@
 import React from 'react';
 import { ReviewPost, UserData } from '../_types/user';
-import TimeAgo from '@/app/review/[response_id]/_components/TimeAgo';
+import TimeAgo from '@/app/[locale]/review/[response_id]/_components/TimeAgo';
 
 type ReviewItemProps = {
   review: ReviewPost;

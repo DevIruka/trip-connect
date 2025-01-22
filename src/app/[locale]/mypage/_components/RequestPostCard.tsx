@@ -2,16 +2,15 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
-import { calculateDDay } from '@/app/search/_utils/calculateDDay';
+import { calculateDDay } from '@/app/[locale]/search/_utils/calculateDDay';
 import { RequestPost } from '../_type/type';
 import TimeAgo from './TimeAgo';
 import stripHtmlTags from '../_util/striptHtmlTags';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useRouter } from 'next/navigation';
 
-
 const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
-    const router = useRouter(); 
+  const router = useRouter();
   const dDay = calculateDDay(post.date_end || undefined);
   const plainContent = stripHtmlTags(post.content ?? '');
   const [responseCount, setResponseCount] = useState<number>(0);
@@ -38,10 +37,10 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
     fetchResponseCount();
   }, [fetchResponseCount]);
 
-    const handleCardClick = () => {
-      router.push(`/post/${post.id}`); // 게시물 ID를 기반으로 상세 페이지 이동
+  const handleCardClick = () => {
+    router.push(`/post/${post.id}`); // 게시물 ID를 기반으로 상세 페이지 이동
   };
-  
+
   return (
     <div
       onClick={handleCardClick}

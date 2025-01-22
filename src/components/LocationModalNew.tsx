@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { nations } from '../data/nation';
-import { nation } from '../app/home/_types/homeTypes';
 import close from '@/data/images/ic-Close.svg';
 import search from '@/data/images/ic-Search.svg';
 import radioBtn from '@/data/images/radio_btn.svg';
 import radioBtnSlctd from '@/data/images/radio_btn_slctd.svg';
 import location from '@/data/images/ic-location.svg';
 import Image from 'next/image';
+import { nation } from '@/app/[locale]/home/_types/homeTypes';
 
 type Props = {
   isOpen: boolean;

@@ -1,6 +1,7 @@
 import React from 'react';
-import BackButton from '../app/post/_components/BackBtn';
+
 import Image from 'next/image';
+import BackButton from '@/app/[locale]/post/_components/BackBtn';
 
 const BackHeader = ({
   image,

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchUser } from '../../supabase_api/user/fetchUser';
-import { UserData } from '@/app/user/_types/user';
+import { UserData } from '@/app/[locale]/user/_types/user';
 
 const useUserData = (
   id: string,

@@ -2,7 +2,7 @@ import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 import {
   ExtendedResponsePostData,
   FetchResponsePostsResult,
-} from '@/app/search/[id]/_types/searchTypes';
+} from '@/app/[locale]/search/[id]/_types/searchTypes';
 import { fetchUserResponsePosts } from '../../supabase_api/user/fetchResponse';
 const PAGE_SIZE = 5; // 페이지 사이즈
 

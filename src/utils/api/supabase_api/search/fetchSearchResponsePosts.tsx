@@ -1,8 +1,8 @@
-import { ExtendedResponsePostData } from '@/app/search/[id]/_types/searchTypes';
+import { ExtendedResponsePostData } from '@/app/[locale]/search/[id]/_types/searchTypes';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
 interface FetchSearchResponsePostsResult {
-  searched_response_posts: ExtendedResponsePostData[]
+  searched_response_posts: ExtendedResponsePostData[];
   totalCount: number | null;
 }
 
@@ -10,7 +10,7 @@ export const fetchSearchResponsePosts = async (
   keyword: string | null,
   page: number,
   limit: number = 5,
-) : Promise<FetchSearchResponsePostsResult> => {
+): Promise<FetchSearchResponsePostsResult> => {
   const startIndex = (page - 1) * limit;
 
   const query = supabase
@@ -37,5 +37,5 @@ export const fetchSearchResponsePosts = async (
     };
   });
 
-  return {searched_response_posts, totalCount: count }
+  return { searched_response_posts, totalCount: count };
 };

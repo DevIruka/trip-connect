@@ -1,6 +1,7 @@
-import { parseHtmlToArray } from '@/app/post/_hooks/parseHtmlToArray';
-import { parsedData } from '@/app/post/_types/parsedData';
 
+
+import { parseHtmlToArray } from '@/app/[locale]/post/_hooks/parseHtmlToArray';
+import { parsedData } from '@/app/[locale]/post/_types/parsedData';
 import React from 'react';
 const ContentRenderer = ({ parsedArray }: { parsedArray: parsedData[] }) => {
   return (

@@ -6,9 +6,10 @@ import coin from '@/data/images/coin.svg';
 import dot from '@/data/images/Ellipse 14.svg';
 import { useRouter } from 'next/navigation';
 import { topicMapping } from '@/utils/topics';
-import { Post } from '@/app/home/_types/homeTypes';
-import { useGPTTranslation } from '@/app/post/_hooks/TranslatedText';
+
 import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
+import { useGPTTranslation } from '@/app/[locale]/post/_hooks/TranslatedText';
+import { Post } from '@/app/[locale]/home/_types/homeTypes';
 
 const ListResPost = ({ post }: { post: Post }) => {
   const router = useRouter();

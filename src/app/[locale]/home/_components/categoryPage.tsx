@@ -3,12 +3,9 @@
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
 import pencil from '@/data/images/ic-pencil.svg';
 import { usePosts } from '@/utils/api/tanstack/home/usePosts';
-
 import { useSearchStore } from '@/store/useSearchStore';
-
 import { nation } from '../_types/homeTypes';
 import QnaHeader from './qnaHeader';
 import Navbar from './navBar';

@@ -7,14 +7,16 @@ import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 
 import { useUserStore } from '@/store/userStore';
-import PostDday from '@/app/home/_components/dDay';
+
 
 import location from '@/data/images/ic-location.svg';
 import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
 import coin from '@/data/images/coin.svg';
 import dot from '@/data/images/Ellipse 14.svg';
 import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
-import { Post } from '@/app/home/_types/homeTypes';
+import { Post } from '@/app/[locale]/home/_types/homeTypes';
+import PostDday from '@/app/[locale]/home/_components/dDay';
+
 
 const ListReqPost = ({
   post,

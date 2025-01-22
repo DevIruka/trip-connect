@@ -3,15 +3,15 @@ import { UserData, UserPostData } from '../_types/user';
 import ResponseItem from './ResponseItem';
 import RequestItem from './RequestItem';
 import ReviewItem from './ReviewItem';
-import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
+import { ReqResPost } from '@/app/[locale]/search/[id]/_components/SearchResults';
 
 type PostListProps = {
   activeTab: 'responses' | 'requests' | 'reviews';
   userPosts: UserPostData;
   userProfile: UserData;
-  userResponsePost : ReqResPost[]
-  userData : UserData
-  reviewCount : number[]
+  userResponsePost: ReqResPost[];
+  userData: UserData;
+  reviewCount: number[];
 };
 
 const PostList: React.FC<PostListProps> = ({
@@ -25,7 +25,14 @@ const PostList: React.FC<PostListProps> = ({
     {activeTab === 'responses' &&
       userResponsePost?.map((post, i) => {
         const review = reviewCount[i];
-        return <ResponseItem key={post.id} post={post} review={review} userData={userData} />;
+        return (
+          <ResponseItem
+            key={post.id}
+            post={post}
+            review={review}
+            userData={userData}
+          />
+        );
       })}
     {/* {activeTab === 'requests' &&
       userPosts.requests.map((post) => (
