@@ -1,48 +1,41 @@
 import { category } from '@/data/category';
 import Link from 'next/link';
-import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
-import { Tabs, Tab, Box } from '@mui/material';
+import { Dispatch, SetStateAction, useEffect, useRef } from 'react';
 import { KoreanCategory } from '@/utils/topics';
 import Image from 'next/image';
 import TabDetail from '../../_components/TabDetail';
 import { convertToKorean } from '../../_utils/convertTopictoKorean';
 import { useSearchStore } from '@/store/useSearchStore';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 
 const iconLeft = '/images/ic-left.svg';
 const iconclose = '/images/ic-xmark.svg';
 
 type DetailedSearchBarProps = {
-  inputRef: RefObject<HTMLInputElement>;
+  keyword: string | null;
   inputOnclick: () => void;
   selectedCategory: string | null;
   setSelectedCategory: Dispatch<SetStateAction<KoreanCategory | '전체'>>;
 };
 
 const DetailedSearchBar = ({
-  inputRef,
+  keyword,
   inputOnclick,
   selectedCategory,
   setSelectedCategory,
 }: DetailedSearchBarProps) => {
-    const setKeyword = useSearchStore((state) => state.setKeyword);
+  const setKeyword = useSearchStore((state) => state.setKeyword);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
     setSelectedCategory('전체');
   }, [setSelectedCategory]);
-
-  const handleCategoryChange = (
-    _: React.SyntheticEvent,
-    newValue: string | null,
-  ) => {
-    setSelectedCategory((prev) =>
-      prev === newValue ? '전체' : (newValue as KoreanCategory | '전체'),
-    );
-  };
 
   const handleClearInput = () => {
     if (inputRef.current) {
       inputRef.current.value = ''; // 입력 필드 초기화
     }
-    setKeyword('')
+    setKeyword('');
   };
 
   return (
@@ -61,6 +54,7 @@ const DetailedSearchBar = ({
           <input
             type="text"
             placeholder="나라와 카테고리 모두 검색할 수 있어요."
+            defaultValue={keyword!}
             ref={inputRef}
             className="bg-[#F9F9F9] rounded-[12px] text-[14px] h-[44px] w-[303px] mt-[6px] mb-[11px] py-[12px] px-[16px]"
             onClick={inputOnclick}
@@ -75,45 +69,23 @@ const DetailedSearchBar = ({
           />
         </div>
       </div>
-      <Box>
+      <div className="w-full px-5 border-b border-[#dee1e5] menuscrollbar">
         <Tabs
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          variant="scrollable"
-          scrollButtons="auto"
-          aria-label="category filter tabs"
-          TabIndicatorProps={{
-            style: {
-              backgroundColor: 'black', // 밑줄 색상을 검은색으로 변경
-            },
-          }}
-          sx={{
-            overflowX: 'auto', // 수평 스크롤 허용
-            '& .MuiTabs-scrollButtons': {
-              width: 'auto', // 스크롤 버튼 너비 조정
-            },
-          }}
+          value={selectedCategory ?? undefined}
+          onValueChange={(value: string) =>
+            setSelectedCategory(value as KoreanCategory | '전체')
+          }
+          className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex"
         >
-          {category.map((category) => (
-            <Tab
-              key={category}
-              label={<TabDetail category={category} />}
-              value={convertToKorean(category)} // Tab의 고유 값
-              sx={{
-                height: '28',
-                padding: '4px 8px', // 위아래 간격 줄이기
-                fontSize: '16px', // 텍스트 크기 조정
-                '&.Mui-selected': {
-                  color: '#000000',
-                },
-                '&:hover': {
-                  backgroundColor: '#f0f0f0', // 기본 탭에 호버 색상 변경
-                },
-              }}
-            />
-          ))}
+          <TabsList>
+            {category.map((cat) => (
+              <TabsTrigger key={cat} value={convertToKorean(cat)}>
+                <TabDetail category={cat} />
+              </TabsTrigger>
+            ))}
+          </TabsList>
         </Tabs>
-      </Box>
+      </div>
     </>
   );
 };

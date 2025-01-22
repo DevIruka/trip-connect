@@ -2,7 +2,7 @@
 
 import { decodeUrl } from '@/utils/decodeUrl';
 import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useInfiniteSearchRequestPosts from '@/utils/api/tanstack/search/useInfiniteSearchRequestPosts';
 import useInfiniteSearchResponsePosts from '@/utils/api/tanstack/search/useInfiniteSearchResponsePosts';
 import { ExtendedResponsePostData, Params, RequestPostData } from '../_types/searchTypes';
@@ -23,16 +23,9 @@ const SearchResultComponent = () => {
   const [selectedCategory, setSelectedCategory] = useState<
     KoreanCategory | '전체'
   >('전체');
-  const inputRef = useRef<HTMLInputElement>(null); // 초기값 null로 설정
   const route = useRouter();
   const [allPosts, setAllPosts] = useState<ReqResPost[] | []>([]);
   const [filter, setFilter] = useState<'all' | 'question' | 'answer'>('all');
-
-  useEffect(() => {
-    if (keyword && inputRef.current) {
-      inputRef.current.value = keyword; // input 엘리먼트의 value를 업데이트
-    }
-  }, [keyword]);
 
   const inputOnclick = () => {
     route.push('/search');
@@ -100,7 +93,7 @@ const SearchResultComponent = () => {
     <>
       <DetailedSearchBar
         inputOnclick={inputOnclick}
-        inputRef={inputRef}
+        keyword={keyword}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />

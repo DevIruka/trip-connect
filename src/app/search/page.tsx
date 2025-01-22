@@ -31,7 +31,7 @@ const SearchPage = () => {
       recentSearches: storedSearches as string[],
     },
   });
-  // const recentSearches: string[] = watch('recentSearches', storedSearches); // 최근 검색어 리스트
+
   const query = watch('searchQuery'); // 검색 입력값
 
   useEffect(() => {
