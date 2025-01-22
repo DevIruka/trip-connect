@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import Header from '../_components/Header';
@@ -15,6 +15,7 @@ import {
   RequestPost,
 } from '../_types/user';
 import useInfiniteUserResponsePosts from '@/utils/api/tanstack/user/useInfiniteUserResponsePosts';
+import useUserData from '@/utils/api/tanstack/user/useUserData';
 
 type BaseResponsePost = Omit<
   ResponsePost,
@@ -30,12 +31,10 @@ type BaseResponsePost = Omit<
 
 const UserPage = () => {
   const { id } = useParams();
+  const [reviewCount, setReviewCount] = useState<number[] | [] | null>([]);
   const [userData, setUserData] = useState<UserData | null>(null);
-  const [userPosts, setUserPosts] = useState<UserPostData>({
-    responses: [],
-    requests: [],
-    reviews: [],
-  });
+
+  const { data, isUserPending } = useUserData(id as string, setUserData);
 
   const [activeTab, setActiveTab] = useState<
     'responses' | 'requests' | 'reviews'
@@ -45,10 +44,23 @@ const UserPage = () => {
     responseFetchNextPage,
     responseHasNextPage,
     responseIsFetchingNextPage,
+    isPending,
     userResponsePost,
-  } = useInfiniteUserResponsePosts(id as string);
+  } = useInfiniteUserResponsePosts(id as string, setReviewCount);
 
   console.log(userResponsePost)
+
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const { data: user, error: userError } = await supabase
+  //       .from('users')
+  //       .select('profile_img, id, nickname, country_verified, introduction')
+  //       .eq('id', id)
+  //       .single();
+  //       setUserData(user)
+  //   };
+  //   fetchUser();
+  // }, []);
 
   // useEffect(()=>{
   //       const { data: user, error: userError } = await supabase
@@ -176,27 +188,25 @@ const UserPage = () => {
   //   fetchUserData();
   // }, [id]);
 
-  if (!userData) return <div>로딩 중...</div>;
-
-  console.log(userData);
-
   return (
     <div className="h-screen overflow-y-auto bg-white">
       <Header />
-      {/* <ProfileSection userData={userData} />
-      <TabNavigation
+      {isUserPending ? <></> : <ProfileSection userData={userData!} />}
+      {/* <TabNavigation
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         counts={{
-          responses: userPosts.responses.length,
-          requests: userPosts.requests.length,
-          reviews: userPosts.reviews.length,
+          responses: userResponsePost ? userResponsePost.length : 0,
+          // requests: userPosts.requests.length,
+          // reviews: userPosts.reviews.length,
         }}
-      />
-      <PostList
+      /> */}
+      {/* <PostList
         activeTab={activeTab}
-        userPosts={userPosts}
-        userProfile={userData}
+        // userResponsePost={userResponsePost}
+        // reviewCount={reviewCount}
+        // userPosts={userPosts}
+        // userProfile={userData}
       /> */}
     </div>
   );
