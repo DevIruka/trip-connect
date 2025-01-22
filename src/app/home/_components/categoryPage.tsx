@@ -4,25 +4,17 @@ import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
-import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
-import location from '@/data/images/ic-location.svg';
-import coin from '@/data/images/coin.svg';
-import dot from '@/data/images/Ellipse 14.svg';
 import pencil from '@/data/images/ic-pencil.svg';
-import { topicMapping } from '@/utils/topics';
 import { usePosts } from '@/utils/api/tanstack/home/usePosts';
-import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
-import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
-import { useUserStore } from '@/store/userStore';
+
 import { useSearchStore } from '@/store/useSearchStore';
 
 import { nation } from '../_types/homeTypes';
 import QnaHeader from './qnaHeader';
 import Navbar from './navBar';
-import PostDday from './dDay';
 import LoginModal from '@/components/loginModal';
 import ListReqPost from '@/components/listReqPost';
+import ListResPost from '@/components/listResPost';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -32,22 +24,6 @@ const CategoryPage = () => {
   const changeCategory = (category: string) => {
     router.push(`?category=${category}`); // URL 업데이트
   };
-
-  const handleNavigation = (id: string | number) => {
-    router.push(`/post/${id}`);
-  };
-
-  //카테고리 한글표시
-  const topicArr = Object.entries(topicMapping);
-
-  // //로그인한 유저
-  const { user } = useUserStore();
-  const userId = user?.id;
-
-  //북마크
-  const { addBookmarkMutation, deleteBookmarkMutation } =
-    useBookmarkMutations(userId);
-  const { isPostBookmarked } = useBookmarks(userId);
 
   //모든 게시물 가져오기
   const { allPosts, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -111,124 +87,10 @@ const CategoryPage = () => {
         />
         <ul className="px-5 grid gap-2 items-start">
           {nationfilteredPosts?.map((post) => {
-            const bookmarked = isPostBookmarked(post.id);
             return !post.request_id ? (
               <ListReqPost post={post} setIsModalOpen={setIsModalOpen} />
             ) : (
-              // <li
-              //   onClick={() =>
-              //     handleNavigation(post.request_id ? post.request_id : post.id)
-              //   }
-              //   key={post.id}
-              //   className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full"
-              // >
-              //   <div className="h-6 w-full justify-between items-center inline-flex gap-3">
-              //     <div className="flex place-content-between items-center gap-1">
-              //       {post.date_end ? (
-              //         <PostDday postDateEnd={post.date_end} />
-              //       ) : null}
-              //       <div className="tag">
-              //         <Image
-              //           width={10}
-              //           height={10}
-              //           src={location}
-              //           alt="location"
-              //         />
-              //         {post.request_id
-              //           ? post.verified_country
-              //           : JSON.parse(post.country_city!).country}
-              //       </div>
-              //       {post.category
-              //         ? topicArr
-              //             .filter(([_, value]) =>
-              //               post.category?.includes(value),
-              //             )
-              //             .map(([key, _]) => (
-              //               <div className="tag" key={key}>
-              //                 {key}
-              //               </div>
-              //             ))
-              //         : topicArr
-              //             .filter(([_, value]) =>
-              //               post.request_posts?.category.includes(value),
-              //             )
-              //             .map(([key, _]) => (
-              //               <div className="tag" key={key}>
-              //                 {key}
-              //               </div>
-              //             ))}
-              //     </div>
-              //     {!post.request_id ? (
-              //       bookmarked ? (
-              //         <button
-              //           onClick={(e) => {
-              //             e.stopPropagation();
-              //             deleteBookmarkMutation.mutate(post.id);
-              //           }}
-              //         >
-              //           <Image
-              //             width={20}
-              //             height={20}
-              //             src={selectedBookmarkBtn}
-              //             alt="bookmark button"
-              //           />
-              //         </button>
-              //       ) : (
-              //         <button
-              //           onClick={(e) => {
-              //             e.stopPropagation();
-              //             if (userId) {
-              //               addBookmarkMutation.mutate(post.id);
-              //             } else {
-              //               setIsModalOpen(true);
-              //             }
-              //           }}
-              //         >
-              //           <Image
-              //             width={20}
-              //             height={20}
-              //             src={bookmarkButton}
-              //             alt="bookmark button"
-              //           />
-              //         </button>
-              //       )
-              //     ) : (
-              //       ''
-              //     )}
-              //   </div>
-              //   <div className="grid gap-2">
-              //     <div className="flex gap-1.5 max-w-full">
-              //       <div
-              //         className={`text-base font-semibold leading-snug w-[16px] ${
-              //           post.request_id ? 'text-[#f94f5b]' : 'text-[#0582ff]'
-              //         }`}
-              //       >
-              //         {post.request_id ? 'A.' : 'Q.'}
-              //       </div>
-              //       <h1 className="text-black text-base font-semibold leading-snug grow line-clamp-2">
-              //         {post.title}
-              //       </h1>
-              //     </div>
-              //     <div className="pl-[22px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2">
-              //       {post.content}
-              //     </div>
-              //   </div>
-              //   <div className="flex gap-4 items-center text-[#797c80] text-xs font-medium justify-between w-full">
-              //     <div className="flex gap-4">
-              //       <div className="flex gap-1.5 items-center">
-              //         <div className="flex gap-1 items-center">
-              //           <Image width={18} height={18} src={coin} alt="coin" />
-              //           {post.credit}
-              //         </div>
-              //         <Image width={2} height={2} src={dot} alt="dot" />
-              //         <div>
-              //           {post.request_id ? '작성자 닉네임' : '1명 답변'}
-              //         </div>
-              //       </div>
-              //     </div>
-              //     <div>1일 전</div>
-              //   </div>
-              // </li>
+              <ListResPost post={post} />
             );
           })}
         </ul>

@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import { Tables } from '@/types/supabase';
 import { topicMapping } from '@/utils/topics';
 import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
@@ -15,25 +14,14 @@ import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
 import coin from '@/data/images/coin.svg';
 import dot from '@/data/images/Ellipse 14.svg';
 import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
-
-const example = {
-  id: 1,
-  created_at: 1,
-  user_id: 1,
-  content: 1,
-  title: 1,
-  date_end: 1,
-  category: 1,
-  credit: 1,
-  country_city: 1,
-};
+import { Post } from '@/app/home/_types/homeTypes';
 
 const ListReqPost = ({
   post,
   setIsModalOpen,
 }: {
-  post: Tables<'request_posts'>;
-  setIsModalOpen: () => void;
+  post: Post;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
   const topicArr = Object.entries(topicMapping);
@@ -73,7 +61,7 @@ const ListReqPost = ({
                   </div>
                 ))
             : topicArr
-                .filter(([_, value]) => post.category.includes(value))
+                .filter(([_, value]) => post.category!.includes(value))
                 .map(([key, _]) => (
                   <div className="tag" key={key}>
                     {key}
