@@ -9,11 +9,13 @@ const BackHeader = ({
   imagesize,
   text,
   isThreeDots,
+  postid,
 }: {
   image: string;
   imagesize: number;
   text: string;
   isThreeDots?: boolean;
+  postid?: string;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
@@ -30,14 +32,16 @@ const BackHeader = ({
 
       {isModalOpen && (
         <div
-          className="w-full h-screen bg-black absolute top-0 right-0"
+          className="w-full h-screen absolute top-0 right-0"
           onClick={() => setIsModalOpen(false)}
         >
-          <div className="bg-white">
-            <button onClick={() => (location.href = `/response-edit`)}>
+          <div className="bg-red-500 grid w-[129px] h-[110px] rounded-lg shadow-[0px_4px_12px_0px_rgba(0,0,0,0.05)] text-center self-stretch p-2.5 justify-start items-center gap-2.5 text-[#44484c] text-sm font-medium leading-tight">
+            <button
+              onClick={() => (location.href = `/response-edit/${postid}`)}
+            >
               수정하기
             </button>
-            <button onClick={() => console.log('삭제')}>삭제하기</button>
+            <button onClick={() => fetchPostDelete(postid!)}>삭제하기</button>
           </div>
         </div>
       )}

@@ -31,6 +31,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
         text=""
         imagesize={20}
         isThreeDots={true}
+        postid={postId}
       />
       {post ? (
         <div className="relative">
