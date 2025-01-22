@@ -11,20 +11,78 @@ import { useGPTTranslation } from '../_hooks/TranslatedText';
 import RenderTranslatedHTML from './RenderTranslatedHTML';
 import { Tables } from '@/types/supabase';
 import { useUserStore } from '@/store/userStore';
-import LoginModal from '@/components/LoginModal';
+import { supabase } from '@/utils/supabase/supabaseClient';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
   const [isPurchased, setIsPurchased] = useState(false); // 구매 여부 상태
-  const [credits, setCredits] = useState(10); // 사용자 크레딧
+  const [mycredits, setMycredits] = useState<number | null>(); // 사용자 크레딧
+  const [credit, setCredit] = useState();
   const [isHydrated, setIsHydrated] = useState(false);
   const [isOriginal, setIsOriginal] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { user } = useUserStore();
 
+  //mycredits: 로그인한 유저의 보유 크레딧 가져오기
+  const fetchLoginuserData = async () => {
+    if (!user) return;
+    try {
+      const { data: loginUserData } = await supabase
+        .from('users')
+        .select('credit')
+        .eq('id', user.id)
+        .single();
+      setMycredits(loginUserData?.credit);
+    } catch (fetchError) {
+      console.error('Unexpected error:', fetchError);
+    }
+  };
+
+  //credit: 게시물 가격(크레딧) 가져오기
+  const fetchRequestData = async () => {
+    const { data: requestData } = await supabase
+      .from('request_posts')
+      .select('credit')
+      .eq('id', post.request_id)
+      .single();
+    setCredit(requestData?.credit);
+  };
+
+  //구매가 되어 있는지 확인하기
+  const fetchPurchased = async () => {
+    const { data, error } = await supabase
+      .from('purchased_users')
+      .select('*')
+      .eq('user_id', user?.id)
+      .eq('response_id', post.id)
+      .single();
+    if (data) setIsPurchased(true);
+    if (error) console.log('아직 구매되지 않았습니다');
+  };
+
+  //구매 시 데이터 넣어주기
+  const fetchPurchasing = async () => {
+    await supabase
+      .from('purchased_users')
+      .insert([{ user_id: user?.id, response_id: post.id }])
+      .select();
+    setIsPurchased(true);
+  };
+
+  //구매 시 크레딧 차감하기
+  const minusCredit = async () => {
+    await supabase
+      .from('users')
+      .update({ credit: mycredits! - credit! })
+      .eq('id', user?.id)
+      .select();
+  };
+
   useEffect(() => {
     setIsHydrated(true);
+    fetchLoginuserData();
+    fetchRequestData();
+    fetchPurchased(); // 구매 상태 확인인
   }, []);
 
   const { data: translatedTitle } = useGPTTranslation(
@@ -42,10 +100,12 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   );
 
   const handlePurchase = () => {
-    if (!user) setIsModalOpen(true);
-    else if (credits > 0) {
-      setCredits((prev) => prev - 1); // 크레딧 차감
-      setIsPurchased(true); // 구매 완료 상태
+    if (!user) alert('로그인해주세요');
+    else if (!mycredits || mycredits < credit!) alert('충전해주세요');
+    else if (mycredits >= credit!) {
+      setMycredits((prev) => prev! - credit!); // 크레딧 차감
+      fetchPurchasing();
+      minusCredit();
     } else {
       alert('크레딧이 부족합니다. 크레딧을 충전해주세요.');
     }
@@ -129,7 +189,11 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
               className="w-full h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-1 inline-flex my-2.5 text-center text-[#44484c] text-sm font-semibold"
               disabled={!translatedText}
             >
-              {isContentVisible ? '접기' : '펼쳐 보기'}
+              {isContentVisible
+                ? '접기'
+                : !translatedText
+                ? '로딩중'
+                : '펼쳐 보기'}
               <Image
                 width={18}
                 height={18}
@@ -148,13 +212,6 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
         </div>
       </div>
       <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
-
-      {isModalOpen && (
-        <LoginModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
     </div>
   );
 };
