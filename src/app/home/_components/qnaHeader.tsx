@@ -1,4 +1,4 @@
-import HeaderButton from './headerButton';
+import HeaderButton from './HeaderButton';
 
 export default function QnaHeader() {
   return (

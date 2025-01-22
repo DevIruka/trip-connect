@@ -2,10 +2,10 @@
 import React from 'react';
 import BackHeader from '@/components/BackHeader';
 import search from '@/data/images/ic-Search.svg';
-import PostCard from './_components/postCard';
 import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
 import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
+import ListReqPost from '@/components/ListReqPost';
 
 const ResponseListPage = () => {
   const {
@@ -15,6 +15,7 @@ const ResponseListPage = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useReqPosts();
+
   if (isPending) {
     return <div>loading...</div>;
   }
@@ -31,7 +32,13 @@ const ResponseListPage = () => {
         </div>
         <ul>
           {ReqPosts?.map((post) => (
-            <PostCard key={post!.id} post={post!} />
+            <div key={post!.id}>
+              <ListReqPost
+                post={post!}
+                setIsModalOpen={() => console.log('모달 연결 예정')}
+                isReqList={true}
+              />
+            </div>
           ))}
         </ul>
       </div>

@@ -10,11 +10,12 @@ import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 import { useSearchStore } from '@/store/useSearchStore';
 
 import { nation } from '../_types/homeTypes';
-import QnaHeader from './qnaHeader';
-import Navbar from './navBar';
+
 import LoginModal from '@/components/LoginModal';
 import ListReqPost from '@/components/ListReqPost';
 import ListResPost from '@/components/ListResPost';
+import QnaHeader from './QnaHeader';
+import Navbar from './NavBar';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
