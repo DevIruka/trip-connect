@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import BackHeader from '@/components/backHeader';
+import BackHeader from '@/components/BackHeader';
 import search from '@/data/images/ic-Search.svg';
 import PostCard from './_components/postCard';
 import updown from '@/data/images/ic-up&down.svg';
