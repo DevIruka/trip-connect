@@ -5,15 +5,22 @@ const MapView: React.FC<NodeViewProps> = ({ node }) => {
   const { lat, lng, name, address } = node.attrs;
 
   return (
-    <NodeViewWrapper style={{ border: "1px solid #ccc", padding: "10px" }}>
+    <NodeViewWrapper
+      style={{
+        border: '1px solid #ccc',
+        padding: '10px',
+        borderRadius: '8px',
+        overflow: 'hidden',
+      }}
+    >
       <iframe
         src={`https://www.google.com/maps?q=${lat},${lng}&output=embed`}
         width="100%"
         height="180"
-        style={{ border: "none" }}
+        style={{ border: 'none' }}
         title="Google Map"
       />
-      <div style={{ marginTop: "10px" }}>
+      <div style={{ marginTop: '10px' }}>
         <strong>{name}</strong>
         <br />
         {address}
