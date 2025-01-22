@@ -29,7 +29,6 @@ const TiptapEditor: React.FC<Props> = ({
   freeContent,
   onChange,
 }) => {
-  const [localTitle, setLocalTitle] = useState(title);
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const extensions = [
@@ -53,7 +52,7 @@ const TiptapEditor: React.FC<Props> = ({
     onUpdate: ({ editor }) => {
       const updatedContentHtml = editor.getHTML();
       onChange({
-        title: localTitle,
+        title,
         contentHtml: updatedContentHtml,
         freeContent,
       });
@@ -71,7 +70,7 @@ const TiptapEditor: React.FC<Props> = ({
     content: freeContent || '',
     onUpdate: ({ editor }) => {
       onChange({
-        title: localTitle,
+        title,
         contentHtml,
         freeContent: editor.getHTML(),
       });
@@ -91,7 +90,7 @@ const TiptapEditor: React.FC<Props> = ({
   }, [editor]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setLocalTitle(e.target.value);
+    const updatedTitle = e.target.value;
 
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
@@ -99,9 +98,9 @@ const TiptapEditor: React.FC<Props> = ({
     }
 
     onChange({
-      title: e.target.value,
-      contentHtml,
-      freeContent,
+      title: updatedTitle,
+      contentHtml: editor?.getHTML() || '',
+      freeContent: previewEditor?.getHTML() || '',
     });
   };
 
@@ -112,7 +111,7 @@ const TiptapEditor: React.FC<Props> = ({
           <label className="sr-only">제목</label>
           <textarea
             ref={textareaRef}
-            value={localTitle}
+            value={title}
             onChange={handleTitleChange}
             placeholder="제목"
             className="w-full py-2 bg-transparent border-0 border-b focus:outline-none focus:ring-0 focus:border-[#DFE1E5] placeholder:text-[#A9A9A9] text-[18px] font-bold resize-none"

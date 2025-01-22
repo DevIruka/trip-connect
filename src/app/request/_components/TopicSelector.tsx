@@ -34,7 +34,7 @@ const TopicSelector: React.FC<Props> = ({
   };
 
   const handleTopicClick = (topic: string, currentTopics: string[]) => {
-    if (disabled || !setValue || !watch) return;
+    if (disabled || !setValue) return;
 
     const updatedTopics = isSingleSelect
       ? [topic]
