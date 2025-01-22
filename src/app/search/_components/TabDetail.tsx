@@ -12,10 +12,10 @@ const TabDetail = ({ category }: { category: EnglishCategory | null }) => {
   };
 
   return (
-    <div className="flex flex-row items-center justify-center">
+    <>
       <Icon size={20} type={category || "all"} />
       <span className="ml-[4px] text-[16px] font-[600]">{convertToKorean(category)}</span>
-    </div>
+    </>
   );
 };
 

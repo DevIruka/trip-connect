@@ -101,7 +101,7 @@ const RequestDetail = ({
               {post.title}
             </p>
             <p className="text-[14px] max-w-[315px] text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis line-clamp-2">
-              {post.content}
+            {post.content ?? '로딩 중...'}
             </p>
           </div>
         </div>
