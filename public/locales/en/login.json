@@ -1,9 +1,12 @@
 {
-  "welcome": "Welcome!",
-  "login": "Login",
-  "logout": "Logout",
-  "profile": {
-    "title": "Profile",
-    "edit": "Edit Profile"
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "easyLogin": "Easy Login",
+    "stillNot": "Not a member yet?",
+    "signup": "Sign up",
+    "beuser": "Join us",
+    "erroremailpattern": "Please enter a valid email address.",
+    "erroremailrequired": "Email is required.",
+    "errorpwrequired": "Password is required."
   }
-}

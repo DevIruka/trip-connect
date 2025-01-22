@@ -1,9 +1,12 @@
 {
-  "welcome": "환영합니다!",
   "login": "로그인",
-  "logout": "로그아웃",
-  "profile": {
-    "title": "프로필",
-    "edit": "프로필 수정"
-  }
+  "email": "이메일",
+  "password": "비밀번호",
+  "easyLogin": "간편 로그인",
+  "stillNot": "아직 회원이 아니신가요?",
+  "signup": "회원가입",
+  "beuser": "가입하기",
+  "erroremailpattern": "유효한 이메일 주소를 입력해주세요.",
+  "erroremailrequired": "이메일을 입력해주세요.",
+  "errorpwrequired": "비밀번호를 입력해주세요."
 }
