@@ -7,15 +7,11 @@ type ReviewItemProps = {
   userProfile: UserData;
 };
 
-const ReviewItem: React.FC<ReviewItemProps> = ({
-  review,
-  userProfile,
-}) => {
+const ReviewItem: React.FC<ReviewItemProps> = ({ review, userProfile }) => {
   const { review: reviewContent, purchasedAt } = review;
 
   console.log('PurchasedAt:', purchasedAt);
 
-  
   return (
     <div
       className="relative"
@@ -54,7 +50,6 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
               <TimeAgo createdAt={purchasedAt} />
             </span>
           )}
-          
         </div>
       </div>
 

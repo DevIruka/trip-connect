@@ -2,13 +2,15 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { topicMapping } from '@/utils/topics';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import Icon from '@/components/Icons';
+
 
 import { LocationModal } from '../../../components/LocationModalNew';
 import { nation } from '../_types/homeTypes';
 import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import Icon from '@/components/Icons';
+
 
 type Props = {
   setFilterType: React.Dispatch<React.SetStateAction<string>>;

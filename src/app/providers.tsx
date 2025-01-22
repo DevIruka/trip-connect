@@ -1,6 +1,7 @@
 'use client';
 
-  // import useInit from '@/hook/useInit';
+import I18nProvider from '@/providers/I18nProvider';
+// import useInit from '@/hook/useInit';
 import TanstackQueryProvider from '@/providers/TanstackQueryProvider';
 import { useUserStore } from '@/store/userStore';
 import { useEffect } from 'react';
@@ -18,6 +19,10 @@ const Providers = ({ children }: Props) => {
     fetchUser();
   }, []);
 
-  return <TanstackQueryProvider> {children}</TanstackQueryProvider>;
+  return (
+    <TanstackQueryProvider>
+      <I18nProvider> {children}</I18nProvider>
+    </TanstackQueryProvider>
+  );
 };
 export default Providers;

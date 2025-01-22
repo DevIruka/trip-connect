@@ -11,12 +11,14 @@ import { googleLogin, kakaoLogin } from '../_auth/oauth';
 import ErrorMessage from './ErrorMessage';
 import { useState } from 'react';
 import WarningModal from './Warning';
+import { useTranslation } from 'react-i18next';
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
 const leftIcon = '/images/ic-left.svg';
 
 const Login = () => {
+  const { t } = useTranslation('login');
   const {
     register,
     handleSubmit,
@@ -53,7 +55,7 @@ const Login = () => {
           >
             <div className="flex flex-col">
               <h2 className="text-[20px] font-[600] mt-[22px] mb-[28px]">
-                로그인하기
+                {t('login')}
               </h2>
               <label className="text-[14px] mb-[8px]">이메일</label>
               <div className="relative mb-[16px]">
@@ -132,11 +134,7 @@ const Login = () => {
           </div>
         </div>
         {/* 에러 발생 시 모달 표시 */}
-        {errorMessage && (
-          <WarningModal
-            onClose={() => setErrorMessage(null)}
-          />
-        )}
+        {errorMessage && <WarningModal onClose={() => setErrorMessage(null)} />}
       </div>
     </>
   );
