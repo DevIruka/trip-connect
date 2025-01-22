@@ -94,13 +94,15 @@ const RequestPage: React.FC = () => {
               !watch('country_city') ||
               !watch('category') ||
               !watch('title') ||
-              !watch('content')
+              !watch('content') ||
+              !watch('date_end')
             }
             className={`rounded-[6px] px-[12px] py-[6px] text-[14px] font-semibold ${
               watch('country_city') &&
               watch('category') &&
               watch('title') &&
-              watch('content')
+              watch('content') &&
+              watch('date_end')
                 ? 'bg-[#0582FF] text-white hover:bg-[#0079F2]'
                 : 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed'
             }`}
