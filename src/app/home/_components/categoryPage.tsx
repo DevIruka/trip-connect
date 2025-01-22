@@ -18,6 +18,7 @@ import QnaHeader from './QnaHeader';
 import Navbar from './NavBar';
 import { useUserStore } from '@/store/userStore';
 
+
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
   const searchParams = useSearchParams();

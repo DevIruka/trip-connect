@@ -9,8 +9,9 @@ import Image from 'next/image';
 import Icon from '@/components/Icons';
 import Imoji from '@/data/images/ic-imoji.svg';
 import share from '@/data/images/ic-share.svg';
-import BackHeader from '../../../components/BackHeader';
+import BackHeader from '@/components/BackHeader';
 import PostDday from '@/app/home/_components/DDay';
+
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
