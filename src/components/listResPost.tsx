@@ -20,7 +20,7 @@ const ListResPost = ({ post }: { post: Post }) => {
 
   const { data: translatedTitle } = useGPTTranslation(
     `
-    ${post.id}freetext`,
+    ${post.id}title`,
     `${post.title}`,
   );
 
