@@ -2,8 +2,8 @@ import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import { topicMapping } from '@/utils/topics';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import Icon from '@/components/icons';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import Icon from '@/components/Icons';
 
 import { LocationModal } from '../../../components/LocationModalNew';
 import { nation } from '../_types/homeTypes';

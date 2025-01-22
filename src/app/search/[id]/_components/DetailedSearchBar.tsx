@@ -6,7 +6,7 @@ import Image from 'next/image';
 import TabDetail from '../../_components/TabDetail';
 import { convertToKorean } from '../../_utils/convertTopictoKorean';
 import { useSearchStore } from '@/store/useSearchStore';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 
 const iconLeft = '/images/ic-left.svg';
 const iconclose = '/images/ic-xmark.svg';

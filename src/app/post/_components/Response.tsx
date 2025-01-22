@@ -10,6 +10,8 @@ import MoreButton from '@/data/images/ic-More.svg';
 import { useGPTTranslation } from '../_hooks/TranslatedText';
 import RenderTranslatedHTML from './RenderTranslatedHTML';
 import { Tables } from '@/types/supabase';
+import { useUserStore } from '@/store/userStore';
+import LoginModal from '@/components/LoginModal';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -17,6 +19,10 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [credits, setCredits] = useState(10); // 사용자 크레딧
   const [isHydrated, setIsHydrated] = useState(false);
   const [isOriginal, setIsOriginal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { user } = useUserStore();
+
   useEffect(() => {
     setIsHydrated(true);
   }, []);
@@ -36,7 +42,8 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   );
 
   const handlePurchase = () => {
-    if (credits > 0) {
+    if (!user) setIsModalOpen(true);
+    else if (credits > 0) {
       setCredits((prev) => prev - 1); // 크레딧 차감
       setIsPurchased(true); // 구매 완료 상태
     } else {
@@ -141,6 +148,13 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
         </div>
       </div>
       <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
+
+      {isModalOpen && (
+        <LoginModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 };
