@@ -131,7 +131,11 @@ const ListReqPost = ({
         <button
           onClick={(e) => {
             e.stopPropagation();
-            handleResNavigation(`response/${post!.id}`);
+            if (userId) {
+              handleResNavigation(`response/${post!.id}`);
+            } else {
+              setIsModalOpen(true);
+            }
           }}
           className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold"
         >

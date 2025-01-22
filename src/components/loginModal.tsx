@@ -10,7 +10,7 @@ const LoginModal = ({ isOpen, onClose }: Props) => {
 
   return (
     <div
-      className="absolute z-[52] bg-[#111111]/60 w-[374px] h-full grid items-end"
+      className="fixed top-0 z-[52] bg-[#111111]/60 w-[374px] h-full grid items-end"
       onClick={onClose}
     >
       {/* 흰색 배경 모달 */}

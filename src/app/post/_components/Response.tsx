@@ -57,7 +57,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
       .eq('response_id', post.id)
       .single();
     if (data) setIsPurchased(true);
-    if (error) console.log('아직 구매되지 않았습니다');
+    if (error) console.log(error.message);
   };
 
   //구매 시 데이터 넣어주기
@@ -82,7 +82,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
     setIsHydrated(true);
     fetchLoginuserData();
     fetchRequestData();
-    fetchPurchased(); // 구매 상태 확인인
+    fetchPurchased(); // 구매 상태 확인
   }, []);
 
   const { data: translatedTitle } = useGPTTranslation(
