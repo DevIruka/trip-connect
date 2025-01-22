@@ -16,6 +16,7 @@ import {
   topicMapping,
 } from '@/utils/topics';
 import { LocationModal } from '@/components/LocationModalNew';
+import IconInfoCircle from '@/app/request/_components/icons/InfoCircle';
 
 type nation = {
   continent: string;
@@ -174,127 +175,118 @@ const EditRequestPage: React.FC = () => {
 
   return (
     <div className="h-screen overflow-y-auto bg-white">
-      <div className="flex justify-between items-center p-4 border-b border-gray-300">
-        <button
-          className="text-lg font-bold text-gray-800"
-          onClick={() => router.back()}
-        >
+      <div className="flex justify-between items-center px-5 py-2 relative">
+        <button className="text-lg font-bold" onClick={() => router.back()}>
           ✕
         </button>
-        <h1 className="text-lg font-bold">질문하기</h1>
+        <h1 className="text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
+          질문하기
+        </h1>
         <button
           onClick={handleSubmit(onSubmit)}
-          disabled={
-            isRestricted ||
-            !watch('country_city') ||
-            !watch('category') ||
-            !watch('title') ||
-            !watch('content')
-          }
-          className={`py-1 px-4 rounded ${
-            isRestricted ||
-            !watch('country_city') ||
-            !watch('category') ||
-            !watch('title') ||
-            !watch('content')
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-black text-white hover:bg-gray-800'
-          }`}
+          className="h-8 px-3 py-1.5 bg-[#0582ff] rounded-md justify-center items-center gap-2.5 inline-flex text-white text-sm font-semibold"
+          disabled={false}
         >
-          수정
+          수정하기
         </button>
       </div>
 
-      {isRestricted && (
-        <div className="text-[#80BFFF] text-[14px] font-semibold mb-2">
-          답변이 달린 질문은 기한 수정만 가능해요
+      <div className="flex items-center gap-[4px] text-[#80BFFF] text-[14px] font-semibold px-[15px] pt-[12px]">
+        <IconInfoCircle />
+        <span>답변이 달린 질문은 기한 수정만 가능해요</span>
+      </div>
+
+      <div className="p-[20px_15px_31px_20px]">
+        <div className="mb-[28px]">
+          <label className="block text-sm font-semibold mb-2">
+            나라/도시 선택
+          </label>
+          <div className="relative">
+            <input
+              type="text"
+              value={`${selectedLocation.country}, ${selectedLocation.city}`}
+              readOnly
+              placeholder="나라/도시를 선택하세요"
+              {...register('country_city', {
+                required: '나라/도시를 선택하세요.',
+              })}
+              className={`w-full py-[14px] px-[16px] border ${
+                errors.country_city ? 'border-red-500' : 'border-gray-300'
+              } rounded focus:outline-none ${
+                isRestricted
+                  ? 'cursor-not-allowed bg-gray-100 text-gray-500'
+                  : 'bg-white text-black'
+              }`}
+              onClick={!isRestricted ? toggleModal : undefined}
+            />
+            {errors.country_city && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.country_city.message}
+              </p>
+            )}
+            {!isRestricted && (
+              <FaSearch
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                style={{ color: 'black' }}
+                size={18}
+              />
+            )}
+          </div>
         </div>
-      )}
-      <div className="mb-4">
-        <label className="block text-sm font-bold mb-2">나라/도시 선택</label>
-        <div className="relative">
-          <input
-            type="text"
-            value={`${selectedLocation.country}, ${selectedLocation.city}`}
-            readOnly
-            placeholder="나라/도시를 선택하세요"
-            {...register('country_city', {
-              required: '나라/도시를 선택하세요.',
-            })}
-            className={`w-full px-3 py-2 border ${
-              errors.country_city ? 'border-red-500' : 'border-gray-300'
-            } rounded focus:outline-none ${
-              isRestricted
-                ? 'cursor-not-allowed bg-gray-100 text-gray-500'
-                : 'bg-white text-black'
-            }`}
-            onClick={!isRestricted ? toggleModal : undefined}
+
+        <div className="mb-[28px]">
+          <label className="block text-sm font-medium mb-2">주제 선택</label>
+          <TopicSelector
+            topics={[
+              '맛집',
+              '쇼핑',
+              '숙소',
+              '이벤트',
+              '일정/경비',
+              '문화',
+              '역사',
+              '액티비티',
+              '기타',
+            ]}
+            disabled={isRestricted}
+            setValue={setValue}
+            selectedCategories={watch('category')}
+            isSingleSelect
           />
-          {errors.country_city && (
+
+          {errors.category && (
             <p className="text-red-500 text-sm mt-1">
-              {errors.country_city.message}
+              {errors.category.message}
             </p>
           )}
-          {!isRestricted && (
-            <FaSearch
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              style={{ color: 'black' }}
-              size={18}
-            />
-          )}
         </div>
-      </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-bold mb-2">주제 선택</label>
-        <TopicSelector
-          topics={[
-            '맛집',
-            '쇼핑',
-            '숙소',
-            '이벤트',
-            '일정/경비',
-            '문화',
-            '역사',
-            '액티비티',
-            '기타',
-          ]}
-          disabled={isRestricted}
+        <FormFields
+          register={register}
+          watch={watch}
+          control={control}
+          errors={errors}
           setValue={setValue}
-          selectedCategories={watch('category')}
-          isSingleSelect
+          disabledFields={{
+            title: isRestricted,
+            credit: isRestricted,
+            content: isRestricted,
+            date_end: false, // 기한 수정은 항상 가능
+          }}
         />
 
-        {errors.category && (
-          <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
-        )}
+        <LocationModal
+          isOpen={isModalOpen}
+          onClose={() => {
+            toggleModal();
+          }}
+          setCountry={(location) => {
+            handleLocationSelect(location);
+            toggleModal();
+          }}
+          selectedCountry={selectedLocation}
+        />
       </div>
-
-      <FormFields
-        register={register}
-        watch={watch}
-        control={control}
-        errors={errors}
-        setValue={setValue}
-        disabledFields={{
-          title: isRestricted,
-          credit: isRestricted,
-          content: isRestricted,
-          date_end: false, // 기한 수정은 항상 가능
-        }}
-      />
-
-      <LocationModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          toggleModal();
-        }}
-        setCountry={(location) => {
-          handleLocationSelect(location);
-          toggleModal();
-        }}
-        selectedCountry={selectedLocation}
-      />
     </div>
   );
 };
