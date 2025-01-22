@@ -60,7 +60,8 @@ export const fetchPosts = async ({
       .select(
         `
         *,
-        request_posts!inner(category)
+        request_posts!inner(category,credit),
+        users!inner(nickname)
       `,
       )
       .range(from, to);

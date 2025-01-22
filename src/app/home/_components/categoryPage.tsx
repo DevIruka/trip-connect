@@ -88,9 +88,13 @@ const CategoryPage = () => {
         <ul className="px-5 grid gap-2 items-start">
           {nationfilteredPosts?.map((post) => {
             return !post.request_id ? (
-              <ListReqPost post={post} setIsModalOpen={setIsModalOpen} />
+              <ListReqPost
+                key={post.id}
+                post={post}
+                setIsModalOpen={setIsModalOpen}
+              />
             ) : (
-              <ListResPost post={post} />
+              <ListResPost key={post.id} post={post} />
             );
           })}
         </ul>
