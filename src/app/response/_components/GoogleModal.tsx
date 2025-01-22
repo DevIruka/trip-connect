@@ -125,7 +125,7 @@ const GoogleModal: React.FC<Props> = ({
         </div>
 
         {/* 결과 영역 */}
-        <div className="flex-grow my-4 overflow-y-auto">
+        <div className="flex-grow pt-[12px] overflow-y-auto">
           {isLoading ? (
             <p className="text-[#797c80] text-sm font-semibold text-center mt-4">
               검색 중...
@@ -135,7 +135,7 @@ const GoogleModal: React.FC<Props> = ({
               results.map((place) => (
                 <div
                   key={place.place_id}
-                  className={`h-12 py-1.5 border-b border-[#f3f3f3] justify-start items-center gap-1.5 flex cursor-pointer hover:bg-gray-100 ${
+                  className={`py-[12px] border-b border-[#f3f3f3] justify-start items-center gap-1.5 flex cursor-pointer hover:bg-gray-100 ${
                     selectedLocation?.place_id === place.place_id
                       ? 'bg-gray-100'
                       : ''
@@ -143,16 +143,18 @@ const GoogleModal: React.FC<Props> = ({
                   onClick={() => handleLocationSelect(place)}
                 >
                   {/* 아이콘 영역 */}
-                  <div className="w-[18px] h-[18px] flex justify-center items-center">
-                    <LocationIcon />
-                  </div>
-
-                  <div className="grow shrink basis-0 flex-col justify-start items-start gap-1">
-                    <div className="self-stretch h-[18px] text-[#44484c] text-sm font-medium leading-tight">
-                      {place.name}
+                  <div className="flex items-start gap-[6px]">
+                    <div className="w-[18px] h-[18px] flex justify-center items-center">
+                      <LocationIcon />
                     </div>
-                    <div className="grow text-[#a9a9a9] text-xs font-medium overflow-hidden break-words">
-                      {place.formatted_address}
+
+                    <div className="flex flex-col gap-1">
+                      <div className="text-[#44484c] text-sm font-medium leading-tight">
+                        {place.name}
+                      </div>
+                      <div className="text-[#a9a9a9] text-xs font-medium overflow-hidden break-words">
+                        {place.formatted_address}
+                      </div>
                     </div>
                   </div>
                 </div>
