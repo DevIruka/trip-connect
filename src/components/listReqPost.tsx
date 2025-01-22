@@ -7,7 +7,7 @@ import { useBookmarkMutations } from '@/utils/api/tanstack/home/BookmarkHooks';
 import { useBookmarks } from '@/utils/api/tanstack/home/useBookmark';
 
 import { useUserStore } from '@/store/userStore';
-import PostDday from '@/app/home/_components/dDay';
+import PostDday from '@/app/home/_components/DDay';
 
 import location from '@/data/images/ic-location.svg';
 import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
@@ -19,9 +19,11 @@ import { Post } from '@/app/home/_types/homeTypes';
 const ListReqPost = ({
   post,
   setIsModalOpen,
+  isReqList,
 }: {
   post: Post;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isReqList?: boolean;
 }) => {
   const router = useRouter();
   const topicArr = Object.entries(topicMapping);
@@ -37,6 +39,9 @@ const ListReqPost = ({
     useBookmarkMutations(userId);
   const handleNavigation = (id: string | number) => {
     router.push(`/post/${id}`);
+  };
+  const handleResNavigation = (address: string) => {
+    router.push(address);
   };
 
   return (
@@ -122,6 +127,21 @@ const ListReqPost = ({
         </div>
         <div>1일 전</div>
       </div>
+      {isReqList && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            if (userId) {
+              handleResNavigation(`response/${post!.id}`);
+            } else {
+              setIsModalOpen(true);
+            }
+          }}
+          className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold"
+        >
+          답변하기
+        </button>
+      )}
     </li>
   );
 };

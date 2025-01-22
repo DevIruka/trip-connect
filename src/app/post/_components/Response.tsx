@@ -57,7 +57,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
       .eq('response_id', post.id)
       .single();
     if (data) setIsPurchased(true);
-    if (error) console.log('아직 구매되지 않았습니다');
+    if (error) console.log(error.message);
   };
 
   //구매 시 데이터 넣어주기
@@ -82,7 +82,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
     setIsHydrated(true);
     fetchLoginuserData();
     fetchRequestData();
-    fetchPurchased(); // 구매 상태 확인인
+    fetchPurchased(); // 구매 상태 확인
   }, []);
 
   const { data: translatedTitle } = useGPTTranslation(
@@ -205,7 +205,10 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
           )}
         </div>
         <div className="border-t border-[#dee1e5] p-4 flex place-content-between">
-          <div className="flex gap-1 text-[#44484c] text-xs font-bold leading-none items-center">
+          <div
+            className="flex gap-1 text-[#44484c] text-xs font-bold leading-none items-center cursor-pointer"
+            onClick={() => (location.href = `/review/${post.id}`)}
+          >
             <Image width={20} height={20} src={comment} alt="comment" />0
           </div>
           <Image width={20} height={20} src={MoreButton} alt="MoreButton" />
