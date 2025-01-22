@@ -35,7 +35,6 @@ const RequestDetail = ({
   addBookmarkMutation,
   responseCount,
 }: RequestDetailProps) => {
-  console.log(post.date_end);
   return (
     <>
       <div className="w-full">
