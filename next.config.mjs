@@ -1,4 +1,5 @@
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   images: {
     remotePatterns: [
@@ -11,6 +12,12 @@ const nextConfig = {
 
   experimental: {
     appDir: true, // App Directory 활성화
+  },
+  i18n: {
+    locales: ['en', 'ko'],
+    defaultLocale: 'en',
+    localeDetection: false,
+    localePrefix: 'never',
   },
 };
 

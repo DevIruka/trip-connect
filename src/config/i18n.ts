@@ -2,15 +2,25 @@
 
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import LanguageDetector from 'i18next-browser-languagedetector';
 import HttpApi from 'i18next-http-backend';
+import { useLang } from '@/store/languageStore';
+
+// const savedLang =
+//   typeof window !== 'undefined' ? localStorage.getItem('lang') || 'ko' : 'ko';
+const getLanguageFromCookie = (): 'ko' | 'en' => {
+  if (typeof window !== 'undefined') {
+    const match = document.cookie.match(/lang=([^;]+)/);
+    return match && match[1] === 'en' ? 'en' : 'ko'; // 'en'이면 'en', 아니면 'ko'
+  }
+  return 'ko'; // 서버 사이드에서는 기본값 'ko' 반환
+};
 
 if (!i18n.isInitialized) {
   i18n
     .use(initReactI18next)
     .use(HttpApi) // JSON 파일 로드
     .init({
-      lng : 'en',
+      lng: getLanguageFromCookie(),
       supportedLngs: ['en', 'ko'],
       interpolation: { escapeValue: false },
       backend: {

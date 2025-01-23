@@ -7,11 +7,13 @@ import Input from '@/components/Input';
 import Link from 'next/link';
 import BlueButton from '@/components/BlueBtn';
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 
 const leftIcon = '/images/ic-left.svg';
 const redDot = '/images/redDot.svg';
 
 const SignupPage = () => {
+  const { t } = useTranslation('signup');
   const [step, setStep] = useState(1); // 현재 단계 관리
   const {
     register,
@@ -52,22 +54,21 @@ const SignupPage = () => {
             <>
               <div className="flex flex-col">
                 <h2 className="text-[20px] font-[600] mt-[22px] mb-[28px]">
-                  가입하기
+                  {t('beuser')}
                 </h2>
-                <div className="relative mb-[8px]">
-                  <label className="text-[14px]">이메일</label>
+                <div className="relative mb-[8px] flex items-start gap-[2px]">
+                  <label className="text-[14px] inline-block">{t('email')}</label>
                   <Image
                     src={redDot}
                     width={3}
                     height={3}
                     alt="dot"
-                    className="absolute top-0 left-[38px]"
                   />
                 </div>
                 <div className="relative">
                   <Input
                     id="email"
-                    placeholder="이메일"
+                    placeholder={t('email')}
                     {...register('email', {
                       required: '이메일을 입력해주세요.',
                       pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
@@ -76,30 +77,29 @@ const SignupPage = () => {
                   />
                   {errors.email?.type === 'required' && (
                     <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
-                      이메일을 입력해 주세요.
+                      {t('erroremailrequired')}
                     </span>
                   )}
                   {errors.email?.type === 'pattern' && (
                     <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
-                      유효한 이메일 주소를 입력해주세요.
+                      {t('erroremailpattern')}
                     </span>
                   )}
                 </div>
               </div>
-              <div className="relative mb-[8px]">
-                <label className="text-[14px]">비밀번호</label>
+              <div className="relative mb-[8px] flex items-start gap-[2px]">
+                <label className="text-[14px]">{t('password')}</label>
                 <Image
                   src={redDot}
                   width={3}
                   height={3}
                   alt="dot"
-                  className="absolute top-0 left-[50px]"
                 />
               </div>
               <div className="relative">
                 <Input
                   id="password"
-                  placeholder="비밀번호"
+                  placeholder={t('password')}
                   type="password"
                   {...register('password', {
                     required: '비밀번호를 입력해주세요.',
@@ -110,26 +110,30 @@ const SignupPage = () => {
                   })}
                   className="mb-[32px]"
                 />
-                {errors.password && (
+                {errors.password?.type === 'required' && (
                   <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
-                    {errors.password.message}
+                    {t('errorpwrequired')}
+                  </span>
+                )}
+                {errors.password?.type === 'minLength' && (
+                  <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
+                    {t('errorpasswordpattern')}
                   </span>
                 )}
               </div>
-              <div className="relative mb-[8px]">
-                <label className="text-[14px]">비밀번호 확인</label>
+              <div className="relative mb-[8px] flex items-start gap-[2px]">
+                <label className="text-[14px]">{t('passwordcheck')}</label>
                 <Image
                   src={redDot}
                   width={3}
                   height={3}
                   alt="dot"
-                  className="absolute top-0 left-[77px]"
                 />
               </div>
               <div className="relative">
                 <Input
                   id="passwordCheck"
-                  placeholder="비밀번호 확인"
+                  placeholder={t('passwordcheck')}
                   type="password"
                   {...register('passwordCheck', {
                     required: '위의 비밀번호를 입력해주세요.',
@@ -139,7 +143,7 @@ const SignupPage = () => {
                 />
                 {errors.passwordCheck && (
                   <span className="absolute top-[53px] left-0 text-[12px] text-[#FC828A]">
-                    {errors.passwordCheck.message}
+                    {t('errorpwsame')}
                   </span>
                 )}
               </div>
@@ -150,28 +154,27 @@ const SignupPage = () => {
               <div>
                 <div className="flex flex-col">
                   <h2 className="text-[20px] font-[600] mt-[22px] mb-[28px]">
-                    가입하기
+                  {t('beuser')}
                   </h2>
-                  <div className="relative mb-[8px]">
-                    <label className="text-[14px]">닉네임</label>
+                  <div className="relative mb-[8px] flex items-start gap-[2px]">
+                    <label className="text-[14px]">{t('nickname')}</label>
                     <Image
                       src={redDot}
                       width={3}
                       height={3}
                       alt="dot"
-                      className="absolute top-0 left-[38px]"
                     />
                   </div>
                   <Input
                     id="nickname"
-                    placeholder="닉네임"
+                    placeholder={t('nickname')}
                     {...register('nickname', {
                       required: '닉네임을 입력해주세요.',
                     })}
                   />
                   {errors.nickname && (
                     <span className="text-sm text-[#FC828A]">
-                      {errors.nickname.message}
+                      {t('errornicknamerequired')}
                     </span>
                   )}
                 </div>
@@ -180,7 +183,7 @@ const SignupPage = () => {
           )}
           <div className="fixed bottom-8 w-[335px]">
             <BlueButton disabled={!isValid}>
-              {step === 1 ? '다음' : '가입하기'}
+            {step === 1 ? t('next') : t('beuser')}
             </BlueButton>
           </div>
         </form>
