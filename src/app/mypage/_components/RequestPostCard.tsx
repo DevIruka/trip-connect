@@ -1,21 +1,22 @@
 'use client';
 
 import React, { useEffect, useState, useCallback } from 'react';
-import Image from 'next/image';
-import { calculateDDay } from '@/app/search/_utils/calculateDDay';
-import { RequestPost } from '../_type/type';
-import TimeAgo from './TimeAgo';
-import stripHtmlTags from '../_util/striptHtmlTags';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import { RequestPost } from '../_type/type';
+import Image from 'next/image';
+import TimeAgo from './TimeAgo';
 import { useRouter } from 'next/navigation';
-
+import { calculateDDay } from '@/app/search/_utils/calculateDDay';
+import stripHtmlTags from '../_util/striptHtmlTags';
 
 const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
-    const router = useRouter(); 
-  const dDay = calculateDDay(post.date_end || undefined);
-  const plainContent = stripHtmlTags(post.content ?? '');
+  const router = useRouter();
   const [responseCount, setResponseCount] = useState<number>(0);
   const [showActions, setShowActions] = useState<boolean>(false);
+
+  const dDay = calculateDDay(post.date_end || undefined);
+  const plainContent = stripHtmlTags(post.content ?? '');
+
   const fetchResponseCount = useCallback(async () => {
     try {
       const { data, error } = await supabase
@@ -38,10 +39,10 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
     fetchResponseCount();
   }, [fetchResponseCount]);
 
-    const handleCardClick = () => {
-      router.push(`/post/${post.id}`); // 게시물 ID를 기반으로 상세 페이지 이동
+  const handleCardClick = () => {
+    router.push(`/post/${post.id}`);
   };
-  
+
   return (
     <div
       onClick={handleCardClick}
@@ -162,7 +163,6 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-
                   router.push(`/request-edit/${post.id}`);
                 }}
               >
@@ -217,12 +217,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
       <div className="flex items-center justify-between text-[12px] text-[#797C80] w-full">
         <div className="flex items-center gap-[6px]">
           <div className="flex items-center gap-[6px]">
-            <Image
-              src="/images/coin.svg"
-              alt="Credit Icon"
-              width={14}
-              height={14}
-            />
+            <Image src="/images/coin.svg" alt="coin" width={14} height={14} />
             <span>{post.credit} C</span>
           </div>
           {responseCount > 0 && (

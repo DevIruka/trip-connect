@@ -17,6 +17,7 @@ import {
 } from '@/utils/topics';
 import { LocationModal } from '@/components/LocationModalNew';
 import IconInfoCircle from '@/app/request/_components/icons/InfoCircle';
+import { useTranslation } from 'react-i18next';
 
 type nation = {
   continent: string;
@@ -25,6 +26,7 @@ type nation = {
 };
 
 const EditRequestPage: React.FC = () => {
+  const { t } = useTranslation('request');
   const { request_id } = useParams();
   const router = useRouter();
 
@@ -180,35 +182,35 @@ const EditRequestPage: React.FC = () => {
           ✕
         </button>
         <h1 className="text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
-          질문하기
+          {t('pageTitle')}
         </h1>
         <button
           onClick={handleSubmit(onSubmit)}
           className="h-8 px-3 py-1.5 bg-[#0582ff] rounded-md justify-center items-center gap-2.5 inline-flex text-white text-sm font-semibold"
           disabled={false}
         >
-          수정하기
+          {t('editButton')}
         </button>
       </div>
 
       <div className="flex items-center gap-[4px] text-[#80BFFF] text-[14px] font-semibold px-[15px] pt-[12px]">
         <IconInfoCircle />
-        <span>답변이 달린 질문은 기한 수정만 가능해요</span>
+        <span>{t('restrictedMessage')}</span>
       </div>
 
       <div className="p-[20px_15px_31px_20px]">
         <div className="mb-[28px]">
           <label className="block text-sm font-semibold mb-2">
-            나라/도시 선택
+            {t('countryCityLabel')}
           </label>
           <div className="relative">
             <input
               type="text"
               value={`${selectedLocation.country}, ${selectedLocation.city}`}
               readOnly
-              placeholder="나라/도시를 선택하세요"
+              placeholder={t('countryCityPlaceholder')}
               {...register('country_city', {
-                required: '나라/도시를 선택하세요.',
+                required: t('countryCityError'),
               })}
               className={`w-full py-[14px] px-[16px] border ${
                 errors.country_city ? 'border-red-500' : 'border-gray-300'
@@ -235,7 +237,7 @@ const EditRequestPage: React.FC = () => {
         </div>
 
         <div className="mb-[28px]">
-          <label className="block text-sm font-medium mb-2">주제 선택</label>
+          <label className="block text-sm font-medium mb-2">{t('topicLabel')}</label>
           <TopicSelector
             topics={[
               '맛집',

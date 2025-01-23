@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { loadTossPayments } from '@tosspayments/payment-sdk';
 import Image from 'next/image';
 import BlueButton from '@/components/BlueBtn';
+import { useTranslation } from 'react-i18next';
 
 const xbutton = '/images/ic-Close.svg';
 
@@ -20,10 +20,9 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   isOpen,
   onClose,
   amount,
-  bonus,
-  customerName,
   onConfirm,
 }) => {
+  const {t} = useTranslation('credit')
   const [selectedMethod, setSelectedMethod] = useState('tosspay');
 
   const handleConfirm = () => {
@@ -51,7 +50,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
             className="absolute top-0 left-0"
           />
 
-          <h2 className="text-[18px] font-[600]">결제하기</h2>
+          <h2 className="text-[18px] font-[600]">{t('paymentTitle')}</h2>
         </div>
 
         <div className="space-y-[24px]">
@@ -69,7 +68,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               <div className="w-[10px] h-[10px] bg-white rounded-full"></div>
             </div>
             <label htmlFor="tosspay" className="ml-2 font-semibold text-[16px]">
-              토스페이
+            {t('tossPay')}
             </label>
           </div>
           <div className="flex items-center justify-between">
@@ -90,7 +89,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               </label>
             </div>
             <span className="text-[12px] font-[500] text-[#A9A9A9]">
-              조금만 기다려주세요!
+            {t('comingSoon')}
             </span>
           </div>
           <div className="flex items-center justify-between">
@@ -107,16 +106,16 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                 <div className="w-[10px] h-[10px] bg-white rounded-full"></div>
               </div>
               <label htmlFor="card" className="ml-2 text-[#A9A9A9]">
-                신용/체크카드
+              {t('creditCard')}
               </label>
             </div>
             <span className="text-[12px] font-[500] text-[#A9A9A9]">
-              조금만 기다려주세요!
+            {t('comingSoon')}
             </span>
           </div>
         </div>
         <BlueButton className="mt-[28px] mb-[16px]" onClick={handleConfirm}>
-          {amount.toLocaleString()}원 결제하기
+        {t('confirmPayment', { amount: amount.toLocaleString() })}
         </BlueButton>
       </div>
     </div>

@@ -22,7 +22,7 @@ const MyPage = () => {
     profileImg: '',
     credit: '',
     country: '',
-    authenticated: false, // 인증 상태 추가
+    authenticated: false, 
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nicknameInput, setNicknameInput] = useState('');
@@ -55,7 +55,7 @@ const MyPage = () => {
           profileImg: profileData?.profile_img || '',
           credit: profileData?.credit || '0',
           country: profileData?.country || '국가 정보 없음',
-          authenticated: profileData?.authenticated || false, // 인증 상태 반영
+          authenticated: profileData?.authenticated || false,
         });
 
         setNicknameInput(profileData?.nickname || '');
@@ -243,19 +243,17 @@ const MyPage = () => {
           </div>
         </div>
         {/* 크레딧 섹션 */}
-        <Link href="/mypage/credit">
-          <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center mt-[20px] mb-[28px]">
-            <div className="flex flex-row justify-between items-center">
-              <Image src={coin} width={24} height={24} alt="coin" />
-              <p className="w-[205px] text-[18px] pt-[1px] ml-[8px] font-[600]">
-                {new Intl.NumberFormat().format(Number(userProfile.credit))} C
-              </p>
-              <Link href="/mypage/credit" className="ml-[16px]">
-                <p className="text-[#0582ff] text-sm font-medium ">충전하기</p>
-              </Link>
-            </div>
+        <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center mt-[20px] mb-[28px]">
+          <div className="flex flex-row justify-between items-center">
+            <Image src={coin} width={24} height={24} alt="coin" />
+            <p className="w-[205px] text-[18px] pt-[1px] ml-[8px] font-[600]">
+              {new Intl.NumberFormat().format(Number(userProfile.credit))} C
+            </p>
+            <Link href="/mypage/credit" className="ml-[16px]">
+              <p className="text-[#0582ff] text-sm font-medium ">충전하기</p>
+            </Link>
           </div>
-        </Link>
+        </div>
         {/* 셀러 인증 */}
         <div className="mb-[24px]">
           <h2 className="text-lg font-[700] mb-[12px]">셀러 인증</h2>

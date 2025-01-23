@@ -50,6 +50,19 @@ const ResponseListPage = () => {
           onClose={() => setIsModalOpen(false)}
         />
       )}
+      <div className="px-5">
+        {hasNextPage && (
+          <button
+            onClick={() => {
+              fetchNextPage();
+            }}
+            disabled={isFetchingNextPage}
+            className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
+          >
+            {isFetchingNextPage ? '로딩 중...' : '더보기'}
+          </button>
+        )}
+      </div>
     </div>
   );
 };

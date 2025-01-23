@@ -1,36 +1,23 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { supabase } from '@/utils/supabase/supabaseClient';
+import { ResponsePost } from '../_type/type';
+import stripHtmlTags from '../_util/striptHtmlTags';
 import Image from 'next/image';
-import { supabase } from '@/utils/supabase/supabaseClient'; // Supabase 임포트
-import TimeAgo from './TimeAgo'; 
+import TimeAgo from './TimeAgo';
 import { useRouter } from 'next/navigation';
+
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
 
-type ResponsePost = {
-  id: string;
-  title: string;
-  content: string | null;
-  country_city: string;
-  category: string[];
-  img_url: string[];
-  type: 'answer';
-  user_id: string;
-  request_id?: string;
-  created_at: string | null;
-  credit: number | null; // null 허용
-};
-
-type ResponsePostCardProps = {
-  post: ResponsePost;
-};
-
-const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
-    const router = useRouter(); 
+const ResponsePostCard: React.FC<{ post: ResponsePost }> = ({ post }) => {
+  const router = useRouter();
   const [nickname, setNickname] = useState<string | null>(null);
-  const [commentCount, setCommentCount] = useState<number | null>(null);
-  const [showActions, setShowActions] = useState<boolean>(false);
+  const [country, setCountry] = useState<string | null>(null); // 나라를 저장할 state 추가
+  const [category, setCategory] = useState<string[]>([]); // 카테고리 추가
+  const [showActions, setShowActions] = useState<boolean>(false); // More 버튼 상태 추가
+  const plainContent = stripHtmlTags(post.content_html || '');
 
   const fetchUserNickname = async (userId: string) => {
     try {
@@ -52,48 +39,47 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
     }
   };
 
-  // 댓글 수와 관련된 로직 주석 처리
-  /*
-  const fetchCommentCount = async (postId: string) => {
+  const fetchRequestDetails = async (requestId: string) => {
     try {
-      const { count, error } = await supabase
-        .from('comments')
-        .select('*', { count: 'exact' })
-        .eq('post_id', postId);
+      const { data, error } = await supabase
+        .from('request_posts')
+        .select('country_city, category') 
+        .eq('id', requestId)
+        .single();
 
       if (error) {
-        console.error('댓글 수 가져오기 오류:', error);
-        setCommentCount(0);
+        console.error('질문글에서 정보 가져오는 중 오류:', error);
+        setCountry('알 수 없음');
+        setCategory([]);
       } else {
-        setCommentCount(count || 0);
+        const countryCity = JSON.parse(data?.country_city || '{}');
+        setCountry(countryCity.country || '알 수 없음');
+        setCategory(data?.category || []);
       }
     } catch (err) {
-      console.error('댓글 수 조회 중 오류 발생:', err);
-      setCommentCount(0);
+      console.error('질문글에서 정보 조회 중 오류 발생:', err);
+      setCountry('알 수 없음');
+      setCategory([]); 
     }
   };
-  */
-
 
   useEffect(() => {
     if (post.user_id) {
       fetchUserNickname(post.user_id);
     }
-    // 댓글 수와 관련된 부분 주석 처리 
-    // if (post.id) {
-    //   fetchCommentCount(post.id);
-    // }
-  }, [post.user_id, post.id]);
+    if (post.request_id) {
+      fetchRequestDetails(post.request_id);
+    }
+  }, [post.user_id, post.request_id]);
 
-  
   const handleCardClick = () => {
     if (post.request_id) {
       router.push(`/post/${post.request_id}`);
     } else {
       console.error('Request ID가 존재하지 않습니다.');
     }
-  }
-  
+  };
+
   return (
     <div
       onClick={handleCardClick}
@@ -111,12 +97,11 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
           {/* 위치 */}
           <div className="flex items-center gap-[4px] bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] py-[4px] text-[12px]">
             <Image src={markerIcon} alt="location" width={12} height={12} />
-            {post.country_city && (
-              <span>{JSON.parse(post.country_city)?.country || ''}</span>
-            )}
+            {country && <span>{country}</span>}{' '}
+            {/* 질문글에서 가져온 나라 정보 */}
           </div>
           {/* 카테고리 */}
-          {post.category.slice(0, 2).map((cat, i) => (
+          {(category || []).slice(0, 2).map((cat, i) => (
             <div
               key={i}
               className="bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] py-[4px] text-[12px]"
@@ -182,15 +167,6 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
                 onClick={(e) => {
                   e.stopPropagation();
                   console.log(`Edit post: ${post.id}`);
-                  if (!post.id) {
-                    alert('올바르지 않은 게시글 ID입니다.');
-                    return;
-                  }
-                  if (post.type === 'answer') {
-                    router.push(`/response-edit/${post.id}`);
-                  } else if (post.type === 'question') {
-                    router.push(`/request-edit/${post.id}`);
-                  }
                 }}
               >
                 수정하기
@@ -225,35 +201,33 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
 
       {/* 제목 및 내용 */}
       <div className="flex items-start gap-[6px]">
-        {/* A. 표시 */}
         <p className="text-[16px] font-[600] text-[#FA505B] leading-[22.4px]">
           A.
         </p>
 
-        {/* 제목과 내용을 포함한 컨테이너 */}
         <div className="flex flex-col">
           {/* 제목 */}
           <div className="mb-[8px]">
-            <p className="text-[16px] font-bold text-black leading-[22.4px] max-w-[315px] line-clamp-2">
+            <p className="text-[16px] font-bold text-black leading-[22.4px] line-clamp-2">
               {post.title}
             </p>
           </div>
           {/* 내용 */}
           <div>
             <p className="text-[14px] text-[#797C80] line-clamp-2">
-              {post.content || ''}
+              {plainContent}
             </p>
           </div>
         </div>
       </div>
 
-      {/* 하단 - 크레딧, 작성자 정보, 댓글 수, 작성 시간 */}
+      {/* 하단 - 크레딧, 작성자 정보, 작성 시간 */}
       <div className="flex items-center justify-between text-[12px] text-[#797C80] w-full">
         <div className="flex items-center gap-[6px]">
           {/* 크레딧 */}
           <div className="flex items-center gap-[6px]">
             <Image src={coinIcon} alt="coin" width={14} height={14} />
-            <span>{post.credit} C</span>
+            <span>50 C</span>
           </div>
           {/* 점 아이콘 */}
           <div
@@ -264,23 +238,9 @@ const ResponsePostCard: React.FC<ResponsePostCardProps> = ({ post }) => {
               backgroundColor: '#797C80',
             }}
           />
-          {/* 작성자 닉네임 */}
-          <span>
-            작성자 <span className="font-bold">{nickname || '알 수 없음'}</span>
-          </span>
-          {/* 점 아이콘 */}
-          <div
-            style={{
-              width: '2px',
-              height: '2px',
-              borderRadius: '50%',
-              backgroundColor: '#797C80',
-            }}
-          />
-          {/* 댓글 수 */}
-          {commentCount !== null && <span>댓글 {commentCount}</span>}
+          {/* 댓글 수 (일단 임의로 넣음) */}
+          <span>댓글 1</span>
         </div>
-        {/* 작성 시간 */}
         <TimeAgo createdAt={post.created_at || new Date().toISOString()} />
       </div>
     </div>
