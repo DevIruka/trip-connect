@@ -125,7 +125,7 @@ const TiptapEditor: React.FC<Props> = ({
         <div className="mb-[24px]">
           <div className=" relative rounded-[8px] border border-[#DFE1E5]">
             <div className=" px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
-              {!previewEditor?.getText() && '미리보기 답변을 작성해 주세요'}
+              {!previewEditor?.getText() && t('previewPlaceholder')}
             </div>
             <div className="rounded-[8px] ">
               <EditorContent editor={previewEditor} />
@@ -144,7 +144,7 @@ const TiptapEditor: React.FC<Props> = ({
         <div className="mb-4">
           <div className="relative rounded-[8px] border border-[#DFE1E5] ">
             <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
-              {!editor?.getText() && '유료 분량의 답변을 작성해 주세요'}
+              {!editor?.getText() && t('paidContentPlaceholder')}
             </div>
             <div className="rounded-[8px] ">
               <EditorContent editor={editor} />
