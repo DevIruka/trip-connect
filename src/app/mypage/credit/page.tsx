@@ -84,7 +84,7 @@ const CreditPage: React.FC = () => {
           width={24}
           height={24}
           alt="back"
-          onClick={() => router.back()}
+          onClick={() => router.push('/mypage')}
         />
       </div>
 
