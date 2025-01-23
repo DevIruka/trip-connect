@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import CategoryPage from './_components/categoryPage';
+import CategoryPage from './_components/CategoryPage';
 
 const Homepage = () => {
   return (

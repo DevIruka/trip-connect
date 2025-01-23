@@ -13,7 +13,7 @@ export type Post = {
   country_city: string;
   created_at: string;
   credit: number;
-  date_end: string | null;
+  date_end: string | undefined;
   id: string;
   img_url: string | null;
   title: string;

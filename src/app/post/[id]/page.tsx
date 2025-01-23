@@ -3,14 +3,14 @@ import { topicMapping } from '@/utils/topics';
 import Responses from '../_components/Responses';
 import BookmarkBtn from '../_components/BookmarkBtn';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import Profile from '../_components/profile';
+import Profile from '../_components/Profile';
 import MoreButton from '@/data/images/ic-More.svg';
 import Image from 'next/image';
 import Icon from '@/components/Icons';
 import Imoji from '@/data/images/ic-imoji.svg';
 import share from '@/data/images/ic-share.svg';
 import BackHeader from '@/components/BackHeader';
-
+import PostDday from '@/app/home/_components/DDay';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
@@ -26,7 +26,13 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
 
   return (
     <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar mb-[76px]">
-      <BackHeader image={MoreButton} text="" imagesize={20} />
+      <BackHeader
+        image={MoreButton}
+        text=""
+        imagesize={20}
+        isThreeDots={true}
+        postid={postId}
+      />
       {post ? (
         <div className="relative">
           <Profile postUserId={post.user_id} />
@@ -57,14 +63,14 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
                 <div>답변 기한</div>
                 <div>크레딧</div>
               </div>
-              <div className="text-black text-sm font-medium leading-tight grid gap-3">
+              <div className="text-black text-sm font-medium leading-tight grid gap-2.5">
                 <div>{`${JSON.parse(post.country_city).country} / ${
                   JSON.parse(post.country_city).city
                 }`}</div>
-                <div className="flex gap-1">
+                <div className="flex gap-1 items-center">
                   {post.date_end}
-                  <div className="px-1.5 bg-[#ffecd4] rounded justify-center items-center inline-flex text-center text-[#ff800a] text-xs font-medium">
-                    D-24
+                  <div className="px-1.5 rounded justify-center items-center inline-flex text-center text-xs font-medium">
+                    <PostDday postDateEnd={post.date_end} />
                   </div>
                 </div>
                 <div>{post.credit} C</div>
