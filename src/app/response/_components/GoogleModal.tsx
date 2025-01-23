@@ -98,24 +98,27 @@ const GoogleModal: React.FC<Props> = ({
           </div>
 
           {/* 검색창 */}
-          <div className="w-full justify-center items-center gap-2.5 flex">
-            <div className="w-full h-11 pl-4 pr-2 py-3.5 bg-white rounded-xl border border-[#DFE1E5] justify-center items-center gap-2.5 inline-flex">
-              {/* 검색 입력 필드 */}
+          <div className="w-full justify-center items-center gap-2.5">
+          <div className="flex items-center w-full h-11 pl-4 pr-2 py-3.5 bg-white rounded-xl border border-[#DFE1E5]">
+          {/* 검색 입력 필드 */}
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="관광지/맛집/숙소 검색"
-                className={`grow shrink basis-0 h-5 text-sm font-medium bg-transparent outline-none ${
+                className={`grow shrink text-sm font-medium bg-transparent outline-none ${
                   search ? 'text-black' : 'text-[#797c80]'
                 }`}
+                style={{
+                  padding: '0',
+                }}
               />
 
               {/* 검색 버튼 */}
               <button
                 onClick={handleSearch}
-                className="px-3 py-1.5 bg-[#eaf4ff] rounded-md justify-center items-center flex"
-              >
+                className="flex-shrink-0 h-[32px] px-4 bg-[#eaf4ff] rounded-md flex items-center justify-center"
+                >
                 <span className="text-[#0079f2] text-sm font-semibold">
                   검색
                 </span>
