@@ -25,7 +25,7 @@ export const useHandlePayment = () => {
         orderName: `${amount.toLocaleString()}C 충전`, // 주문 이름
         customerName, // 사용자 이름
         successUrl: `${window.location.origin}/mypage/credit?status=success&amount=${amount}&bonus=${bonus}`, // 결제 성공 URL
-        failUrl: `${window.location.origin}/mypage/credit?status=fail`, // 결제 실패 URL
+        failUrl: `${window.location.origin}/mypage/credit`, // 결제 실패 URL
       });
     } catch (error) {
       console.error('결제 요청 중 오류 발생:', error);
