@@ -56,7 +56,7 @@ const BackHeader = ({
                     onClick={() => {
                       if (user.id !== post?.user_id) {
                         alert('작성자가 아닙니다.');
-                      } else location.href = `/response-edit/${post?.id}`;
+                      } else location.href = `/request-edit/${post?.id}`;
                     }}
                     className="ml-2.5 mx-[4.5px] h-[29px]"
                   >

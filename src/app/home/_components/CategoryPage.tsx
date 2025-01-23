@@ -18,7 +18,6 @@ import QnaHeader from './QnaHeader';
 import Navbar from './NavBar';
 import { useUserStore } from '@/store/userStore';
 
-
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
   const searchParams = useSearchParams();
@@ -49,17 +48,14 @@ const CategoryPage = () => {
   const nationfilteredPosts = filteredPosts?.filter((post) => {
     // Request 유형 처리
     if (nationFilter) {
-      if (
-        !post.request_id &&
-        !post.country_city?.includes(nationFilter.country)
-      ) {
+      if (!post.request_id && !post.country_city?.includes(nationFilter.city)) {
         return false;
       }
 
       // Response 유형 처리
       if (
         post.request_id &&
-        !post.verified_country?.includes(nationFilter.country)
+        !post.verified_country?.includes(nationFilter.city)
       ) {
         return false;
       }
