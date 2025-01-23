@@ -139,7 +139,7 @@ const EditRequestPage: React.FC = () => {
       } catch (error) {
         console.error('데이터 불러오기 오류:', error);
         alert('데이터를 불러오는 데 문제가 발생했습니다.');
-        router.push('/request'); // 실패했을때 어디로 리다이렉트를 해야할까...
+        router.push(`/post/${request_id}`);
       }
     };
 
@@ -168,7 +168,7 @@ const EditRequestPage: React.FC = () => {
       if (error) throw error;
 
       alert('수정이 완료되었습니다.');
-      router.push('/request');
+      router.push(`/post/${request_id}`);
     } catch (error) {
       console.error('수정 중 오류:', error);
       alert('수정 중 오류가 발생했습니다.');

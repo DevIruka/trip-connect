@@ -16,6 +16,7 @@ import { useUserStore } from '@/store/userStore';
 import { LocationModal } from '../../components/LocationModalNew';
 import IconInfoCircle from './_components/icons/InfoCircle';
 import { useTranslation } from 'react-i18next';
+import { useRouter } from 'next/navigation';
 
 const RequestPage: React.FC = () => {
   const { t } = useTranslation('request');
@@ -35,7 +36,8 @@ const RequestPage: React.FC = () => {
   } = useFormState();
 
   const { user } = useUserStore();
-
+  const router = useRouter();
+  
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
       if (!user) {
@@ -57,21 +59,28 @@ const RequestPage: React.FC = () => {
       const selectedTopicsInEnglish =
         convertTopicsToEnglish(selectedCategories);
 
-      const { error } = await supabase.from('request_posts').insert([
+      const { data:insertData, error } = await supabase.from('request_posts').insert([
         {
           ...data,
           category: selectedTopicsInEnglish, // 영어로 저장
           country_city: selectedLocation,
           user_id: user.id,
         },
-      ]);
+      ])
+      .select('id')
+      .single()
 
       if (error) {
         throw new Error(error.message);
       }
 
+      if (!insertData) {
+        throw new Error('데이터 삽입 후 반환된 데이터가 없습니다.');
+      }
+
+      const postId = insertData.id;
       alert('질문이 성공적으로 등록되었습니다!');
-      reset();
+      router.push(`/post/${postId}`);
     } catch (error) {
       console.error('오류 발생:', error);
       alert('질문 등록 중 오류가 발생했습니다.');
@@ -121,7 +130,9 @@ const RequestPage: React.FC = () => {
 
         <form className="p-4 space-y-[28px]">
           <div className="flex flex-col items-start gap-[8px]">
-            <label className="text-sm font-semibold ">{t('countryCityLabel')}</label>
+            <label className="text-sm font-semibold ">
+              {t('countryCityLabel')}
+            </label>
             <div className="relative w-full">
               <div className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] flex items-center bg-white">
                 <input
