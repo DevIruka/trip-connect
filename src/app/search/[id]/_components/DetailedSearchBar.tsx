@@ -7,6 +7,7 @@ import TabDetail from '../../_components/TabDetail';
 import { convertToKorean } from '../../_utils/convertTopictoKorean';
 import { useSearchStore } from '@/store/useSearchStore';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { useTranslation } from 'react-i18next';
 
 const iconLeft = '/images/ic-left.svg';
 const iconclose = '/images/ic-xmark.svg';
@@ -24,6 +25,7 @@ const DetailedSearchBar = ({
   selectedCategory,
   setSelectedCategory,
 }: DetailedSearchBarProps) => {
+  const { t } = useTranslation('search');
   const setKeyword = useSearchStore((state) => state.setKeyword);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -53,7 +55,7 @@ const DetailedSearchBar = ({
         <div className="flex flex-row justify-center items-center relative">
           <input
             type="text"
-            placeholder="나라와 카테고리 모두 검색할 수 있어요."
+            placeholder={t('placeHolder')}
             defaultValue={keyword!}
             ref={inputRef}
             className="bg-[#F9F9F9] rounded-[12px] text-[14px] h-[44px] w-[303px] mt-[6px] mb-[11px] py-[12px] px-[16px]"

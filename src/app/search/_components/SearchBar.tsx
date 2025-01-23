@@ -5,6 +5,7 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 const iconLeft = '/images/ic-left.svg';
 const iconclose = '/images/ic-xmark.svg';
@@ -34,6 +35,7 @@ const SearchBar = ({
   handleSubmit,
   handleSearch,
 }: SearchBarProps) => {
+  const { t } = useTranslation('search');
   return (
     <>
       <form
@@ -53,7 +55,7 @@ const SearchBar = ({
           <input
             {...register('searchQuery')}
             type="text"
-            placeholder="나라와 카테고리 모두 검색할 수 있어요."
+            placeholder={t('placeHolder')}
             className="bg-[#F9F9F9] rounded-[12px] text-[14px] h-[44px] w-[303px] mt-[6px] mb-[11px] py-[12px] px-[16px]"
           />
           <button

@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { topicMapping } from '@/utils/topics';
 import Responses from '../_components/Responses';
 import BookmarkBtn from '../_components/BookmarkBtn';
@@ -11,6 +10,8 @@ import Imoji from '@/data/images/ic-imoji.svg';
 import share from '@/data/images/ic-share.svg';
 import BackHeader from '@/components/BackHeader';
 import PostDday from '@/app/home/_components/DDay';
+import ResponseBtn from '../_components/ResponseBtn';
+import ShareBtn from '../_components/ShareBtn';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
@@ -90,21 +91,12 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               </button>
               <div className="flex gap-5">
                 <BookmarkBtn postId={postId} />
-                <Image
-                  width={24}
-                  height={24}
-                  src={share}
-                  alt="bookmark button"
-                />
+                <ShareBtn />
               </div>
             </div>
           </div>
           <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
-          <div className="bg-white z-50 fixed bottom-0 w-[375px]">
-            <Link className="blue-btn" href={`/response/${postId}`}>
-              답변하기
-            </Link>
-          </div>
+          <ResponseBtn postId={postId} />
         </div>
       ) : (
         <div>게시물을 찾을 수 없습니다.</div>

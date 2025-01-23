@@ -12,6 +12,8 @@ import RenderTranslatedHTML from './RenderTranslatedHTML';
 import { Tables } from '@/types/supabase';
 import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import SelectBox from '@/components/SelectBox';
+import DeleteConfirmModal from './DeleteConfirmModal';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -20,6 +22,8 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [credit, setCredit] = useState();
   const [isHydrated, setIsHydrated] = useState(false);
   const [isOriginal, setIsOriginal] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDModalOpen, setIsDModalOpen] = useState(false);
 
   const { user } = useUserStore();
 
@@ -211,10 +215,28 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
           >
             <Image width={20} height={20} src={comment} alt="comment" />0
           </div>
-          <Image width={20} height={20} src={MoreButton} alt="MoreButton" />
+          {isModalOpen && (
+            <SelectBox
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+              user={user!}
+              post={post!}
+              setIsDModalOpen={setIsDModalOpen}
+            />
+          )}
+
+          <button onClick={() => setIsModalOpen(true)}>
+            <Image width={20} height={20} src={MoreButton} alt="MoreButton" />
+          </button>
         </div>
       </div>
       <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
+
+      <DeleteConfirmModal
+        isOpen={isDModalOpen}
+        onClose={() => setIsDModalOpen(false)}
+        responsepost={post!}
+      />
     </div>
   );
 };

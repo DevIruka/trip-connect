@@ -7,13 +7,18 @@ import { Tables } from '@/types/supabase';
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  post: Tables<'request_posts'>;
+  requestpost?: Tables<'request_posts'>;
+  responsepost?: Tables<'response_posts'>;
 };
-const DeleteConfirmModal = ({ isOpen, onClose, post }: Props) => {
+const DeleteConfirmModal = ({
+  isOpen,
+  onClose,
+  requestpost,
+  responsepost,
+}: Props) => {
   const { user } = useUserStore();
 
   if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
-
   return (
     <div
       className="fixed top-0 z-[100] bg-[#111111]/60 w-[374px] h-full grid items-center"
@@ -41,7 +46,10 @@ const DeleteConfirmModal = ({ isOpen, onClose, post }: Props) => {
           </div>
           <div
             className="flex-1 py-3 text-sm font-semibold text-white bg-[#111111] rounded-lg w-[100px] text-center"
-            onClick={() => fetchPostDelete(post, user?.id)}
+            onClick={() => {
+              if (requestpost) fetchPostDelete(requestpost, user?.id);
+              else if (responsepost) console.log('답변글 삭제');
+            }}
           >
             삭제
           </div>
