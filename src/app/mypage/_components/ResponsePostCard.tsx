@@ -159,18 +159,20 @@ const ResponsePostCard: React.FC<{
               </svg>
             </button>
             {showActions && (
-              <div className="absolute top-full right-0 flex flex-col items-start gap-2 p-2 border bg-white shadow-md rounded-md">
+              <div className="absolute top-full right-0 flex flex-col gap-2 p-2 bg-white border border-gray-200 rounded-md shadow-md">
+                {/* 수정하기 버튼 */}
                 <button
-                  className="text-left w-full px-2 py-1 rounded-md text-sm hover:bg-gray-100"
+                  className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
                   onClick={(e) => {
                     e.stopPropagation();
-                    console.log(`Edit post: ${post.id}`);
+                    router.push(`/request-edit/${post.id}`);
                   }}
                 >
                   수정하기
                 </button>
+                {/* 삭제하기 버튼 */}
                 <button
-                  className="text-left w-full px-2 py-1 rounded-md text-sm hover:bg-gray-100"
+                  className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
                   onClick={(e) => {
                     e.stopPropagation();
                     console.log(`Delete post: ${post.id}`);
@@ -206,6 +208,8 @@ const ResponsePostCard: React.FC<{
             <Image src={coinIcon} alt="coin" width={14} height={14} />
             <span>50 C</span>
           </div>
+          <span>·</span>
+          <span>작성자 {nickname}</span>
           <span>·</span>
           <span>댓글 {commentCount}</span>
         </div>

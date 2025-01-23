@@ -100,7 +100,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
       </div>
 
       {/* 탭 섹션 */}
-      <div className="flex items-center justify-around border-b bg-white h-12 relative">
+      <div className="flex items-center justify-around bg-white h-12 relative">
         {tabs.map((tab) => (
           <button
             key={tab.key}
