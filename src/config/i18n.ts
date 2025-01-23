@@ -3,12 +3,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import HttpApi from 'i18next-http-backend';
-import { useLang } from '@/store/languageStore';
 
-// const savedLang =
-//   typeof window !== 'undefined' ? localStorage.getItem('lang') || 'ko' : 'ko';
 const getLanguageFromCookie = (): 'ko' | 'en' => {
   if (typeof window !== 'undefined') {
+    console.log('확인')
     const match = document.cookie.match(/lang=([^;]+)/);
     return match && match[1] === 'en' ? 'en' : 'ko'; // 'en'이면 'en', 아니면 'ko'
   }

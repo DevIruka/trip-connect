@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RxCross2 } from 'react-icons/rx';
 
 const iconHelp = '/images/ic-help.svg';
@@ -13,6 +14,7 @@ const SearchToolTip = ({
   handleClearRecentSearches,
   recentSearches,
 }: SearchToolTip) => {
+  const { t } = useTranslation('search');
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const handleTooltipToggle = () => {
     setIsTooltipVisible(!isTooltipVisible); // 클릭 시 메시지 박스 표시/숨기기
@@ -21,7 +23,7 @@ const SearchToolTip = ({
     <>
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row">
-          <p className="text-[16px] font-[600]">최근 검색어</p>
+          <p className="text-[16px] font-[600]">{t('recentSearch')}</p>
           <Image
             src={iconHelp}
             alt="Help icon"
@@ -35,7 +37,7 @@ const SearchToolTip = ({
           {recentSearches.length > 0 && (
             <button onClick={handleClearRecentSearches}>
               <span className="text-[12px] text-[#45484D] tracking-[-0.24px] underline underline-offset-[1px]">
-                전체 삭제
+              {t('deleteall')}
               </span>
             </button>
           )}
@@ -45,7 +47,7 @@ const SearchToolTip = ({
         <div className="absolute top-8 right-[120px] w-[224px]">
           <div className="flex flex-row items-center relative max-w-md py-[8px] pl-[12px] pr-[12px] bg-[#3A474E] rounded-md shadow-md">
             <p className="text-[12px] text-white pr-[4px] font-[500] tracking-[-0.24px]">
-              최근 검색어는 10개까지만 볼 수 있어요
+              {t('limit')}
             </p>
             <RxCross2
               size={18}

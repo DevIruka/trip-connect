@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FaAngleDown } from 'react-icons/fa6';
 
 type SelectBoxProps = {
@@ -7,6 +8,7 @@ type SelectBoxProps = {
 };
 
 const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
+  const { t } = useTranslation('search');
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (value: 'all' | 'question' | 'answer') => {
@@ -22,12 +24,12 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
       >
         <p className="w-[56px] text-[14px] tracking-[-0.28px]">
           {filter === 'all'
-            ? '질문&답변'
+            ? t('q&a')
             : filter === 'question'
-            ? '질문'
-            : '답변'}
+            ? t('q')
+            : t('a')}
         </p>
-        <FaAngleDown color="gray" className='ml-1'/>
+        <FaAngleDown color="gray" className="ml-1" />
       </div>
 
       {isOpen && (
@@ -40,7 +42,7 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
             }`}
             onClick={() => handleSelect('all')}
           >
-            질문&답변
+            {t('q&a')}
           </li>
           <li
             className={`flex items-center justify-start h-[29px] my-[4px] w-[113px] px-3 py-2 cursor-pointer border-black rounded-[8px] ${
@@ -50,7 +52,7 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
             }`}
             onClick={() => handleSelect('question')}
           >
-            질문글
+            {t('q')}
           </li>
           <li
             className={`flex items-center justify-start h-[29px] my-[4px] w-[113px] px-3 py-2 cursor-pointer border-black rounded-[8px] ${
@@ -60,7 +62,7 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
             }`}
             onClick={() => handleSelect('answer')}
           >
-            답변글
+            {t('a')}
           </li>
         </ul>
       )}

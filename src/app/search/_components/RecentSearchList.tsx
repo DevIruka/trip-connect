@@ -1,4 +1,5 @@
 import { UseFormHandleSubmit } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { RxCross2 } from 'react-icons/rx';
 
 type RecentSearchListProps = {
@@ -11,7 +12,7 @@ type RecentSearchListProps = {
     undefined
   >;
   handleSearch: () => void;
-  handleRecentSearchClick: (term: string) => Promise<void>
+  handleRecentSearchClick: (term: string) => Promise<void>;
   handleRecentSearchDelete: (term: string) => void;
 };
 
@@ -22,6 +23,7 @@ const RecentSearchList = ({
   handleRecentSearchClick,
   handleRecentSearchDelete,
 }: RecentSearchListProps) => {
+  const { t } = useTranslation('search');
   return (
     <>
       <ul className="flex flex-row gap-[4px] items-center overflow-x-auto whitespace-nowrap menuscrollbar">
@@ -58,7 +60,7 @@ const RecentSearchList = ({
         ) : (
           <div className="flex flex-col justify-center items-center w-full">
             <p className="text-[#797C80] text-[16px] font-[600] pt-10 text-center">
-              검색어를 입력해주세요.
+              {t('pleaseinput')}
             </p>
           </div>
         )}
