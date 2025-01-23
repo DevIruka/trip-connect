@@ -11,6 +11,7 @@ import FontFamily from '@tiptap/extension-font-family';
 import MapNode from './MapNode';
 import TextStyle from '@tiptap/extension-text-style';
 import Placeholder from '@tiptap/extension-placeholder';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   title: string;
@@ -29,6 +30,7 @@ const TiptapEditor: React.FC<Props> = ({
   freeContent,
   onChange,
 }) => {
+  const { t } = useTranslation('response');
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const extensions = [
@@ -108,12 +110,12 @@ const TiptapEditor: React.FC<Props> = ({
     <>
       <div className="px-5 pb-0">
         <div className="mb-[24px]">
-          <label className="sr-only">제목</label>
+          <label className="sr-only">{t('titlePlaceholder')}</label>
           <textarea
             ref={textareaRef}
             value={title}
             onChange={handleTitleChange}
-            placeholder="제목"
+            placeholder={t('titlePlaceholder')}
             className="w-full py-2 bg-transparent border-0 border-b focus:outline-none focus:ring-0 focus:border-[#DFE1E5] placeholder:text-[#A9A9A9] text-[18px] font-bold resize-none"
             style={{ color: '#000000', lineHeight: '1.5', overflow: 'hidden' }}
             rows={1}
@@ -134,7 +136,7 @@ const TiptapEditor: React.FC<Props> = ({
         <div className="relative my-[16px] flex items-center justify-center">
           <div className="flex-grow border-t border-[#DFE1E5]"></div>
           <p className="px-4 text-sm whitespace-nowrap bg-white text-[#80BFFF]">
-            이후로는 유료 결제자만 볼 수 있어요
+            {t('paidOnlyMessage')}
           </p>
           <div className="flex-grow border-t border-[#DFE1E5]"></div>
         </div>

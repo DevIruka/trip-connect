@@ -89,7 +89,7 @@ const EditResponsePage: React.FC = () => {
   return (
     <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
       <HeaderWithButton
-        buttonLabel="수정"
+        buttonKey="edit"
         onButtonClick={handleSubmit}
         disabled={!data.title || !data.contentHtml}
       />
