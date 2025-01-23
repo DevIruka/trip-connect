@@ -78,20 +78,28 @@
 
 'use client';
 
+import { useLang } from '@/store/languageStore';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 const lefticon = '/images/ic-left.svg';
 
 const LanguagePage = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState<'ko' | 'en'>('ko');
+  const { lang, setLang } = useLang();
+  const { i18n } = useTranslation();
 
+  const changeLanguage = (lng: 'ko' | 'en') => {
+    i18n.changeLanguage(lng);
+    console.log(i18n.language)
+  };
   const handleLanguageChange = (language: 'ko' | 'en') => {
-    setSelectedLanguage(language);
+    setLang(language);
+    localStorage.setItem('lang', language);
+    changeLanguage(language);
     // 언어 변경 로직 추가 (예: i18n 설정 변경)
   };
-    const router = useRouter();
+  const router = useRouter();
 
   return (
     <div className="min-h-screen px-5 py-4 bg-white">
@@ -136,7 +144,7 @@ const LanguagePage = () => {
         {/* 한국어 */}
         <div
           className={`flex items-center gap-[55px] border-b cursor-pointer ${
-            selectedLanguage === 'ko' ? 'text-black font-bold' : 'text-gray-500'
+            lang === 'ko' ? 'text-black font-bold' : 'text-gray-500'
           }`}
           onClick={() => handleLanguageChange('ko')}
           style={{
@@ -159,7 +167,7 @@ const LanguagePage = () => {
           >
             한국어
           </span>
-          {selectedLanguage === 'ko' && (
+          {lang === 'ko' && (
             <span
               style={{
                 color: 'var(--Primary-Blue, #0582FF)',
@@ -175,7 +183,7 @@ const LanguagePage = () => {
         {/* 영어 */}
         <div
           className={`flex items-center gap-[55px] border-b cursor-pointer ${
-            selectedLanguage === 'en' ? 'text-black font-bold' : 'text-gray-500'
+            lang === 'en' ? 'text-black font-bold' : 'text-gray-500'
           }`}
           onClick={() => handleLanguageChange('en')}
           style={{
@@ -184,7 +192,7 @@ const LanguagePage = () => {
             alignItems: 'center',
             alignSelf: 'stretch',
             borderBottom: '1px solid var(--Grayscale-Gray-7-line, #EBEBEB)',
-            justifyContent: 'space-between', 
+            justifyContent: 'space-between',
           }}
         >
           <span
@@ -198,7 +206,7 @@ const LanguagePage = () => {
           >
             English
           </span>
-          {selectedLanguage === 'en' && (
+          {lang === 'en' && (
             <span
               style={{
                 color: 'var(--Primary-Blue, #0582FF)',

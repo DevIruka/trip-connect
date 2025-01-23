@@ -4,6 +4,7 @@ import Login from './_components/Login';
 
 
 const LoginPage = () => {
+  // const {} = await initTrans
   return (
     <>
       <Login />
@@ -11,3 +12,4 @@ const LoginPage = () => {
   );
 };
 export default LoginPage;
+

@@ -11,7 +11,8 @@ import { googleLogin, kakaoLogin } from '../_auth/oauth';
 import ErrorMessage from './ErrorMessage';
 import { useState } from 'react';
 import WarningModal from './Warning';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next'
+
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
@@ -19,6 +20,7 @@ const leftIcon = '/images/ic-left.svg';
 
 const Login = () => {
   const { t } = useTranslation('login');
+
   const {
     register,
     handleSubmit,
@@ -35,6 +37,7 @@ const Login = () => {
       setErrorMessage(response.message); // 에러 메시지 상태 업데이트
     }
   };
+
 
   return (
     <>
