@@ -1,0 +1,16 @@
+{
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "passwordcheck" : "Password Check",
+    "signup": "Sign Up",
+    "beuser": "Join",
+    "erroremailpattern": "Please enter a valid email address.",
+    "erroremailrequired": "Please enter your email.",
+    "errorpwrequired": "Please enter your password.",
+    "errorpasswordpattern": "Password must be at least 6 characters long.",
+    "errorpwsame": "Passwords do not match.",
+    "nickname": "Nickname",
+    "errornicknamerequired": "Please enter your nickname.",
+    "next": "Next"
+  }
