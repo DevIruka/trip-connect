@@ -98,24 +98,67 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
             </svg>
           </button>
           {showActions && (
-            <div className="absolute top-full right-0 flex flex-col gap-2 p-2 bg-white border border-gray-200 rounded-md shadow-md">
+            <div
+              className="absolute top-full right-0"
+              style={{
+                display: 'flex',
+                width: '129px',
+                padding: '8px',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '10px',
+                borderRadius: '8px',
+                border: '1px solid var(--Grayscale-Gray-8-line, #F4F4F4)',
+                background: '#FFF',
+                boxShadow: '0px 4px 12px 0px rgba(0, 0, 0, 0.05)',
+              }}
+            >
               {/* 수정하기 버튼 */}
               <button
-                className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
+                className="w-full text-left"
+                style={{
+                  display: 'flex',
+                  padding: '6px 10px',
+                  alignItems: 'center',
+                  gap: '10px',
+                  alignSelf: 'stretch',
+                  borderRadius: '8px',
+                  color: 'var(--Grayscale-Gray-1, #45484D)',
+                  textAlign: 'center',
+                  fontFamily: 'Pretendard',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: 'normal',
+                  letterSpacing: '-0.28px',
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  router.push(`/request-edit/${post.id}`);
+                  console.log(`Edit post: ${post.id}`);
                 }}
               >
                 수정하기
               </button>
               {/* 삭제하기 버튼 */}
               <button
-                className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log(`Delete post: ${post.id}`);
+                className="w-full text-left"
+                style={{
+                  display: 'flex',
+                  padding: '6px 10px',
+                  alignItems: 'center',
+                  gap: '10px',
+                  alignSelf: 'stretch',
+                  borderRadius: '8px',
+                  color: 'var(--Grayscale-Gray-1, #45484D)',
+                  textAlign: 'center',
+                  fontFamily: 'Pretendard',
+                  fontSize: '14px',
+                  fontStyle: 'normal',
+                  fontWeight: '500',
+                  lineHeight: 'normal',
+                  letterSpacing: '-0.28px',
                 }}
+                onClick={() => console.log(`Delete post: ${post.id}`)}
               >
                 삭제하기
               </button>
