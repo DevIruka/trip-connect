@@ -8,21 +8,24 @@ import useSearchHandlers from './_hooks/useSearchHandlers';
 import SearchBar from './_components/SearchBar';
 import SearchToolTip from './_components/SearchToolTip';
 import RecentSearchList from './_components/RecentSearchList';
+import { useTranslation } from 'react-i18next';
 
 const SearchPage = () => {
   const router = useRouter();
-
   const [storedSearches, setStoredSearches] = useState<string[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const { t } = useTranslation('login');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const searches = JSON.parse(localStorage.getItem('recentSearches') || '[]');
+      const searches = JSON.parse(
+        localStorage.getItem('recentSearches') || '[]',
+      );
       setStoredSearches(searches);
-      setRecentSearches(searches)
+      setRecentSearches(searches);
     }
   }, []);
-      
+
   const keyword = useSearchStore((state) => state.keyword);
 
   const { register, handleSubmit, setValue, watch, setFocus } = useForm({
@@ -46,7 +49,13 @@ const SearchPage = () => {
     handleRecentSearchClick,
     handleRecentSearchDelete,
     handleSearch,
-  } = useSearchHandlers({ query, recentSearches, router, setValue , setRecentSearches });
+  } = useSearchHandlers({
+    query,
+    recentSearches,
+    router,
+    setValue,
+    setRecentSearches,
+  });
 
   return (
     <>

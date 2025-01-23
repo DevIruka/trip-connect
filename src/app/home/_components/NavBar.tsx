@@ -3,14 +3,13 @@ import { useEffect, useState } from 'react';
 
 import { topicMapping } from '@/utils/topics';
 
-
 import { LocationModal } from '../../../components/LocationModalNew';
 import { nation } from '../_types/homeTypes';
 import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import Icon from '@/components/Icons';
-
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   setFilterType: React.Dispatch<React.SetStateAction<string>>;
@@ -25,6 +24,8 @@ const Navbar = ({
   setNationFilter,
   filterType,
 }: Props) => {
+  const { t } = useTranslation('home');
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
   const [selectedCountry, setSelectedCountry] = useState<nation | null>(() => {
     return typeof window !== 'undefined'
@@ -61,7 +62,7 @@ const Navbar = ({
           <TabsList>
             <TabsTrigger value="all" onClick={() => changeCategory('all')}>
               <Icon type={'all'} size={20} />
-              <div className="pl-1">전체</div>
+              <div className="pl-1">{t('all')}</div>
             </TabsTrigger>
             {topicArr.map(([key, value]) => (
               <TabsTrigger
@@ -84,7 +85,7 @@ const Navbar = ({
             }
             onClick={() => setFilterType('latest')}
           >
-            전체
+            {t('all')}
           </button>
           <button
             className={
@@ -92,7 +93,7 @@ const Navbar = ({
             }
             onClick={() => setFilterType('request')}
           >
-            질문
+            {t('Q')}
           </button>
           <button
             className={
@@ -100,7 +101,7 @@ const Navbar = ({
             }
             onClick={() => setFilterType('response')}
           >
-            답변
+            {t('A')}
           </button>
         </div>
 
