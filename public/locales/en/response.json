@@ -1,0 +1,8 @@
+{
+  "register": "Register",
+  "edit": "Edit",
+  "titlePlaceholder": "Title",
+  "previewPlaceholder": "Write your preview answer here",
+  "paidOnlyMessage": "The rest is available to paid users only",
+  "paidContentPlaceholder": "Write your paid answer here"
+}

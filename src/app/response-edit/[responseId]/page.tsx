@@ -18,6 +18,7 @@ const EditResponsePage: React.FC = () => {
   const [request, setRequest] = useState({ title: '', content: '' });
   const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
+  const [requestId, setRequestId] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchResponseDetails = async () => {
@@ -35,6 +36,8 @@ const EditResponsePage: React.FC = () => {
           contentHtml: responseData.content_html,
           freeContent: responseData.free_content,
         });
+
+        setRequestId(responseData.request_id);
 
         const { data: requestData, error: requestError } = await supabase
           .from('request_posts')
@@ -70,7 +73,7 @@ const EditResponsePage: React.FC = () => {
       if (error) throw error;
 
       alert('수정이 완료되었습니다.');
-      router.push(`/response/${responseId}`);
+      router.push(`/post/${requestId}`);
     } catch (error) {
       console.error('Error:', error);
       alert('수정 중 문제가 발생했습니다.');
@@ -89,7 +92,7 @@ const EditResponsePage: React.FC = () => {
   return (
     <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
       <HeaderWithButton
-        buttonLabel="수정"
+        buttonKey="edit"
         onButtonClick={handleSubmit}
         disabled={!data.title || !data.contentHtml}
       />

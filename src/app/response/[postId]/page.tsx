@@ -88,7 +88,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
 
   return (
     <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
-      <HeaderWithButton buttonLabel="등록" onButtonClick={handleSubmit} />
+      <HeaderWithButton buttonKey="register" onButtonClick={handleSubmit} />
 
       <div className="bg-[#F5F7FA] w-full mb-[16px] px-[20px] py-[16px]">
         <div className="flex flex-col gap-[8px]">
