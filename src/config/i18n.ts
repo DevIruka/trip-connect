@@ -10,7 +10,7 @@ if (!i18n.isInitialized) {
     .use(initReactI18next)
     .use(HttpApi) // JSON 파일 로드
     .init({
-      lng : 'en',
+      lng: 'ko',
       supportedLngs: ['en', 'ko'],
       interpolation: { escapeValue: false },
       backend: {
