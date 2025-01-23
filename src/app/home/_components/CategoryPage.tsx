@@ -10,11 +10,14 @@ import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 import { useSearchStore } from '@/store/useSearchStore';
 
 import { nation } from '../_types/homeTypes';
-import QnaHeader from './qnaHeader';
-import Navbar from './navBar';
-import ListReqPost from '@/components/listReqPost';
-import ListResPost from '@/components/listResPost';
-import LoginModal from '@/components/loginModal';
+
+import LoginModal from '@/components/LoginModal';
+import ListReqPost from '@/components/ListReqPost';
+import ListResPost from '@/components/ListResPost';
+import QnaHeader from './QnaHeader';
+import Navbar from './NavBar';
+import { useUserStore } from '@/store/userStore';
+
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -74,11 +77,11 @@ const CategoryPage = () => {
 
   //로그인해주세요 모달
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
-
+  const { user } = useUserStore();
   return (
     <>
       <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar">
-        <QnaHeader />
+        <QnaHeader setIsModalOpen={setIsModalOpen} />
         <Navbar
           setFilterType={setFilterType}
           changeCategory={changeCategory}
@@ -117,7 +120,8 @@ const CategoryPage = () => {
         <button
           className="sticky bottom-8 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
           onClick={() => {
-            router.push('/request');
+            if (!user) setIsModalOpen(true);
+            else router.push('/request');
           }}
         >
           <Image width={36} height={36} src={pencil} alt="pencil" />

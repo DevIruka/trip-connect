@@ -14,6 +14,7 @@ import {
 } from '@/utils/topics';
 import { useUserStore } from '@/store/userStore';
 import { LocationModal } from '../../components/LocationModalNew';
+import IconInfoCircle from './_components/icons/InfoCircle';
 
 const RequestPage: React.FC = () => {
   const {
@@ -78,15 +79,15 @@ const RequestPage: React.FC = () => {
   return (
     <>
       <div className="w-full h-screen bg-white flex flex-col overflow-y-auto menuscrollbar">
-        <div className="h-[56px] w-full flex justify-between items-center px-[20px] py-[10px]">
+        <div className="top-0 h-[56px] w-full flex justify-between items-center px-[20px] py-[10px] relative">
           <button
             className="w-[24px] h-[24px] text-black flex items-center justify-center"
             onClick={() => history.back()}
           >
             <span className="font-semibold">✕</span>
           </button>
-          <h1 className="w-[62px] h-[22px] text-[18px] font-bold text-center flex-1">
-            질문하기
+          <h1 className="text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
+          질문하기
           </h1>
           <button
             onClick={handleSubmit(onSubmit)}
@@ -94,13 +95,15 @@ const RequestPage: React.FC = () => {
               !watch('country_city') ||
               !watch('category') ||
               !watch('title') ||
-              !watch('content')
+              !watch('content') ||
+              !watch('date_end')
             }
             className={`rounded-[6px] px-[12px] py-[6px] text-[14px] font-semibold ${
               watch('country_city') &&
               watch('category') &&
               watch('title') &&
-              watch('content')
+              watch('content') &&
+              watch('date_end')
                 ? 'bg-[#0582FF] text-white hover:bg-[#0079F2]'
                 : 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed'
             }`}
@@ -109,11 +112,14 @@ const RequestPage: React.FC = () => {
           </button>
         </div>
 
+        <div className="flex items-center gap-[4px] text-[#80BFFF] text-[14px] font-semibold px-[15px] pt-[12px]">
+          <IconInfoCircle />
+          <span>답변이 달린 질문은 기한 수정만 가능해요</span>
+        </div>
+
         <form className="p-4 space-y-[28px]">
           <div className="flex flex-col items-start gap-[8px]">
-            <label className="text-sm font-bold text-[13px]">
-              나라/도시 선택
-            </label>
+            <label className="text-sm font-semibold ">나라/도시 선택</label>
             <div className="relative w-full">
               <div className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] flex items-center bg-white">
                 <input
@@ -161,7 +167,7 @@ const RequestPage: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-start gap-[8px]">
-            <label className="text-sm font-bold text-[13px]">주제 선택</label>
+            <label className="text-sm font-semibold ">주제 선택</label>
             <TopicSelector
               topics={[
                 '맛집',
@@ -178,7 +184,7 @@ const RequestPage: React.FC = () => {
               watch={watch}
               isSingleSelect={true}
             />
-            
+
             {errors.category && (
               <p className="text-red-500 text-sm mt-1">
                 {errors.category.message}

@@ -75,83 +75,87 @@ const FormFields: React.FC<Props> = ({
 
   return (
     <>
-      <div className="flex flex-col items-start gap-[8px]">
-        <label className="text-sm font-bold text-[13px]">제목</label>
-        <input
-          type="text"
-          placeholder="제목을 입력해주세요"
-          {...register('title', { required: '제목을 입력해주세요' })}
-          disabled={disabledFields.title}
-          className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
-            disabledFields.title
-              ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
-              : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
-          }`}
-        />
-        {errors.title && (
-          <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>
-        )}
-      </div>
-
-      <div className="flex flex-col items-start gap-[8px]">
-        <label className="text-sm font-bold text-[13px]">크레딧</label>
-        <input
-          type="number"
-          placeholder="크레딧을 입력해주세요"
-          {...register('credit', {
-            required: '크레딧을 입력해주세요',
-            min: {
-              value: 0,
-              message: '크레딧은 0 이상이어야 합니다.',
-            },
-          })}
-          disabled={disabledFields.credit}
-          className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
-            disabledFields.credit
-              ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
-              : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
-          }`}
-        />
-        {errors.credit && (
-          <p className="text-sm text-red-500 mt-1">{errors.credit.message}</p>
-        )}
-      </div>
-
-      <div className="flex flex-col items-start gap-[8px]">
-        <label className="text-sm font-bold text-[13px]">내용</label>
-        <textarea
-          placeholder="질문하고 싶은 내용을 작성해주세요"
-          {...register('content', {
-            required: '내용을 입력해주세요.',
-          })}
-          disabled={disabledFields.content}
-          onInput={handleInputResize} // 입력 시 높이 조정
-          className={`w-full px-[16px] py-[14px] border rounded-[8px] resize-none overflow-hidden text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
-            disabledFields.content
-              ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
-              : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
-          }`}
-          style={{ height: 'auto', minHeight: '156px' }} // 초기 높이 설정
-        />
-        {errors.content && (
-          <p className="text-sm text-red-500 mt-1">{errors.content.message}</p>
-        )}
-      </div>
-
-      <div className="flex flex-col items-start gap-[8px]">
-        <label className="text-sm font-bold text-[13px]">기한</label>
-        <div className="relative w-full">
+      <div className="flex flex-col gap-[28px]">
+        <div className="flex flex-col items-start gap-[8px]">
+          <label className="text-sm font-semibold text-[13px]">제목</label>
           <input
             type="text"
-            placeholder="yyyy/mm/dd"
-            value={
-              selectedDate ? format(new Date(selectedDate), 'yyyy/MM/dd') : ''
-            }
-            readOnly
-            onClick={toggleCalendar}
-            className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] placeholder:text-[14px] placeholder:font-medium placeholder-[#A9A9A9] focus:outline-none pr-[40px]"
+            placeholder="제목을 입력해주세요"
+            {...register('title', { required: '제목을 입력해주세요' })}
+            disabled={disabledFields.title}
+            className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
+              disabledFields.title
+                ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
+                : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
+            }`}
           />
-          <CalendarIcon />
+          {errors.title && (
+            <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col items-start gap-[8px]">
+          <label className="text-sm font-semibold text-[13px]">크레딧</label>
+          <input
+            type="number"
+            placeholder="크레딧을 입력해주세요"
+            {...register('credit', {
+              required: '크레딧을 입력해주세요',
+              min: {
+                value: 0,
+                message: '크레딧은 0 이상이어야 합니다.',
+              },
+            })}
+            disabled={disabledFields.credit}
+            className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
+              disabledFields.credit
+                ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
+                : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
+            }`}
+          />
+          {errors.credit && (
+            <p className="text-sm text-red-500 mt-1">{errors.credit.message}</p>
+          )}
+        </div>
+
+        <div className="flex flex-col items-start gap-[8px]">
+          <label className="text-sm font-semibold text-[13px]">내용</label>
+          <textarea
+            placeholder="질문하고 싶은 내용을 작성해주세요"
+            {...register('content', {
+              required: '내용을 입력해주세요.',
+            })}
+            disabled={disabledFields.content}
+            onInput={handleInputResize} // 입력 시 높이 조정
+            className={`w-full px-[16px] py-[14px] border rounded-[8px] resize-none overflow-hidden text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
+              disabledFields.content
+                ? 'bg-white text-[#A9A9A9] cursor-not-allowed border-[#DFE1E5]'
+                : 'border-[#DFE1E5] placeholder-[#A9A9A9]'
+            }`}
+            style={{ height: 'auto', minHeight: '156px' }} // 초기 높이 설정
+          />
+          {errors.content && (
+            <p className="text-sm text-red-500 mt-1">
+              {errors.content.message}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-col items-start gap-[8px]">
+          <label className="text-sm font-semibold text-[13px]">기한</label>
+          <div className="relative w-full">
+            <input
+              type="text"
+              placeholder="yyyy/mm/dd"
+              value={
+                selectedDate ? format(new Date(selectedDate), 'yyyy/MM/dd') : ''
+              }
+              readOnly
+              onClick={toggleCalendar}
+              className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] placeholder:text-[14px] placeholder:font-medium placeholder-[#A9A9A9] focus:outline-none pr-[40px]"
+            />
+            <CalendarIcon />
+          </div>
 
           {/* 모달 */}
           {isCalendarOpen && (

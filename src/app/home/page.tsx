@@ -1,6 +1,7 @@
 import React, { Suspense } from 'react';
-import CategoryPage from './_components/categoryPage';
 import initTranslation from '@/config/server/i18n'
+import CategoryPage from './_components/CategoryPage';
+
 
 const Homepage = async () => {
   const { t } = await initTranslation('ko', ['login']);

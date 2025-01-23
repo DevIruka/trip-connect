@@ -1,11 +1,12 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import BackHeader from '@/components/BackHeader';
 import search from '@/data/images/ic-Search.svg';
-import PostCard from './_components/postCard';
 import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
 import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
+import ListReqPost from '@/components/ListReqPost';
+import LoginModal from '@/components/LoginModal';
 
 const ResponseListPage = () => {
   const {
@@ -15,6 +16,8 @@ const ResponseListPage = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useReqPosts();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
   if (isPending) {
     return <div>loading...</div>;
   }
@@ -31,10 +34,22 @@ const ResponseListPage = () => {
         </div>
         <ul>
           {ReqPosts?.map((post) => (
-            <PostCard key={post!.id} post={post!} />
+            <div key={post!.id}>
+              <ListReqPost
+                post={post!}
+                setIsModalOpen={setIsModalOpen}
+                isReqList={true}
+              />
+            </div>
           ))}
         </ul>
       </div>
+      {isModalOpen && (
+        <LoginModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 };

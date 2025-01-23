@@ -1,6 +1,10 @@
-import HeaderButton from './headerButton';
+import HeaderButton from './HeaderButton';
 
-export default function QnaHeader() {
+export default function QnaHeader({
+  setIsModalOpen,
+}: {
+  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
   return (
     <header className="h-[268px] px-[20px] pt-[28px] pb-[40px] bg-[#f4f6f9]">
       <div className="text-xl font-semibold pb-[8px]">
@@ -12,6 +16,7 @@ export default function QnaHeader() {
       </div>
       <div className="flex gap-[7px]">
         <HeaderButton
+          setIsModalOpen={setIsModalOpen}
           url="request"
           title="질문하기"
           text1="여행 예정 국가의"
