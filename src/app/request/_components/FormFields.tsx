@@ -13,6 +13,7 @@ import { format } from 'date-fns';
 import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import CalendarIcon from './icons/CalendarIcon';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   register: UseFormRegister<FormInputs>;
@@ -35,6 +36,7 @@ const FormFields: React.FC<Props> = ({
   setValue,
   disabledFields,
 }) => {
+  const { t } = useTranslation('request');
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
     watch('date_end') ? new Date(String(watch('date_end'))) : undefined,
@@ -77,11 +79,13 @@ const FormFields: React.FC<Props> = ({
     <>
       <div className="flex flex-col gap-[28px]">
         <div className="flex flex-col items-start gap-[8px]">
-          <label className="text-sm font-semibold text-[13px]">제목</label>
+          <label className="text-sm font-semibold text-[13px]">
+            {t('titleLabel')}
+          </label>
           <input
             type="text"
-            placeholder="제목을 입력해주세요"
-            {...register('title', { required: '제목을 입력해주세요' })}
+            placeholder={t('titlePlaceholder')}
+            {...register('title', { required: t('titleError') })}
             disabled={disabledFields.title}
             className={`w-full px-[16px] py-[14px] border rounded-[8px] text-[14px] font-medium focus:outline-none placeholder:text-[14px] placeholder:font-medium ${
               disabledFields.title
@@ -95,15 +99,17 @@ const FormFields: React.FC<Props> = ({
         </div>
 
         <div className="flex flex-col items-start gap-[8px]">
-          <label className="text-sm font-semibold text-[13px]">크레딧</label>
+          <label className="text-sm font-semibold text-[13px]">
+            {t('creditLabel')}
+          </label>
           <input
             type="number"
-            placeholder="크레딧을 입력해주세요"
+            placeholder={t('creditPlaceholder')}
             {...register('credit', {
-              required: '크레딧을 입력해주세요',
+              required: t('creditErrorRequired'),
               min: {
                 value: 0,
-                message: '크레딧은 0 이상이어야 합니다.',
+                message: t('creditErrorMin'),
               },
             })}
             disabled={disabledFields.credit}
@@ -119,11 +125,13 @@ const FormFields: React.FC<Props> = ({
         </div>
 
         <div className="flex flex-col items-start gap-[8px]">
-          <label className="text-sm font-semibold text-[13px]">내용</label>
+          <label className="text-sm font-semibold text-[13px]">
+            {t('contentLabel')}
+          </label>
           <textarea
-            placeholder="질문하고 싶은 내용을 작성해주세요"
+            placeholder={t('contentPlaceholder')}
             {...register('content', {
-              required: '내용을 입력해주세요.',
+              required: t('contentError'),
             })}
             disabled={disabledFields.content}
             onInput={handleInputResize} // 입력 시 높이 조정
@@ -142,7 +150,9 @@ const FormFields: React.FC<Props> = ({
         </div>
 
         <div className="flex flex-col items-start gap-[8px]">
-          <label className="text-sm font-semibold text-[13px]">기한</label>
+          <label className="text-sm font-semibold text-[13px]">
+            {t('dateLabel')}
+          </label>
           <div className="relative w-full">
             <input
               type="text"
@@ -164,7 +174,7 @@ const FormFields: React.FC<Props> = ({
                 {/* 헤더 */}
                 <div className="flex justify-between items-center mb-4">
                   <h2 className="text-[16px] font-semibold text-[#757575]">
-                    답변 받을 기한을 설정해주세요!
+                    {t('calendarTitle')}
                   </h2>
                   <button
                     type="button"
@@ -211,14 +221,14 @@ const FormFields: React.FC<Props> = ({
                     className="w-[72px] h-[48px] px-[12px] py-[6px] border border-[#DFE1E5] rounded-[12px] text-[#333] text-[14px] font-semibold"
                     onClick={handleCancel}
                   >
-                    취소
+                    {t('cancelButton')}
                   </button>
                   <button
                     type="button"
                     className="flex-1 h-[48px] px-[12px] py-[6px] bg-[#0582FF] rounded-[12px] text-white text-[14px] font-semibold"
                     onClick={handleConfirm}
                   >
-                    등록하기
+                    {t('confirmButton')}
                   </button>
                 </div>
               </div>

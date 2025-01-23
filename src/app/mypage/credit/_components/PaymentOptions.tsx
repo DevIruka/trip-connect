@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { PaymentOptionsProps } from '../_types/credit';
 import PaymentModal from './PaymentModal';
+import { useTranslation } from 'react-i18next';
 
 const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   options,
   onPayment,
 }) => {
+  const {t} = useTranslation('credit')
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [selectedBonus, setSelectedBonus] = useState(0);
@@ -36,20 +38,20 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
               </p>
               {bonus > 0 && (
                 <div className="flex flex-row items-center">
-                  <p className="text-[#0582ff] text-sm font-medium font-['Pretendard'] leading-tight mt-[2px] mr-[2px]">
+                  <p className="text-[#0582ff] text-sm font-medium leading-tight mt-[2px] mr-[2px]">
                     +{bonus.toLocaleString()}
                   </p>
                   <span className="text-[#44484c] text-sm font-medium leading-tightmt-[2px]">
-                    추가 크레딧
+                    {t('amountWithBonus')}
                   </span>
                 </div>
               )}
             </div>
             <button
-              className="bg-[#EBF5FF] text-center text-[#0582ff] text-sm font-medium font-['Pretendard'] px-[19px] py-[8px] rounded-[8px]"
+              className="bg-[#EBF5FF] text-center text-[#0582ff] text-sm font-medium px-[19px] py-[8px] rounded-[8px]"
               onClick={() => openModal(amount)}
             >
-              {amount.toLocaleString()}원
+              {amount.toLocaleString()}{t('won')}
             </button>
           </div>
         );

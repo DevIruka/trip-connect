@@ -9,6 +9,7 @@ import { useHandlePayment } from './_hooks/useHandlePayment';
 import CreditBalance from './_components/CreditBalance';
 import PaymentOptions from './_components/PaymentOptions';
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 
 const leftIcon = '/images/ic-left.svg';
 
@@ -27,6 +28,7 @@ const fetchCredit = async (userId: string) => {
 };
 
 const CreditPage: React.FC = () => {
+  const { t } = useTranslation('credit');
   const router = useRouter();
   const { user } = useUserStore();
   const { handlePayment, processPaymentResult } = useHandlePayment();
@@ -90,7 +92,9 @@ const CreditPage: React.FC = () => {
       <CreditBalance credit={credit} />
 
       {/* 충전하기 */}
-      <h2 className="text-black text-[20px] font-[700] mb-[16px]">충전하기</h2>
+      <h2 className="text-black text-[20px] font-[700] mb-[16px]">
+        {t('recharge')}
+      </h2>
       <PaymentOptions
         options={[
           { amount: 1000, bonusRate: 0 },
