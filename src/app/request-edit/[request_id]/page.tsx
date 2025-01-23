@@ -19,7 +19,7 @@ import { LocationModal } from '@/components/LocationModalNew';
 import IconInfoCircle from '@/app/request/_components/icons/InfoCircle';
 import { useTranslation } from 'react-i18next';
 
-type nation = {
+type Nation = {
   continent: string;
   country: string;
   city: string;
@@ -42,44 +42,28 @@ const EditRequestPage: React.FC = () => {
   } = useForm<FormInputs>();
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
-  const [selectedLocation, setSelectedLocation] = useState<{
-    continent: string;
-    country: string;
-    city: string;
-  }>({ continent: '', country: '', city: '' });
+  const [selectedLocation, setSelectedLocation] = useState<Nation>({
+    continent: '',
+    country: '',
+    city: '',
+  });
   const [isRestricted, setIsRestricted] = useState(false);
 
   const toggleModal = () => setIsModalOpen((prev) => !prev);
 
-  const handleLocationSelect = (location: nation | null) => {
+  const handleLocationSelect = (location: Nation | null) => {
     if (location) {
       const { continent, country, city } = location;
       setSelectedLocation({ continent, country, city });
       setValue('country_city', `${country}, ${city}`);
       clearErrors('country_city');
-      sessionStorage.setItem(
-        'selectedLocation',
-        JSON.stringify({ continent, country, city }),
-      ); // 선택된 값 저장
     } else {
       setSelectedLocation({ continent: '', country: '', city: '' });
       setValue('country_city', '');
       sessionStorage.removeItem('selectedLocation');
     }
-    toggleModal();
+    setIsModalOpen(false);
   };
-
-  useEffect(() => {
-    const savedLocation = sessionStorage.getItem('selectedLocation');
-    if (savedLocation) {
-      const parsedLocation = JSON.parse(savedLocation);
-      setSelectedLocation(parsedLocation);
-      setValue(
-        'country_city',
-        `${parsedLocation.country}, ${parsedLocation.city}`,
-      );
-    }
-  }, [setValue]);
 
   useEffect(() => {
     const fetchRequestDetails = async () => {
@@ -161,7 +145,7 @@ const EditRequestPage: React.FC = () => {
         .update({
           ...data,
           category: englishCategories,
-          country_city: selectedLocation,
+          country_city: JSON.stringify(selectedLocation),
         })
         .eq('id', request_id);
 
@@ -237,7 +221,9 @@ const EditRequestPage: React.FC = () => {
         </div>
 
         <div className="mb-[28px]">
-          <label className="block text-sm font-medium mb-2">{t('topicLabel')}</label>
+          <label className="block text-sm font-medium mb-2">
+            {t('topicLabel')}
+          </label>
           <TopicSelector
             topics={[
               '맛집',
@@ -279,13 +265,8 @@ const EditRequestPage: React.FC = () => {
 
         <LocationModal
           isOpen={isModalOpen}
-          onClose={() => {
-            toggleModal();
-          }}
-          setCountry={(location) => {
-            handleLocationSelect(location);
-            toggleModal();
-          }}
+          onClose={toggleModal}
+          setCountry={handleLocationSelect}
           selectedCountry={selectedLocation}
         />
       </div>
