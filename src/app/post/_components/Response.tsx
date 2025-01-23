@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Profile from './profile';
+import Profile from './Profile';
 import Image from 'next/image';
 
 import original from '@/data/images/original.svg';
@@ -55,7 +55,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
       .select('*')
       .eq('user_id', user?.id)
       .eq('response_id', post.id)
-      .single();
+      .maybeSingle();
     if (data) setIsPurchased(true);
     if (error) console.log(error.message);
   };

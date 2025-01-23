@@ -3,7 +3,7 @@ import { topicMapping } from '@/utils/topics';
 import Responses from '../_components/Responses';
 import BookmarkBtn from '../_components/BookmarkBtn';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import Profile from '../_components/profile';
+import Profile from '../_components/Profile';
 import MoreButton from '@/data/images/ic-More.svg';
 import Image from 'next/image';
 import Icon from '@/components/Icons';
@@ -11,7 +11,6 @@ import Imoji from '@/data/images/ic-imoji.svg';
 import share from '@/data/images/ic-share.svg';
 import BackHeader from '@/components/BackHeader';
 import PostDday from '@/app/home/_components/DDay';
-
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
