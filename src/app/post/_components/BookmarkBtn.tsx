@@ -15,6 +15,7 @@ const BookmarkBtn = ({ postId }: { postId: string }) => {
   const bookmarked = isPostBookmarked(postId);
   const { addBookmarkMutation, deleteBookmarkMutation } =
     useBookmarkMutations(userId);
+  if (!user) return null;
 
   return (
     <>
@@ -34,9 +35,6 @@ const BookmarkBtn = ({ postId }: { postId: string }) => {
       ) : (
         <button
           onClick={() => {
-            if (!userId) {
-              alert('로그인해주세요');
-            }
             addBookmarkMutation.mutate(postId);
           }}
         >
