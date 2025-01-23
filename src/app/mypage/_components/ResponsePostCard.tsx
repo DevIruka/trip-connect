@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { ResponsePost } from '../_type/type';
 import stripHtmlTags from '../_util/striptHtmlTags';
@@ -11,15 +11,39 @@ import { useRouter } from 'next/navigation';
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
 
-const ResponsePostCard: React.FC<{ post: ResponsePost }> = ({ post }) => {
+const ResponsePostCard: React.FC<{
+  post: ResponsePost;
+  editable?: boolean;
+}> = ({ post, editable = true }) => {
   const router = useRouter();
   const [nickname, setNickname] = useState<string | null>(null);
-  const [country, setCountry] = useState<string | null>(null); // 나라를 저장할 state 추가
-  const [category, setCategory] = useState<string[]>([]); // 카테고리 추가
-  const [showActions, setShowActions] = useState<boolean>(false); // More 버튼 상태 추가
-  const plainContent = stripHtmlTags(post.content_html || '');
+  const [country, setCountry] = useState<string | null>(null);
+  const [category, setCategory] = useState<string[]>([]);
+  const [commentCount, setCommentCount] = useState<number>(0);
+  const [showActions, setShowActions] = useState<boolean>(false);
+  const plainContent = stripHtmlTags(post.free_content || '');
 
-  const fetchUserNickname = async (userId: string) => {
+  const fetchCommentCount = useCallback(async () => {
+    if (!post.request_id) return;
+
+    try {
+      const { count, error } = await supabase
+        .from('response_posts')
+        .select('*', { count: 'exact', head: true })
+        .eq('request_id', post.request_id);
+
+      if (error) {
+        console.error('댓글 개수 조회 오류:', error);
+        return;
+      }
+
+      setCommentCount(count || 0);
+    } catch (err) {
+      console.error('댓글 개수 조회 중 오류 발생:', err);
+    }
+  }, [post.request_id]);
+
+  const fetchUserNickname = useCallback(async (userId: string) => {
     try {
       const { data, error } = await supabase
         .from('users')
@@ -37,13 +61,13 @@ const ResponsePostCard: React.FC<{ post: ResponsePost }> = ({ post }) => {
       console.error('유저 닉네임 조회 중 오류 발생:', err);
       setNickname('알 수 없음');
     }
-  };
+  }, []);
 
-  const fetchRequestDetails = async (requestId: string) => {
+  const fetchRequestDetails = useCallback(async (requestId: string) => {
     try {
       const { data, error } = await supabase
         .from('request_posts')
-        .select('country_city, category') 
+        .select('country_city, category')
         .eq('id', requestId)
         .single();
 
@@ -53,15 +77,16 @@ const ResponsePostCard: React.FC<{ post: ResponsePost }> = ({ post }) => {
         setCategory([]);
       } else {
         const countryCity = JSON.parse(data?.country_city || '{}');
+        console.log(data);
         setCountry(countryCity.country || '알 수 없음');
         setCategory(data?.category || []);
       }
     } catch (err) {
       console.error('질문글에서 정보 조회 중 오류 발생:', err);
       setCountry('알 수 없음');
-      setCategory([]); 
+      setCategory([]);
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (post.user_id) {
@@ -70,7 +95,14 @@ const ResponsePostCard: React.FC<{ post: ResponsePost }> = ({ post }) => {
     if (post.request_id) {
       fetchRequestDetails(post.request_id);
     }
-  }, [post.user_id, post.request_id]);
+    fetchCommentCount();
+  }, [
+    post.user_id,
+    post.request_id,
+    fetchCommentCount,
+    fetchUserNickname,
+    fetchRequestDetails,
+  ]);
 
   const handleCardClick = () => {
     if (post.request_id) {
@@ -79,167 +111,107 @@ const ResponsePostCard: React.FC<{ post: ResponsePost }> = ({ post }) => {
       console.error('Request ID가 존재하지 않습니다.');
     }
   };
-
+  console.log(category);
   return (
     <div
       onClick={handleCardClick}
-      className="flex flex-col items-start gap-3 border-b bg-white w-full"
-      style={{
-        padding: '12px 20px 24px 20px',
-        borderBottom: '1px solid #F4F4F4',
-        background: '#FFF',
-      }}
+      className="flex flex-col items-start gap-3 border-b bg-white w-full p-6 border-gray-200"
     >
       {/* 상단 - 위치와 카테고리 */}
-      <div className="flex items-center justify-between w-full gap-[8px]">
-        {/* 왼쪽 - 위치와 카테고리 */}
-        <div className="flex items-center gap-[8px]">
+      <div className="flex items-center justify-between w-full gap-2">
+        <div className="flex items-center gap-2">
           {/* 위치 */}
-          <div className="flex items-center gap-[4px] bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] py-[4px] text-[12px]">
+          <div className="flex items-center text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1">
             <Image src={markerIcon} alt="location" width={12} height={12} />
-            {country && <span>{country}</span>}{' '}
-            {/* 질문글에서 가져온 나라 정보 */}
+            {country && <span className="ml-1">{country}</span>}
           </div>
           {/* 카테고리 */}
           {(category || []).slice(0, 2).map((cat, i) => (
             <div
               key={i}
-              className="bg-[#F5F7FA] text-[#45484D] rounded-md px-[6px] py-[4px] text-[12px]"
+              className="text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1"
             >
               {cat}
             </div>
           ))}
         </div>
 
-        {/* 오른쪽 - More 버튼 */}
-        <div className="relative">
-          <button
-            onClick={() => setShowActions((prev) => !prev)}
-            className="p-2"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              width="14"
-              height="14"
-              fill="none"
-            >
-              <circle cx="12" cy="5" r="2" fill="#797C80" />
-              <circle cx="12" cy="12" r="2" fill="#797C80" />
-              <circle cx="12" cy="19" r="2" fill="#797C80" />
-            </svg>
-          </button>
-          {showActions && (
-            <div
-              className="absolute top-full right-0"
-              style={{
-                display: 'flex',
-                width: '129px',
-                padding: '8px',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '10px',
-                borderRadius: '8px',
-                border: '1px solid var(--Grayscale-Gray-8-line, #F4F4F4)',
-                background: '#FFF',
-                boxShadow: '0px 4px 12px 0px rgba(0, 0, 0, 0.05)',
+        {/* More 버튼 */}
+        {editable && (
+          <div className="relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowActions((prev) => !prev);
               }}
+              className="p-2"
             >
-              {/* 수정하기 버튼 */}
-              <button
-                className="w-full text-left"
-                style={{
-                  display: 'flex',
-                  padding: '6px 10px',
-                  alignItems: 'center',
-                  gap: '10px',
-                  alignSelf: 'stretch',
-                  borderRadius: '8px',
-                  color: 'var(--Grayscale-Gray-1, #45484D)',
-                  textAlign: 'center',
-                  fontFamily: 'Pretendard',
-                  fontSize: '14px',
-                  fontStyle: 'normal',
-                  fontWeight: '500',
-                  lineHeight: 'normal',
-                  letterSpacing: '-0.28px',
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log(`Edit post: ${post.id}`);
-                }}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                width={14}
+                height={14}
+                fill="none"
               >
-                수정하기
-              </button>
-              {/* 삭제하기 버튼 */}
-              <button
-                className="w-full text-left"
-                style={{
-                  display: 'flex',
-                  padding: '6px 10px',
-                  alignItems: 'center',
-                  gap: '10px',
-                  alignSelf: 'stretch',
-                  borderRadius: '8px',
-                  color: 'var(--Grayscale-Gray-1, #45484D)',
-                  textAlign: 'center',
-                  fontFamily: 'Pretendard',
-                  fontSize: '14px',
-                  fontStyle: 'normal',
-                  fontWeight: '500',
-                  lineHeight: 'normal',
-                  letterSpacing: '-0.28px',
-                }}
-                onClick={() => console.log(`Delete post: ${post.id}`)}
-              >
-                삭제하기
-              </button>
-            </div>
-          )}
-        </div>
+                <circle cx="12" cy="5" r="2" fill="#797C80" />
+                <circle cx="12" cy="12" r="2" fill="#797C80" />
+                <circle cx="12" cy="19" r="2" fill="#797C80" />
+              </svg>
+            </button>
+            {showActions && (
+              <div className="absolute top-full right-0 flex flex-col gap-2 p-2 bg-white border border-gray-200 rounded-md shadow-md">
+                {/* 수정하기 버튼 */}
+                <button
+                  className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push(`/request-edit/${post.id}`);
+                  }}
+                >
+                  수정하기
+                </button>
+                {/* 삭제하기 버튼 */}
+                <button
+                  className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log(`Delete post: ${post.id}`);
+                  }}
+                >
+                  삭제하기
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* 제목 및 내용 */}
-      <div className="flex items-start gap-[6px]">
-        <p className="text-[16px] font-[600] text-[#FA505B] leading-[22.4px]">
-          A.
-        </p>
-
+      <div className="flex items-start gap-2">
+        <p className="text-red-500 text-base font-semibold leading-6">A.</p>
         <div className="flex flex-col">
-          {/* 제목 */}
-          <div className="mb-[8px]">
-            <p className="text-[16px] font-bold text-black leading-[22.4px] line-clamp-2">
+          <div className="mb-2">
+            <p className="text-base font-bold text-black leading-6 line-clamp-2">
               {post.title}
             </p>
           </div>
-          {/* 내용 */}
           <div>
-            <p className="text-[14px] text-[#797C80] line-clamp-2">
-              {plainContent}
-            </p>
+            <p className="text-sm text-gray-500 line-clamp-2">{plainContent}</p>
           </div>
         </div>
       </div>
 
-      {/* 하단 - 크레딧, 작성자 정보, 작성 시간 */}
-      <div className="flex items-center justify-between text-[12px] text-[#797C80] w-full">
-        <div className="flex items-center gap-[6px]">
-          {/* 크레딧 */}
-          <div className="flex items-center gap-[6px]">
+      {/* 하단 - 크레딧, 댓글 수, 작성 시간 */}
+      <div className="flex items-center justify-between text-sm text-gray-500 w-full">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Image src={coinIcon} alt="coin" width={14} height={14} />
             <span>50 C</span>
           </div>
-          {/* 점 아이콘 */}
-          <div
-            style={{
-              width: '2px',
-              height: '2px',
-              borderRadius: '50%',
-              backgroundColor: '#797C80',
-            }}
-          />
-          {/* 댓글 수 (일단 임의로 넣음) */}
-          <span>댓글 1</span>
+          <span>·</span>
+          <span>작성자 {nickname}</span>
+          <span>·</span>
+          <span>댓글 {commentCount}</span>
         </div>
         <TimeAgo createdAt={post.created_at || new Date().toISOString()} />
       </div>
