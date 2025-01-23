@@ -11,7 +11,8 @@ import { googleLogin, kakaoLogin } from '../_auth/oauth';
 import ErrorMessage from './ErrorMessage';
 import { useState } from 'react';
 import WarningModal from './Warning';
-import { useTranslation } from 'next-i18next'
+import { useTranslation } from 'react-i18next';
+
 
 
 const googleImage = '/images/google.png';

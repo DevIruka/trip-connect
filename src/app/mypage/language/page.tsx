@@ -80,26 +80,31 @@
 
 import { useLang } from '@/store/languageStore';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { useTranslation } from 'react-i18next';
 const lefticon = '/images/ic-left.svg';
 
 const LanguagePage = () => {
   const { lang, setLang } = useLang();
+  const [selectedLang, setSelectedLang] = useState<'ko' | 'en'>(lang); // 변경할 언어 상태 추가
   const { i18n } = useTranslation();
-
-  const changeLanguage = (lng: 'ko' | 'en') => {
-    i18n.changeLanguage(lng);
-    console.log(i18n.language)
-  };
-  const handleLanguageChange = (language: 'ko' | 'en') => {
-    setLang(language);
-    localStorage.setItem('lang', language);
-    changeLanguage(language);
-    // 언어 변경 로직 추가 (예: i18n 설정 변경)
-  };
   const router = useRouter();
+
+  const handleLanguageSelect = (language: 'ko' | 'en') => {
+    setSelectedLang(language); // 선택만 변경, 즉시 반영 X
+  };
+
+  const handleSave = () => {
+    setLang(selectedLang); // Zustand 상태 업데이트
+    const expires = new Date();
+    expires.setFullYear(expires.getFullYear() + 1);
+    document.cookie = `lang=${selectedLang}; path=/; expires=${expires.toUTCString()}; Secure; SameSite=Strict`;
+    i18n.changeLanguage(selectedLang); // i18next 적용
+    router.refresh();
+  };
 
   return (
     <div className="min-h-screen px-5 py-4 bg-white">
@@ -144,9 +149,9 @@ const LanguagePage = () => {
         {/* 한국어 */}
         <div
           className={`flex items-center gap-[55px] border-b cursor-pointer ${
-            lang === 'ko' ? 'text-black font-bold' : 'text-gray-500'
+            selectedLang === 'ko' ? 'text-black font-bold' : 'text-gray-500'
           }`}
-          onClick={() => handleLanguageChange('ko')}
+          onClick={() => handleLanguageSelect('ko')}
           style={{
             display: 'flex',
             padding: '16px 16px 0px 16px',
@@ -167,7 +172,7 @@ const LanguagePage = () => {
           >
             한국어
           </span>
-          {lang === 'ko' && (
+          {selectedLang === 'ko' && (
             <span
               style={{
                 color: 'var(--Primary-Blue, #0582FF)',
@@ -183,9 +188,9 @@ const LanguagePage = () => {
         {/* 영어 */}
         <div
           className={`flex items-center gap-[55px] border-b cursor-pointer ${
-            lang === 'en' ? 'text-black font-bold' : 'text-gray-500'
+            selectedLang === 'en' ? 'text-black font-bold' : 'text-gray-500'
           }`}
-          onClick={() => handleLanguageChange('en')}
+          onClick={() => handleLanguageSelect('en')}
           style={{
             display: 'flex',
             padding: '16px',
@@ -206,7 +211,7 @@ const LanguagePage = () => {
           >
             English
           </span>
-          {lang === 'en' && (
+          {selectedLang === 'en' && (
             <span
               style={{
                 color: 'var(--Primary-Blue, #0582FF)',
@@ -223,6 +228,14 @@ const LanguagePage = () => {
       <p className="mt-6 text-gray-500 text-sm">
         다른 언어들은 나중에 추가될 예정이에요.
       </p>
+      {/* 완료 버튼 */}
+      <a
+        href="/"
+        onClick={handleSave}
+        className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white px-6 py-3 rounded-lg"
+      >
+        완료
+      </a>
     </div>
   );
 };

@@ -8,15 +8,13 @@ import useSearchHandlers from './_hooks/useSearchHandlers';
 import SearchBar from './_components/SearchBar';
 import SearchToolTip from './_components/SearchToolTip';
 import RecentSearchList from './_components/RecentSearchList';
-import { useLang } from '@/store/languageStore';
+import { useTranslation } from 'react-i18next';
 
 const SearchPage = () => {
   const router = useRouter();
   const [storedSearches, setStoredSearches] = useState<string[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
-
-  const { lang } = useLang();
-  console.log(lang)
+  const { t } = useTranslation('login');
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
