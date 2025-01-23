@@ -1,14 +1,16 @@
 import React from 'react';
 import { CreditBalanceProps } from '../_types/credit';
 import Image from 'next/image';
+import { useTranslation } from 'react-i18next';
 
 const coin = '/images/goldcoin.svg';
 
 const CreditBalance: React.FC<CreditBalanceProps> = ({ credit }) => {
+  const{t} = useTranslation('credit')
   return (
     <div className="mb-[34px]">
       <h2 className="text-black text-[20px] font-[700] mb-[20px]">
-        보유 크레딧
+      {t('creditBalance')}
       </h2>
       <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center">
         <div className='flex flex-row justify-center items-center'>

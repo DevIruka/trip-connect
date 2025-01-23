@@ -1,0 +1,13 @@
+{
+    "creditBalance": "보유 크레딧",
+    "recharge": "충전하기",
+    "amountWithBonus": "추가크레딧",  
+    "confirmPayment": "{{amount}}원 결제하기",
+    "paymentTitle": "결제하기",
+    "selectPaymentMethod": "결제 수단 선택",
+    "tossPay": "토스페이",
+    "creditCard": "신용/체크카드",
+    "comingSoon": "조금만 기다려주세요!",
+    "won": "원"
+}
+  
