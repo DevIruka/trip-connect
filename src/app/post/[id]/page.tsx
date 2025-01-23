@@ -11,6 +11,7 @@ import share from '@/data/images/ic-share.svg';
 import BackHeader from '@/components/BackHeader';
 import PostDday from '@/app/home/_components/DDay';
 import ResponseBtn from '../_components/ResponseBtn';
+import ShareBtn from '../_components/ShareBtn';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
@@ -90,12 +91,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               </button>
               <div className="flex gap-5">
                 <BookmarkBtn postId={postId} />
-                <Image
-                  width={24}
-                  height={24}
-                  src={share}
-                  alt="bookmark button"
-                />
+                <ShareBtn />
               </div>
             </div>
           </div>
