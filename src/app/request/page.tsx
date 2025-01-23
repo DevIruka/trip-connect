@@ -15,8 +15,10 @@ import {
 import { useUserStore } from '@/store/userStore';
 import { LocationModal } from '../../components/LocationModalNew';
 import IconInfoCircle from './_components/icons/InfoCircle';
+import { useTranslation } from 'react-i18next';
 
 const RequestPage: React.FC = () => {
+  const { t } = useTranslation('request');
   const {
     register,
     handleSubmit,
@@ -87,7 +89,7 @@ const RequestPage: React.FC = () => {
             <span className="font-semibold">✕</span>
           </button>
           <h1 className="text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
-          질문하기
+            {t('pageTitle')}
           </h1>
           <button
             onClick={handleSubmit(onSubmit)}
@@ -108,18 +110,18 @@ const RequestPage: React.FC = () => {
                 : 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed'
             }`}
           >
-            등록
+            {t('submitButton')}
           </button>
         </div>
 
         <div className="flex items-center gap-[4px] text-[#80BFFF] text-[14px] font-semibold px-[15px] pt-[12px]">
           <IconInfoCircle />
-          <span>답변이 달린 질문은 기한 수정만 가능해요</span>
+          <span>{t('restrictedMessage')}</span>
         </div>
 
         <form className="p-4 space-y-[28px]">
           <div className="flex flex-col items-start gap-[8px]">
-            <label className="text-sm font-semibold ">나라/도시 선택</label>
+            <label className="text-sm font-semibold ">{t('countryCityLabel')}</label>
             <div className="relative w-full">
               <div className="w-full px-[16px] py-[14px] border border-[#DFE1E5] rounded-[8px] flex items-center bg-white">
                 <input
@@ -129,10 +131,10 @@ const RequestPage: React.FC = () => {
                       ? `${selectedLocation.country}, ${selectedLocation.city}`
                       : ''
                   }
-                  placeholder="나라/도시를 선택해 주세요"
+                  placeholder={t('countryCityPlaceholder')}
                   readOnly
                   {...register('country_city', {
-                    required: '나라/도시를 선택하세요.',
+                    required: t('countryCityError'),
                   })}
                   className="w-full text-[14px] font-medium placeholder-[#A9A9A9] bg-transparent focus:outline-none"
                   onClick={() => {
@@ -167,7 +169,7 @@ const RequestPage: React.FC = () => {
           </div>
 
           <div className="flex flex-col items-start gap-[8px]">
-            <label className="text-sm font-semibold ">주제 선택</label>
+            <label className="text-sm font-semibold ">{t('topicLabel')}</label>
             <TopicSelector
               topics={[
                 '맛집',
