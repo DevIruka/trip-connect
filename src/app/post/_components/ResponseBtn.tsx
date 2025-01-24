@@ -1,11 +1,18 @@
 'use client';
 import LoginModal from '@/components/LoginModal';
 import { useUserStore } from '@/store/userStore';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 const ResponseBtn = ({ postId }: { postId: string }) => {
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+
+  const handleNavigation = (postId: string) => {
+    router.push(`/response/${postId}`);
+  };
+
   return (
     <>
       <div className="bg-white z-50 fixed bottom-0 w-[375px] cursor-pointer">
@@ -13,7 +20,7 @@ const ResponseBtn = ({ postId }: { postId: string }) => {
           className="blue-btn"
           onClick={() => {
             if (user) {
-              location.href = `/response/${postId}`;
+              handleNavigation(postId);
             } else {
               setIsModalOpen(true);
             }

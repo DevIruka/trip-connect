@@ -44,7 +44,6 @@ const ResponseListPage = () => {
   if (isPending) {
     return <div>loading...</div>;
   }
-  console.log(nationFilter);
   return (
     <div className="h-full w-full relative overflow-y-scroll menuscrollbar">
       <BackHeader image={search} text="답변하기" imagesize={24} />
