@@ -21,14 +21,15 @@ export async function GET(request: Request) {
         data: { user },
       } = await supabase.auth.getUser();
 
-      if (isLocalEnv) {
-        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        if (user) {
-          const { data: profile } = await supabase
+      const { data: profile } = await supabase
             .from('users') // 유저 정보를 저장하는 테이블 (예: profiles)
             .select('nickname')
-            .eq('id', user.id) // user.id를 기준으로 검색
+            .eq('id', user?.id) // user.id를 기준으로 검색
             .single();
+
+      if (isLocalEnv) {
+        // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
+        if (profile) {
 
           if (profile?.nickname === 'guest') {
             // 닉네임이 없으면 설정 페이지로 이동
@@ -37,12 +38,7 @@ export async function GET(request: Request) {
           return NextResponse.redirect(`${origin}${next}`);
         }
       } else if (forwardedHost) {
-        if (user) {
-          const { data: profile } = await supabase
-            .from('users') // 유저 정보를 저장하는 테이블 (예: profiles)
-            .select('nickname')
-            .eq('id', user.id) // user.id를 기준으로 검색
-            .single();
+        if (profile) {
 
           if (profile?.nickname === 'guest') {
             // 닉네임이 없으면 설정 페이지로 이동
@@ -51,8 +47,14 @@ export async function GET(request: Request) {
           return NextResponse.redirect(`https://${forwardedHost}${next}/auth`);
         }
       } else {
-        console.log('elseisLocalEnv', isLocalEnv);
-        return NextResponse.redirect(`${origin}${next}/auth`);
+        if (profile) {
+
+          if (profile?.nickname === 'guest') {
+            // 닉네임이 없으면 설정 페이지로 이동
+            return NextResponse.redirect(`https://${origin}${next}/auth`);
+          }
+          return NextResponse.redirect(`https://${origin}${next}/auth`);
+        }
       }
     }
   }
