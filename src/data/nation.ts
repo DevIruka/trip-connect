@@ -85,3 +85,91 @@ export const nations = [
     ],
   },
 ];
+
+export const ennations = [
+  {
+    continent: 'Asia',
+    countries: [
+      {
+        name: 'South Korea',
+        cities: ['Seoul'],
+      },
+      {
+        name: 'Japan',
+        cities: ['Tokyo'],
+      },
+      {
+        name: 'Thailand',
+        cities: ['Bangkok'],
+      },
+      {
+        name: 'Singapore',
+        cities: ['Singapore'],
+      },
+    ],
+  },
+  {
+    continent: 'Europe',
+    countries: [
+      {
+        name: 'United Kingdom',
+        cities: ['London'],
+      },
+      {
+        name: 'France',
+        cities: ['Paris'],
+      },
+      {
+        name: 'Italy',
+        cities: ['Rome'],
+      },
+      {
+        name: 'Germany',
+        cities: ['Berlin'],
+      },
+    ],
+  },
+  {
+    continent: 'North America',
+    countries: [
+      {
+        name: 'United States',
+        cities: ['New York', 'Los Angeles', 'Seattle'],
+      },
+      {
+        name: 'Canada',
+        cities: ['Toronto'],
+      },
+    ],
+  },
+  {
+    continent: 'Oceania',
+    countries: [
+      {
+        name: 'Australia',
+        cities: ['Sydney', 'Melbourne'],
+      },
+      {
+        name: 'New Zealand',
+        cities: ['Auckland'],
+      },
+    ],
+  },
+  {
+    continent: 'Other',
+    countries: [
+      {
+        name: 'Dubai',
+        cities: ['Dubai'],
+      },
+      {
+        name: 'Türkiye',
+        cities: ['Istanbul'],
+      },
+      {
+        name: 'Russia',
+        cities: ['Moscow'],
+      },
+    ],
+  },
+];

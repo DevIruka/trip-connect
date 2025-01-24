@@ -4,11 +4,65 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 import { useState, useEffect } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { useRouter, useSearchParams } from 'next/navigation';
-import SellerAuthCard from './_components/sellerAuthCard';
 import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+
 const lefticon = '/images/ic-left.svg';
 
+const Button = ({
+  isVerified,
+  link,
+}: {
+  isVerified: boolean;
+  text: string;
+  link: string;
+}) => {
+  const { t } = useTranslation('mypage');
+  return (
+    <Link href={`/mypage/seller-auth/${link}`}>
+      <button className="h-8 px-3 py-1.5 bg-[#0582ff] rounded-md justify-center items-center gap-2.5 inline-flex text-white text-sm font-semibold">
+        {isVerified ? t('re_verify') : t('verify')}
+      </button>
+    </Link>
+  );
+};
+const SellerAuthCard = ({
+  isVerified,
+  title,
+  content,
+  link,
+}: {
+  isVerified: boolean;
+  title: string;
+  content: string;
+  link: string;
+}) => {
+  const { t } = useTranslation('mypage');
+  return (
+    <div className="h-auto p-4 rounded-xl border border-[#dee1e5] grid gap-3">
+      <div className="grid gap-2">
+        <div className="flex space-x-1.5">
+          <h3 className="text-black text-base font-semibold leading-snug">
+            {title} {t('verify')}
+          </h3>
+          {/* 완료 상태 박스 */}
+          {isVerified && (
+            <div className="h-[22px] px-1.5 py-[5px] bg-[#eaf4ff] rounded justify-start items-center inline-flex text-center text-[#0079f2] text-xs font-medium">
+              {t('completed')}
+            </div>
+          )}
+        </div>
+        <p className="text-[#797c80] text-sm font-medium">{content}</p>
+      </div>
+      <Button isVerified={isVerified} text={title} link={link} />
+    </div>
+  );
+};
+
 const SellerPage = () => {
+  const { t } = useTranslation('mypage');
   const { user } = useUserStore();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -31,7 +85,7 @@ const SellerPage = () => {
           .single();
 
         if (fetchError) {
-          console.error('인증 상태를 가져오는 중 오류 발생:', fetchError);
+          console.error(t('verification_error'), fetchError);
           return;
         }
 
@@ -46,12 +100,12 @@ const SellerPage = () => {
           window.history.replaceState({}, '', url.toString());
         }
       } catch (err) {
-        console.error('예기치 않은 오류 발생:', err);
+        console.error(t('verification_error'), err);
       }
     };
 
     fetchAuthenticationStatus();
-  }, [user, router, searchParams]);
+  }, [user, router, searchParams, t]);
 
   return (
     <div className="h-full w-full px-5 relative">
@@ -60,7 +114,6 @@ const SellerPage = () => {
         className="flex flex-row justify-between items-center"
         style={{
           height: '56px',
-          padding: '10px',
         }}
       >
         <button
@@ -71,37 +124,33 @@ const SellerPage = () => {
         </button>
       </div>
 
-      <h1 className="w-full py-[20px] text-left text-black font-semibold text-[18px] leading-normal tracking-[-0.36px]">
-        셀러 인증하기
-      </h1>
+      <div className="w-full py-[20px] text-left text-black font-semibold text-[18px] leading-normal tracking-[-0.36px]">
+        {t('seller_verification')}
+      </div>
 
       {/* 인증 섹션 */}
       <div className="mt-4 space-y-3">
         <SellerAuthCard
           isVerified={isCountryVerified}
-          title={'국가'}
-          content={
-            '현재 거주 국가 및 지역을 인증하면 해당하는 국가와 관련된 게시글에 답변이 결제될 확률이 높아져요'
-          }
+          title={t('country')}
+          content={t('verify_country_region')}
           link={'country-verification'}
         />
         <SellerAuthCard
           isVerified={isIdentityVerified}
-          title={'본인'}
-          content={
-            '본인 인증을 마치면 프로필 옆에 인증 마크가 생기고 나의 답변이 결제될 확률이 높아져요'
-          }
+          title={t('identity')}
+          content={t('profile_verification')}
           link={'identity-verification'}
         />
         <div className="h-[140px] p-4 rounded-xl grid gap-3">
           <div className="grid gap-2">
             <div className="flex space-x-1.5">
               <h3 className="text-[#a9a9a9] text-base font-semibold leading-snug">
-                계좌 인증
+                {t('account_verification')}
               </h3>
             </div>
             <p className="text-center text-[#797c80] text-xs font-medium leading-none">
-              크레딧 출금을 위한 계좌 인증은 준비 중이에요
+              {t('account_verification_description')}
             </p>
           </div>
         </div>
@@ -110,14 +159,8 @@ const SellerPage = () => {
       {/* 알림 메시지 */}
       {showAlert && (
         <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 flex w-[335px] p-[12px] justify-center items-center gap-[4px] rounded-[8px] bg-black bg-opacity-50 z-50">
-          {/* <Image
-            src="/images/ic-notice.svg"
-            alt="Notice"
-            width={16}
-            height={16}
-          /> */}
           <span className="text-center text-[14px] font-semibold leading-normal tracking-[-0.28px] text-white">
-            국가 인증이 완료되었습니다!
+            {t('country_verification_completed')}
           </span>
         </div>
       )}
