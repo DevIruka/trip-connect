@@ -66,7 +66,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
               {JSON.parse(post.country_city || '{}').country || '위치 없음'}
             </span>
           </div>
-          {post.category.slice(0, 2).map((cat, i) => (
+          {post.category?.slice(0, 2).map((cat, i) => (
             <div
               key={i}
               className="text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1"

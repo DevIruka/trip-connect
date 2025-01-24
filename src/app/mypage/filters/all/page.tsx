@@ -10,8 +10,10 @@ import CategoryTabs from '../../_components/CategoryTabs';
 import {
   convertTopicsToKorean,
   EnglishCategory,
+  KoreanCategory,
   topicMapping,
 } from '@/utils/topics';
+
 
 const WrittenPostsPage: React.FC = () => {
   const { user } = useUserStore();
@@ -40,20 +42,21 @@ const WrittenPostsPage: React.FC = () => {
           if ('category' in post && Array.isArray(post.category)) {
             const filteredCategories = post.category.filter(
               (cat): cat is EnglishCategory =>
-                Object.values<string>(topicMapping).includes(cat),
+                Object.values<EnglishCategory | KoreanCategory>(topicMapping).includes(cat),
             );
 
-            const koreanCategories = convertTopicsToKorean(filteredCategories);
+            const koreanCategories = convertTopicsToKorean(filteredCategories) as KoreanCategory[]
             console.log(koreanCategories);
             return {
               ...post,
               category: koreanCategories,
             };
           }
-          return post;
+          return post
         });
 
         setPosts(processedData);
+        console.log(processedData)
       } catch (err) {
         console.error('데이터를 가져오는 중 오류가 발생했습니다.', err);
         setError('오류가 발생했습니다. 다시 시도해주세요.');
