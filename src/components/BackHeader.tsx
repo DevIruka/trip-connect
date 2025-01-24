@@ -46,13 +46,16 @@ const BackHeader = ({
         )}
 
         {isModalOpen && (
-          <SelectBox
-            isModalOpen={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
-            user={user!}
-            post={post!}
-            setIsDModalOpen={setIsDModalOpen}
-          />
+          <div
+            className="w-full h-screen absolute top-0 right-0"
+            onClick={() => setIsModalOpen(!isModalOpen)}
+          >
+            <SelectBox
+              user={user!}
+              post={post!}
+              setIsDModalOpen={setIsDModalOpen}
+            />
+          </div>
         )}
       </div>
       <DeleteConfirmModal

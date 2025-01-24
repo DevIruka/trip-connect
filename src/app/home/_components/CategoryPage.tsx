@@ -76,7 +76,7 @@ const CategoryPage = () => {
   const { user } = useUserStore();
   return (
     <>
-      <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar">
+      <div className="w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar">
         <QnaHeader setIsModalOpen={setIsModalOpen} />
         <Navbar
           setFilterType={setFilterType}
@@ -114,7 +114,7 @@ const CategoryPage = () => {
         </div>
 
         <button
-          className="sticky bottom-8 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
+          className="sticky bottom-16 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
           onClick={() => {
             if (!user) setIsModalOpen(true);
             else router.push('/request');

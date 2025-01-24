@@ -114,7 +114,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
     <div>
       {/* Text Menu */}
       {isTextMenuVisible && (
-        <div className="w-[375px] h-14 flex-col justify-start items-start inline-flex">
+        <div className="w-full h-14 flex-col justify-start items-start inline-flex">
           <div className="self-stretch px-5 py-4 bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex">
             <div className="h-6 justify-start items-center gap-6 flex">
               <div className="h-6 justify-start items-center gap-6 flex">
@@ -158,7 +158,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       )}
 
       {/* Main Menu */}
-      <div className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6">
+      <div className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50">
         <div className="justify-start items-center gap-6 flex">
           <button onClick={() => handleTextHeightClick()}>
             <TextHeightIcon color={getTextHeightColor()} />

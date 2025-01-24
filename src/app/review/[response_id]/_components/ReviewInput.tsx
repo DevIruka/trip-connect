@@ -8,9 +8,15 @@ type Props = {
   review: string;
   setReview: (value: string) => void;
   onSubmit: () => void;
+  disabled: boolean;
 };
 
-const ReviewInput: React.FC<Props> = ({ review, setReview, onSubmit }) => {
+const ReviewInput: React.FC<Props> = ({
+  review,
+  setReview,
+  onSubmit,
+  disabled,
+}) => {
   const { t } = useTranslation('review');
 
   return (
@@ -24,7 +30,9 @@ const ReviewInput: React.FC<Props> = ({ review, setReview, onSubmit }) => {
       />
       <button
         onClick={onSubmit}
-        className="ml-[4px] flex items-center justify-center"
+        className={`ml-[4px] flex items-center justify-center ${
+          disabled ? 'opacity-50 cursor-not-allowed' : ''
+        }`}
       >
         <Image src={arrowbtn} width={32} height={32} alt="send" />
       </button>
