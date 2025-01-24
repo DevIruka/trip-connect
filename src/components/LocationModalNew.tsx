@@ -136,7 +136,7 @@ export const LocationModal = ({
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
       >
         <div
-          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[90%] px-5"
+          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[80%] px-5"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="h-14 py-2.5 flex place-content-between items-center text-lg font-bold">
