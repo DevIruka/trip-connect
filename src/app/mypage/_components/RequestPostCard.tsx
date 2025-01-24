@@ -6,8 +6,9 @@ import { RequestPost } from '../_type/type';
 import Image from 'next/image';
 import TimeAgo from './TimeAgo';
 import { useRouter } from 'next/navigation';
-import { calculateDDay } from '@/app/search/_utils/calculateDDay';
+
 import stripHtmlTags from '../_util/striptHtmlTags';
+import { calculateDDay } from '@/app/search/_utils/calculateDDay';
 
 const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
   const router = useRouter();
@@ -16,6 +17,22 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
 
   const dDay = calculateDDay(post.date_end || undefined);
   const plainContent = stripHtmlTags(post.content ?? '');
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (showActions) {
+        const actionMenu = document.getElementById(`action-menu-${post.id}`);
+        if (actionMenu && !actionMenu.contains(event.target as Node)) {
+          setShowActions(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, [showActions, post.id]);
 
   const fetchResponseCount = useCallback(async () => {
     try {
@@ -39,10 +56,26 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
     fetchResponseCount();
   }, [fetchResponseCount]);
 
+  const handleDelete = async () => {
+    if (responseCount > 0) {
+      alert('댓글이 달린 게시물은 삭제할 수 없습니다.');
+    } else {
+      const confirmDelete = confirm('정말 삭제하시겠습니까?');
+      if (confirmDelete) {
+        try {
+          await supabase.from('request_posts').delete().eq('id', post.id);
+
+          alert('게시물이 삭제되었습니다.');
+          router.refresh();
+        } catch {}
+      }
+    }
+  };
+
   const handleCardClick = () => {
     router.push(`/post/${post.id}`);
   };
-  console.log(post.category);
+
   return (
     <div
       onClick={handleCardClick}
@@ -99,6 +132,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
           </button>
           {showActions && (
             <div
+              id={`action-menu-${post.id}`}
               className="absolute top-full right-0"
               style={{
                 display: 'flex',
@@ -133,8 +167,8 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
                   letterSpacing: '-0.28px',
                 }}
                 onClick={(e) => {
-                  e.stopPropagation();
-                  console.log(`Edit post: ${post.id}`);
+                  e.stopPropagation(); // 클릭 이벤트 전파 중단
+                  router.push(`/request-edit/${post.id}`); // 해당 경로로 이동
                 }}
               >
                 수정하기
@@ -158,7 +192,10 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
                   lineHeight: 'normal',
                   letterSpacing: '-0.28px',
                 }}
-                onClick={() => console.log(`Delete post: ${post.id}`)}
+                onClick={(e) => {
+                  e.stopPropagation(); // 클릭 이벤트 전파 중단
+                  handleDelete(); // 삭제 함수 호출
+                }}
               >
                 삭제하기
               </button>
