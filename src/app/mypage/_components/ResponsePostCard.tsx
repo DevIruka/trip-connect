@@ -167,7 +167,7 @@ const ResponsePostCard: React.FC<{
                   className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
                   onClick={(e) => {
                     e.stopPropagation();
-                    router.push(`/request-edit/${post.id}`);
+                    router.push(`/response-edit/${post.id}`);
                   }}
                 >
                   수정하기

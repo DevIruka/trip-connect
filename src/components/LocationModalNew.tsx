@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { nations } from '../data/nation';
+import { enNations, nations } from '../data/nation';
 import { nation } from '../app/home/_types/homeTypes';
 import close from '@/data/images/ic-Close.svg';
 import search from '@/data/images/ic-Search.svg';
@@ -8,6 +8,7 @@ import radioBtnSlctd from '@/data/images/radio_btn_slctd.svg';
 import location from '@/data/images/ic-location.svg';
 import Image from 'next/image';
 import { useLang } from '@/store/languageStore';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   isOpen: boolean;
@@ -35,6 +36,7 @@ export const LocationModal = ({
   );
   const [selectedValue, setSelectedValue] = useState(''); // 선택된 값 저장
   const [crntNation, setCrntNation] = useState<nation | null>();
+  const { t } = useTranslation('location');
   const { lang } = useLang();
 
   if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
@@ -47,29 +49,55 @@ export const LocationModal = ({
     if (value) {
       // 검색어를 기반으로 필터링
       const results: nationProps[] = [];
-      nations.forEach((continent) => {
-        continent.countries.forEach((country) => {
-          if (country.name.toLowerCase().includes(value.toLowerCase())) {
-            results.push({
-              continent: continent.continent,
-              country: country.name,
-              cities: country.cities,
-            });
-          } else if (
-            country.cities.some((city) =>
-              city.toLowerCase().includes(value.toLowerCase()),
-            )
-          ) {
-            results.push({
-              continent: continent.continent,
-              country: country.name,
-              cities: country.cities.filter((city) =>
+      if (lang === 'en') {
+        enNations.forEach((continent) => {
+          continent.countries.forEach((country) => {
+            if (country.name.toLowerCase().includes(value.toLowerCase())) {
+              results.push({
+                continent: continent.continent,
+                country: country.name,
+                cities: country.cities,
+              });
+            } else if (
+              country.cities.some((city) =>
                 city.toLowerCase().includes(value.toLowerCase()),
-              ),
-            });
-          }
+              )
+            ) {
+              results.push({
+                continent: continent.continent,
+                country: country.name,
+                cities: country.cities.filter((city) =>
+                  city.toLowerCase().includes(value.toLowerCase()),
+                ),
+              });
+            }
+          });
         });
-      });
+      } else {
+        nations.forEach((continent) => {
+          continent.countries.forEach((country) => {
+            if (country.name.toLowerCase().includes(value.toLowerCase())) {
+              results.push({
+                continent: continent.continent,
+                country: country.name,
+                cities: country.cities,
+              });
+            } else if (
+              country.cities.some((city) =>
+                city.toLowerCase().includes(value.toLowerCase()),
+              )
+            ) {
+              results.push({
+                continent: continent.continent,
+                country: country.name,
+                cities: country.cities.filter((city) =>
+                  city.toLowerCase().includes(value.toLowerCase()),
+                ),
+              });
+            }
+          });
+        });
+      }
       setFilteredResults(results);
     } else {
       setFilteredResults([]);
@@ -125,7 +153,7 @@ export const LocationModal = ({
               />
             </button>
             <h2 className="flex justify-start items-center text-center text-black text-lg font-semibold">
-              나라/도시 선택
+              {t('select_country_city')}
             </h2>
             <button
               onClick={() => {
@@ -134,7 +162,7 @@ export const LocationModal = ({
               }}
               className="bg-[#0582FF] h-8 py-1.5 px-3 rounded-md text-white text-sm font-semibold"
             >
-              선택
+              {t('select')}
             </button>
           </div>
           <div className="grid">
@@ -150,7 +178,7 @@ export const LocationModal = ({
                 className="w-full h-11 px-4 py-3 bg-[#f9f9f9] rounded-lg placeholder:text-[#797c80] placeholder:text-sm placeholder:font-medium placeholder:leading-tight" // 오른쪽 여백 추가 (버튼 겹침 방지)
                 value={searchTerm}
                 onChange={handleSearchChange} // 검색어 업데이트
-                placeholder="나라 또는 도시를 검색해주세요"
+                placeholder={t('search_country_city')}
               />
               <button
                 type="submit" // 폼 제출 버튼으로 설정
@@ -171,7 +199,7 @@ export const LocationModal = ({
                   className="h-[29px] px-3 py-1.5 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-xs font-medium leading-none"
                   onClick={handleDeselect}
                 >
-                  선택 초기화
+                  {t('initialize')}
                 </button>
               </div>
             )}
@@ -263,8 +291,42 @@ export const LocationModal = ({
                 ) : (
                   <p className="pt-10 text-center text-[#797c80] text-base font-semibold leading-snug">{`"${searchTerm}"에 대한 검색 결과가 없어요.`}</p>
                 )
+              ) : // 대륙 > 나라 버튼 표시
+
+              lang === 'en' ? (
+                enNations.map((continent, idx) => (
+                  <div key={idx} className="grid gap-2 min-h-[65px] mb-9">
+                    <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px]">
+                      {continent.continent}
+                    </h3>
+                    <div className="flex gap-[7px] flex-wrap">
+                      {continent.countries.map((country) =>
+                        country.cities.map((city, cityIndex) => (
+                          <button
+                            key={cityIndex}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleTempSelect(
+                                continent.continent,
+                                country.name,
+                                city,
+                              );
+                            }}
+                            className={`h-7 px-3 py-[7px] rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium ${
+                              JSON.stringify(crntNation) ===
+                              `{"continent":"${continent.continent}","country":"${country.name}","city":"${city}"}`
+                                ? 'bg-[#f4f6f9] text-[#0582ff] border-[#0582ff]'
+                                : 'bg-white text-[#797c80] border-[#dee1e5]'
+                            }`}
+                          >
+                            {city}
+                          </button>
+                        )),
+                      )}
+                    </div>
+                  </div>
+                ))
               ) : (
-                // 대륙 > 나라 버튼 표시
                 nations.map((continent, idx) => (
                   <div key={idx} className="grid gap-2 min-h-[65px] mb-9">
                     <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px]">
