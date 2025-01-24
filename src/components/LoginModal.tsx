@@ -10,12 +10,12 @@ const LoginModal = ({ isOpen, onClose }: Props) => {
 
   return (
     <div
-      className="fixed top-0 z-[52] bg-[#111111]/60 w-[374px] h-full grid items-end"
+      className="fixed top-0 z-[52] bg-[#111111]/60 w-[375px] h-full grid items-end"
       onClick={onClose}
     >
       {/* 흰색 배경 모달 */}
       <div
-        className="bg-white h-[284px] rounded-t-2xl px-6 py-4 place-items-center"
+        className="bg-white h-[284px] rounded-t-2xl px-6 py-4 justify-items-center"
         onClick={(e) => e.stopPropagation()} // 클릭 이벤트 전파 방지
       >
         {/* 모달 내용 */}
@@ -29,15 +29,15 @@ const LoginModal = ({ isOpen, onClose }: Props) => {
         </div>
 
         {/* 버튼 영역 */}
-        <div className="flex justify-center gap-4 mt-4">
+        <div className="flex justify-center gap-4 mt-4 w-full">
           <div
-            className="flex-1 py-3 text-sm font-semibold text-[#797c80] bg-gray-200 rounded-lg w-[100px] text-center"
+            className="flex-1 py-3 text-sm font-semibold text-Gray1 bg-Gray9Fill rounded-lg w-full text-center"
             onClick={onClose}
           >
             나중에 하기
           </div>
           <div
-            className="flex-1 py-3 text-sm font-semibold text-white bg-[#111111] rounded-lg w-[100px] text-center"
+            className="flex-1 py-3 text-sm font-semibold text-white bg-Blue2 rounded-lg w-[100px] text-center"
             onClick={() => (window.location.href = '/login')}
           >
             로그인 하기

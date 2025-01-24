@@ -8,7 +8,7 @@ const ResponseBtn = ({ postId }: { postId: string }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <>
-      <div className="bg-white z-50 fixed bottom-0 w-[375px]">
+      <div className="bg-white z-50 fixed bottom-0 w-[375px] cursor-pointer">
         <div
           className="blue-btn"
           onClick={() => {
