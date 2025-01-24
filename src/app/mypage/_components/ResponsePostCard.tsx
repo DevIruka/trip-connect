@@ -3,12 +3,12 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { ResponsePost } from '../_type/type';
-import stripHtmlTags from '../_util/striptHtmlTags';
 import Image from 'next/image';
 import TimeAgo from './TimeAgo';
 import { useRouter } from 'next/navigation';
 import { convertToKorean } from '../_util/convertTopicMapping';
 import { EnglishCategory } from '@/utils/topics';
+import { useGPTTranslation } from '@/app/post/_hooks/TranslatedText';
 
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
@@ -23,17 +23,25 @@ const ResponsePostCard: React.FC<{
   const [category, setCategory] = useState<EnglishCategory[]>([]);
   const [commentCount, setCommentCount] = useState<number>(0);
   const [showActions, setShowActions] = useState<boolean>(false);
-  const plainContent = stripHtmlTags(post.free_content || '');
+
+  const { data: translatedTitle } = useGPTTranslation(
+    `${post.id}-title`,
+    post.title,
+  );
+
+  const { data: translatedContent } = useGPTTranslation(
+    `${post.id}-content`,
+    post.free_content || '',
+  );
 
   const fetchCommentCount = useCallback(async () => {
     if (!post.request_id) return;
 
     try {
       const { count, error } = await supabase
-        .from('response_posts')
+        .from('reviews')
         .select('*', { count: 'exact', head: true })
-        .eq('request_id', post.request_id);
-
+        .eq('response_id', post.id);
       if (error) {
         console.error('댓글 개수 조회 오류:', error);
         return;
@@ -247,11 +255,25 @@ const ResponsePostCard: React.FC<{
         <div className="flex flex-col">
           <div className="mb-2">
             <p className="text-base font-bold text-black leading-6 line-clamp-2">
-              {post.title}
+              {translatedTitle && (
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.parse(translatedTitle).translated,
+                  }}
+                />
+              )}
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500 line-clamp-2">{plainContent}</p>
+            <p className="text-sm text-gray-500 line-clamp-2">
+              {translatedContent && (
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.parse(translatedContent).translated,
+                  }}
+                />
+              )}
+            </p>
           </div>
         </div>
       </div>
