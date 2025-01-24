@@ -114,7 +114,15 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
     <div>
       {/* Text Menu */}
       {isTextMenuVisible && (
-        <div className="w-full h-14 flex-col justify-start items-start inline-flex">
+        <div className="w-full h-14 flex-col justify-start items-start inline-flex"
+        style={{
+          position: 'fixed', // 고정 위치
+          top: 'auto', // 상단이 아닌 메인 메뉴 위에 나타나도록 설정
+          bottom: '56px', // 메인 메뉴 위에 표시되도록 여백 추가
+          left: 0,
+          right: 0,
+          zIndex: 60, // 메인 메뉴보다 높은 z-index 설정
+        }}>
           <div className="self-stretch px-5 py-4 bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex">
             <div className="h-6 justify-start items-center gap-6 flex">
               <div className="h-6 justify-start items-center gap-6 flex">
