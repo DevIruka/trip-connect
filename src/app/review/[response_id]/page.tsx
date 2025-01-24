@@ -7,7 +7,11 @@ import { useUserStore } from '@/store/userStore';
 import ReviewHeader from './_components/ReviewHeader';
 import ReviewInput from './_components/ReviewInput';
 import ReviewList from './_components/ReviewList';
-import { canWriteReview, checkUserCommented, fetchReviews } from './_utils/review';
+import {
+  canWriteReview,
+  checkUserCommented,
+  fetchReviews,
+} from './_utils/review';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
 const ReviewPage = () => {
@@ -17,9 +21,10 @@ const ReviewPage = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const { data: canWrite = false, isLoading: isCheckingWritePermission } = useQuery({
+  const { data: canWrite = false } = useQuery({
     queryKey: ['canWriteReview', response_id, user?.id],
-    queryFn: () => canWriteReview(response_id as string, user!.id),
+    queryFn: () =>
+      user ? canWriteReview(response_id as string, user.id) : false,
     enabled: !!response_id && !!user?.id,
   });
 
@@ -54,7 +59,7 @@ const ReviewPage = () => {
       queryClient.invalidateQueries({
         queryKey: ['hasCommented', response_id, user?.id],
       });
-      setReview(''); 
+      setReview('');
     },
   });
 
@@ -69,7 +74,9 @@ const ReviewPage = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['reviews', response_id] });
-      queryClient.invalidateQueries({ queryKey: ['hasCommented', response_id, user?.id] });
+      queryClient.invalidateQueries({
+        queryKey: ['hasCommented', response_id, user?.id],
+      });
     },
   });
 
@@ -86,7 +93,7 @@ const ReviewPage = () => {
           reviews={reviews}
           isLoading={isLoading}
           userId={user?.id || ''}
-          onDelete={handleDelete} 
+          onDelete={handleDelete}
         />
       </div>
 
@@ -106,7 +113,7 @@ const ReviewPage = () => {
 
           addReviewMutation.mutate(review);
         }}
-        disabled={!canWrite || isCheckingWritePermission}
+        disabled={!canWrite}
       />
     </div>
   );
