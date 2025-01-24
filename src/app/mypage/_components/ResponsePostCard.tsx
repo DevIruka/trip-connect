@@ -79,7 +79,6 @@ const ResponsePostCard: React.FC<{
         setCategory([]);
       } else {
         const countryCity = JSON.parse(data?.country_city || '{}');
-        console.log(data);
         setCountry(countryCity.country || '알 수 없음');
         setCategory(data?.category || []);
       }
@@ -106,6 +105,56 @@ const ResponsePostCard: React.FC<{
     fetchRequestDetails,
   ]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (
+        !target.closest(`#action-menu-${post.id}`) &&
+        !target.closest(`#more-button-${post.id}`)
+      ) {
+        setShowActions(false);
+      }
+    };
+
+    if (showActions) {
+      document.addEventListener('click', handleClickOutside);
+    } else {
+      document.removeEventListener('click', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showActions, post.id]);
+
+  const handleDelete = async () => {
+    if (commentCount > 0) {
+      alert('댓글이 달린 글은 삭제할 수 없습니다.');
+    } else {
+      const confirmDelete = confirm('정말 삭제하시겠습니까?');
+      if (confirmDelete) {
+        try {
+          const { error } = await supabase
+            .from('response_posts')
+            .delete()
+            .eq('id', post.id);
+
+          if (error) {
+            alert('삭제 중 오류가 발생했습니다.');
+            console.error('삭제 오류:', error);
+            return;
+          }
+
+          alert('게시물이 삭제되었습니다.');
+          router.refresh();
+        } catch (err) {
+          console.error('삭제 요청 중 오류 발생:', err);
+          alert('예상치 못한 오류가 발생했습니다.');
+        }
+      }
+    }
+  };
+
   const handleCardClick = () => {
     if (post.request_id) {
       router.push(`/post/${post.request_id}`);
@@ -113,7 +162,7 @@ const ResponsePostCard: React.FC<{
       console.error('Request ID가 존재하지 않습니다.');
     }
   };
-  console.log(category);
+
   return (
     <div
       onClick={handleCardClick}
@@ -142,6 +191,7 @@ const ResponsePostCard: React.FC<{
         {editable && (
           <div className="relative">
             <button
+              id={`more-button-${post.id}`}
               onClick={(e) => {
                 e.stopPropagation();
                 setShowActions((prev) => !prev);
@@ -161,10 +211,13 @@ const ResponsePostCard: React.FC<{
               </svg>
             </button>
             {showActions && (
-              <div className="absolute top-full right-0 flex flex-col gap-2 p-2 bg-white border border-gray-200 rounded-md shadow-md">
+              <div
+                id={`action-menu-${post.id}`}
+                className="absolute top-full right-0 flex flex-col items-start gap-[10px] p-[8px] w-[129px] rounded-[8px] border border-[#F4F4F4] bg-white shadow-md"
+              >
                 {/* 수정하기 버튼 */}
                 <button
-                  className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
+                  className="flex w-full items-center gap-[10px] p-[6px_10px] rounded-[8px] text-[14px] font-medium text-[#45484D] Pretendard text-left"
                   onClick={(e) => {
                     e.stopPropagation();
                     router.push(`/response-edit/${post.id}`);
@@ -174,10 +227,10 @@ const ResponsePostCard: React.FC<{
                 </button>
                 {/* 삭제하기 버튼 */}
                 <button
-                  className="text-sm px-2 py-1 rounded-md hover:bg-gray-100"
+                  className="flex w-full items-center gap-[10px] p-[6px_10px] rounded-[8px] text-[14px] font-medium text-[#45484D] Pretendard text-left"
                   onClick={(e) => {
                     e.stopPropagation();
-                    console.log(`Delete post: ${post.id}`);
+                    handleDelete();
                   }}
                 >
                   삭제하기

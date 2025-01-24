@@ -7,12 +7,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import search from '@/data/images/ic-Search.svg';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 const lefticon = '/images/ic-left.svg';
 const marker = '/images/ic-location.svg';
 const coin = '/images/goldcoin.svg';
 const badge = '/images/verified badge.svg';
+const close = '/images/ic-Close.svg';
 
 const MyPage = () => {
+  const { t } = useTranslation('mypage');
   const router = useRouter();
   const user = useUserStore((state) => state.user);
   const signOut = useUserStore((state) => state.signOut);
@@ -22,7 +25,7 @@ const MyPage = () => {
     profileImg: '',
     credit: '',
     country: '',
-    authenticated: false, 
+    authenticated: false,
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [nicknameInput, setNicknameInput] = useState('');
@@ -49,12 +52,11 @@ const MyPage = () => {
         }
 
         setUserProfile({
-          nickname: profileData?.nickname || '닉네임 없음',
-          introduction:
-            profileData?.introduction || '아직 자기소개가 없습니다.',
+          nickname: profileData?.nickname || t('no_nickname'),
+          introduction: profileData?.introduction || t('no_introduction'),
           profileImg: profileData?.profile_img || '',
           credit: profileData?.credit || '0',
-          country: profileData?.country || '국가 정보 없음',
+          country: profileData?.country || t('unknown_country'),
           authenticated: profileData?.authenticated || false,
         });
 
@@ -67,7 +69,7 @@ const MyPage = () => {
     };
 
     fetchUserProfile();
-  }, [user]);
+  }, [user, t]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -151,9 +153,9 @@ const MyPage = () => {
               router.push('/');
             }}
           />
-          <h1 className="text-black text-[20px] font-semibold leading-none">
-            마이페이지
-          </h1>
+          <div className="text-black text-[20px] font-semibold leading-none">
+            {t('page_title')}
+          </div>
           <Link href={'/search'}>
             <Image
               src={search}
@@ -190,7 +192,10 @@ const MyPage = () => {
               </div>
 
               {/* 닉네임, 국가 정보 */}
-              <div className="flex flex-col ml-[8px] relative">
+              <div
+                className="flex flex-col ml-[8px] relative"
+                style={{ top: '-5px' }}
+              >
                 <h2
                   className="text-[16px] font-semibold mb-[2px] flex items-center"
                   style={{
@@ -222,7 +227,7 @@ const MyPage = () => {
                   </div>
                 ) : (
                   <p className="absolute top-[24px] left-0 text-[#45484D] text-[12px]">
-                    국가 인증 전이에요!
+                    {t('not_verified_country')}
                   </p>
                 )}
               </div>
@@ -232,7 +237,7 @@ const MyPage = () => {
               className="flex justify-center items-center gap-[10px] px-[12px] py-[6px] rounded-full bg-[#F5F7FA] text-[12px] text-[#45484D]"
               onClick={() => setIsModalOpen(true)}
             >
-              프로필 편집
+              {t('edit_profile')}
             </button>
           </div>
         </div>
@@ -250,19 +255,23 @@ const MyPage = () => {
               {new Intl.NumberFormat().format(Number(userProfile.credit))} C
             </p>
             <Link href="/mypage/credit" className="ml-[16px]">
-              <p className="text-[#0582ff] text-sm font-medium ">충전하기</p>
+              <p className="text-[#0582ff] text-sm font-medium ">
+                {t('charge_credits')}
+              </p>
             </Link>
           </div>
         </div>
         {/* 셀러 인증 */}
         <div className="mb-[24px]">
-          <h2 className="text-lg font-[700] mb-[12px]">셀러 인증</h2>
+          <h2 className="text-lg font-[700] mb-[12px]">
+            {t('seller_verification')}
+          </h2>
           <Link
             href="/mypage/seller-auth"
             className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
           >
             <span className="text-[16px] text-[#45484D] font-[500]">
-              인증하러 가기
+              {t('verify')}
             </span>
             <Image
               src="/images/right arrow.svg"
@@ -274,14 +283,14 @@ const MyPage = () => {
         </div>
         {/* 활동 내역 */}
         <div className="mb-[24px]">
-          <h2 className="text-lg font-[700] mb-[12px]">활동 내역</h2>
+          <h2 className="text-lg font-[700] mb-[12px]">{t('activity_logs')}</h2>
           <div className="mt-2">
             <Link
               href="/mypage/filters/all"
               className="flex justify-between items-center gap-[23px] p-[16px] rounded-t-[8px] bg-[#F9F9F9] w-full"
             >
               <span className="text-[16px] text-[#45484D] font-[500]">
-                내가 작성한 게시물
+                {t('written_posts')}
               </span>
               <Image
                 src="/images/right arrow.svg"
@@ -297,7 +306,7 @@ const MyPage = () => {
               className="flex justify-between items-center gap-[23px] p-[16px] bg-[#F9F9F9] w-full"
             >
               <span className="text-[16px] text-[#45484D] font-[500]">
-                내가 구매한 게시물
+                {t('purchased_posts')}
               </span>
               <Image
                 src="/images/right arrow.svg"
@@ -313,7 +322,7 @@ const MyPage = () => {
               className="flex justify-between items-center gap-[23px] p-[16px] rounded-b-[8px] bg-[#F9F9F9] w-full"
             >
               <span className="text-[16px] text-[#45484D] font-[500]">
-                북마크한 게시물
+                {t('bookmark_posts')}
               </span>
               <Image
                 src="/images/right arrow.svg"
@@ -326,13 +335,16 @@ const MyPage = () => {
           </div>
         </div>
         {/* 설정 */}
-        <h2 className="text-lg font-[700] mb-[12px]">언어 설정</h2>
+        <h2 className="text-lg font-[700] mb-[12px]">
+          {' '}
+          {t('language_settings')}
+        </h2>
         <Link
           href="/mypage/language"
           className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full mb-[50px]"
         >
           <span className="text-[16px] text-[#45484D] font-[500]">
-            언어 설정
+            {t('language_settings')}
           </span>
           <Image
             src="/images/right arrow.svg"
@@ -398,7 +410,7 @@ const MyPage = () => {
                     letterSpacing: '-0.32px',
                   }}
                 >
-                  프로필 편집
+                  {t('edit_profile')}
                 </h2>
 
                 {/* 닫기 버튼 */}
@@ -414,12 +426,7 @@ const MyPage = () => {
                     cursor: 'pointer',
                   }}
                 >
-                  <Image
-                    src="/images/ic-Close.svg"
-                    alt="닫기"
-                    width={24}
-                    height={24}
-                  />
+                  <Image src={close} alt="닫기" width={24} height={24} />
                 </button>
               </div>
 
@@ -450,6 +457,11 @@ const MyPage = () => {
                     <label
                       htmlFor="profileImageInput"
                       className="cursor-pointer"
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        height: '100%',
+                      }}
                     >
                       {previewImage ? (
                         <Image
@@ -469,6 +481,7 @@ const MyPage = () => {
                         />
                       )}
                     </label>
+
                     <input
                       id="profileImageInput"
                       type="file"
@@ -478,7 +491,6 @@ const MyPage = () => {
                     />
                   </div>
                 </div>
-
                 {/* 닉네임 */}
 
                 <label
@@ -486,13 +498,13 @@ const MyPage = () => {
     w-full text-sm text-black font-pretendard font-semibold leading-[140%] tracking-[-0.28px] mb-2
   "
                 >
-                  닉네임
+                  {t('nickname')}
                 </label>
                 <input
                   type="text"
                   value={nicknameInput}
                   onChange={(e) => setNicknameInput(e.target.value)}
-                  placeholder="닉네임 입력"
+                  placeholder={t('nickname_input')}
                   className="
     flex flex-col items-start 
     border rounded-[8px] border-gray-300 bg-white w-full
@@ -512,12 +524,12 @@ const MyPage = () => {
     w-full text-sm font-pretendard font-semibold leading-[140%] tracking-[-0.28px] text-black mb-[8px]
   "
                 >
-                  자기 소개
+                  {t('self_intro')}
                 </label>
                 <textarea
                   value={bioInput}
                   onChange={(e) => setBioInput(e.target.value)}
-                  placeholder="지금까지 다녀온 여행 경험을 추가해 주세요"
+                  placeholder={t('travel_experience')}
                   className="
     flex flex-col items-start 
     border rounded-[8px] border-gray-300 bg-white w-full
@@ -552,7 +564,7 @@ const MyPage = () => {
                     }}
                     onClick={() => setIsModalOpen(false)}
                   >
-                    취소
+                    {t('cancel')}
                   </button>
 
                   {/* 저장하기 버튼 */}
@@ -569,7 +581,7 @@ const MyPage = () => {
                     }}
                     onClick={handleSaveProfile}
                   >
-                    저장하기
+                    {t('save')}
                   </button>
                 </div>
               </div>
@@ -584,7 +596,7 @@ const MyPage = () => {
           className="text-[#44484c] text-sm font-medium ml-[28px] mt-[32px] mb-[43px] cursor-pointer"
           onClick={handleLogout}
         >
-          로그아웃
+          {t('logout')}
         </button>
       </div>
     </div>

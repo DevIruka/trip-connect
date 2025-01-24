@@ -13,9 +13,10 @@ import {
   KoreanCategory,
   topicMapping,
 } from '@/utils/topics';
-
+import { useTranslation } from 'react-i18next';
 
 const WrittenPostsPage: React.FC = () => {
+  const { t } = useTranslation('mypage');
   const { user } = useUserStore();
   const [posts, setPosts] = useState<UnifiedPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +28,7 @@ const WrittenPostsPage: React.FC = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       if (!user?.id) {
-        setError('유저 정보가 없습니다.');
+        setError(t('noUser'));
         setLoading(false);
         return;
       }
@@ -36,40 +37,39 @@ const WrittenPostsPage: React.FC = () => {
         const data = await fetchFilterPost(activeFilter, user.id);
 
         const processedData = data.map((post) => {
-          console.log(post);
-          console.log('1', 'category' in post);
-          console.log('2', Array.isArray(post.category));
           if ('category' in post && Array.isArray(post.category)) {
             const filteredCategories = post.category.filter(
               (cat): cat is EnglishCategory =>
-                Object.values<EnglishCategory | KoreanCategory>(topicMapping).includes(cat),
+                Object.values<EnglishCategory | KoreanCategory>(
+                  topicMapping,
+                ).includes(cat),
             );
 
-            const koreanCategories = convertTopicsToKorean(filteredCategories) as KoreanCategory[]
-            console.log(koreanCategories);
+            const koreanCategories = convertTopicsToKorean(
+              filteredCategories,
+            ) as KoreanCategory[];
             return {
               ...post,
               category: koreanCategories,
             };
           }
-          return post
+          return post;
         });
 
         setPosts(processedData);
-        console.log(processedData)
       } catch (err) {
-        console.error('데이터를 가져오는 중 오류가 발생했습니다.', err);
-        setError('오류가 발생했습니다. 다시 시도해주세요.');
+        console.error(t('fetchError'), err);
+        setError(t('tryAgain'));
       } finally {
         setLoading(false);
       }
     };
 
     fetchPosts();
-  }, [user?.id, activeFilter]);
+  }, [user?.id, activeFilter, t]);
 
-  if (loading) return <div>로딩 중...</div>;
-  if (error) return <div>{error}</div>;
+  if (loading) return <div>loaing...</div>;
+  if (error) return <div>error</div>;
 
   return (
     <div className="px-5 space-y-4 min-h-screen">
@@ -101,10 +101,10 @@ const WrittenPostsPage: React.FC = () => {
             }}
           >
             {filter === 'all'
-              ? '전체'
+              ? t('all')
               : filter === 'question'
-              ? '질문'
-              : '답변'}
+              ? t('question')
+              : t('answer')}
           </button>
         ))}
       </div>
@@ -135,7 +135,7 @@ const WrittenPostsPage: React.FC = () => {
             ),
           )
         ) : (
-          <div className="text-center text-gray-500">게시물이 없습니다.</div>
+          <div className="text-center text-gray-500">{t('noPosts')}</div>
         )}
       </div>
     </div>

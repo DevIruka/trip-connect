@@ -62,7 +62,6 @@ const PurchasePage: React.FC = () => {
           }),
         );
 
-
         const processedPosts = await Promise.all(
           formattedPosts.map(async (post) => {
             if (post.request_id) {
@@ -78,12 +77,17 @@ const PurchasePage: React.FC = () => {
               }
 
               const filteredCategories = (requestData?.category || []).filter(
-                (cat: EnglishCategory | KoreanCategory): cat is EnglishCategory =>
-                  Object.values<EnglishCategory | KoreanCategory>(topicMapping).includes(cat),
+                (
+                  cat: EnglishCategory | KoreanCategory,
+                ): cat is EnglishCategory =>
+                  Object.values<EnglishCategory | KoreanCategory>(
+                    topicMapping,
+                  ).includes(cat),
               );
 
-              const koreanCategories =
-                convertTopicsToKorean(filteredCategories) as KoreanCategory[]
+              const koreanCategories = convertTopicsToKorean(
+                filteredCategories,
+              ) as KoreanCategory[];
 
               return {
                 ...post,
@@ -132,7 +136,8 @@ const PurchasePage: React.FC = () => {
         {purchasedPosts.length > 0 ? (
           <ul className="space-y-4">
             {purchasedPosts.map((post) => (
-              <ResponsePostCard key={post.id} post={post} />
+              // editable을 false로 설정
+              <ResponsePostCard key={post.id} post={post} editable={false} />
             ))}
           </ul>
         ) : (

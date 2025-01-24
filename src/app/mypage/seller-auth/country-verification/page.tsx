@@ -7,8 +7,10 @@ import { useUserStore } from '@/store/userStore';
 import BackButton from '@/app/post/_components/BackBtn';
 import LocationText from '../_components/locationText';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import { useTranslation } from 'react-i18next'; // i18n 추가
 
 const CountryVerification = () => {
+  const { t } = useTranslation('mypage'); // 번역 함수 추가
   const router = useRouter();
   const { user } = useUserStore();
   const [userLocation, setUserLocation] = useState<{
@@ -58,14 +60,14 @@ const CountryVerification = () => {
       );
 
       // 국가와 도시 정보 설정
-      setCountry(countryComponent?.long_name || '알 수 없는 국가');
-      setLocationDescription(cityComponent?.long_name || '알 수 없는 도시');
+      setCountry(countryComponent?.long_name || t('unknown_country'));
+      setLocationDescription(cityComponent?.long_name || t('unknown_city'));
     }
   };
 
   const handleVerificationComplete = async () => {
     if (!user?.id) {
-      alert('로그인이 필요합니다.');
+      alert(t('login_required'));
       return;
     }
 
@@ -75,7 +77,7 @@ const CountryVerification = () => {
       .eq('id', user.id);
 
     if (error) {
-      alert('인증 상태 업데이트 중 오류가 발생했습니다.');
+      alert(t('verification_error'));
       console.error(error);
       return;
     }
@@ -84,15 +86,15 @@ const CountryVerification = () => {
     router.push('/mypage/seller-auth?newlyVerified=true');
   };
 
-  if (!isLoaded) return <div>Loading Google Maps...</div>;
-  if (loadError) return <div>Error loading Google Maps</div>;
+  if (!isLoaded) return <div>{t('map_loading')}</div>;
+  if (loadError) return <div>{t('map_error')}</div>;
 
   return (
     <div className="h-full w-full px-5 bg-white">
       <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
         <BackButton />
         <h1 className="text-center text-black text-lg font-semibold">
-          국가 인증
+          {t('country_verification')}
         </h1>
         <div className="w-6"></div>
       </div>
@@ -109,7 +111,7 @@ const CountryVerification = () => {
             />
           </GoogleMap>
         ) : (
-          <span className="text-gray-500">지도 로드 중...</span>
+          <span className="text-gray-500">{t('map_loading')}</span>
         )}
       </div>
 
@@ -123,7 +125,7 @@ const CountryVerification = () => {
         onClick={handleVerificationComplete}
         disabled={!locationDescription || !country}
       >
-        인증 완료하기
+        {t('complete_verification')}
       </button>
     </div>
   );

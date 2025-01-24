@@ -1,10 +1,12 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
 import Image from 'next/image';
 import search from '@/data/images/ic-Search.svg';
-
+import { useTranslation } from 'react-i18next';
 const lefticon = '/images/ic-left.svg';
 
 type Props = {
@@ -19,13 +21,14 @@ type Counts = {
 
 const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
   const router = useRouter();
+  const { t } = useTranslation('mypage');
   const { user } = useUserStore();
   const [counts, setCounts] = useState<Counts | null>(null);
 
   useEffect(() => {
     const fetchCounts = async () => {
       if (!user?.id) {
-        console.error('User ID가 없습니다.');
+        console.error(t('noUserId'));
         return;
       }
 
@@ -66,17 +69,17 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
           bookmark: bookmarkCount || 0,
         });
       } catch (error) {
-        console.error('카운트를 가져오는 중 오류가 발생했습니다:', error);
+        console.error(t('fetchCountsError'), error);
       }
     };
 
     fetchCounts();
-  }, [user?.id]);
+  }, [user?.id, t]);
 
   const tabs = [
-    { key: 'written', label: '작성한 글', link: '/mypage/filters/all' },
-    { key: 'purchased', label: '구매한 글', link: '/mypage/purchase' },
-    { key: 'bookmark', label: '북마크', link: '/mypage/bookmark' },
+    { key: 'written', label: t('written'), link: '/mypage/filters/all' },
+    { key: 'purchased', label: t('purchased'), link: '/mypage/purchase' },
+    { key: 'bookmark', label: t('bookmark'), link: '/mypage/bookmark' },
   ];
 
   return (
@@ -87,15 +90,15 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
           onClick={() => router.push('/mypage')}
           className="flex items-center justify-center"
         >
-          <Image src={lefticon} width={24} height={24} alt="back" />
+          <Image src={lefticon} width={24} height={24} alt={t('back')} />
         </button>
-        <Image src={search} width={24} height={24} alt="search" />
+        <Image src={search} width={24} height={24} alt={t('search')} />
       </div>
 
       {/* 프로필 섹션 */}
       <div className="flex items-center h-12 px-5">
         <h2 className="text-[20px] font-bold text-[#45484D] leading-8 tracking-tight font-Pretendard">
-          나의 활동 내역
+          {t('title')}
         </h2>
       </div>
 

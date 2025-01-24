@@ -4,10 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
-import Image from 'next/image';
-const lefticon = '/images/ic-left.svg';
+import BackButton from '@/app/post/_components/BackBtn';
+import { useTranslation } from 'react-i18next';
 
 const VerificationCodePage = () => {
+  const { t } = useTranslation('mypage');
   const { user } = useUserStore();
   const router = useRouter();
   const [verificationCode, setVerificationCode] = useState('');
@@ -30,7 +31,7 @@ const VerificationCodePage = () => {
 
   const handleSubmit = async () => {
     if (!user?.id) {
-      alert('로그인이 필요합니다.');
+      alert(t('login_required'));
       return;
     }
 
@@ -42,7 +43,7 @@ const VerificationCodePage = () => {
       .eq('id', userId);
 
     if (updateError) {
-      alert('인증 상태 업데이트 중 오류가 발생했습니다.');
+      alert(t('update_error'));
       console.error(updateError);
       return;
     }
@@ -54,38 +55,18 @@ const VerificationCodePage = () => {
   const handleResendCode = () => {
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
     setVerificationCode(newCode);
-    alert(`새 인증 코드가 생성되었습니다: ${newCode}`);
+    alert(t('new_code', { code: newCode }));
   };
 
   return (
-    <div className="px-5 py-4 min-h-screen bg-white">
+    <div className="h-full w-full px-5 bg-white">
       {/* 상단 헤더 */}
-      <div className="flex flex-row justify-between items-center h-[56px] mb-[16px] relative">
-        <Image
-          src={lefticon}
-          width={24}
-          height={24}
-          alt="back"
-          className="cursor-pointer absolute left-0"
-          onClick={() => {
-            router.back();
-          }}
-        />
-        <h1
-          style={{
-            color: '#000',
-            textAlign: 'center',
-            fontFamily: 'Pretendard',
-            fontSize: '18px',
-            fontStyle: 'normal',
-            fontWeight: 600,
-            lineHeight: 'normal',
-            letterSpacing: '-0.36px',
-          }}
-          className="w-full flex justify-center"
-        >
-          본인 인증
-        </h1>
+      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
+        <BackButton />
+        <div className="text-center text-black text-lg font-semibold">
+          {t('title')}
+        </div>
+        <div className="w-6"></div>
       </div>
 
       {/* 안내 텍스트 */}
@@ -101,12 +82,14 @@ const VerificationCodePage = () => {
         }}
         className="flex items-start gap-[10px] self-stretch py-[16px] mb-6 h-[56px]"
       >
-        인증 코드를 입력해 주세요.
+        {t('enter_code')}
       </p>
 
       {/* 인증 코드 입력 필드 */}
       <div className="mb-4">
-        <label className="text-gray-600 text-sm mb-2 block">인증 코드</label>
+        <label className="text-gray-600 text-sm mb-2 block">
+          {t('verification_code')}
+        </label>
         <input
           type="text"
           value={verificationCode}
@@ -121,18 +104,18 @@ const VerificationCodePage = () => {
           className="flex px-0 py-[4px] justify-center items-center gap-[10px] overflow-hidden text-[#0582FF] text-[14px] font-medium tracking-[-0.28px]"
           onClick={handleResendCode}
         >
-          재전송
+          {t('resend')}
         </button>
       </div>
 
       {/* 이전 및 제출 버튼 */}
-      <div className="flex justify-between mt-[315px]">
+      <div className="flex justify-between mt-[315px] ">
         {/* 이전 버튼 */}
         <button
           className="flex h-[52px] px-[12px] py-[6px] justify-center items-center gap-[10px] flex-1 rounded-[12px] bg-[#F5F7FA] text-black text-[16px] font-semibold tracking-[-0.32px]"
           onClick={() => router.back()}
         >
-          이전
+          {t('previous')}
         </button>
 
         {/* 버튼 간격 */}
@@ -143,7 +126,7 @@ const VerificationCodePage = () => {
           className="flex h-[52px] px-[12px] py-[6px] justify-center items-center gap-[10px] flex-1 rounded-[12px] bg-[#0582FF] text-white text-[16px] font-semibold tracking-[-0.32px]"
           onClick={handleSubmit}
         >
-          제출
+          {t('submit')}
         </button>
       </div>
     </div>
