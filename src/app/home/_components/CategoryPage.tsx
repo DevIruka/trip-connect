@@ -76,7 +76,7 @@ const CategoryPage = () => {
   const { user } = useUserStore();
   return (
     <>
-      <div className="h-full w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar">
+      <div className="w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar">
         <QnaHeader setIsModalOpen={setIsModalOpen} />
         <Navbar
           setFilterType={setFilterType}

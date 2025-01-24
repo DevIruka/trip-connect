@@ -7,6 +7,8 @@ import stripHtmlTags from '../_util/striptHtmlTags';
 import Image from 'next/image';
 import TimeAgo from './TimeAgo';
 import { useRouter } from 'next/navigation';
+import { convertToKorean } from '../_util/convertTopicMapping';
+import { EnglishCategory } from '@/utils/topics';
 
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
@@ -18,7 +20,7 @@ const ResponsePostCard: React.FC<{
   const router = useRouter();
   const [nickname, setNickname] = useState<string | null>(null);
   const [country, setCountry] = useState<string | null>(null);
-  const [category, setCategory] = useState<string[]>([]);
+  const [category, setCategory] = useState<EnglishCategory[]>([]);
   const [commentCount, setCommentCount] = useState<number>(0);
   const [showActions, setShowActions] = useState<boolean>(false);
   const plainContent = stripHtmlTags(post.free_content || '');
@@ -131,7 +133,7 @@ const ResponsePostCard: React.FC<{
               key={i}
               className="text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1"
             >
-              {cat}
+              {convertToKorean(cat)}
             </div>
           ))}
         </div>

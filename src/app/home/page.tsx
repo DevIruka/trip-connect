@@ -1,11 +1,11 @@
 import React, { Suspense } from 'react';
 import CategoryPage from './_components/CategoryPage';
-
+import LoadingPage from '../loading';
 
 const Homepage = async () => {
   return (
     <>
-      <Suspense fallback={<div>loading...</div>}>
+      <Suspense fallback={<LoadingPage />}>
         <CategoryPage />
       </Suspense>
     </>

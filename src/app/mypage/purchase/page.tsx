@@ -8,6 +8,7 @@ import CategoryTabs from '../_components/CategoryTabs';
 import {
   convertTopicsToKorean,
   EnglishCategory,
+  KoreanCategory,
   topicMapping,
 } from '@/utils/topics';
 import { supabase } from '@/utils/supabase/supabaseClient';
@@ -77,12 +78,12 @@ const PurchasePage: React.FC = () => {
               }
 
               const filteredCategories = (requestData?.category || []).filter(
-                (cat: string): cat is EnglishCategory =>
-                  Object.values<string>(topicMapping).includes(cat),
+                (cat: EnglishCategory | KoreanCategory): cat is EnglishCategory =>
+                  Object.values<EnglishCategory | KoreanCategory>(topicMapping).includes(cat),
               );
 
               const koreanCategories =
-                convertTopicsToKorean(filteredCategories);
+                convertTopicsToKorean(filteredCategories) as KoreanCategory[]
 
               return {
                 ...post,

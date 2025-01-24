@@ -7,7 +7,6 @@ import MoreButton from '@/data/images/ic-More.svg';
 import Image from 'next/image';
 import Icon from '@/components/Icons';
 import Imoji from '@/data/images/ic-imoji.svg';
-import share from '@/data/images/ic-share.svg';
 import BackHeader from '@/components/BackHeader';
 import PostDday from '@/app/home/_components/DDay';
 import ResponseBtn from '../_components/ResponseBtn';
