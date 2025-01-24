@@ -114,7 +114,7 @@ const CategoryPage = () => {
         </div>
 
         <button
-          className="sticky bottom-8 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
+          className="sticky bottom-16 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
           onClick={() => {
             if (!user) setIsModalOpen(true);
             else router.push('/request');
