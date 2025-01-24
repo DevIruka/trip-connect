@@ -162,7 +162,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
                 translatedFreeText ? (
                   <RenderTranslatedHTML data={JSON.parse(translatedFreeText)} />
                 ) : (
-                  '공짜내용로딩중'
+                  '무료내용 로딩중'
                 )
               ) : (
                 <RenderTranslatedHTML
@@ -176,7 +176,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
                   translatedText ? (
                     <RenderTranslatedHTML data={JSON.parse(translatedText)} />
                   ) : (
-                    '유료내용로딩중'
+                    '유료내용 로딩중'
                   )
                 ) : (
                   <RenderTranslatedHTML

@@ -86,7 +86,7 @@ export const nations = [
   },
 ];
 
-export const ennations = [
+export const enNations = [
   {
     continent: 'Asia',
     countries: [

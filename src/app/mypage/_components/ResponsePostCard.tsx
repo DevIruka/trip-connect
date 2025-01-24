@@ -228,7 +228,7 @@ const ResponsePostCard: React.FC<{
                   className="flex w-full items-center gap-[10px] p-[6px_10px] rounded-[8px] text-[14px] font-medium text-[#45484D] Pretendard text-left"
                   onClick={(e) => {
                     e.stopPropagation();
-                    router.push(`/response/${post.id}`);
+                    router.push(`/response-edit/${post.id}`);
                   }}
                 >
                   수정하기

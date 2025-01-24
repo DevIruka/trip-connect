@@ -5,7 +5,7 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true,
 });
 
-export const GPTTranslator = async (text: string) => {
+export const getGPTTranslator = async (text: string) => {
   const response = await openai.chat.completions.create({
     model: 'gpt-4o',
     messages: [
