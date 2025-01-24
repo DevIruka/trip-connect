@@ -534,7 +534,7 @@ const MyPage = () => {
     flex flex-col items-start 
     border rounded-[8px] border-gray-300 bg-white w-full
     text-gray-400 text-[14px] font-normal leading-[142.857%] tracking-[-0.35px]
-    overflow-hidden whitespace-nowrap
+    overflow-y-auto resize-none
   "
                   style={{
                     height: '140px',
