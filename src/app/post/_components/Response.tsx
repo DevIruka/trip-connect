@@ -15,6 +15,7 @@ import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import SelectBox from '@/components/SelectBox';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import { useRouter } from 'next/navigation';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -27,6 +28,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isDModalOpen, setIsDModalOpen] = useState(false);
 
   const { user } = useUserStore();
+  const router = useRouter();
 
   //mycredits: 로그인한 유저의 보유 크레딧 가져오기
   const fetchLoginuserData = async () => {
@@ -219,7 +221,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
         <div className="border-t border-[#dee1e5] p-4 flex place-content-between">
           <div
             className="flex gap-1 text-[#44484c] text-xs font-bold leading-none items-center cursor-pointer"
-            onClick={() => (location.href = `/review/${post.id}`)}
+            onClick={() => router.push(`/review/${post.id}`)}
           >
             <Image width={20} height={20} src={comment} alt="comment" />0
           </div>
