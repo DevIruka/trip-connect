@@ -46,7 +46,7 @@ const PurchasePage: React.FC = () => {
         const { data: responsePostsData, error: responsePostsError } =
           await supabase
             .from('response_posts')
-            .select('id, title, content_html, created_at, user_id, request_id')
+            .select('id, title, content_html, free_content, created_at, user_id, request_id')
             .in('id', responseIds);
 
         if (responsePostsError) throw responsePostsError;
@@ -54,7 +54,7 @@ const PurchasePage: React.FC = () => {
         const formattedPosts: ResponsePost[] = (responsePostsData || []).map(
           (post) => ({
             ...post,
-            free_content: '',
+            free_content: post.free_content || '',
             verified_country: null,
             category: [],
             img_url: [],
