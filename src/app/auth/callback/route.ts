@@ -44,11 +44,9 @@ export async function GET(request: Request) {
             .eq('id', user.id) // user.id를 기준으로 검색
             .single();
 
-          if (!profile?.nickname) {
+          if (profile?.nickname === 'guest') {
             // 닉네임이 없으면 설정 페이지로 이동
-            return NextResponse.redirect(
-              `https://${forwardedHost}${next}/auth`,
-            );
+            return NextResponse.redirect(`https://${forwardedHost}${next}/auth`);
           }
           return NextResponse.redirect(`https://${forwardedHost}${next}/auth`);
         }
