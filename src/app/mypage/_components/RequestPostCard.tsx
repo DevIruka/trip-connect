@@ -21,7 +21,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
     try {
       const { data, error } = await supabase
         .from('response_posts')
-        .select('id')
+        .select('id', { count: 'exact' })
         .eq('request_id', post.id);
 
       if (error) {
@@ -42,66 +42,34 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
   const handleCardClick = () => {
     router.push(`/post/${post.id}`);
   };
-
+  console.log(post.category);
   return (
     <div
       onClick={handleCardClick}
-      className="flex flex-col items-start gap-3 border-b bg-white w-full"
-      style={{
-        padding: '12px 20px 24px 20px',
-        borderBottom: '1px solid #F4F4F4',
-        background: '#FFF',
-      }}
+      className="flex flex-col items-start gap-3 border-b border-gray-200 bg-white w-full p-6"
     >
       {/* D-Day와 위치 및 카테고리 */}
-      <div className="flex flex-row items-center justify-between gap-[4px] w-full">
+      <div className="flex justify-between items-center w-full gap-2">
         {/* 왼쪽 - D-Day, 위치 및 카테고리 */}
-        <div className="flex flex-row items-center gap-[4px]">
-          <div
-            className="flex items-center justify-center text-[#FF810B] text-[12px]"
-            style={{
-              height: '22.017px',
-              padding: '0px 6px',
-              transform: 'rotate(-0.024deg)',
-              borderRadius: '4px',
-              background: '#FFECD4',
-            }}
-          >
+        <div className="flex items-center gap-2">
+          <div className="flex items-center justify-center text-orange-500 text-sm bg-orange-100 rounded-md px-2 py-1">
             {dDay}
           </div>
-          <div
-            className="flex items-center text-[#45484D] text-[12px]"
-            style={{
-              height: '22px',
-              padding: '0px 6px 0px 4px',
-              alignItems: 'center',
-              gap: '2px',
-              borderRadius: '4px',
-              background: '#F5F7FA',
-            }}
-          >
+          <div className="flex items-center text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1">
             <Image
               src="/images/ic-location.svg"
               alt="Location"
               width={12}
               height={12}
             />
-            <span>
+            <span className="ml-1">
               {JSON.parse(post.country_city || '{}').country || '위치 없음'}
             </span>
           </div>
-          {post.category.slice(0, 2).map((cat, i) => (
+          {post.category?.slice(0, 2).map((cat, i) => (
             <div
               key={i}
-              className="flex items-center text-[#45484D] text-[12px]"
-              style={{
-                height: '22px',
-                padding: '0px 6px 0px 4px',
-                alignItems: 'center',
-                gap: '2px',
-                borderRadius: '4px',
-                background: '#F5F7FA',
-              }}
+              className="text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1"
             >
               {cat}
             </div>
@@ -111,14 +79,17 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
         {/* 오른쪽 - 수정 및 삭제 버튼 */}
         <div className="relative">
           <button
-            onClick={() => setShowActions((prev) => !prev)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowActions((prev) => !prev);
+            }}
             className="p-2"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              width="14"
-              height="14"
+              width={14}
+              height={14}
               fill="none"
             >
               <circle cx="12" cy="5" r="2" fill="#797C80" />
@@ -163,7 +134,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  router.push(`/request-edit/${post.id}`);
+                  console.log(`Edit post: ${post.id}`);
                 }}
               >
                 수정하기
@@ -196,40 +167,27 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
         </div>
       </div>
 
-      <div className="flex items-start gap-[6px]">
-        <p className="text-[16px] font-[600] text-[#0582FF] leading-[22.4px]">
-          Q.
-        </p>
+      {/* 질문 제목 및 내용 */}
+      <div className="flex items-start gap-2">
+        <p className="text-blue-500 font-semibold text-base leading-6">Q.</p>
         <div className="flex flex-col">
-          <div className="mb-[8px]">
-            <p className="text-[16px] font-bold text-black leading-[22.4px] max-w-[315px] line-clamp-2">
-              {post.title}
-            </p>
-          </div>
-          <div>
-            <p className="text-[14px] text-[#797C80] line-clamp-2">
-              {plainContent}
-            </p>
-          </div>
+          <p className="text-black font-bold text-base leading-6 line-clamp-2">
+            {post.title}
+          </p>
+          <p className="text-gray-500 text-sm line-clamp-2">{plainContent}</p>
         </div>
       </div>
 
-      <div className="flex items-center justify-between text-[12px] text-[#797C80] w-full">
-        <div className="flex items-center gap-[6px]">
-          <div className="flex items-center gap-[6px]">
+      {/* 하단 - 크레딧, 댓글 수, 작성 시간 */}
+      <div className="flex justify-between items-center text-sm text-gray-500 w-full">
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Image src="/images/coin.svg" alt="coin" width={14} height={14} />
             <span>{post.credit} C</span>
           </div>
           {responseCount > 0 && (
             <>
-              <div
-                style={{
-                  width: '2px',
-                  height: '2px',
-                  borderRadius: '50%',
-                  backgroundColor: '#797C80',
-                }}
-              />
+              <span>·</span>
               <span>{responseCount}명 답변</span>
             </>
           )}

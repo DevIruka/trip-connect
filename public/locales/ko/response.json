@@ -1,0 +1,8 @@
+{
+  "register": "등록",
+  "edit": "수정",
+  "titlePlaceholder": "제목",
+  "previewPlaceholder": "미리보기 답변을 작성해 주세요",
+  "paidOnlyMessage": "이후로는 유료 결제자만 볼 수 있어요",
+  "paidContentPlaceholder": "유료 분량의 답변을 작성해 주세요"
+}

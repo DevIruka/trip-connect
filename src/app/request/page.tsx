@@ -24,7 +24,6 @@ const RequestPage: React.FC = () => {
     register,
     handleSubmit,
     watch,
-    reset,
     control,
     errors,
     isModalOpen,
@@ -108,7 +107,7 @@ const RequestPage: React.FC = () => {
               !watch('title') ||
               !watch('content') ||
               !watch('date_end')
-            }
+            } //getValue로 변환
             className={`rounded-[6px] px-[12px] py-[6px] text-[14px] font-semibold ${
               watch('country_city') &&
               watch('category') &&

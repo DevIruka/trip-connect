@@ -7,14 +7,22 @@ import { fetchFilterPost } from '../../_util/fetchFilterPost';
 import RequestPostCard from '../../_components/RequestPostCard';
 import ResponsePostCard from '../../_components/ResponsePostCard';
 import CategoryTabs from '../../_components/CategoryTabs';
-import { convertTopicsToKorean, EnglishCategory, topicMapping } from '@/utils/topics';
+import {
+  convertTopicsToKorean,
+  EnglishCategory,
+  KoreanCategory,
+  topicMapping,
+} from '@/utils/topics';
+
 
 const WrittenPostsPage: React.FC = () => {
   const { user } = useUserStore();
   const [posts, setPosts] = useState<UnifiedPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeFilter, setActiveFilter] = useState<'all' | 'question' | 'answer'>('all');
+  const [activeFilter, setActiveFilter] = useState<
+    'all' | 'question' | 'answer'
+  >('all');
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -28,23 +36,27 @@ const WrittenPostsPage: React.FC = () => {
         const data = await fetchFilterPost(activeFilter, user.id);
 
         const processedData = data.map((post) => {
+          console.log(post);
+          console.log('1', 'category' in post);
+          console.log('2', Array.isArray(post.category));
           if ('category' in post && Array.isArray(post.category)) {
             const filteredCategories = post.category.filter(
               (cat): cat is EnglishCategory =>
-                Object.values<string>(topicMapping).includes(cat),
+                Object.values<EnglishCategory | KoreanCategory>(topicMapping).includes(cat),
             );
 
-            const koreanCategories = convertTopicsToKorean(filteredCategories);
-
+            const koreanCategories = convertTopicsToKorean(filteredCategories) as KoreanCategory[]
+            console.log(koreanCategories);
             return {
               ...post,
-              category: koreanCategories, 
+              category: koreanCategories,
             };
           }
-          return post;
+          return post
         });
 
         setPosts(processedData);
+        console.log(processedData)
       } catch (err) {
         console.error('데이터를 가져오는 중 오류가 발생했습니다.', err);
         setError('오류가 발생했습니다. 다시 시도해주세요.');
@@ -65,28 +77,34 @@ const WrittenPostsPage: React.FC = () => {
 
       {/* 필터 버튼 */}
       <div
-        className="inline-flex items-start gap-[4px] mt-[16px]"
-        style={{ width: '100%', paddingLeft: '20px' }}
+        className="flex items-start gap-2 mt-4"
+        style={{ paddingLeft: '20px' }}
       >
         {['all', 'question', 'answer'].map((filter) => (
           <button
             key={filter}
-            onClick={() => setActiveFilter(filter as 'all' | 'question' | 'answer')}
-            className={`flex items-center justify-center px-[16px] py-[12px] h-[36px] rounded-full ${
+            onClick={() =>
+              setActiveFilter(filter as 'all' | 'question' | 'answer')
+            }
+            className={`flex justify-center items-center gap-2 px-4 py-3 h-9 rounded-full border text-sm font-normal tracking-[-0.28px] ${
               activeFilter === filter
-                ? 'border-[#000] bg-[#000] text-[#FFF]'
-                : 'border-[#DFE1E5] bg-transparent text-[#000]'
+                ? 'border-black bg-black text-white'
+                : 'border-gray-300 bg-transparent text-black'
             }`}
             style={{
+              borderRadius: '100px',
               borderWidth: '1px',
               fontFamily: 'Pretendard',
               fontSize: '14px',
               fontWeight: 400,
               lineHeight: '19.6px',
-              letterSpacing: '-0.28px',
             }}
           >
-            {filter === 'all' ? '전체' : filter === 'question' ? '질문' : '답변'}
+            {filter === 'all'
+              ? '전체'
+              : filter === 'question'
+              ? '질문'
+              : '답변'}
           </button>
         ))}
       </div>
@@ -99,6 +117,7 @@ const WrittenPostsPage: React.FC = () => {
           paddingBottom: '50px',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
+          marginTop: '12px',
         }}
       >
         <style jsx>{`
@@ -124,4 +143,3 @@ const WrittenPostsPage: React.FC = () => {
 };
 
 export default WrittenPostsPage;
-
