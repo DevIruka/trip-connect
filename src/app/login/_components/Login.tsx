@@ -12,14 +12,14 @@ import ErrorMessage from './ErrorMessage';
 import { useState } from 'react';
 import WarningModal from './Warning';
 import { useTranslation } from 'react-i18next';
-
-
+import { useRouter } from 'next/navigation';
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
 const leftIcon = '/images/ic-left.svg';
 
 const Login = () => {
+  const route = useRouter();
   const { t } = useTranslation('login');
 
   const {
@@ -36,9 +36,10 @@ const Login = () => {
     const response = await login(data);
     if (!response.success) {
       setErrorMessage(response.message); // 에러 메시지 상태 업데이트
+      return;
     }
+    route.push('/');
   };
-
 
   return (
     <>
@@ -75,9 +76,7 @@ const Login = () => {
                   <ErrorMessage>{t('erroremailrequired')}</ErrorMessage>
                 )}
                 {errors.email?.type === 'pattern' && (
-                  <ErrorMessage>
-                    {t('erroremailpattern')}
-                  </ErrorMessage>
+                  <ErrorMessage>{t('erroremailpattern')}</ErrorMessage>
                 )}
               </div>
             </div>
@@ -97,13 +96,13 @@ const Login = () => {
               )}
             </div>
             <BlueButton type="submit" className="mt-[40px] mb-[40px]">
-            {t('login')}
+              {t('login')}
             </BlueButton>
           </form>
           <div className="flex items-center w-full">
             <div className="flex-grow border-t border-[E5E5EC]"></div>
             <span className="mx-[8px] text-[#808080] text-[14px]">
-            {t('easyLogin')}
+              {t('easyLogin')}
             </span>
             <div className="flex-grow border-t border-[#D9D9D9]"></div>
           </div>
@@ -126,9 +125,7 @@ const Login = () => {
             />
           </div>
           <div className="flex flex-row">
-            <p className="text-[14px] text-[#505050]">
-            {t('stillNot')}
-            </p>
+            <p className="text-[14px] text-[#505050]">{t('stillNot')}</p>
             <Link
               href={'/signup'}
               className="text-[14px] text-[#45484D] underline underline-offset-[1px] ml-1 cursor-pointer"
