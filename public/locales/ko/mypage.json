@@ -121,5 +121,10 @@
   "edit": "수정하기",
   "delete": "삭제하기",
   "author": "작성자",
-  "comments": "댓글"
+  "comments": "댓글",
+
+  "korean": "한국어",
+  "english": "English",
+  "more_languages_coming": "다른 언어들은 나중에 추가될 예정이에요."
+
 }
