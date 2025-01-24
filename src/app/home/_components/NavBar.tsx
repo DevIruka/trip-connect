@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import Icon from '@/components/Icons';
 import { useTranslation } from 'react-i18next';
+import { useLang } from '@/store/languageStore';
 
 type Props = {
   setFilterType: React.Dispatch<React.SetStateAction<string>>;
@@ -25,6 +26,7 @@ const Navbar = ({
   filterType,
 }: Props) => {
   const { t } = useTranslation('home');
+  const { lang } = useLang();
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
   const [selectedCountry, setSelectedCountry] = useState<nation | null>(() => {
@@ -43,7 +45,7 @@ const Navbar = ({
 
   const getSelectedCountryLabel = (selectedCountry: nation | null) => {
     if (!selectedCountry) {
-      return '나라/도시';
+      return t('city_country');
     }
     if (!selectedCountry.city) {
       return selectedCountry.country;
@@ -71,7 +73,7 @@ const Navbar = ({
                 key={key}
               >
                 <Icon type={value} size={20} />
-                <div className="pl-1">{key}</div>
+                <div className="pl-1">{lang === 'en' ? value : key}</div>
               </TabsTrigger>
             ))}
           </TabsList>

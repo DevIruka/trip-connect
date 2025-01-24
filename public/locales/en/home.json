@@ -8,8 +8,13 @@
   "answer_now": "Answer Now",
   "earn_credits": "Answer questions",
   "earn_credits_2": "and earn credits",
-  "city_country": "country/city",
+  "city_country": "Location",
   "all": "All",
   "Q": "Q",
-  "A": "A"
+  "A": "A",
+  "login_please": "Please sign in",
+  "login_subtext_1": "Sign in quickly and",
+  "login_subtext_2": "start asking questions!",
+  "later": "Later",
+  "now": "Now"
 }
