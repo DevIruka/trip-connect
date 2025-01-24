@@ -31,7 +31,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   const router = useRouter();
   const { postId } = params;
   const { user } = useUserStore();
-  const { t } = useTranslation();
+  const { t } = useTranslation('response');
   const [data, setData] = useState({
     title: '',
     contentHtml: '',

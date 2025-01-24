@@ -36,7 +36,7 @@ const RequestPage: React.FC = () => {
 
   const { user } = useUserStore();
   const router = useRouter();
-  
+
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
     try {
       if (!user) {
@@ -58,16 +58,18 @@ const RequestPage: React.FC = () => {
       const selectedTopicsInEnglish =
         convertTopicsToEnglish(selectedCategories);
 
-      const { data:insertData, error } = await supabase.from('request_posts').insert([
-        {
-          ...data,
-          category: selectedTopicsInEnglish, // 영어로 저장
-          country_city: selectedLocation,
-          user_id: user.id,
-        },
-      ])
-      .select('id')
-      .single()
+      const { data: insertData, error } = await supabase
+        .from('request_posts')
+        .insert([
+          {
+            ...data,
+            category: selectedTopicsInEnglish, // 영어로 저장
+            country_city: selectedLocation,
+            user_id: user.id,
+          },
+        ])
+        .select('id')
+        .single();
 
       if (error) {
         throw new Error(error.message);
@@ -217,18 +219,17 @@ const RequestPage: React.FC = () => {
               date_end: false,
             }}
           />
-
-          <LocationModal
-            isOpen={isModalOpen}
-            onClose={toggleModal}
-            setCountry={(location) => {
-              handleLocationSelect(location!); // 기존 로직 수행
-              setValue('country_city', location!.country); // react-hook-form에 선택된 값 설정
-              clearErrors('country_city'); // 에러 메시지 제거
-            }}
-          />
         </form>
       </div>
+      <LocationModal
+        isOpen={isModalOpen}
+        onClose={toggleModal}
+        setCountry={(location) => {
+          handleLocationSelect(location!); // 기존 로직 수행
+          setValue('country_city', location!.country); // react-hook-form에 선택된 값 설정
+          clearErrors('country_city'); // 에러 메시지 제거
+        }}
+      />
     </>
   );
 };
