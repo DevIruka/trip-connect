@@ -52,17 +52,15 @@ const Header = () => {
               style={{ width: 24, height: 24 }}
             />
           </Link>
-          {user ? (
-            <Link href="/mypage" className="flex place-content-center">
-              <Image
-                src={profile}
-                alt="profile"
-                width={24}
-                height={24}
-                style={{ width: 24, height: 24 }}
-              />
-            </Link>
-          ) : null}
+          <Link href="/mypage" className="flex place-content-center">
+            <Image
+              src={profile}
+              alt="profile"
+              width={24}
+              height={24}
+              style={{ width: 24, height: 24 }}
+            />
+          </Link>
         </div>
       </div>
     </>

@@ -4,6 +4,7 @@ import lock from '@/data/images/🔓️ 열린 자물쇠.svg';
 import { fetchPostDelete } from '@/utils/api/supabase_api/home/fetchPostDelete';
 import { useUserStore } from '@/store/userStore';
 import { Tables } from '@/types/supabase';
+import { fetchResPostDelete } from '@/utils/api/supabase_api/home/fetchResPostDelete';
 type Props = {
   isOpen: boolean;
   onClose: () => void;
@@ -48,7 +49,7 @@ const DeleteConfirmModal = ({
             className="flex-1 py-3 text-sm font-semibold text-white bg-[#111111] rounded-lg w-[100px] text-center"
             onClick={() => {
               if (requestpost) fetchPostDelete(requestpost, user?.id);
-              else if (responsepost) console.log('답변글 삭제');
+              else if (responsepost) fetchResPostDelete(responsepost, user?.id);
             }}
           >
             삭제
