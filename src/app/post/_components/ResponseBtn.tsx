@@ -1,14 +1,13 @@
 'use client';
 import LoginModal from '@/components/LoginModal';
 import { useUserStore } from '@/store/userStore';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const ResponseBtn = ({ postId }: { postId: string }) => {
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-
   const handleNavigation = (postId: string) => {
     router.push(`/response/${postId}`);
   };
