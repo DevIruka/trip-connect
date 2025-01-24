@@ -33,26 +33,31 @@ const BackHeader = ({
           {text}
         </div>
         {isThreeDots ? (
-          <button onClick={() => setIsModalOpen(true)}>
-            <Image
-              width={imagesize}
-              height={imagesize}
-              alt={image}
-              src={image}
-            />
-          </button>
+          user?.id === post?.user_id ? (
+            <button onClick={() => setIsModalOpen(true)}>
+              <Image
+                width={imagesize}
+                height={imagesize}
+                alt={image}
+                src={image}
+              />
+            </button>
+          ) : null
         ) : (
           <Image width={imagesize} height={imagesize} alt={image} src={image} />
         )}
 
         {isModalOpen && (
-          <SelectBox
-            isModalOpen={isModalOpen}
-            setIsModalOpen={setIsModalOpen}
-            user={user!}
-            post={post!}
-            setIsDModalOpen={setIsDModalOpen}
-          />
+          <div
+            className="w-full h-screen absolute top-0 right-0"
+            onClick={() => setIsModalOpen(!isModalOpen)}
+          >
+            <SelectBox
+              user={user!}
+              post={post!}
+              setIsDModalOpen={setIsDModalOpen}
+            />
+          </div>
         )}
       </div>
       <DeleteConfirmModal

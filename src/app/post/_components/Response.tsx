@@ -215,19 +215,29 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
           >
             <Image width={20} height={20} src={comment} alt="comment" />0
           </div>
-          {isModalOpen && (
-            <SelectBox
-              isModalOpen={isModalOpen}
-              setIsModalOpen={setIsModalOpen}
-              user={user!}
-              post={post!}
-              setIsDModalOpen={setIsDModalOpen}
-            />
-          )}
-
-          <button onClick={() => setIsModalOpen(true)}>
-            <Image width={20} height={20} src={MoreButton} alt="MoreButton" />
-          </button>
+          <div
+            className="relative"
+            onClick={() => setIsModalOpen(!isModalOpen)}
+          >
+            {isModalOpen && (
+              <SelectBox
+                user={user!}
+                post={post!}
+                setIsDModalOpen={setIsDModalOpen}
+                mode="response"
+              />
+            )}
+            {user?.id === post.user_id ? (
+              <button onClick={() => setIsModalOpen(true)}>
+                <Image
+                  width={20}
+                  height={20}
+                  src={MoreButton}
+                  alt="MoreButton"
+                />
+              </button>
+            ) : null}
+          </div>
         </div>
       </div>
       <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
