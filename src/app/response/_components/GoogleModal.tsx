@@ -84,8 +84,14 @@ const GoogleModal: React.FC<Props> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="w-[335px] h-[416px] px-5 py-2.5 bg-white rounded-2xl flex flex-col justify-between">
+    <div
+      className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50"
+      style={{ zIndex: 1000 }}
+    >
+      <div
+        className="w-[335px] h-[416px] px-5 py-2.5 bg-white rounded-2xl flex flex-col justify-between"
+        style={{ zIndex: 1001 }}
+      >
         {/* 헤더 */}
         <div className="flex flex-col justify-start gap-3">
           <div className="flex justify-between items-center py-2">
@@ -99,8 +105,8 @@ const GoogleModal: React.FC<Props> = ({
 
           {/* 검색창 */}
           <div className="w-full justify-center items-center gap-2.5">
-          <div className="flex items-center w-full h-11 pl-4 pr-2 py-3.5 bg-white rounded-xl border border-[#DFE1E5]">
-          {/* 검색 입력 필드 */}
+            <div className="flex items-center w-full h-11 pl-4 pr-2 py-3.5 bg-white rounded-xl border border-[#DFE1E5]">
+              {/* 검색 입력 필드 */}
               <input
                 type="text"
                 value={search}
@@ -111,6 +117,7 @@ const GoogleModal: React.FC<Props> = ({
                 }`}
                 style={{
                   padding: '0',
+                  minWidth: 0,
                 }}
               />
 
@@ -118,7 +125,11 @@ const GoogleModal: React.FC<Props> = ({
               <button
                 onClick={handleSearch}
                 className="flex-shrink-0 h-[32px] px-4 bg-[#eaf4ff] rounded-md flex items-center justify-center"
-                >
+                style={{
+                  flexShrink: 0, // 버튼 크기 고정
+                  whiteSpace: 'nowrap', // 텍스트 줄바꿈 방지
+                }}
+              >
                 <span className="text-[#0079f2] text-sm font-semibold">
                   검색
                 </span>
