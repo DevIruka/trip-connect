@@ -289,7 +289,9 @@ export const LocationModal = ({
                     ))}
                   </ul>
                 ) : (
-                  <p className="pt-10 text-center text-[#797c80] text-base font-semibold leading-snug">{`"${searchTerm}"에 대한 검색 결과가 없어요.`}</p>
+                  <p className="pt-10 text-center text-[#797c80] text-base font-semibold leading-snug">{`"${searchTerm}${t(
+                    'noresults',
+                  )}`}</p>
                 )
               ) : // 대륙 > 나라 버튼 표시
 
