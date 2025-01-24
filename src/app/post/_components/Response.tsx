@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import Profile from './Profile';
 import Image from 'next/image';
+import * as Sentry from '@sentry/nextjs';
 
 import original from '@/data/images/original.svg';
 import comment from '@/data/images/ic-comment.svg';
@@ -75,11 +76,18 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
 
   //구매 시 크레딧 차감하기
   const minusCredit = async () => {
-    await supabase
-      .from('users')
-      .update({ credit: mycredits! - credit! })
-      .eq('id', user?.id)
-      .select();
+    try {
+      const response = await supabase
+        .from('users')
+        .update({ credit: mycredits! - credit! })
+        .eq('id', user?.id)
+        .select();
+      if (!response) {
+        throw new Error('크레딧 차감에 실패하였습니다다.');
+      }
+    } catch (error) {
+      Sentry.captureException(error);
+    }
   };
 
   useEffect(() => {
