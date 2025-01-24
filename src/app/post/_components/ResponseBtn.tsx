@@ -8,7 +8,6 @@ const ResponseBtn = ({ postId }: { postId: string }) => {
   const { user } = useUserStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-
   const handleNavigation = (postId: string) => {
     router.push(`/response/${postId}`);
   };
