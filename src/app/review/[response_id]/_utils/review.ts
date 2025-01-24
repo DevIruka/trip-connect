@@ -89,3 +89,14 @@ export const fetchReviews = async (response_id: string): Promise<Review[]> => {
     };
   });
 };
+
+export const canWriteReview = async (response_id: string, user_id: string): Promise<boolean> => {
+  const { data, error } = await supabase
+    .from('purchased_users')
+    .select('id')
+    .eq('response_id', response_id)
+    .eq('user_id', user_id);
+
+  if (error) throw new Error(`권한 확인 실패: ${error.message}`);
+  return data.length > 0;
+};
