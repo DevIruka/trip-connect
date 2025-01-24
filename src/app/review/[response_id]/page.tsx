@@ -7,9 +7,8 @@ import { useUserStore } from '@/store/userStore';
 import ReviewHeader from './_components/ReviewHeader';
 import ReviewInput from './_components/ReviewInput';
 import ReviewList from './_components/ReviewList';
-import { checkUserCommented, fetchReviews } from './_utils/review';
+import { canWriteReview, checkUserCommented, fetchReviews } from './_utils/review';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { useTranslation } from 'react-i18next';
 
 const ReviewPage = () => {
   const { user } = useUserStore();
@@ -17,6 +16,12 @@ const ReviewPage = () => {
   const [review, setReview] = useState('');
   const router = useRouter();
   const queryClient = useQueryClient();
+
+  const { data: canWrite = false, isLoading: isCheckingWritePermission } = useQuery({
+    queryKey: ['canWriteReview', response_id, user?.id],
+    queryFn: () => canWriteReview(response_id as string, user!.id),
+    enabled: !!response_id && !!user?.id,
+  });
 
   const { data: hasCommented = false } = useQuery({
     queryKey: ['hasCommented', response_id, user?.id],
@@ -101,6 +106,7 @@ const ReviewPage = () => {
 
           addReviewMutation.mutate(review);
         }}
+        disabled={!canWrite || isCheckingWritePermission}
       />
     </div>
   );
