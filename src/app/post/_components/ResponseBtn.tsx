@@ -1,7 +1,7 @@
 'use client';
 import LoginModal from '@/components/LoginModal';
 import { useUserStore } from '@/store/userStore';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 const ResponseBtn = ({ postId }: { postId: string }) => {
