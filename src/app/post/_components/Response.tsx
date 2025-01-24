@@ -235,16 +235,10 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
                 mode="response"
               />
             )}
-            {user?.id === post.user_id ? (
-              <button onClick={() => setIsModalOpen(true)}>
-                <Image
-                  width={20}
-                  height={20}
-                  src={MoreButton}
-                  alt="MoreButton"
-                />
-              </button>
-            ) : null}
+
+            <button onClick={() => setIsModalOpen(true)}>
+              <Image width={20} height={20} src={MoreButton} alt="MoreButton" />
+            </button>
           </div>
         </div>
       </div>

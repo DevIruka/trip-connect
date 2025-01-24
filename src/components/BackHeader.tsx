@@ -33,16 +33,14 @@ const BackHeader = ({
           {text}
         </div>
         {isThreeDots ? (
-          user?.id === post?.user_id ? (
-            <button onClick={() => setIsModalOpen(true)}>
-              <Image
-                width={imagesize}
-                height={imagesize}
-                alt={image}
-                src={image}
-              />
-            </button>
-          ) : null
+          <button onClick={() => setIsModalOpen(true)}>
+            <Image
+              width={imagesize}
+              height={imagesize}
+              alt={image}
+              src={image}
+            />
+          </button>
         ) : (
           <Image width={imagesize} height={imagesize} alt={image} src={image} />
         )}
