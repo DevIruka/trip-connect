@@ -2,7 +2,6 @@
 
 import { useLang } from '@/store/languageStore';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -12,7 +11,7 @@ const lefticon = '/images/ic-left.svg';
 const LanguagePage = () => {
   const { lang, setLang } = useLang();
   const [selectedLang, setSelectedLang] = useState<'ko' | 'en'>(lang); // 변경할 언어 상태 추가
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation('mypage'); // i18n 번역 추가
   const router = useRouter();
 
   const handleLanguageSelect = (language: 'ko' | 'en') => {
@@ -62,7 +61,7 @@ const LanguagePage = () => {
             fontFamily: 'Pretendard',
           }}
         >
-          언어설정
+          {t('language_settings')}
         </h2>
       </div>
 
@@ -91,7 +90,7 @@ const LanguagePage = () => {
                 letterSpacing: '-0.32px',
               }}
             >
-              한국어
+              {t('korean')}
             </span>
             {selectedLang === 'ko' && (
               <span
@@ -128,7 +127,7 @@ const LanguagePage = () => {
                 letterSpacing: '-0.32px',
               }}
             >
-              English
+              {t('english')}
             </span>
             {selectedLang === 'en' && (
               <span
@@ -145,16 +144,19 @@ const LanguagePage = () => {
         </div>
       </div>
 
-      <p className="mt-6 text-gray-500 text-sm">
-        다른 언어들은 나중에 추가될 예정이에요.
-      </p>
+      <p className="mt-6 text-gray-500 text-sm">{t('more_languages_coming')}</p>
       {/* 완료 버튼 */}
       <button
         onClick={handleSave}
-        className="fixed bottom-5 left-0 w-full bg-blue-500 text-white px-6 py-3 rounded-lg"
-        style={{ fontFamily: 'Pretendard', fontWeight: 600 }}
+        className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-blue-500 text-white py-3 px-4 rounded-lg"
+        style={{
+          fontFamily: 'Pretendard',
+          fontWeight: 600,
+          width: 'calc(100% - 40px)', // 화면 양쪽에서 20px씩 마진
+          maxWidth: '335px', // 최대 너비 설정
+        }}
       >
-        완료
+        {t('save')}
       </button>
     </div>
   );

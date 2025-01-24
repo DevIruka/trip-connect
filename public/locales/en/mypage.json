@@ -122,5 +122,9 @@
   "edit": "Edit",
   "delete": "Delete",
   "author": "Author",
-  "comments": "Comments"
+  "comments": "Comments",
+
+  "korean": "Korean",
+  "english": "English",
+  "more_languages_coming": "More languages will be added later."
 }
