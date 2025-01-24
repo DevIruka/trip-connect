@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-  buttonKey: 'register' | 'edit'; // 버튼 이름
+  buttonKey: string; // 버튼 이름
   onButtonClick: () => void;
   disabled?: boolean;
 };
@@ -15,7 +15,7 @@ const HeaderWithButton: React.FC<Props> = ({ buttonKey, onButtonClick }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex justify-between items-center px-[20px] py-[10px] bg-white shadow-md">
+    <div className="flex justify-between items-center px-[20px] py-[10px] bg-white shadow-md sticky top-0 z-50">
       <button
         onClick={() => router.back()}
         className="text-lg font-bold text-black"

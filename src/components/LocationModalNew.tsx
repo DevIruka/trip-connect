@@ -7,6 +7,7 @@ import radioBtn from '@/data/images/radio_btn.svg';
 import radioBtnSlctd from '@/data/images/radio_btn_slctd.svg';
 import location from '@/data/images/ic-location.svg';
 import Image from 'next/image';
+import { useLang } from '@/store/languageStore';
 
 type Props = {
   isOpen: boolean;
@@ -34,6 +35,7 @@ export const LocationModal = ({
   );
   const [selectedValue, setSelectedValue] = useState(''); // 선택된 값 저장
   const [crntNation, setCrntNation] = useState<nation | null>();
+  const { lang } = useLang();
 
   if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
 
