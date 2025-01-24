@@ -19,7 +19,7 @@ const SelectBox = ({ user, post, setIsDModalOpen, mode }: Props) => {
             : 'top-[45px] right-[23px]'
         }`}
       >
-        {user ? (
+        {user?.id === post?.user_id ? (
           <>
             <button
               onClick={() => {

@@ -101,7 +101,7 @@ export const LocationModal = ({
   return (
     <>
       <div
-        className="w-[375px] h-full flex justify-center overflow-hidden fixed inset-y-0 z-[52] items-end bg-black bg-opacity-50 pt-10"
+        className="w-[375px] h-full flex justify-center overflow-hidden fixed inset-y-0 z-[100] items-end bg-black bg-opacity-50 pt-10"
         onClick={onClose} // 뒷배경 클릭 시 모달 닫기
       >
         <div
