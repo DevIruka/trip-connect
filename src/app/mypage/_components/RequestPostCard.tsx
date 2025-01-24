@@ -15,6 +15,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
   const [responseCount, setResponseCount] = useState<number>(0);
   const [showActions, setShowActions] = useState<boolean>(false);
 
+
   const dDay = calculateDDay(post.date_end || undefined);
   const plainContent = stripHtmlTags(post.content ?? '');
 
@@ -33,6 +34,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
   }, [showActions, post.id]);
+  
 
   const fetchResponseCount = useCallback(async () => {
     try {
@@ -56,21 +58,23 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
     fetchResponseCount();
   }, [fetchResponseCount]);
 
-  const handleDelete = async () => {
-    if (responseCount > 0) {
-      alert('댓글이 달린 게시물은 삭제할 수 없습니다.');
-    } else {
-      const confirmDelete = confirm('정말 삭제하시겠습니까?');
-      if (confirmDelete) {
-        try {
-          await supabase.from('request_posts').delete().eq('id', post.id);
+const handleDelete = async () => {
+  if (responseCount > 0) {
+    alert('댓글이 달린 게시물은 삭제할 수 없습니다.');
+  } else {
+    const confirmDelete = confirm('정말 삭제하시겠습니까?');
+    if (confirmDelete) {
+      try {
+        await supabase.from('request_posts').delete().eq('id', post.id);
 
-          alert('게시물이 삭제되었습니다.');
-          router.refresh();
-        } catch {}
+        alert('게시물이 삭제되었습니다.');
+        router.refresh();
+      } catch {
       }
     }
-  };
+  }
+};
+
 
   const handleCardClick = () => {
     router.push(`/post/${post.id}`);

@@ -161,7 +161,7 @@ const EditRequestPage: React.FC = () => {
 
   return (
     <div className="h-screen overflow-y-auto bg-white">
-      <div className="flex justify-between items-center px-5 py-2 relative">
+      <div className="flex justify-between items-center px-5 py-2 relative sticky bg-white top-0 z-[51]">
         <button className="text-lg font-bold" onClick={() => router.back()}>
           ✕
         </button>
