@@ -2,18 +2,20 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
-const lefticon = '/images/ic-left.svg';
+import BackButton from '@/app/post/_components/BackBtn';
+import { useTranslation } from 'react-i18next'; // i18n 추가
 
 const IdentityVerification = () => {
+  const { t } = useTranslation('mypage'); // 번역 함수
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState(''); // 국가 선택 상태 추가
 
   const handleSendCode = () => {
-    if (phoneNumber.length === 11) {
+    if (phoneNumber.length === 11 && selectedCountry) {
       router.push('/mypage/seller-auth/identity-verification/codepage');
     } else {
-      alert('전화번호를 정확히 입력해주세요.');
+      alert(t('enter_correct_phone')); // 번역 적용
     }
   };
 
@@ -22,34 +24,18 @@ const IdentityVerification = () => {
     setPhoneNumber(input);
   };
 
+  const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCountry(e.target.value);
+  };
+
   return (
-    <div className="px-5 py-4 min-h-screen bg-white">
-      <div className="flex flex-row justify-between items-center h-[56px] mb-[16px] relative">
-        <Image
-          src={lefticon}
-          width={24}
-          height={24}
-          alt="back"
-          className="cursor-pointer absolute left-0"
-          onClick={() => {
-            router.back();
-          }}
-        />
-        <h1
-          style={{
-            color: '#000',
-            textAlign: 'center',
-            fontFamily: 'Pretendard',
-            fontSize: '18px',
-            fontStyle: 'normal',
-            fontWeight: 600,
-            lineHeight: 'normal',
-            letterSpacing: '-0.36px',
-          }}
-          className="w-full flex justify-center"
-        >
-          본인 인증
+    <div className="h-full w-full px-5 bg-white">
+      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
+        <BackButton />
+        <h1 className="text-center text-black text-lg font-semibold">
+          {t('identity_verification')} {/* 번역 적용 */}
         </h1>
+        <div className="w-6"></div>
       </div>
 
       <div>
@@ -65,8 +51,7 @@ const IdentityVerification = () => {
           }}
           className="mb-6"
         >
-          본인 인증을 위해
-          <br /> 국가와 전화번호를 입력해 주세요
+          {t('identity_verification_description')} {/* 번역 적용 */}
         </p>
       </div>
 
@@ -84,15 +69,19 @@ const IdentityVerification = () => {
           }}
           className="mb-2 block"
         >
-          국가 선택
+          {t('select_country')} {/* 번역 적용 */}
         </label>
-        <select className="flex w-[335px] h-[52px] px-[16px] py-[14px] flex-col items-start gap-[10px] self-stretch rounded-lg border border-gray-300 bg-white overflow-hidden text-black text-sm font-medium leading-[140%] tracking-[-0.28px] whitespace-nowrap">
-          <option value="" disabled selected className="text-gray-400">
-            국가
+        <select
+          value={selectedCountry}
+          onChange={handleCountryChange}
+          className="flex w-[335px] h-[52px] px-[16px] py-[14px] flex-col items-start gap-[10px] self-stretch rounded-lg border border-gray-300 bg-white overflow-hidden text-black text-sm font-medium leading-[140%] tracking-[-0.28px] whitespace-nowrap"
+        >
+          <option value="" disabled className="text-gray-400">
+            {t('country')} {/* 번역 적용 */}
           </option>
-          <option value="kr">대한민국</option>
-          <option value="us">미국</option>
-          <option value="jp">일본</option>
+          <option value="kr">{t('korea')}</option>
+          <option value="us">{t('usa')}</option>
+          <option value="jp">{t('japan')}</option>
         </select>
       </div>
 
@@ -107,11 +96,11 @@ const IdentityVerification = () => {
             fontWeight: 500,
           }}
         >
-          전화번호
+          {t('phone_number')} {/* 번역 적용 */}
         </label>
         <input
           type="text"
-          placeholder="전화번호를 입력하세요"
+          placeholder={t('enter_phone_number')} // 번역 적용
           value={phoneNumber}
           onChange={handlePhoneNumberChange}
           className="w-[335px] h-[52px] border border-gray-300 rounded-lg px-3 py-2 text-sm"
@@ -121,16 +110,16 @@ const IdentityVerification = () => {
 
       {/* 인증 코드 받기 버튼 */}
       <button
-        className={`w-full h-[52px] px-[12px] py-[6px] flex justify-center items-center gap-[10px] rounded-[12px] mt-[270px] ${
-          phoneNumber.length === 11
+        className={`h-[52px] rounded-xl text-center my-3 text-white text-base font-semibold absolute bottom-0 w-[335px] ${
+          phoneNumber.length === 11 && selectedCountry
             ? 'bg-[#0582FF] text-white'
             : 'bg-gray-300 text-gray-600 cursor-not-allowed'
         }`}
         onClick={handleSendCode}
-        disabled={phoneNumber.length !== 11}
+        disabled={!(phoneNumber.length === 11 && selectedCountry)} // 조건에 국가 선택 여부 추가
       >
         <span className="text-[16px] font-pretendard font-semibold leading-normal tracking-[-0.32px] text-white">
-          인증 코드 받기
+          {t('get_verification_code')} {/* 번역 적용 */}
         </span>
       </button>
     </div>
