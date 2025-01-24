@@ -8,6 +8,7 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import HeaderWithButton from '../_components/HeaderButtons';
 import { useQuery } from '@tanstack/react-query';
 import { useUserStore } from '@/store/userStore';
+import { useTranslation } from 'react-i18next';
 
 type RequestDetails = {
   title: string;
@@ -30,7 +31,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   const router = useRouter();
   const { postId } = params;
   const { user } = useUserStore();
-
+  const { t } = useTranslation();
   const [data, setData] = useState({
     title: '',
     contentHtml: '',
@@ -88,7 +89,10 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
 
   return (
     <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
-      <HeaderWithButton buttonKey="register" onButtonClick={handleSubmit} />
+      <HeaderWithButton
+        buttonKey={t('register')}
+        onButtonClick={handleSubmit}
+      />
 
       <div className="bg-[#F5F7FA] w-full mb-[16px] px-[20px] py-[16px]">
         <div className="flex flex-col gap-[8px]">

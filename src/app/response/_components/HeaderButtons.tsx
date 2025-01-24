@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 type Props = {
-  buttonKey: 'register' | 'edit'; // 버튼 이름
+  buttonKey: string; // 버튼 이름
   onButtonClick: () => void;
   disabled?: boolean;
 };
