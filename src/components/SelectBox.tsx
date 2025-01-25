@@ -1,5 +1,6 @@
 import { Tables } from '@/types/supabase';
 import { User } from '@supabase/supabase-js';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 type Props = {
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const SelectBox = ({ user, post, setIsDModalOpen, mode }: Props) => {
+  const router = useRouter();
   return (
     <>
       <div
@@ -26,9 +28,11 @@ const SelectBox = ({ user, post, setIsDModalOpen, mode }: Props) => {
                 if (user.id !== post?.user_id) {
                   alert('작성자가 아닙니다.');
                 } else
-                  location.href = `/${
-                    mode === 'response' ? 'response-edit' : 'request-edit'
-                  }/${post?.id}`;
+                  router.push(
+                    `/${
+                      mode === 'response' ? 'response-edit' : 'request-edit'
+                    }/${post?.id}`,
+                  );
               }}
               className="ml-2.5 mx-[4.5px] h-[29px]"
             >
