@@ -46,7 +46,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
           <div className="w-[36px] h-[36px] rounded-full bg-gray-300 flex items-center justify-center" />
         )}
 
-        <div className="ml-3 flex-grow">
+        <div className="flex-grow">
           <div className="flex items-center">
             <span className="text-sm font-medium">{review.nickname}</span>
           </div>
@@ -57,7 +57,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
           <div className="relative">
             <button
               onClick={() => setVisibleDropdown((prev) => !prev)}
-              className="text-gray-500 hover:text-gray-700"
+              className="text-gray-500 hover:text-gray-700 flex items-center justify-center"
             >
               <Image src={threedot} width={20} height={20} alt="edit" />
             </button>
@@ -68,13 +68,13 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
                     setIsEditing(true);
                     setVisibleDropdown(false);
                   }}
-                  className="block px-4 py-2 text-sm text-blue-600 hover:bg-gray-100"
+                  className="block px-4 py-2 text-sm font-medium text-[#44484c]"
                 >
                   {t('reviewEdit')}
                 </button>
                 <button
                   onClick={() => onDelete(review.id)}
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                  className="block px-4 py-2 text-sm font-medium text-[#44484c]"
                 >
                   {t('reviewDelete')}
                 </button>
@@ -82,6 +82,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
             )}
           </div>
         )}
+        </div>
 
         <div>
           {isEditing ? (
@@ -89,30 +90,29 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
               <textarea
                 value={updatedReview}
                 onChange={(e) => setUpdatedReview(e.target.value)}
-                className="w-full p-2 border rounded text-sm"
+                className="w-full p-2 border border-[#80BFFF] rounded text-sm"
               />
-              <div className="flex gap-2 mt-2">
+              <div className="flex gap-[4px] mt-2 justify-end">
                 <button
                   onClick={() => {
                     setIsEditing(false);
                     setUpdatedReview(review.review);
                   }}
-                  className="px-4 py-2 bg-gray-300 text-black rounded hover:bg-gray-400"
+                  className="px-[12px] py-[6px] bg-[#f4f6f9] rounded-md text-[#44484c]"
                 >
                   {t('reviewEditCancel')}
                 </button>
                 <button
                   onClick={handleSave}
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  className="px-[12px] py-[6px] text-white bg-[#0582ff] rounded-md"
                 >
                   {t('reviewEditSave')}
                 </button>
               </div>
             </div>
           ) : (
-            <p className="text-sm">{review.review}</p>
+            <p className="text-sm pl-[44px]">{review.review}</p>
           )}
-        </div>
       </div>
     </div>
   );
