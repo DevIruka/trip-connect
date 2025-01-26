@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import TiptapEditor from '../../response/_components/TiptapEditor';
 import HeaderWithButton from '../../response/_components/HeaderButtons';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 const EditResponsePage: React.FC = () => {
   const { responseId } = useParams();
@@ -15,52 +16,42 @@ const EditResponsePage: React.FC = () => {
     contentHtml: '',
     freeContent: '',
   });
-  const [request, setRequest] = useState({ title: '', content: '' });
-  const [isLoading, setIsLoading] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
   const [requestId, setRequestId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchResponseDetails = async () => {
-      try {
-        const { data: responseData, error: responseError } = await supabase
-          .from('response_posts')
-          .select('title, content_html, free_content, request_id')
-          .eq('id', responseId)
-          .single();
+  const { data: responseData, isLoading } = useQuery({
+    queryKey: ['response', responseId],
+    queryFn: async () => {
+      const { data: responseData, error: responseError } = await supabase
+        .from('response_posts')
+        .select('title, content_html, free_content, request_id')
+        .eq('id', responseId)
+        .single();
 
-        if (responseError) throw responseError;
+      if (responseError) throw responseError;
 
-        setData({
-          title: responseData.title,
-          contentHtml: responseData.content_html,
-          freeContent: responseData.free_content,
-        });
+      setData({
+        title: responseData.title,
+        contentHtml: responseData.content_html,
+        freeContent: responseData.free_content,
+      });
 
-        setRequestId(responseData.request_id);
+      setRequestId(responseData.request_id);
 
-        const { data: requestData, error: requestError } = await supabase
-          .from('request_posts')
-          .select('title, content')
-          .eq('id', responseData.request_id)
-          .single();
+      const { data: requestData, error: requestError } = await supabase
+        .from('request_posts')
+        .select('title, content')
+        .eq('id', responseData.request_id)
+        .single();
 
-        if (requestError) throw requestError;
+      if (requestError) throw requestError;
 
-        setRequest({ title: requestData.title, content: requestData.content });
-      } catch (error) {
-        console.error('Error:', error);
-        alert('데이터를 불러오지 못했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      return { responseData, requestData };
+    },
+  });
 
-    fetchResponseDetails();
-  }, [responseId]);
-
-  const handleSubmit = async () => {
-    try {
+  const updateMutation = useMutation({
+    mutationFn: async () => {
       const { error } = await supabase
         .from('response_posts')
         .update({
@@ -71,18 +62,24 @@ const EditResponsePage: React.FC = () => {
         .eq('id', responseId);
 
       if (error) throw error;
-
+    },
+    onSuccess: () => {
       alert('수정이 완료되었습니다.');
       router.push(`/post/${requestId}`);
-    } catch (error) {
+    },
+    onError: (error) => {
       console.error('Error:', error);
       alert('수정 중 문제가 발생했습니다.');
-    }
+    },
+  });
+
+  const handleSubmit = () => {
+    updateMutation.mutate();
   };
 
   if (isLoading) return <p>로딩 중...</p>;
 
-  const title = request?.title || '';
+  const title = responseData?.requestData?.title || '';
   const maxVisibleChars = 20;
   const visibleTitle =
     title.length > maxVisibleChars
@@ -145,8 +142,8 @@ const EditResponsePage: React.FC = () => {
         {/* 본문 내용 */}
         {isVisible && (
           <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line">
-            {request?.content}
-          </p>
+            {responseData?.requestData?.content}
+            </p>
         )}
       </div>
 

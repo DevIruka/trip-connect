@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/core';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import GoogleModal from './GoogleModal';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import MapMarkerIcon from '../_icons/MapMarkerIcon';
@@ -22,6 +22,28 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
   const [activeTextStyle, setActiveTextStyle] = useState<
     'bold' | 'italic' | null
   >(null);
+  const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.visualViewport) {
+        const viewport = window.visualViewport;
+        const windowHeight = window.innerHeight;
+        const keyboardHeight = windowHeight - viewport.height;
+        setKeyboardHeight(keyboardHeight);
+      }
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleResize);
+    }
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleResize);
+      }
+    };
+  }, []);
 
   const handleInsertMap = (location: {
     name: string;
@@ -114,15 +136,17 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
     <div>
       {/* Text Menu */}
       {isTextMenuVisible && (
-        <div className="w-full h-14 flex-col justify-start items-start inline-flex"
-        style={{
-          position: 'fixed', // 고정 위치
-          top: 'auto', // 상단이 아닌 메인 메뉴 위에 나타나도록 설정
-          bottom: '56px', // 메인 메뉴 위에 표시되도록 여백 추가
-          left: 0,
-          right: 0,
-          zIndex: 60, // 메인 메뉴보다 높은 z-index 설정
-        }}>
+        <div
+          className="w-full h-14 flex-col justify-start items-start inline-flex"
+          style={{
+            position: 'fixed', // 고정 위치
+            top: 'auto', // 상단이 아닌 메인 메뉴 위에 나타나도록 설정
+            bottom: `${keyboardHeight + 56}px`,
+            left: 0,
+            right: 0,
+            zIndex: 60, // 메인 메뉴보다 높은 z-index 설정
+          }}
+        >
           <div className="self-stretch px-5 py-4 bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex">
             <div className="h-6 justify-start items-center gap-6 flex">
               <div className="h-6 justify-start items-center gap-6 flex">
@@ -166,7 +190,12 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       )}
 
       {/* Main Menu */}
-      <div className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50">
+      <div
+        className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50"
+        style={{
+          bottom: `${keyboardHeight}px`,
+        }}
+      >
         <div className="justify-start items-center gap-6 flex">
           <button onClick={() => handleTextHeightClick()}>
             <TextHeightIcon color={getTextHeightColor()} />

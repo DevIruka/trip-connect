@@ -2,5 +2,8 @@
     "reviewLabel" : "리뷰",
     "reviewInput" : "답변이 마음에 드셨다면 리뷰를 남겨주세요",
     "reviewDelete" : "삭제하기",
-    "reviewNone" : "아직 작성된 리뷰가 없어요"
+    "reviewNone" : "아직 작성된 리뷰가 없어요",
+    "reviewEdit" : "수정하기",
+    "reviewEditSave" : "수정 완료",
+    "reviewEditCancel" : "취소"
 }

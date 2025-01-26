@@ -17,6 +17,7 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 const ReviewPage = () => {
   const { user } = useUserStore();
   const { response_id } = useParams();
+  const responseId = Array.isArray(response_id) ? response_id[0] : response_id;
   const [review, setReview] = useState('');
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -94,6 +95,7 @@ const ReviewPage = () => {
           isLoading={isLoading}
           userId={user?.id || ''}
           onDelete={handleDelete}
+          responseId={responseId}
         />
       </div>
 
