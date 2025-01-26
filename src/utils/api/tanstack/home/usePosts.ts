@@ -8,7 +8,7 @@ export type FetchPostsResponse = {
   nextPage: number | null; // 다음 페이지 번호 (없으면 null)
 };
 
-export const usePosts = (category: string) => {
+export const usePosts = (category?: string) => {
   const isAll = category === 'all'; // 'all'인지 확인
   const {
     data: allPosts,
