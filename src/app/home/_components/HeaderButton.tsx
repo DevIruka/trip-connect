@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import pencil from '@/data/images/✏️ 연필.svg';
 import ball from '@/data/images/💡 전구.svg';
 import { useUserStore } from '@/store/userStore';
-import LoginModal from '@/components/LoginModal';
 
 type HeaderButtonProps = {
   url: string;

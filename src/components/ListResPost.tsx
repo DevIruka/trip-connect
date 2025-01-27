@@ -33,7 +33,7 @@ const ListResPost = ({ post }: { post: Post }) => {
     <li
       onClick={() => handleNavigation(post.request_id!)}
       key={post.id}
-      className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full"
+      className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full md:w-[365px] md:p-5 md:border md:border-gray7 md:rounded-xl"
     >
       <div className="h-6 w-full justify-between items-center inline-flex gap-3">
         <div className="flex place-content-between items-center gap-1">
@@ -61,7 +61,7 @@ const ListResPost = ({ post }: { post: Post }) => {
           >
             A.
           </div>
-          <h1 className="text-black text-base font-semibold leading-snug grow line-clamp-2">
+          <h1 className="text-black text-base font-semibold leading-snug grow line-clamp-2 md:line-clamp-1">
             {translatedTitle && (
               <p
                 dangerouslySetInnerHTML={{
@@ -71,7 +71,7 @@ const ListResPost = ({ post }: { post: Post }) => {
             )}
           </h1>
         </div>
-        <div className="pl-[22px] max-h-[38.5px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2">
+        <div className="pl-[22px] max-h-[38.5px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2 md:h-[38px]">
           {translatedContent && (
             <RenderonlyTextHTML data={JSON.parse(translatedContent)} />
           )}

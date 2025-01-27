@@ -131,12 +131,12 @@ export const LocationModal = ({
   return (
     <>
       <div
-        className="w-[375px] h-full flex justify-center fixed inset-y-0 z-[52] items-end bg-black bg-opacity-50 pt-10"
+        className="w-screen h-full flex justify-center fixed inset-y-0 z-[52] items-end md:items-center bg-black bg-opacity-50 pt-10"
         onClick={onClose} // 뒷배경 클릭 시 모달 닫기
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
       >
         <div
-          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[80%] px-5"
+          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[80%] px-5 md:w-[606px] md:rounded-[20px]"
           onClick={(e) => e.stopPropagation()}
         >
           <div className="h-14 py-2.5 flex place-content-between items-center text-lg font-bold">

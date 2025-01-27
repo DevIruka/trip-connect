@@ -17,6 +17,7 @@ import ListResPost from '@/components/ListResPost';
 import QnaHeader from './QnaHeader';
 import Navbar from './NavBar';
 import { useUserStore } from '@/store/userStore';
+import { Mobile } from '@/components/ui/Responsive';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -92,8 +93,8 @@ const CategoryPage = () => {
           setNationFilter={setNationFilter}
           filterType={filterType}
         />
-        <div className="grid w-[1200px] mx-auto">
-          <ul className="px-5 grid gap-2 items-start">
+        <div className="grid max-w-[1200px] mx-auto">
+          <ul className="px-5 grid md:flex md:flex-wrap gap-2 items-start md:gap-4 md:justify-center">
             {nationfilteredPosts?.map((post) => {
               return !post.request_id ? (
                 <ListReqPost
@@ -122,15 +123,18 @@ const CategoryPage = () => {
             )}
           </div>
         </div>
-        <button
-          className="sticky bottom-16 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
-          onClick={() => {
-            if (!user) setIsModalOpen(true);
-            else router.push('/request');
-          }}
-        >
-          <Image width={36} height={36} src={pencil} alt="pencil" />
-        </button>
+
+        <Mobile>
+          <button
+            className="sticky bottom-16 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
+            onClick={() => {
+              if (!user) setIsModalOpen(true);
+              else router.push('/request');
+            }}
+          >
+            <Image width={36} height={36} src={pencil} alt="pencil" />
+          </button>
+        </Mobile>
       </div>
       <LoginModal
         isOpen={isModalOpen}

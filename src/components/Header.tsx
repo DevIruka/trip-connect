@@ -35,7 +35,7 @@ const Header = () => {
     <></>
   ) : (
     <>
-      <div className="flex sticky top-0 h-[56px] bg-white z-50 w-full justify-between py-[13.5px] px-[20px] max-w-[1200px]">
+      <div className="flex sticky top-0 h-[56px] bg-white z-50 w-full justify-between py-[13.5px] px-[20px] max-w-[1200px] md:px-9">
         <Link href="/" className="flex place-content-center">
           <Image
             src={heylocal}
