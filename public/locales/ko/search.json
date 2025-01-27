@@ -10,5 +10,6 @@
   "a": "답변글",
   "writer": "작성자",
   "totalAnswers": "명 답변",
-  "expired" : "기한 만료"
+  "expired" : "기한 만료",
+  "reply" : "댓글"
 }

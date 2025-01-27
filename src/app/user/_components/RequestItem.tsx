@@ -1,7 +1,12 @@
 import { convertTopicsToKorean } from '@/utils/topics';
-import TimeAgo from './TimeAgo';
+// import TimeAgo from './TimeAgo';
 import { useRouter } from 'next/navigation';
 import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
+import { countryNameMapping } from '@/data/nation';
+import { useLang } from '@/store/languageStore';
+import { useTranslation } from 'react-i18next';
+import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
+import Dday from '@/app/search/[id]/_components/DDay';
 
 export const categoryIconMapping: Record<string, string> = {
   맛집: '🥘',
@@ -30,6 +35,8 @@ const RequestItem = ({
   post: ReqResPost;
   responseCount: number;
 }) => {
+  const { lang } = useLang();
+  const { t } = useTranslation('user');
   const router = useRouter();
   const { date_end, country_city, category, title, content, created_at } = post;
   const dDay = calculateDday(date_end!);
@@ -61,15 +68,7 @@ const RequestItem = ({
       ></div>
 
       <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-        <div
-          className="text-[12px] font-medium text-[#FF810B] bg-[#FFF8DC] rounded-[4px] flex items-center justify-center"
-          style={{
-            padding: '0 6px',
-            minHeight: '24px',
-          }}
-        >
-          {dDay}
-        </div>{' '}
+        <Dday postDateEnd={date_end!}/>
         <div className="flex gap-2 text-xs text-gray-500">
           <div
             className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] px-1.5 py-0.5"
@@ -84,7 +83,7 @@ const RequestItem = ({
               className="w-[10px] h-[10px]"
             />
             <span className="text-[12px] font-medium text-[#45484D]">
-              {country}
+              {lang === 'en' ? countryNameMapping[country] : country}
             </span>
           </div>
 
@@ -97,7 +96,7 @@ const RequestItem = ({
           >
             <span>{categoryIcon[0]}</span>
             <span className="text-[12px] font-medium text-[#45484D]">
-              {categoryKorean[0]}
+              {lang === 'en' ? category![0] : categoryKorean[0]}
             </span>
           </div>
         </div>
@@ -169,7 +168,7 @@ const RequestItem = ({
             }}
           ></span>
           <span className="text-[12px] font-semibold text-[#797C80]">
-            {responseCount}명 답변
+            {responseCount}{t('totalAnswers')}
           </span>
         </div>
 
