@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { RequestPost } from '../_types/user';
-import { convertTopicsToKorean, EnglishCategory } from '@/utils/topics';
+import { convertTopicsToKorean } from '@/utils/topics';
 import TimeAgo from './TimeAgo';
-import { supabase } from '@/utils/supabase/supabaseClient';
 import { useRouter } from 'next/navigation';
+import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
 
-const categoryIconMapping: Record<string, string> = {
+export const categoryIconMapping: Record<string, string> = {
   맛집: '🥘',
   쇼핑: '🛍️',
   숙소: '🛏️',
@@ -25,33 +23,21 @@ const calculateDday = (dateEnd: string): string => {
   return diffDays > 0 ? `D-${diffDays}` : 'D-00';
 };
 
-const RequestItem: React.FC<{ post: RequestPost }> = ({ post }) => {
+const RequestItem = ({
+  post,
+  responseCount,
+}: {
+  post: ReqResPost;
+  responseCount: number;
+}) => {
   const router = useRouter();
   const { date_end, country_city, category, title, content, created_at } = post;
-  const dDay = calculateDday(date_end);
-  const country = JSON.parse(country_city)?.country || '';
-
-  const categoryKorean = convertTopicsToKorean([
-    category as EnglishCategory,
-  ])[0];
-  const categoryIcon = categoryIconMapping[categoryKorean] || '❓';
-
-  const [responseCount, setResponseCount] = useState<number>(0);
-
-  useEffect(() => {
-    const fetchResponseCount = async () => {
-      const { error, count } = await supabase
-        .from('response_posts')
-        .select('*', { count: 'exact' })
-        .eq('request_id', post.id);
-
-      if (!error) {
-        setResponseCount(count || 0);
-      }
-    };
-
-    fetchResponseCount();
-  }, [post.id]);
+  const dDay = calculateDday(date_end!);
+  const country = JSON.parse(String(country_city!))?.country || '';
+  const categoryKorean = convertTopicsToKorean(category!);
+  const categoryIcon = categoryKorean.map(
+    (cat) => categoryIconMapping[cat] || '❓',
+  );
 
   const handleNavigate = () => {
     router.push(`/post/${post.id}`); // 라우팅 설정
@@ -103,16 +89,15 @@ const RequestItem: React.FC<{ post: RequestPost }> = ({ post }) => {
           </div>
 
           <div
-            className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] flex items-center justify-center"
+            className="flex gap-1 bg-[#F5F7FA] rounded-[4px] items-center justify-center"
             style={{
               padding: '0 6px',
               minHeight: '24px',
             }}
           >
-            {' '}
-            <span>{categoryIcon}</span>
+            <span>{categoryIcon[0]}</span>
             <span className="text-[12px] font-medium text-[#45484D]">
-              {categoryKorean}
+              {categoryKorean[0]}
             </span>
           </div>
         </div>
@@ -168,7 +153,7 @@ const RequestItem: React.FC<{ post: RequestPost }> = ({ post }) => {
               />
             </svg>
             <span className="text-[12px] font-medium text-[#797C80]">
-              {post.credit?.toLocaleString()} 크레딧
+              {post.credit?.toLocaleString()}
             </span>
           </div>
           <span

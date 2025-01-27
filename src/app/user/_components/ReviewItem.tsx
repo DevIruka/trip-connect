@@ -1,17 +1,17 @@
 import React from 'react';
-import { ReviewPost, UserData } from '../_types/user';
 import TimeAgo from '@/app/review/[response_id]/_components/TimeAgo';
+import { Tables } from '@/types/supabase';
 
 type ReviewItemProps = {
-  review: ReviewPost;
-  userProfile: UserData;
+  review: (Tables<'reviews'> & {
+    response_posts: Tables<'response_posts'>;
+    users: Tables<'users'>;
+    purchased_user_created_at: string | null;
+  })
 };
 
-const ReviewItem: React.FC<ReviewItemProps> = ({ review, userProfile }) => {
-  const { review: reviewContent, purchasedAt } = review;
-
-  console.log('PurchasedAt:', purchasedAt);
-
+const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
+  console.log(review)
   return (
     <div
       className="relative"
@@ -21,7 +21,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ review, userProfile }) => {
     >
       <div className="flex items-center px-5 py-4">
         <img
-          src={userProfile.profile_img || '/images/default-profile.svg'}
+          src={review.users.profile_img || '/images/default-profile.svg'}
           alt="프로필 이미지"
           className="w-9 h-9 rounded-full bg-gray-200"
         />
@@ -29,9 +29,9 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ review, userProfile }) => {
           {/* 닉네임과 인증 국가 */}
           <div className="flex items-center gap-2">
             <span className="text-[14px] font-semibold">
-              {userProfile.nickname}
+              {review.users.nickname}
             </span>
-            {userProfile.country_verified && (
+            {review.users.country_verified && (
               <div className="flex items-center bg-[#F5F7FA] rounded-[16px] px-[4px] py-[2px]">
                 <img
                   src="/images/ic-location.svg"
@@ -39,15 +39,15 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ review, userProfile }) => {
                   className="w-[10px] h-[10px]"
                 />
                 <span className="text-[12px] font-medium text-[#45484D] ml-1">
-                  {userProfile.country_verified}
+                  {review.users.country}
                 </span>
               </div>
             )}
           </div>
 
-          {purchasedAt && (
+          {review.purchased_user_created_at && (
             <span className="text-[12px] text-gray-500 mt-2">
-              <TimeAgo createdAt={purchasedAt} />
+              <TimeAgo createdAt={review.purchased_user_created_at} />
             </span>
           )}
         </div>
@@ -69,7 +69,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ review, userProfile }) => {
           lineHeight: '1.25',
         }}
       >
-        {reviewContent}
+        {review.review}
       </p>
     </div>
   );

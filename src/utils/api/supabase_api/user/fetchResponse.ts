@@ -56,9 +56,7 @@ export const fetchUserResponsePosts = async (
     return responseCount || 0;
   });
 
-  const responseCounts = await Promise.all(responseCountPromises);
+  const responseCounts = await Promise.all(responseCountPromises) 
 
-  console.log(responseCounts);
-
-  return { user_response_posts, totalCount: responseCounts };
+  return { user_response_posts, totalCount: responseCounts ? responseCounts : [] };
 };
