@@ -29,11 +29,19 @@ const CategoryPage = () => {
 
   //모든 게시물 가져오기
   const { allPosts, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    usePosts(category);
+    usePosts('all');
+
+  const categoryFilteredPosts = allPosts?.filter((post) => {
+    if (category === 'all') return post;
+    return (
+      post.category?.includes(category) ||
+      post.request_posts?.category.includes(category)
+    );
+  });
 
   //filter로 카테고리 2차구분
   const [filterType, setFilterType] = useState('latest');
-  const filteredPosts = allPosts?.filter((post) => {
+  const filteredPosts = categoryFilteredPosts?.filter((post) => {
     if (filterType === 'request') return !post.request_id; // 질문글 (request_id가 없는 경우)
     if (filterType === 'response') return !!post.request_id; // 답변글 (request_id가 있는 경우)
     return true; // 최신 (모두 표시)
