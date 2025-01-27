@@ -1,10 +1,15 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { ResponsePost, UserData } from '../_types/user';
-import { convertTopicsToKorean, EnglishCategory } from '@/utils/topics';
+import { UserData } from '../_types/user';
 import TimeAgo from './TimeAgo';
 import { convertToKorean } from '@/app/search/_utils/convertTopictoKorean';
 import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
+import { categoryIconMapping } from './RequestItem';
+import {
+  FetchNextPageOptions,
+  InfiniteQueryObserverResult,
+} from '@tanstack/react-query';
+import { ExtendedResponsePostData } from '@/app/search/[id]/_types/searchTypes';
 
 type ResponseItemProps = {
   post: ReqResPost;
@@ -32,7 +37,6 @@ const ResponseItem: React.FC<ResponseItemProps> = ({
   const handleNavigate = () => {
     router.push(`/post/${post.request_id}`); // 이동할 경로
   };
-
   return (
     <div
       className="relative"
@@ -63,18 +67,23 @@ const ResponseItem: React.FC<ResponseItemProps> = ({
             alt="location"
             className="w-[10px] h-[10px]"
           />
-          {/* <span className="text-[12px] font-medium text-[#45484D]">
-            {post.country_city?.country}
-          </span> */}
+          <span className="text-[12px] font-medium text-[#45484D]">
+            {typeof post.country_city === 'string'
+              ? ''
+              : post.country_city?.country}
+          </span>
         </div>
         {post.category?.slice(0, 3).map((element, i) => {
           const koreanCategory = convertToKorean(element);
           return (
             <div
               key={i}
-              className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
+              className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] px-1.5 py-0.5"
             >
-              <p className="text-[12px]">{koreanCategory}</p>
+              <span>{categoryIconMapping[koreanCategory]}</span>
+              <p className="text-[12px] font-medium text-[#45484D]">
+                {koreanCategory}
+              </p>
             </div>
           );
         })}
