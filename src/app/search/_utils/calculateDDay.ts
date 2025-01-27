@@ -19,5 +19,5 @@ export const calculateDDay = (targetDateString: string | undefined): string => {
     ? `D-${diffInDays}`
     : diffInDays === 0
     ? 'D-DAY'
-    : `D+${Math.abs(diffInDays)}`;
+    : `기한 만료`;
 };

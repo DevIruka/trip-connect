@@ -4,6 +4,9 @@ import ResponseContent from './ResponseContent';
 import TimeAgo from './TimeAgo';
 import { ReqResPost } from './SearchResults';
 import { convertToKorean } from '../../_utils/convertTopictoKorean';
+import { useLang } from '@/store/languageStore';
+import { useTranslation } from 'react-i18next';
+import { countryNameMapping } from '@/data/nation';
 
 type ResponseDetailProps = {
   post: ReqResPost;
@@ -25,13 +28,22 @@ const ResponseDetail = ({
   reviewCount,
   credit,
 }: ResponseDetailProps) => {
+  const { lang } = useLang();
+  const { t } = useTranslation('search');
+  console.log(post);
   return (
     <div className="w-full">
       <div className="flex flex-row w-full">
         <div className="flex flex-row w-full items-center mt-[12px] mb-[12px]">
           <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]">
             <Image src={marker} width={10} height={10} alt="marker" />
-            <p className="text-[12px]">{post.verified_country}</p>
+            <p className="text-[12px]">
+              {typeof post.country_city === 'string'
+                ? ''
+                : lang === 'en'
+                ? countryNameMapping[post.country_city?.country || '']
+                : post.country_city?.country}
+            </p>
           </div>
           <div className="flex flex-row">
             {post.category?.slice(0, 3).map((element, i) => {
@@ -41,7 +53,7 @@ const ResponseDetail = ({
                   key={i}
                   className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
                 >
-                  <p className="text-[12px]">{koreanCategory}</p>
+                  <p className="text-[12px]">{lang === 'en' ? element : koreanCategory}</p>
                 </div>
               );
             })}
@@ -72,7 +84,7 @@ const ResponseDetail = ({
             </p>
           ) : (
             <p className="text-[12px] text-[#797C80]">
-              작성자{' '}
+              {t('writer')}{' '}
               <span className="text-[12px] text-[#797C80] font-[700]">
                 {nickname}
               </span>
@@ -81,9 +93,7 @@ const ResponseDetail = ({
           {reviewCount && Number(reviewCount) !== 0 ? (
             <>
               <p className="text-[12px] text-[#797C80] mx-[6px]">·</p>
-              <p className="text-[12px] text-[#797C80]">
-                댓글 {reviewCount}
-              </p>
+              <p className="text-[12px] text-[#797C80]">댓글 {reviewCount}</p>
             </>
           ) : null}
         </div>

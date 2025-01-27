@@ -11,7 +11,6 @@ type ReviewItemProps = {
 };
 
 const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
-  console.log(review)
   return (
     <div
       className="relative"

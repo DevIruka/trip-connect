@@ -1,3 +1,4 @@
+import { useLang } from '@/store/languageStore';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -6,6 +7,7 @@ type Props = {
 
 const TimeAgo = ({ createdAt }: Props) => {
   const [timeAgo, setTimeAgo] = useState('');
+  const { lang } = useLang();
 
   useEffect(() => {
     const calculateTimeAgo = () => {
@@ -18,20 +20,20 @@ const TimeAgo = ({ createdAt }: Props) => {
       const diffMinutes = Math.floor(diffMs / (1000 * 60)); // 분 단위
 
       if (diffMinutes < 1) {
-        return '방금 전';
+        return lang === "en" ? "Just now" : "방금 전";
       } else if (diffHours < 1) {
-        return `${diffMinutes}분 전`;
+        return lang === "en" ? `${diffMinutes} minutes ago` : `${diffMinutes}분 전`;
       } else if (diffDays < 1) {
-        return `${diffHours}시간 전`;
+        return lang === "en" ? `${diffHours} hours ago` : `${diffHours}시간 전`;
       } else {
-        return `${diffDays}일 전`;
+        return lang === "en" ? `${diffDays} days ago` : `${diffDays}일 전`;
       }
     };
 
     setTimeAgo(calculateTimeAgo());
   }, [createdAt]);
 
-  return <p className='text-[12px] text-[#797C80]'>{timeAgo}</p>;
+  return <p className="text-[12px] text-[#797C80]">{timeAgo}</p>;
 };
 
 export default TimeAgo;

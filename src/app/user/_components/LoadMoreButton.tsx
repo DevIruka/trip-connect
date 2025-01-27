@@ -14,7 +14,6 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
   children,
 }) => {
   if (!hasNextPage) return null; // 다음 페이지가 없으면 버튼을 렌더링하지 않음
-
   return (
     <div className="flex flex-row justify-center">
       <button

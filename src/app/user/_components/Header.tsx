@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 
 const Header: React.FC = () => {
   const router = useRouter();
-
   return (
     <div className="flex items-center px-5 py-2.5 bg-white">
       <button

@@ -173,3 +173,14 @@ export const enNations = [
     ],
   },
 ];
+
+export const countryNameMapping: Record<string, string> = {};
+
+nations.forEach((continent, i) => {
+  continent.countries.forEach((country, j) => {
+    const enCountry = enNations[i]?.countries[j]?.name; // 동일한 인덱스의 나라 가져오기
+    if (enCountry) {
+      countryNameMapping[country.name] = enCountry;
+    }
+  });
+});
