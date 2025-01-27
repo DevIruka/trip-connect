@@ -94,7 +94,7 @@ const CategoryPage = () => {
           filterType={filterType}
         />
         <div className="grid max-w-[1200px] mx-auto">
-          <ul className="px-5 grid md:flex md:flex-wrap gap-2 items-start md:gap-4 md:justify-center">
+          <ul className="px-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-start md:gap-4 md:justify-center">
             {nationfilteredPosts?.map((post) => {
               return !post.request_id ? (
                 <ListReqPost
