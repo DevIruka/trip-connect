@@ -8,6 +8,9 @@ const config: Config = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    screens: {
+      md: '800px',
+    },
     extend: {
       colors: {
         Blue1: '#0079F2',

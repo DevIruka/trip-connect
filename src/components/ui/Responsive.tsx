@@ -5,7 +5,7 @@ export const Desktop = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const isDesktop = useMediaQuery({ minWidth: 768 });
+  const isDesktop = useMediaQuery({ minWidth: 800 });
   return isDesktop ? children : null;
 };
 
@@ -14,6 +14,6 @@ export const Mobile = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 799 });
   return isMobile ? children : null;
 };
