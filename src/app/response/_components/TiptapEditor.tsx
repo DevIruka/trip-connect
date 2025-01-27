@@ -141,7 +141,7 @@ const TiptapEditor: React.FC<Props> = ({
           <div className="flex-grow border-t border-[#DFE1E5]"></div>
         </div>
 
-        <div className="mb-[56px]">
+        <div className="mb-[150px]">
           <div className="relative rounded-[8px] border border-[#DFE1E5] ">
             <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
               {!editor?.getText() && t('paidContentPlaceholder')}
