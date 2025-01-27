@@ -55,77 +55,80 @@ const Navbar = ({
   };
 
   return (
-    <div className="grid sticky top-[0px] bg-white z-10">
-      <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b border-[#dee1e5] px-5">
-        <Tabs
-          defaultValue={category}
-          className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex"
-        >
-          <TabsList>
-            <TabsTrigger value="all" onClick={() => changeCategory('all')}>
-              <Icon type={'all'} size={20} />
-              <div className="pl-1">{t('all')}</div>
-            </TabsTrigger>
-            {topicArr.map(([key, value]) => (
-              <TabsTrigger
-                value={value}
-                onClick={() => changeCategory(value)}
-                key={key}
-              >
-                <Icon type={value} size={20} />
-                <div className="pl-1">{lang === 'en' ? value : key}</div>
+    <>
+      <div className="grid sticky top-[0px] bg-white z-10 max-w-[1200px] mx-auto">
+        <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b border-[#dee1e5] px-5 md:px-9">
+          <Tabs
+            defaultValue={category}
+            className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex"
+          >
+            <TabsList className="md:justify-between">
+              <TabsTrigger value="all" onClick={() => changeCategory('all')}>
+                <Icon type={'all'} size={20} />
+                <div className="pl-1">{t('all')}</div>
               </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      </div>
-      <div className="flex h-[68px] justify-between px-5 py-4">
-        <div className="flex gap-1">
+              {topicArr.map(([key, value]) => (
+                <TabsTrigger
+                  value={value}
+                  onClick={() => changeCategory(value)}
+                  key={key}
+                >
+                  <Icon type={value} size={20} />
+                  <div className="pl-1">{lang === 'en' ? value : key}</div>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        </div>
+        <div className="flex h-[68px] justify-between px-5 py-4 md:px-9">
+          <div className="flex gap-1">
+            <button
+              className={
+                filterType === 'latest' ? 'menu-selected-btn' : 'menu-btn'
+              }
+              onClick={() => setFilterType('latest')}
+            >
+              {t('all')}
+            </button>
+            <button
+              className={
+                filterType === 'request' ? 'menu-selected-btn' : 'menu-btn'
+              }
+              onClick={() => setFilterType('request')}
+            >
+              {t('Q')}
+            </button>
+            <button
+              className={
+                filterType === 'response' ? 'menu-selected-btn' : 'menu-btn'
+              }
+              onClick={() => setFilterType('response')}
+            >
+              {t('A')}
+            </button>
+          </div>
+
           <button
-            className={
-              filterType === 'latest' ? 'menu-selected-btn' : 'menu-btn'
-            }
-            onClick={() => setFilterType('latest')}
+            className={`menu-dropdown-btn max-w-[122px] font-semibold text-sm ${
+              isHydrated && selectedCountry
+                ? 'text-[#0079f2]'
+                : 'text-[#797c80]'
+            }`}
+            onClick={() => setIsModalOpen(true)} // 모달 열기
           >
-            {t('all')}
-          </button>
-          <button
-            className={
-              filterType === 'request' ? 'menu-selected-btn' : 'menu-btn'
-            }
-            onClick={() => setFilterType('request')}
-          >
-            {t('Q')}
-          </button>
-          <button
-            className={
-              filterType === 'response' ? 'menu-selected-btn' : 'menu-btn'
-            }
-            onClick={() => setFilterType('response')}
-          >
-            {t('A')}
+            <div className="truncate max-w-[68px]">
+              {isHydrated && getSelectedCountryLabel(selectedCountry)}
+            </div>
+            <Image
+              className=""
+              src={updown}
+              alt={'dropdown arrow'}
+              width={16}
+              height={16}
+            />
           </button>
         </div>
-
-        <button
-          className={`menu-dropdown-btn max-w-[122px] font-semibold text-sm ${
-            isHydrated && selectedCountry ? 'text-[#0079f2]' : 'text-[#797c80]'
-          }`}
-          onClick={() => setIsModalOpen(true)} // 모달 열기
-        >
-          <div className="truncate max-w-[68px]">
-            {isHydrated && getSelectedCountryLabel(selectedCountry)}
-          </div>
-          <Image
-            className=""
-            src={updown}
-            alt={'dropdown arrow'}
-            width={16}
-            height={16}
-          />
-        </button>
-      </div>
-
+      </div>{' '}
       <LocationModal
         isOpen={isModalOpen}
         onClose={() => {
@@ -137,7 +140,7 @@ const Navbar = ({
         }}
         selectedCountry={selectedCountry}
       />
-    </div>
+    </>
   );
 };
 
