@@ -16,6 +16,7 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 import SelectBox from '@/components/SelectBox';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { useRouter } from 'next/navigation';
+import translate from '@/data/images/translate.svg';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -153,9 +154,17 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
           </div>
           <button
             onClick={() => setIsOriginal(!isOriginal)}
-            className="h-6 px-2 py-1 rounded-[14px] border border-[#c5c8cc] justify-center items-center gap-1 inline-flex text-[#44484c] text-xs font-medium mb-5"
+            className={`h-6 px-2 py-1 rounded-[14px] border justify-center items-center gap-1 inline-flex text-xs font-medium mb-5 ${
+              !isOriginal
+                ? 'border-[#c5c8cc] text-[#44484c]'
+                : 'border-Blue3 text-Blue1'
+            }`}
           >
-            <Image src={original} alt="original" height={14} width={14} />
+            {!isOriginal ? (
+              <Image src={original} alt="original" height={14} width={14} />
+            ) : (
+              <Image src={translate} alt="translate" height={14} width={14} />
+            )}
             {!isOriginal ? '원문보기' : '번역보기'}
           </button>
           <div className="grid gap-4">

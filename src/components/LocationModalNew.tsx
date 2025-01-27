@@ -161,6 +161,7 @@ export const LocationModal = ({
                 handleSelect();
               }}
               className="bg-[#0582FF] h-8 py-1.5 px-3 rounded-md text-white text-sm font-semibold"
+              disabled={!crntNation}
             >
               {t('select')}
             </button>
