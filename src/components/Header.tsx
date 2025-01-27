@@ -7,9 +7,12 @@ import heylocal from '@/data/images/HeyLocal.svg';
 import search from '@/data/images/ic-Search.svg';
 import profile from '@/data/images/ic-Profile.svg';
 import { useUserStore } from '@/store/userStore';
+import { useMediaQuery } from 'react-responsive';
 
 const Header = () => {
   const pathname = usePathname();
+  const isDesktop = useMediaQuery({ minWidth: 800 });
+
   const excludedPaths = [
     '/login',
     '/signup',
@@ -31,7 +34,7 @@ const Header = () => {
     pathname.startsWith(path),
   );
   const { user } = useUserStore();
-  return shouldHideHeader ? (
+  return shouldHideHeader && !isDesktop ? (
     <></>
   ) : (
     <>
