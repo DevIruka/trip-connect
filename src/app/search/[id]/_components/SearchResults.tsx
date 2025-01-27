@@ -10,6 +10,7 @@ import {
 import { useCredit } from '@/utils/api/tanstack/search/useCredit';
 import ResponseDetail from './ResponseDetail';
 import RequestDetail from './RequestDetail';
+import { useLang } from '@/store/languageStore';
 
 type SearchResultsProps = {
   filteredPosts: ReqResPost[];
@@ -27,11 +28,13 @@ export type ReqResPost = {
   verified_country: string | null;
   category: EnglishCategory[] | null;
   content?: string | null;
-  country_city?: string | {
-    continent: string;
-    country: string;
-    city: string;
-  }
+  country_city?:
+    | string
+    | {
+        continent: string;
+        country: string;
+        city: string;
+      };
   credit?: number;
   date_end?: string;
   img_url?: string | null;

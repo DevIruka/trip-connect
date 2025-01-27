@@ -18,7 +18,7 @@ export const fetchSearchResponsePosts = async (
     .select(
       `
       *,
-      request_posts (category)
+      request_posts (category, country_city)
     `,
       { count: 'exact' },
     )
@@ -34,6 +34,7 @@ export const fetchSearchResponsePosts = async (
     return {
       ...rest,
       category: request_posts?.category || null,
+      country_city: JSON.parse(request_posts?.country_city) || null,
     };
   });
 

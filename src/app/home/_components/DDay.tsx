@@ -1,3 +1,4 @@
+import { useLang } from '@/store/languageStore';
 import React from 'react';
 
 const calculateDday = (dateEnd: string): number => {
@@ -14,7 +15,6 @@ const calculateDday = (dateEnd: string): number => {
 
 const PostDday = ({ postDateEnd }: { postDateEnd: string }) => {
   const dDay = calculateDday(postDateEnd!);
-
   return (
     <>
       {dDay >= 0 ? (
