@@ -10,5 +10,6 @@
   "a": "Answer",
   "writer": "Writer",
   "totalAnswers": " Responses",
-  "expired": "Expired"
+  "expired": "Expired",
+  "reply" : "replied"
 }

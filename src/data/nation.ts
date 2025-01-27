@@ -3,7 +3,7 @@ export const nations = [
     continent: '아시아',
     countries: [
       {
-        name: '한국',
+        name: '대한민국',
         cities: ['서울'],
       },
       {

@@ -1,15 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { UserData } from '../_types/user';
-import TimeAgo from './TimeAgo';
 import { convertToKorean } from '@/app/search/_utils/convertTopictoKorean';
 import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
 import { categoryIconMapping } from './RequestItem';
-import {
-  FetchNextPageOptions,
-  InfiniteQueryObserverResult,
-} from '@tanstack/react-query';
-import { ExtendedResponsePostData } from '@/app/search/[id]/_types/searchTypes';
+import { useLang } from '@/store/languageStore';
+import { countryNameMapping } from '@/data/nation';
+import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
+import { useTranslation } from 'react-i18next';
 
 type ResponseItemProps = {
   post: ReqResPost;
@@ -29,6 +27,8 @@ const ResponseItem: React.FC<ResponseItemProps> = ({
   review,
   userData,
 }) => {
+  const { lang } = useLang();
+  const { t } = useTranslation('user');
   const router = useRouter();
   const freeContentText = post.free_content
     ? extractContentFromParagraph(post.free_content)
@@ -70,6 +70,8 @@ const ResponseItem: React.FC<ResponseItemProps> = ({
           <span className="text-[12px] font-medium text-[#45484D]">
             {typeof post.country_city === 'string'
               ? ''
+              : lang === 'en'
+              ? countryNameMapping[post.country_city?.country || '']
               : post.country_city?.country}
           </span>
         </div>
@@ -81,9 +83,9 @@ const ResponseItem: React.FC<ResponseItemProps> = ({
               className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] px-1.5 py-0.5"
             >
               <span>{categoryIconMapping[koreanCategory]}</span>
-              <p className="text-[12px] font-medium text-[#45484D]">
-                {koreanCategory}
-              </p>
+              <span className="text-[12px] font-medium text-[#45484D]">
+                {lang === 'en' ? element! : koreanCategory}
+              </span>
             </div>
           );
         })}
@@ -154,7 +156,7 @@ const ResponseItem: React.FC<ResponseItemProps> = ({
             }}
           ></span>{' '}
           <span className="text-[12px] font-semibold text-[#797C80]">
-            작성자 {userData.nickname}
+            {t('writer')} {userData?.nickname}
           </span>
           <span
             className="mx-[6px]"
@@ -169,7 +171,15 @@ const ResponseItem: React.FC<ResponseItemProps> = ({
             }}
           ></span>
           <span className="text-[12px] font-semibold text-[#797C80]">
-            댓글 {review}
+            {lang === 'en' ? (
+              <p className="text-[12px] text-[#797C80]">
+                {review} {t('reply')}
+              </p>
+            ) : (
+              <p className="text-[12px] text-[#797C80]">
+                {t('reply')} {review}
+              </p>
+            )}
           </span>
         </div>
 
