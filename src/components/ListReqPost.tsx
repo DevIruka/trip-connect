@@ -48,7 +48,7 @@ const ListReqPost = ({
     <li
       onClick={() => handleNavigation(post.id)}
       key={post.id}
-      className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full md:bg-red-500"
+      className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full"
     >
       <div className="h-6 w-full justify-between items-center inline-flex gap-3">
         <div className="flex place-content-between items-center gap-1">

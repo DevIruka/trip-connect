@@ -92,35 +92,36 @@ const CategoryPage = () => {
           setNationFilter={setNationFilter}
           filterType={filterType}
         />
-        <ul className="px-5 grid gap-2 items-start">
-          {nationfilteredPosts?.map((post) => {
-            return !post.request_id ? (
-              <ListReqPost
-                key={post.id}
-                post={post}
-                setIsModalOpen={setIsModalOpen}
-              />
-            ) : (
-              <ListResPost key={post.id} post={post} />
-            );
-          })}
-        </ul>
+        <div className="grid w-[1200px] mx-auto">
+          <ul className="px-5 grid gap-2 items-start">
+            {nationfilteredPosts?.map((post) => {
+              return !post.request_id ? (
+                <ListReqPost
+                  key={post.id}
+                  post={post}
+                  setIsModalOpen={setIsModalOpen}
+                />
+              ) : (
+                <ListResPost key={post.id} post={post} />
+              );
+            })}
+          </ul>
 
-        {/* 더보기 버튼 */}
-        <div className="px-5">
-          {hasNextPage && (
-            <button
-              onClick={() => {
-                fetchNextPage();
-              }}
-              disabled={isFetchingNextPage}
-              className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
-            >
-              {isFetchingNextPage ? '로딩 중...' : '더보기'}
-            </button>
-          )}
+          {/* 더보기 버튼 */}
+          <div className="px-5">
+            {hasNextPage && (
+              <button
+                onClick={() => {
+                  fetchNextPage();
+                }}
+                disabled={isFetchingNextPage}
+                className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
+              >
+                {isFetchingNextPage ? '로딩 중...' : '더보기'}
+              </button>
+            )}
+          </div>
         </div>
-
         <button
           className="sticky bottom-16 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
           onClick={() => {

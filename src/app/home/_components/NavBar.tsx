@@ -55,7 +55,7 @@ const Navbar = ({
   };
 
   return (
-    <div className="grid sticky top-[0px] bg-white z-10">
+    <div className="grid sticky top-[0px] bg-white z-10 max-w-[1200px] mx-auto">
       <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b border-[#dee1e5] px-5">
         <Tabs
           defaultValue={category}
