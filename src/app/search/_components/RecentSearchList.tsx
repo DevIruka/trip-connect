@@ -26,7 +26,7 @@ const RecentSearchList = ({
   const { t } = useTranslation('search');
   return (
     <>
-      <ul className="flex flex-row gap-[4px] items-center overflow-x-auto whitespace-nowrap menuscrollbar">
+      <ul className="flex flex-row gap-[8px] md:gap-[12px] items-center overflow-x-auto whitespace-nowrap menuscrollbar">
         {recentSearches && recentSearches.length > 0 ? (
           recentSearches.map((term, index) => (
             <li
