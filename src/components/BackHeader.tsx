@@ -6,6 +6,7 @@ import { useUserStore } from '@/store/userStore';
 import DeleteConfirmModal from '@/app/post/_components/DeleteConfirmModal';
 import { Tables } from '@/types/supabase';
 import SelectBox from './SelectBox';
+import { Mobile } from './ui/Responsive';
 
 const BackHeader = ({
   image,
@@ -27,42 +28,49 @@ const BackHeader = ({
 
   return (
     <>
-      <div className="h-14 px-5 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
-        <BackButton />
-        <div className="text-center text-black text-lg font-semibold">
-          {text}
-        </div>
-        {isThreeDots ? (
-          <button onClick={() => setIsModalOpen(true)}>
+      <Mobile>
+        <div className="h-14 px-5 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
+          <BackButton />
+          <div className="text-center text-black text-lg font-semibold">
+            {text}
+          </div>
+          {isThreeDots ? (
+            <button onClick={() => setIsModalOpen(true)}>
+              <Image
+                width={imagesize}
+                height={imagesize}
+                alt={image}
+                src={image}
+              />
+            </button>
+          ) : (
             <Image
               width={imagesize}
               height={imagesize}
               alt={image}
               src={image}
             />
-          </button>
-        ) : (
-          <Image width={imagesize} height={imagesize} alt={image} src={image} />
-        )}
+          )}
 
-        {isModalOpen && (
-          <div
-            className="w-full h-screen absolute top-0 right-0"
-            onClick={() => setIsModalOpen(!isModalOpen)}
-          >
-            <SelectBox
-              user={user!}
-              post={post!}
-              setIsDModalOpen={setIsDModalOpen}
-            />
-          </div>
-        )}
-      </div>
-      <DeleteConfirmModal
-        isOpen={isDModalOpen}
-        onClose={() => setIsDModalOpen(false)}
-        requestpost={post!}
-      />
+          {isModalOpen && (
+            <div
+              className="w-full h-screen absolute top-0 right-0"
+              onClick={() => setIsModalOpen(!isModalOpen)}
+            >
+              <SelectBox
+                user={user!}
+                post={post!}
+                setIsDModalOpen={setIsDModalOpen}
+              />
+            </div>
+          )}
+        </div>
+        <DeleteConfirmModal
+          isOpen={isDModalOpen}
+          onClose={() => setIsDModalOpen(false)}
+          requestpost={post!}
+        />
+      </Mobile>
     </>
   );
 };

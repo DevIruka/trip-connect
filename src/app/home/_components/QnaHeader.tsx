@@ -9,9 +9,9 @@ export default function QnaHeader({
   const { t } = useTranslation('home');
 
   return (
-    <header className="h-[268px] px-[20px] pt-[28px] pb-[40px] bg-[#f4f6f9] md:h-[238px]">
-      <div className="max-w-[1200px] mx-auto md:flex md:justify-between md:px-9 md:pt-10">
-        <div>
+    <header className="h-[268px] pt-[28px] pb-[40px] bg-[#f4f6f9] md:h-[238px]">
+      <div className="max-w-[1200px] px-[20px] mx-auto md:flex md:justify-between md:px-9 md:pt-10">
+        <div className="md:min-w-[364px]">
           <div className="text-xl font-semibold pb-[8px] md:text-[28px] md:font-bold md:leading-[44.80px]">
             {t('chat_with_locals')}
           </div>
@@ -20,7 +20,7 @@ export default function QnaHeader({
             {t('share_answers')}
           </div>
         </div>
-        <div className="flex gap-[7px] md:min-w-[584px]">
+        <div className="flex gap-[7px] md:w-full md:justify-end">
           <HeaderButton
             setIsModalOpen={setIsModalOpen}
             url="request"

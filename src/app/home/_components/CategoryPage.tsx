@@ -31,6 +31,9 @@ const CategoryPage = () => {
   //모든 게시물 가져오기
   const { allPosts, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePosts('all');
+  // const { response_posts } = useResPosts();
+  // const { request_posts } = useReqPosts();
+  // const allPosts = [...response_posts, ...request_posts];
 
   const categoryFilteredPosts = allPosts?.filter((post) => {
     if (category === 'all') return post;
@@ -94,7 +97,7 @@ const CategoryPage = () => {
           filterType={filterType}
         />
         <div className="grid max-w-[1200px] mx-auto">
-          <ul className="px-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-start md:gap-4 md:justify-center">
+          <ul className="px-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-start md:gap-4 md:justify-center md:px-9">
             {nationfilteredPosts?.map((post) => {
               return !post.request_id ? (
                 <ListReqPost
