@@ -33,7 +33,7 @@ const ListResPost = ({ post }: { post: Post }) => {
     <li
       onClick={() => handleNavigation(post.request_id!)}
       key={post.id}
-      className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full md:w-[365px] md:p-5 md:border md:border-gray7 md:rounded-xl"
+      className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full md:p-5 md:border md:border-gray7 md:rounded-xl"
     >
       <div className="h-6 w-full justify-between items-center inline-flex gap-3">
         <div className="flex place-content-between items-center gap-1">

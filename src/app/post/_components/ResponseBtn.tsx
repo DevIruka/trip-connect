@@ -2,7 +2,7 @@
 import { useModal } from '@/providers/ModalProvider';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React from 'react';
 
 const ResponseBtn = ({ postId }: { postId: string }) => {
   const { user } = useUserStore();
@@ -14,7 +14,7 @@ const ResponseBtn = ({ postId }: { postId: string }) => {
 
   return (
     <>
-      <div className="bg-white z-50 fixed bottom-0 w-[375px] cursor-pointer">
+      <div className="bg-white z-50 fixed bottom-0 w-full max-w-[800px] cursor-pointer">
         <div
           className="blue-btn"
           onClick={() => {
