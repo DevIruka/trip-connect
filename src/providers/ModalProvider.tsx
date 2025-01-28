@@ -1,3 +1,4 @@
+import ChargeModal from '@/app/post/_components/ChargeModal';
 import LoginModal from '@/components/LoginModal';
 import React, { createContext, useContext, useState } from 'react';
 
@@ -36,6 +37,7 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
     <ModalContext.Provider value={{ modals, openModal, closeModal }}>
       {children}
       {modals.loginModal && <LoginModal onClose={closeModal} />}
+      {modals.chargeModal && <ChargeModal onClose={closeModal} />}
     </ModalContext.Provider>
   );
 };

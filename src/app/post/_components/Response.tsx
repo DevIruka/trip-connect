@@ -17,6 +17,7 @@ import SelectBox from '@/components/SelectBox';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import { useRouter } from 'next/navigation';
 import translate from '@/data/images/translate.svg';
+import { useModal } from '@/providers/ModalProvider';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -30,6 +31,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
 
   const { user } = useUserStore();
   const router = useRouter();
+  const { openModal } = useModal();
 
   //mycredits: 로그인한 유저의 보유 크레딧 가져오기
   const fetchLoginuserData = async () => {
@@ -86,7 +88,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
         .eq('id', user?.id)
         .select();
       if (!response) {
-        throw new Error('크레딧 차감에 실패하였습니다다.');
+        throw new Error('크레딧 차감에 실패하였습니다.');
       }
     } catch (error) {
       Sentry.captureException(error);
@@ -116,7 +118,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
 
   const handlePurchase = () => {
     if (!user) alert('로그인해주세요');
-    else if (!mycredits || mycredits < credit!) alert('충전해주세요');
+    else if (!mycredits || mycredits < credit!) openModal('chargeModal');
     else if (mycredits >= credit!) {
       setMycredits((prev) => prev! - credit!); // 크레딧 차감
       fetchPurchasing();

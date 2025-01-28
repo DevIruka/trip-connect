@@ -1,8 +1,8 @@
 'use client';
 
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
 import heylocal from '@/data/images/HeyLocal.svg';
 import search from '@/data/images/ic-Search.svg';
 import profile from '@/data/images/ic-Profile.svg';
@@ -37,9 +37,8 @@ const Header = () => {
   );
   const { user } = useUserStore();
   const { openModal } = useModal();
-  return shouldHideHeader && !isDesktop ? (
-    <></>
-  ) : (
+
+  return shouldHideHeader && !isDesktop ? null : (
     <>
       <div className="flex sticky top-0 h-[56px] bg-white z-50 w-full justify-between py-[13.5px] px-[20px] max-w-[1200px] md:px-9">
         <Link href="/" className="flex place-content-center">

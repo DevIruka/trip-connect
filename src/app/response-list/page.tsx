@@ -8,6 +8,7 @@ import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
 import ListReqPost from '@/components/ListReqPost';
 import { LocationModal } from '@/components/LocationModalNew';
 import { nation } from '../home/_types/homeTypes';
+import { Desktop } from '@/components/ui/Responsive';
 
 const ResponseListPage = () => {
   const {
@@ -43,13 +44,14 @@ const ResponseListPage = () => {
     return <div>loading...</div>;
   }
   return (
-    <div className="h-full w-full relative overflow-y-scroll menuscrollbar">
+    <div className="h-full w-full relative overflow-y-scroll menuscrollbar md:w-[800px]">
       <BackHeader image={search} text="답변하기" imagesize={24} />
+      <Desktop>답변하기</Desktop>
       <div className="px-5">
         <div className="py-4">
           <button
             className={`px-4 py-2 rounded-[100px] border border-[#dee1e5] bg-[#F9F9F9] gap-1 justify-center items-center flex overflow-hidden text-center text-sm font-semibold ${
-              nationFilter ? 'text-[#0079f2]' : 'text-#797c80'
+              nationFilter ? 'text-[#0079f2]' : 'text-Gray2'
             }`}
             onClick={() => setIsLModalOpen(true)} // 모달 열기
           >
