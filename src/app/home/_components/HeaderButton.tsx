@@ -34,13 +34,13 @@ const HeaderButton = ({
       <Link
         href={`/${url}`}
         onClick={handleClick}
-        className="w-[50%] h-[92px] bg-white rounded-lg px-[16px] py-[13px] relative md:max-w-[276px]"
+        className="w-[50%] h-[92px] bg-white rounded-lg px-[16px] py-[13px] relative md:max-w-[276px] md:h-[108px]"
       >
         <div className="flex flex-col space-y-[8px]">
-          <div className="text-black text-base font-semibold leading-normal">
+          <div className="text-black text-base font-semibold leading-normal md:text-lg">
             {title}
           </div>
-          <div className="text-[#797c80] text-xs font-medium">
+          <div className="text-[#797c80] text-xs font-medium md:text-sm">
             {text1}
             <br />
             {text2}

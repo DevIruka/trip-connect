@@ -17,7 +17,6 @@ import ListResPost from '@/components/ListResPost';
 import QnaHeader from './QnaHeader';
 import Navbar from './NavBar';
 import { useUserStore } from '@/store/userStore';
-import { Mobile } from '@/components/ui/Responsive';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -88,7 +87,7 @@ const CategoryPage = () => {
   const { user } = useUserStore();
   return (
     <>
-      <div className="w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar md:pb-[140px]">
+      <div className="w-full h-screen mx-auto relative overflow-y-scroll z-[51] menuscrollbar md:pb-[140px]">
         <QnaHeader setIsModalOpen={setIsModalOpen} />
         <Navbar
           setFilterType={setFilterType}
@@ -112,14 +111,14 @@ const CategoryPage = () => {
           </ul>
 
           {/* 더보기 버튼 */}
-          <div className="px-5">
+          <div className="px-5 flex justify-center">
             {hasNextPage && (
               <button
                 onClick={() => {
                   fetchNextPage();
                 }}
                 disabled={isFetchingNextPage}
-                className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
+                className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full md:max-w-[324px]"
               >
                 {isFetchingNextPage ? '로딩 중...' : '더보기'}
               </button>
@@ -127,17 +126,15 @@ const CategoryPage = () => {
           </div>
         </div>
 
-        <Mobile>
-          <button
-            className="sticky bottom-16 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
-            onClick={() => {
-              if (!user) setIsModalOpen(true);
-              else router.push('/request');
-            }}
-          >
-            <Image width={36} height={36} src={pencil} alt="pencil" />
-          </button>
-        </Mobile>
+        <button
+          className="fixed bottom-10 right-10 bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
+          onClick={() => {
+            if (!user) setIsModalOpen(true);
+            else router.push('/request');
+          }}
+        >
+          <Image width={36} height={36} src={pencil} alt="pencil" />
+        </button>
       </div>
       <LoginModal
         isOpen={isModalOpen}
