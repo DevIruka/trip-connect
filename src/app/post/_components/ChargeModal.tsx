@@ -13,7 +13,7 @@ const ChargeModal = ({ onClose }: { onClose: (modalId: string) => void }) => {
       buttonTxt1="취소"
       buttonTxt2="충전하러 가기"
       onYesClick={() => (window.location.href = '/mypage/credit')}
-      color="Blue2"
+      color="bg-Blue2"
     />
   );
 };

@@ -117,14 +117,14 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   );
 
   const handlePurchase = () => {
-    if (!user) alert('로그인해주세요');
+    if (!user) openModal('loginModal');
     else if (!mycredits || mycredits < credit!) openModal('chargeModal');
     else if (mycredits >= credit!) {
       setMycredits((prev) => prev! - credit!); // 크레딧 차감
       fetchPurchasing();
       minusCredit();
     } else {
-      alert('크레딧이 부족합니다. 크레딧을 충전해주세요.');
+      openModal('chargeModal');
     }
   };
 

@@ -52,7 +52,7 @@ const ModalForm = ({
             {buttonTxt1}
           </div>
           <div
-            className={`flex-1 py-[16.5px] text-base font-semibold text-white bg-${color} rounded-xl w-full text-center cursor-pointer`}
+            className={`flex-1 py-[16.5px] text-base font-semibold text-white ${color} rounded-xl w-full text-center cursor-pointer`}
             onClick={onYesClick}
           >
             {buttonTxt2}
