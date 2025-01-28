@@ -6,20 +6,18 @@ import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
 import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
 import ListReqPost from '@/components/ListReqPost';
-import LoginModal from '@/components/LoginModal';
 import { LocationModal } from '@/components/LocationModalNew';
 import { nation } from '../home/_types/homeTypes';
 
 const ResponseListPage = () => {
   const {
-    ReqPosts,
+    request_posts,
     isPending,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
   } = useReqPosts();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLModalOpen, setIsLModalOpen] = useState(false);
 
   //nation filter
@@ -28,7 +26,7 @@ const ResponseListPage = () => {
       ? JSON.parse(sessionStorage.getItem('selectedLocation')!)
       : null,
   );
-  const nationfilteredPosts = ReqPosts?.filter((post) => {
+  const nationfilteredPosts = request_posts?.filter((post) => {
     if (
       nationFilter &&
       post &&
@@ -64,21 +62,12 @@ const ResponseListPage = () => {
         <ul>
           {nationfilteredPosts?.map((post) => (
             <div key={post!.id}>
-              <ListReqPost
-                post={post!}
-                setIsModalOpen={setIsModalOpen}
-                isReqList={true}
-              />
+              <ListReqPost post={post!} isReqList={true} />
             </div>
           ))}
         </ul>
       </div>
-      {isModalOpen && (
-        <LoginModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
+
       <div className="px-5">
         {hasNextPage && (
           <button

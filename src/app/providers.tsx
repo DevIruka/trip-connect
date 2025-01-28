@@ -1,6 +1,7 @@
 'use client';
 
 import I18nProvider from '@/providers/I18nProvider';
+import ModalProvider from '@/providers/ModalProvider';
 // import useInit from '@/hook/useInit';
 import TanstackQueryProvider from '@/providers/TanstackQueryProvider';
 import { useLang } from '@/store/languageStore';
@@ -24,7 +25,9 @@ const Providers = ({ children }: Props) => {
 
   return (
     <TanstackQueryProvider>
-      <I18nProvider> {children}</I18nProvider>
+      <I18nProvider>
+        <ModalProvider>{children}</ModalProvider>
+      </I18nProvider>
     </TanstackQueryProvider>
   );
 };

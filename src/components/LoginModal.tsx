@@ -3,13 +3,10 @@ import React from 'react';
 import lock from '@/data/images/🔓️ 열린 자물쇠.svg';
 import { useTranslation } from 'react-i18next';
 type Props = {
-  isOpen: boolean;
   onClose: () => void;
 };
-const LoginModal = ({ isOpen, onClose }: Props) => {
+const LoginModal = ({ onClose }: Props) => {
   const { t } = useTranslation('home');
-
-  if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
 
   return (
     <div

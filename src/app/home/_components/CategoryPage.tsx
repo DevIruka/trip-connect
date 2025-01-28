@@ -11,12 +11,12 @@ import { useSearchStore } from '@/store/useSearchStore';
 
 import { nation } from '../_types/homeTypes';
 
-import LoginModal from '@/components/LoginModal';
 import ListReqPost from '@/components/ListReqPost';
 import ListResPost from '@/components/ListResPost';
 import QnaHeader from './QnaHeader';
 import Navbar from './NavBar';
 import { useUserStore } from '@/store/userStore';
+import { useModal } from '@/providers/ModalProvider';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -83,12 +83,13 @@ const CategoryPage = () => {
   }, [setKeyword]);
 
   //로그인해주세요 모달
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
+  const { onOpen } = useModal();
+
   const { user } = useUserStore();
   return (
     <>
       <div className="w-full h-screen mx-auto relative overflow-y-scroll z-[51] menuscrollbar md:pb-[140px]">
-        <QnaHeader setIsModalOpen={setIsModalOpen} />
+        <QnaHeader />
         <Navbar
           setFilterType={setFilterType}
           changeCategory={changeCategory}
@@ -99,11 +100,7 @@ const CategoryPage = () => {
           <ul className="px-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-start md:gap-4 md:justify-center md:px-9">
             {nationfilteredPosts?.map((post) => {
               return !post.request_id ? (
-                <ListReqPost
-                  key={post.id}
-                  post={post}
-                  setIsModalOpen={setIsModalOpen}
-                />
+                <ListReqPost key={post.id} post={post} />
               ) : (
                 <ListResPost key={post.id} post={post} />
               );
@@ -129,19 +126,13 @@ const CategoryPage = () => {
         <button
           className="fixed bottom-10 right-10 bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
           onClick={() => {
-            if (!user) setIsModalOpen(true);
+            if (!user) onOpen();
             else router.push('/request');
           }}
         >
           <Image width={36} height={36} src={pencil} alt="pencil" />
         </button>
       </div>
-      <LoginModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-      />
     </>
   );
 };

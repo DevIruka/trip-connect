@@ -1,31 +1,26 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import React from 'react';
 import pencil from '@/data/images/✏️ 연필.svg';
 import ball from '@/data/images/💡 전구.svg';
 import { useUserStore } from '@/store/userStore';
+import { useModal } from '@/providers/ModalProvider';
 
 type HeaderButtonProps = {
   url: string;
   text1: string;
   text2: string;
   title: string;
-  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
-const HeaderButton = ({
-  url,
-  text1,
-  text2,
-  title,
-  setIsModalOpen,
-}: HeaderButtonProps) => {
+const HeaderButton = ({ url, text1, text2, title }: HeaderButtonProps) => {
   const { user } = useUserStore();
+  const { onOpen } = useModal();
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     // `url`이 `request`이고 `user`가 없으면 모달 열기
     if (url === 'request' && !user) {
       e.preventDefault(); // 링크 기본 동작 방지
-      setIsModalOpen!(true); // 모달 열기
+      onOpen(); // 모달 열기
     }
   };
 
@@ -40,7 +35,7 @@ const HeaderButton = ({
           <div className="text-black text-base font-semibold leading-normal md:text-lg">
             {title}
           </div>
-          <div className="text-[#797c80] text-xs font-medium md:text-sm">
+          <div className="text-Gray2 text-xs font-medium md:text-sm">
             {text1}
             <br />
             {text2}

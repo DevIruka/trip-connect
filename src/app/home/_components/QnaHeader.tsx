@@ -1,28 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import HeaderButton from './HeaderButton';
 
-export default function QnaHeader({
-  setIsModalOpen,
-}: {
-  setIsModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function QnaHeader() {
   const { t } = useTranslation('home');
 
   return (
-    <header className="h-[268px] pt-[28px] pb-[40px] bg-[#f4f6f9] md:h-[238px]">
+    <header className="h-[268px] pt-[28px] pb-[40px] bg-Gray9Fill md:h-[238px]">
       <div className="max-w-[1200px] px-[20px] mx-auto md:flex md:justify-between md:px-9 md:pt-10">
         <div className="md:min-w-[364px]">
           <div className="text-xl font-semibold pb-[8px] md:text-[28px] md:font-bold md:leading-[44.80px]">
             {t('chat_with_locals')}
           </div>
-          <div className="text-[#44484c] text-sm font-medium leading-snug pb-[32px] md:text-base md:leading-relaxed">
+          <div className="text-Gray1 text-sm font-medium leading-snug pb-[32px] md:text-base md:leading-relaxed">
             {t('ask_questions')} <br />
             {t('share_answers')}
           </div>
         </div>
         <div className="flex gap-[7px] md:w-full md:justify-end">
           <HeaderButton
-            setIsModalOpen={setIsModalOpen}
             url="request"
             title={t('ask_now')}
             text1={t('locals_answer')}

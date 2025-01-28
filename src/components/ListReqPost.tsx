@@ -15,18 +15,18 @@ import coin from '@/data/images/coin.svg';
 import dot from '@/data/images/Ellipse 14.svg';
 import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
 import { Post } from '@/app/home/_types/homeTypes';
+import { useModal } from '@/providers/ModalProvider';
 
 const ListReqPost = ({
   post,
-  setIsModalOpen,
   isReqList,
 }: {
   post: Post;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isReqList?: boolean;
 }) => {
   const router = useRouter();
   const topicArr = Object.entries(topicMapping);
+  const { onOpen } = useModal();
 
   //로그인한 유저
   const { user } = useUserStore();
@@ -86,7 +86,7 @@ const ListReqPost = ({
               if (userId) {
                 addBookmarkMutation.mutate(post.id);
               } else {
-                setIsModalOpen(true);
+                onOpen();
               }
             }}
           >
@@ -134,7 +134,7 @@ const ListReqPost = ({
             if (userId) {
               handleResNavigation(`response/${post!.id}`);
             } else {
-              setIsModalOpen(true);
+              onOpen();
             }
           }}
           className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold"
