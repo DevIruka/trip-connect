@@ -44,46 +44,52 @@ const ResponseListPage = () => {
     return <div>loading...</div>;
   }
   return (
-    <div className="h-full w-full relative overflow-y-scroll menuscrollbar md:w-[800px]">
-      <BackHeader image={search} text="답변하기" imagesize={24} />
-      <Desktop>답변하기</Desktop>
-      <div className="px-5">
-        <div className="py-4">
-          <button
-            className={`px-4 py-2 rounded-[100px] border border-[#dee1e5] bg-[#F9F9F9] gap-1 justify-center items-center flex overflow-hidden text-center text-sm font-semibold ${
-              nationFilter ? 'text-[#0079f2]' : 'text-Gray2'
-            }`}
-            onClick={() => setIsLModalOpen(true)} // 모달 열기
-          >
-            {nationFilter
-              ? `${nationFilter.country}/${nationFilter.city}`
-              : '나라/도시'}
-            <Image src={updown} alt={'dropdown arrow'} width={16} height={16} />
-          </button>
+    <>
+      <div className="h-full w-full relative overflow-y-scroll menuscrollbar md:w-[800px]">
+        <BackHeader image={search} text="답변하기" imagesize={24} />
+        <Desktop>답변하기</Desktop>
+        <div className="px-5">
+          <div className="py-4">
+            <button
+              className={`px-4 py-2 rounded-[100px] border border-[#dee1e5] bg-[#F9F9F9] gap-1 justify-center items-center flex overflow-hidden text-center text-sm font-semibold ${
+                nationFilter ? 'text-[#0079f2]' : 'text-Gray2'
+              }`}
+              onClick={() => setIsLModalOpen(true)} // 모달 열기
+            >
+              {nationFilter
+                ? `${nationFilter.country}/${nationFilter.city}`
+                : '나라/도시'}
+              <Image
+                src={updown}
+                alt={'dropdown arrow'}
+                width={16}
+                height={16}
+              />
+            </button>
+          </div>
+          <ul>
+            {nationfilteredPosts?.map((post) => (
+              <div key={post!.id}>
+                <ListReqPost post={post!} isReqList={true} />
+              </div>
+            ))}
+          </ul>
         </div>
-        <ul>
-          {nationfilteredPosts?.map((post) => (
-            <div key={post!.id}>
-              <ListReqPost post={post!} isReqList={true} />
-            </div>
-          ))}
-        </ul>
-      </div>
 
-      <div className="px-5">
-        {hasNextPage && (
-          <button
-            onClick={() => {
-              fetchNextPage();
-            }}
-            disabled={isFetchingNextPage}
-            className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
-          >
-            {isFetchingNextPage ? '로딩 중...' : '더보기'}
-          </button>
-        )}
+        <div className="px-5">
+          {hasNextPage && (
+            <button
+              onClick={() => {
+                fetchNextPage();
+              }}
+              disabled={isFetchingNextPage}
+              className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
+            >
+              {isFetchingNextPage ? '로딩 중...' : '더보기'}
+            </button>
+          )}
+        </div>
       </div>
-
       <LocationModal
         isOpen={isLModalOpen}
         onClose={() => {
@@ -94,7 +100,7 @@ const ResponseListPage = () => {
         }}
         selectedCountry={nationFilter}
       />
-    </div>
+    </>
   );
 };
 

@@ -132,12 +132,12 @@ export const LocationModal = ({
   return (
     <>
       <div
-        className="w-screen h-full flex justify-center fixed inset-y-0 z-[52] items-end bg-black bg-opacity-50 pt-10 md:items-center md:p-0"
+        className="w-full h-screen flex justify-center fixed inset-y-0 z-[52] items-end bg-black bg-opacity-50 md:items-center md:p-0"
         onClick={onClose} // 뒷배경 클릭 시 모달 닫기
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
       >
         <div
-          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[80%] px-5 md:rounded-[20px] md:max-w-[686px] md:h-[726px] md:py-9 md:px-10 md:max-h-none md:min-h-[auto]"
+          className="bg-white rounded-t-[20px] z-[52] w-full h-[90%] px-5 md:rounded-[20px] md:max-w-[686px] md:h-[726px] md:py-9 md:px-10 relative"
           onClick={(e) => e.stopPropagation()}
         >
           <Mobile>
@@ -174,7 +174,6 @@ export const LocationModal = ({
               질문할 나라 또는 도시를 선택해주세요.
             </div>
           </Desktop>
-
           <div className="grid">
             {/* 검색창 */}
             <form
@@ -223,7 +222,7 @@ export const LocationModal = ({
                     <Image
                       src={location}
                       width={20}
-                      height={14}
+                      height={20}
                       alt="location"
                     />
                     {`${selectedCountry.country}/${selectedCountry.city}`}
@@ -238,11 +237,11 @@ export const LocationModal = ({
               </div>
             )}
 
-            <div className="h-[90%] overflow-y-auto menuscrollbar place-content-start mt-5">
+            <div className="overflow-y-auto menuscrollbar place-content-start mt-5 max-h-[60vh] md:grid md:grid-cols-2 md:my-9">
               {/* 필터링된 결과 */}
               {searchTerm ? (
                 filteredResults.length > 0 ? (
-                  <ul className="grid gap-3 text-[#44484c] text-sm font-medium leading-tight">
+                  <ul className="grid gap-3 text-[#44484c] text-sm font-medium leading-tight md:text-lg">
                     {filteredResults.map((result, index) => (
                       <li key={index}>
                         <ul className="grid gap-3">
@@ -323,7 +322,7 @@ export const LocationModal = ({
                     ))}
                   </ul>
                 ) : (
-                  <p className="pt-10 text-center text-[#797c80] text-base font-semibold leading-snug">{`"${searchTerm}${t(
+                  <p className="pt-10 text-center text-[#797c80] text-base font-semibold leading-snug md:absolute md:left-1/2 md:-translate-x-1/2">{`"${searchTerm}${t(
                     'noresults',
                   )}`}</p>
                 )
@@ -331,7 +330,7 @@ export const LocationModal = ({
 
               lang === 'en' ? (
                 enNations.map((continent, idx) => (
-                  <div key={idx} className="grid gap-2 min-h-[65px] mb-9">
+                  <div key={idx} className="grid gap-2 mb-9">
                     <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px]">
                       {continent.continent}
                     </h3>
@@ -364,8 +363,8 @@ export const LocationModal = ({
                 ))
               ) : (
                 nations.map((continent, idx) => (
-                  <div key={idx} className="grid gap-2 min-h-[65px] mb-9">
-                    <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px]">
+                  <div key={idx} className="grid gap-2 mb-9">
+                    <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px] md:text-xl md:font-semibold">
                       {continent.continent}
                     </h3>
                     <div className="flex gap-[7px] flex-wrap">
@@ -381,7 +380,7 @@ export const LocationModal = ({
                                 city,
                               );
                             }}
-                            className={`h-7 px-3 py-[7px] rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium ${
+                            className={`h-7 px-3 py-[7px] rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium md:text-base md:h-9 ${
                               JSON.stringify(crntNation) ===
                               `{"continent":"${continent.continent}","country":"${country.name}","city":"${city}"}`
                                 ? 'bg-[#f4f6f9] text-[#0582ff] border-[#0582ff]'
@@ -396,9 +395,27 @@ export const LocationModal = ({
                   </div>
                 ))
               )}
-              <div className="pb-[400px]"></div>
             </div>
           </div>
+          <Desktop>
+            <div className="absolute bottom-11 left-1/2 -translate-x-1/2 flex gap-2">
+              <button
+                onClick={onClose}
+                className="w-[196px] h-16 px-3 py-1.5 bg-[#f4f6f9] rounded-xl justify-center items-center gap-2.5 inline-flex text-[#44484c] text-xl font-semibold leading-loose"
+              >
+                닫기
+              </button>
+              <button
+                onClick={() => {
+                  onClose();
+                  handleSelect();
+                }}
+                className="w-[196px] h-16 px-3 py-1.5 bg-[#0582ff] rounded-xl justify-center items-center gap-2.5 inline-flex text-white text-xl font-semibold leading-loose"
+              >
+                확인
+              </button>
+            </div>
+          </Desktop>
         </div>
       </div>
     </>
