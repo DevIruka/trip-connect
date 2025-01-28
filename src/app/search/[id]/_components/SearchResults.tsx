@@ -83,7 +83,7 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
 
   return (
     <>
-      <ul className="w-full">
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-[1200px] mx-auto md:px-[36px]">
         {filtered?.map((post, index) => {
           const bookmarked = isPostBookmarked(String(post.id));
           const nickname = nicknameMap?.[post.user_id!];
@@ -103,10 +103,10 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
           return (
             <li
               key={post.id}
-              className="w-full"
+              className="w-full flex"
               onClick={() => onClickHandler(post)}
             >
-              <div className="flex border-b-2 border-[#F4F4F4] cursor-pointer w-full">
+              <div className="flex border-b-2 md:border md:border-[#eaeaea] md:rounded-lg md:p-[20px] border-[#F4F4F4] cursor-pointer w-full">
                 {'request_id' in post ? (
                   <ResponseDetail
                     credit={credit}

@@ -17,7 +17,7 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
   };
 
   return (
-    <div className="flex justify-center items-center relative">
+    <div className="flex justify-center items-center relative md:pr-[36px]">
       <div
         className="flex items-center justify-end text-right h-[29px] w-[80px] rounded py-1 cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}

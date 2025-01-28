@@ -31,10 +31,10 @@ const ResponseDetail = ({
   const { lang } = useLang();
   const { t } = useTranslation('search');
   return (
-    <div className="w-full">
-      <div className="flex flex-row w-full">
-        <div className="flex flex-row w-full items-center mt-[12px] mb-[12px]">
-          <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]">
+    <div className="w-full ">
+      <div className="flex flex-row w-full ">
+        <div className="flex flex-row w-full items-center mt-[12px] mb-[12px] ">
+          <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px] ">
             <Image src={marker} width={10} height={10} alt="marker" />
             <p className="text-[12px]">
               {typeof post.country_city === 'string'
@@ -72,7 +72,7 @@ const ResponseDetail = ({
         </div>
       </div>
 
-      <div className="flex flex-row items-center mt-[12px] mb-[24px] justify-between">
+      <div className="flex flex-row items-center mt-[12px] mb-[24px] md:mb-0 justify-between">
         <div className="flex flex-row items-center">
           <Image width={18} height={18} src={coin} alt="credit icon" />
           <p className="text-[12px] text-[#797C80] ml-1">{credit} </p>

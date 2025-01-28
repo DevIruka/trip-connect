@@ -3,11 +3,9 @@ import { ReqResPost } from './SearchResults';
 import { UseMutationResult } from '@tanstack/react-query';
 import TimeAgo from './TimeAgo';
 import selectedBookmarkBtn from '@/data/images/ic-bookmark.svg';
-import { calculateDDay } from '../../_utils/calculateDDay';
 import { convertToKorean } from '../../_utils/convertTopictoKorean';
 import { useLang } from '@/store/languageStore';
-import { countryNameMapping, enNations, nations } from '@/data/nation';
-import PostDday from '@/app/home/_components/DDay';
+import { countryNameMapping} from '@/data/nation';
 import { useTranslation } from 'react-i18next';
 import Dday from './DDay';
 
@@ -112,13 +110,13 @@ const RequestDetail = ({
             <p className="max-w-[315px] text-[16px] font-[600] ml-[6px] mb-[6px] overflow-hidden text-ellipsis line-clamp-2">
               {post.title}
             </p>
-            <p className="text-[14px] max-w-[315px] text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis line-clamp-2">
+            <p className="text-[14px] w-full text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis line-clamp-2">
               {post.content ?? '로딩 중...'}
             </p>
           </div>
         </div>
 
-        <div className="flex flex-row items-center mt-[12px] mb-[24px] justify-between">
+        <div className="flex flex-row items-center mt-[12px] mb-[24px] md:mb-0 justify-between">
           <div className="flex flex-row items-center">
             <Image width={18} height={18} src={coin} alt="credit icon" />
             <p className="text-[12px] text-[#797C80] ml-1">{post.credit} </p>
