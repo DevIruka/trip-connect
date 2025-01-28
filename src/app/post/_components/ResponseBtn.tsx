@@ -10,7 +10,7 @@ const ResponseBtn = ({ postId }: { postId: string }) => {
   const handleNavigation = (postId: string) => {
     router.push(`/response/${postId}`);
   };
-  const { onOpen } = useModal();
+  const { openModal } = useModal();
 
   return (
     <>
@@ -21,7 +21,7 @@ const ResponseBtn = ({ postId }: { postId: string }) => {
             if (user) {
               handleNavigation(postId);
             } else {
-              onOpen();
+              openModal('loginModal');
             }
           }}
         >

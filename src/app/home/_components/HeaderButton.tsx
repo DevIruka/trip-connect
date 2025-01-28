@@ -14,13 +14,13 @@ type HeaderButtonProps = {
 };
 const HeaderButton = ({ url, text1, text2, title }: HeaderButtonProps) => {
   const { user } = useUserStore();
-  const { onOpen } = useModal();
+  const { openModal } = useModal();
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     // `url`이 `request`이고 `user`가 없으면 모달 열기
     if (url === 'request' && !user) {
       e.preventDefault(); // 링크 기본 동작 방지
-      onOpen(); // 모달 열기
+      openModal('loginModal'); // 모달 열기
     }
   };
 

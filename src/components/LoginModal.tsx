@@ -3,7 +3,7 @@ import React from 'react';
 import lock from '@/data/images/🔓️ 열린 자물쇠.svg';
 import { useTranslation } from 'react-i18next';
 type Props = {
-  onClose: () => void;
+  onClose: (modalId: string) => void;
 };
 const LoginModal = ({ onClose }: Props) => {
   const { t } = useTranslation('home');
@@ -11,7 +11,7 @@ const LoginModal = ({ onClose }: Props) => {
   return (
     <div
       className="fixed top-0 z-[52] bg-[#111111]/60 w-[375px] h-full grid items-end"
-      onClick={onClose}
+      onClick={() => onClose('loginModal')}
     >
       {/* 흰색 배경 모달 */}
       <div
@@ -33,7 +33,7 @@ const LoginModal = ({ onClose }: Props) => {
         <div className="flex justify-center gap-4 mt-4 w-full">
           <div
             className="flex-1 py-3 text-sm font-semibold text-Gray1 bg-Gray9Fill rounded-lg w-full text-center cursor-pointer"
-            onClick={onClose}
+            onClick={() => onClose('loginModal')}
           >
             {t('later')}
           </div>

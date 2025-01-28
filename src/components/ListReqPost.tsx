@@ -26,7 +26,7 @@ const ListReqPost = ({
 }) => {
   const router = useRouter();
   const topicArr = Object.entries(topicMapping);
-  const { onOpen } = useModal();
+  const { openModal } = useModal();
 
   //로그인한 유저
   const { user } = useUserStore();
@@ -86,7 +86,7 @@ const ListReqPost = ({
               if (userId) {
                 addBookmarkMutation.mutate(post.id);
               } else {
-                onOpen();
+                openModal('loginModal');
               }
             }}
           >
@@ -134,7 +134,7 @@ const ListReqPost = ({
             if (userId) {
               handleResNavigation(`response/${post!.id}`);
             } else {
-              onOpen();
+              openModal('loginModal');
             }
           }}
           className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold"

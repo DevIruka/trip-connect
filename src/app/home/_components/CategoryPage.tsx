@@ -83,7 +83,7 @@ const CategoryPage = () => {
   }, [setKeyword]);
 
   //로그인해주세요 모달
-  const { onOpen } = useModal();
+  const { openModal } = useModal();
 
   const { user } = useUserStore();
   return (
@@ -126,7 +126,7 @@ const CategoryPage = () => {
         <button
           className="fixed bottom-10 right-10 bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
           onClick={() => {
-            if (!user) onOpen();
+            if (!user) openModal('loginModal');
             else router.push('/request');
           }}
         >
