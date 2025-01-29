@@ -20,7 +20,8 @@ export const fetchResPosts = async ({
       .from('response_posts')
       .select(
         `*,
-        request_posts!inner(category)`,
+        request_posts!inner(category,credit),
+        users!inner(nickname)`,
         { count: 'exact' },
       )
       .range(from, to);

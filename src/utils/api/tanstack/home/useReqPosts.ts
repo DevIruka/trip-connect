@@ -1,11 +1,9 @@
 import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 import { fetchReqPosts } from '../../supabase_api/home/fetchReqPosts';
 import { Tables } from '@/types/supabase';
-import { Post } from '@/app/home/_types/homeTypes';
 
-// fetchPosts 함수의 반환값 타입 정의
 export type FetchReqPostsResponse = {
-  data: Post[] | null;
+  data: Tables<'request_posts'>[] | null;
   nextPage: number | null;
 };
 
@@ -16,7 +14,13 @@ export const useReqPosts = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<FetchReqPostsResponse, Error, Post[], QueryKey, number>({
+  } = useInfiniteQuery<
+    FetchReqPostsResponse,
+    Error,
+    Tables<'request_posts'>[],
+    QueryKey,
+    number
+  >({
     queryKey: ['request_posts'],
     queryFn: fetchReqPosts,
     getNextPageParam: (lastPage) => lastPage.nextPage, // 다음 페이지 번호 계산

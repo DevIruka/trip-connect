@@ -9,7 +9,7 @@ import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 
 import { useSearchStore } from '@/store/useSearchStore';
 
-import { nation } from '../_types/homeTypes';
+import { nation, Post } from '../_types/homeTypes';
 
 import ListReqPost from '@/components/ListReqPost';
 import ListResPost from '@/components/ListResPost';
@@ -17,6 +17,8 @@ import QnaHeader from './QnaHeader';
 import Navbar from './NavBar';
 import { useUserStore } from '@/store/userStore';
 import { useModal } from '@/providers/ModalProvider';
+import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
+import { useResPosts } from '@/utils/api/tanstack/home/useResPosts';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -28,18 +30,46 @@ const CategoryPage = () => {
   };
 
   //모든 게시물 가져오기
-  const { allPosts, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    usePosts('all');
-  // const { response_posts } = useResPosts();
-  // const { request_posts } = useReqPosts();
-  // const allPosts = [...response_posts, ...request_posts];
+  const {
+    response_posts,
+    fetchNextPage: QfetchNextPage,
+    hasNextPage: QhasNextPage,
+    isFetchingNextPage: QisFetchingNextPage,
+  } = useResPosts();
+  const {
+    request_posts,
+    fetchNextPage: AfetchNextPage,
+    hasNextPage: AhasNextPage,
+    isFetchingNextPage: AisFetchingNextPage,
+  } = useReqPosts();
 
-  const categoryFilteredPosts = allPosts?.filter((post) => {
+  const [allPosts, setAllPosts] = useState<Post[] | []>([]);
+  useEffect(() => {
+    if (response_posts) {
+      setAllPosts((prevPosts) => {
+        return [...prevPosts, ...response_posts];
+      });
+    }
+  }, [response_posts]);
+  useEffect(() => {
+    if (request_posts) {
+      setAllPosts((prevPosts) => {
+        return [...prevPosts, ...request_posts];
+      });
+    }
+  }, [request_posts]);
+
+  const sortedPosts = allPosts.sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+  });
+
+  const categoryFilteredPosts = sortedPosts?.filter((post) => {
     if (category === 'all') return post;
-    return (
-      post.category?.includes(category) ||
-      post.request_posts?.category.includes(category)
-    );
+    if ('category' in post) {
+      return post.category?.includes(category);
+    } else if ('request_post' in post && post.request_post) {
+      return post.request_posts?.category.includes(category);
+    }
   });
 
   //filter로 카테고리 2차구분
@@ -109,15 +139,15 @@ const CategoryPage = () => {
 
           {/* 더보기 버튼 */}
           <div className="px-5 flex justify-center">
-            {hasNextPage && (
+            {QhasNextPage && (
               <button
                 onClick={() => {
-                  fetchNextPage();
+                  QfetchNextPage();
                 }}
-                disabled={isFetchingNextPage}
+                disabled={QisFetchingNextPage}
                 className="gray-btn"
               >
-                {isFetchingNextPage ? '로딩 중...' : '더보기'}
+                {QisFetchingNextPage ? '로딩 중...' : '더보기'}
               </button>
             )}
           </div>

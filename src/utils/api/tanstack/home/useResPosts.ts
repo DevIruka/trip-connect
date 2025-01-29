@@ -1,10 +1,9 @@
 import { Tables } from '@/types/supabase';
 import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 import { fetchResPosts } from '../../supabase_api/home/fetchResPosts';
-import { Post } from '@/app/home/_types/homeTypes';
 
 export type FetchResPostsResponse = {
-  data: Post[] | null;
+  data: Tables<'response_posts'>[] | null;
   nextPage: number | null;
 };
 
@@ -15,7 +14,13 @@ export const useResPosts = () => {
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useInfiniteQuery<FetchResPostsResponse, Error, Post[], QueryKey, number>({
+  } = useInfiniteQuery<
+    FetchResPostsResponse,
+    Error,
+    Tables<'response_posts'>[],
+    QueryKey,
+    number
+  >({
     queryKey: ['response_posts'],
     queryFn: fetchResPosts,
     getNextPageParam: (lastPage) => lastPage.nextPage,
