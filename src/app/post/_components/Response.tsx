@@ -14,7 +14,6 @@ import { Tables } from '@/types/supabase';
 import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import SelectBox from '@/components/SelectBox';
-import DeleteConfirmModal from './DeleteConfirmModal';
 import { useRouter } from 'next/navigation';
 import translate from '@/data/images/translate.svg';
 import { useModal } from '@/providers/ModalProvider';
@@ -27,7 +26,6 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isHydrated, setIsHydrated] = useState(false);
   const [isOriginal, setIsOriginal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDModalOpen, setIsDModalOpen] = useState(false);
 
   const { user } = useUserStore();
   const router = useRouter();
@@ -241,12 +239,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
             onClick={() => setIsModalOpen(!isModalOpen)}
           >
             {isModalOpen && (
-              <SelectBox
-                user={user!}
-                post={post!}
-                setIsDModalOpen={setIsDModalOpen}
-                mode="response"
-              />
+              <SelectBox user={user!} responsePost={post!} mode="response" />
             )}
 
             <button onClick={() => setIsModalOpen(true)}>
@@ -256,12 +249,6 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
         </div>
       </div>
       <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
-
-      <DeleteConfirmModal
-        isOpen={isDModalOpen}
-        onClose={() => setIsDModalOpen(false)}
-        responsepost={post!}
-      />
     </div>
   );
 };

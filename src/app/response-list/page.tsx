@@ -47,8 +47,12 @@ const ResponseListPage = () => {
     <>
       <div className="h-full w-full relative overflow-y-scroll menuscrollbar md:w-[800px]">
         <BackHeader image={search} text="답변하기" imagesize={24} />
-        <Desktop>답변하기</Desktop>
         <div className="px-5">
+          <Desktop>
+            <div className="text-[#44484c] text-[28px] font-bold leading-[44.80px] py-5">
+              답변하기
+            </div>
+          </Desktop>
           <div className="py-4">
             <button
               className={`px-4 py-2 rounded-[100px] border border-[#dee1e5] bg-[#F9F9F9] gap-1 justify-center items-center flex overflow-hidden text-center text-sm font-semibold ${
@@ -67,7 +71,7 @@ const ResponseListPage = () => {
               />
             </button>
           </div>
-          <ul>
+          <ul className="grid gap-5">
             {nationfilteredPosts?.map((post) => (
               <div key={post!.id}>
                 <ListReqPost post={post!} isReqList={true} />
@@ -76,14 +80,14 @@ const ResponseListPage = () => {
           </ul>
         </div>
 
-        <div className="px-5">
+        <div className="px-5 flex justify-center">
           {hasNextPage && (
             <button
               onClick={() => {
                 fetchNextPage();
               }}
               disabled={isFetchingNextPage}
-              className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
+              className="gray-btn"
             >
               {isFetchingNextPage ? '로딩 중...' : '더보기'}
             </button>

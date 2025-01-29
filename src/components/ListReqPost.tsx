@@ -16,6 +16,7 @@ import dot from '@/data/images/Ellipse 14.svg';
 import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
 import { Post } from '@/app/home/_types/homeTypes';
 import { useModal } from '@/providers/ModalProvider';
+import { Desktop, Mobile } from './ui/Responsive';
 
 const ListReqPost = ({
   post,
@@ -48,7 +49,9 @@ const ListReqPost = ({
     <li
       onClick={() => handleNavigation(post.id)}
       key={post.id}
-      className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full md:p-5 md:border md:border-gray7 md:rounded-xl"
+      className={`h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full md:p-5 md:border md:border-gray7 md:rounded-xl ${
+        isReqList && 'md:p-9'
+      }`}
     >
       <div className="h-6 w-full justify-between items-center inline-flex gap-3">
         <div className="flex place-content-between items-center gap-1">
@@ -123,24 +126,50 @@ const ListReqPost = ({
             </div>
             <Image width={2} height={2} src={dot} alt="dot" />
             <div>1명 답변</div>
+            {isReqList && (
+              <Desktop>
+                <Image width={2} height={2} src={dot} alt="dot" />
+                <div>1일 전</div>
+              </Desktop>
+            )}
           </div>
         </div>
-        <div>1일 전</div>
+        {isReqList && <Mobile>1일 전</Mobile>}
+        {!isReqList && <div>1일 전</div>}
+        {isReqList && (
+          <Desktop>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (userId) {
+                  handleResNavigation(`response/${post!.id}`);
+                } else {
+                  openModal('loginModal');
+                }
+              }}
+              className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold md:max-w-[136px]"
+            >
+              답변하기
+            </button>
+          </Desktop>
+        )}
       </div>
       {isReqList && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            if (userId) {
-              handleResNavigation(`response/${post!.id}`);
-            } else {
-              openModal('loginModal');
-            }
-          }}
-          className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold"
-        >
-          답변하기
-        </button>
+        <Mobile>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (userId) {
+                handleResNavigation(`response/${post!.id}`);
+              } else {
+                openModal('loginModal');
+              }
+            }}
+            className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold md:max-w-[136px]"
+          >
+            답변하기
+          </button>
+        </Mobile>
       )}
     </li>
   );
