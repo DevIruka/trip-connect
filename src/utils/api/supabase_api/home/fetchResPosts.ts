@@ -1,7 +1,8 @@
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { FetchResPostsResponse } from '../../tanstack/home/useResPosts';
+import { pagination } from '@/constants/pagination';
 
-const PAGE_SIZE = 10; // 페이지당 불러올 항목 수
+const PAGE_SIZE = pagination.home.posts; // 페이지당 불러올 항목 수
 
 export const fetchResPosts = async ({
   pageParam = 0,
