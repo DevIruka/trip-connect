@@ -21,8 +21,9 @@ import { useResPosts } from '@/utils/api/tanstack/home/useResPosts';
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
   const searchParams = useSearchParams();
-  const router = useRouter();
   const category = searchParams.get('category') || 'all';
+  const { user } = useUserStore();
+  const router = useRouter();
   const changeCategory = (category: string) => {
     router.push(`?category=${category}`); // URL 업데이트
   };
@@ -45,14 +46,20 @@ const CategoryPage = () => {
   useEffect(() => {
     if (response_posts) {
       setAllPosts((prevPosts) => {
-        return [...prevPosts, ...response_posts];
+        return [...prevPosts, ...response_posts].filter(
+          (post, index, self) =>
+            index === self.findIndex((p) => p.id === post.id),
+        );
       });
     }
   }, [response_posts]);
   useEffect(() => {
     if (request_posts) {
       setAllPosts((prevPosts) => {
-        return [...prevPosts, ...request_posts];
+        return [...prevPosts, ...request_posts].filter(
+          (post, index, self) =>
+            index === self.findIndex((p) => p.id === post.id),
+        );
       });
     }
   }, [request_posts]);
@@ -61,16 +68,17 @@ const CategoryPage = () => {
     return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
+  //주제별 카테고리
   const categoryFilteredPosts = sortedPosts?.filter((post) => {
     if (category === 'all') return post;
     if ('category' in post) {
       return post.category?.includes(category);
-    } else if ('request_post' in post && post.request_post) {
+    } else if ('request_posts' in post && post.request_posts) {
       return post.request_posts?.category.includes(category);
     }
   });
 
-  //filter로 카테고리 2차구분
+  //질문 답변 카테고리
   const [filterType, setFilterType] = useState('latest');
   const filteredPosts = categoryFilteredPosts?.filter((post) => {
     if (filterType === 'request') return !post.request_id; // 질문글 (request_id가 없는 경우)
@@ -85,18 +93,39 @@ const CategoryPage = () => {
       : null,
   );
   const nationfilteredPosts = filteredPosts?.filter((post) => {
-    // Request 유형 처리
     if (nationFilter) {
-      if (!post.request_id && !post.country_city?.includes(nationFilter.city)) {
-        return false;
-      }
+      if (nationFilter.city) {
+        // Request 유형 처리
+        if (
+          !post.request_id &&
+          !post.country_city?.includes(nationFilter.city)
+        ) {
+          return false;
+        }
 
-      // Response 유형 처리
-      if (
-        post.request_id &&
-        !post.verified_country?.includes(nationFilter.city)
-      ) {
-        return false;
+        // Response 유형 처리
+        if (
+          post.request_id &&
+          !post.verified_country?.includes(nationFilter.city)
+        ) {
+          return false;
+        }
+      } else {
+        // Request 유형 처리
+        if (
+          !post.request_id &&
+          !post.country_city?.includes(nationFilter.country)
+        ) {
+          return false;
+        }
+
+        // Response 유형 처리
+        if (
+          post.request_id &&
+          !post.verified_country?.includes(nationFilter.country)
+        ) {
+          return false;
+        }
       }
     }
 
@@ -113,7 +142,6 @@ const CategoryPage = () => {
   //로그인해주세요 모달
   const { openModal } = useModal();
 
-  const { user } = useUserStore();
   return (
     <>
       <div className="w-full h-screen mx-auto relative overflow-y-scroll z-[51] menuscrollbar md:pb-[140px]">
@@ -137,21 +165,20 @@ const CategoryPage = () => {
 
           {/* 더보기 버튼 */}
           <div className="px-5 flex justify-center">
-            {QhasNextPage ||
-              (AhasNextPage && (
-                <button
-                  onClick={() => {
-                    QfetchNextPage();
-                    AfetchNextPage();
-                  }}
-                  disabled={QisFetchingNextPage || AisFetchingNextPage}
-                  className="gray-btn"
-                >
-                  {QisFetchingNextPage || AisFetchingNextPage
-                    ? '로딩 중...'
-                    : '더보기'}
-                </button>
-              ))}
+            {QhasNextPage || AhasNextPage ? (
+              <button
+                onClick={() => {
+                  QfetchNextPage();
+                  AfetchNextPage();
+                }}
+                disabled={QisFetchingNextPage || AisFetchingNextPage}
+                className="gray-btn"
+              >
+                {QisFetchingNextPage || AisFetchingNextPage
+                  ? '로딩 중...'
+                  : '더보기'}
+              </button>
+            ) : null}
           </div>
         </div>
 
