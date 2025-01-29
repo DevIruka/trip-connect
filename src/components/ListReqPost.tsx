@@ -17,6 +17,8 @@ import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
 import { Post } from '@/app/home/_types/homeTypes';
 import { useModal } from '@/providers/ModalProvider';
 import { Desktop, Mobile } from './ui/Responsive';
+import { useResCount } from '@/utils/api/tanstack/home/useResCount';
+import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 
 const ListReqPost = ({
   post,
@@ -44,6 +46,8 @@ const ListReqPost = ({
   const handleResNavigation = (address: string) => {
     router.push(address);
   };
+
+  const { resCounts } = useResCount(post.id);
 
   return (
     <li
@@ -125,17 +129,21 @@ const ListReqPost = ({
               {post.credit}
             </div>
             <Image width={2} height={2} src={dot} alt="dot" />
-            <div>1명 답변</div>
+            <div>{resCounts}명 답변</div>
             {isReqList && (
               <Desktop>
                 <Image width={2} height={2} src={dot} alt="dot" />
-                <div>1일 전</div>
+                <TimeAgo createdAt={post.created_at} />
               </Desktop>
             )}
           </div>
         </div>
-        {isReqList && <Mobile>1일 전</Mobile>}
-        {!isReqList && <div>1일 전</div>}
+        {isReqList && (
+          <Mobile>
+            <TimeAgo createdAt={post.created_at} />
+          </Mobile>
+        )}
+        {!isReqList && <TimeAgo createdAt={post.created_at} />}
         {isReqList && (
           <Desktop>
             <button
