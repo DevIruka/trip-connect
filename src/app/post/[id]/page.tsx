@@ -95,7 +95,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
             </div>
           </div>
           <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
-          <ResponseBtn postId={postId} />
+          <ResponseBtn post={post} />
         </div>
       ) : (
         <div>게시물을 찾을 수 없습니다.</div>
