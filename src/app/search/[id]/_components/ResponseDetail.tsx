@@ -7,6 +7,7 @@ import { convertToKorean } from '../../_utils/convertTopictoKorean';
 import { useLang } from '@/store/languageStore';
 import { useTranslation } from 'react-i18next';
 import { countryNameMapping } from '@/data/nation';
+import { capitalizeFirstLetter } from '../../_utils/capitalize';
 
 type ResponseDetailProps = {
   post: ReqResPost;
@@ -53,7 +54,7 @@ const ResponseDetail = ({
                   className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
                 >
                   <p className="text-[12px]">
-                    {lang === 'en' ? element : koreanCategory}
+                    {lang === 'en' ? capitalizeFirstLetter(element) : koreanCategory}
                   </p>
                 </div>
               );

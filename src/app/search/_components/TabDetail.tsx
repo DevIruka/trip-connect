@@ -1,6 +1,7 @@
 import Icon from '@/components/Icons';
 import { useLang } from '@/store/languageStore';
 import { EnglishCategory, KoreanCategory, topicMapping } from '@/utils/topics';
+import { capitalizeFirstLetter } from '../_utils/capitalize';
 
 const TabDetail = ({ category }: { category: EnglishCategory | null }) => {
   const { lang } = useLang();
@@ -20,7 +21,7 @@ const TabDetail = ({ category }: { category: EnglishCategory | null }) => {
       <>
       <Icon size={20} type={category || 'all'} />
       <span className="ml-[4px] text-[16px] font-[600]">
-        {(category)}
+        {capitalizeFirstLetter(category!)}
       </span>
     </>
     )

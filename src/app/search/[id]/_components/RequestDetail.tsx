@@ -8,6 +8,7 @@ import { useLang } from '@/store/languageStore';
 import { countryNameMapping} from '@/data/nation';
 import { useTranslation } from 'react-i18next';
 import Dday from './DDay';
+import { capitalizeFirstLetter } from '../../_utils/capitalize';
 
 const borderbookmarkButton = '/images/ic-bookmark.svg';
 const coin = '/images/coin.svg';
@@ -66,7 +67,7 @@ const RequestDetail = ({
                     className="flex items-center justify-center h-[22.017px] min-w-8 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
                   >
                     <p className="text-[12px]">
-                      {lang === 'en' ? element : koreanCategory}
+                      {lang === 'en' ? capitalizeFirstLetter(element) : koreanCategory}
                     </p>
                   </div>
                 );
