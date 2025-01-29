@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import caution from '@/data/images/⚠️ 주의.svg';
-import { fetchPostDelete } from '@/utils/api/supabase_api/home/fetchPostDelete';
 import { useUserStore } from '@/store/userStore';
 import { fetchResPostDelete } from '@/utils/api/supabase_api/home/fetchResPostDelete';
 import ModalForm from '@/components/ModalForm';
 import AlertModal from './AlertModal';
 import { useModal } from '@/providers/ModalProvider';
+import { fetchReqPostDelete } from '@/utils/api/supabase_api/home/fetchReqPostDelete';
 
 const DeleteConfirmModal = () => {
   const { user } = useUserStore();
@@ -27,7 +27,7 @@ const DeleteConfirmModal = () => {
         buttonTxt2="삭제"
         onYesClick={() => {
           if (requestpost) {
-            fetchPostDelete(requestpost, user?.id);
+            fetchReqPostDelete(requestpost, user?.id);
             setShowAlert(true); // 알림 표시
 
             // 1.5초 후 알림 숨기기

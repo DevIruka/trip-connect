@@ -1,7 +1,7 @@
 import { Tables } from '@/types/supabase';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
-export const fetchPostDelete = async (
+export const fetchReqPostDelete = async (
   post: Tables<'request_posts'>,
   userId?: string,
 ) => {

@@ -5,8 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import pencil from '@/data/images/ic-pencil.svg';
-import { usePosts } from '@/utils/api/tanstack/home/usePosts';
-
 import { useSearchStore } from '@/store/useSearchStore';
 
 import { nation, Post } from '../_types/homeTypes';
@@ -139,17 +137,21 @@ const CategoryPage = () => {
 
           {/* 더보기 버튼 */}
           <div className="px-5 flex justify-center">
-            {QhasNextPage && (
-              <button
-                onClick={() => {
-                  QfetchNextPage();
-                }}
-                disabled={QisFetchingNextPage}
-                className="gray-btn"
-              >
-                {QisFetchingNextPage ? '로딩 중...' : '더보기'}
-              </button>
-            )}
+            {QhasNextPage ||
+              (AhasNextPage && (
+                <button
+                  onClick={() => {
+                    QfetchNextPage();
+                    AfetchNextPage();
+                  }}
+                  disabled={QisFetchingNextPage || AisFetchingNextPage}
+                  className="gray-btn"
+                >
+                  {QisFetchingNextPage || AisFetchingNextPage
+                    ? '로딩 중...'
+                    : '더보기'}
+                </button>
+              ))}
           </div>
         </div>
 
