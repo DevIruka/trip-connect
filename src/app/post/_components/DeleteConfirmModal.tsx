@@ -6,13 +6,11 @@ import { fetchResPostDelete } from '@/utils/api/supabase_api/home/fetchResPostDe
 import ModalForm from '@/components/ModalForm';
 import AlertModal from './AlertModal';
 import { useModal } from '@/providers/ModalProvider';
-type Props = {
-  onClose: (modalId: string) => void;
-};
-const DeleteConfirmModal = ({ onClose }: Props) => {
+
+const DeleteConfirmModal = () => {
   const { user } = useUserStore();
   const [showAlert, setShowAlert] = useState(false);
-  const { modals, modalData } = useModal();
+  const { modals, modalData, closeModal } = useModal();
 
   if (!modals.deleteConfirm || !modalData) return null;
 
@@ -21,7 +19,7 @@ const DeleteConfirmModal = ({ onClose }: Props) => {
   return (
     <>
       <ModalForm
-        onClose={() => onClose('deleteConfirm')}
+        onClose={() => closeModal('deleteConfirm')}
         imageSrc={caution}
         text1="정말 삭제하시겠어요?"
         text2="삭제 후에는 글을 복구할 수 없어요"

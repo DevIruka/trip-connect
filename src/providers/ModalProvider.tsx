@@ -47,9 +47,9 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <ModalContext.Provider value={{ modals, modalData, openModal, closeModal }}>
       {children}
-      {modals.loginModal && <LoginModal onClose={closeModal} />}
-      {modals.chargeModal && <ChargeModal onClose={closeModal} />}
-      {modals.deleteConfirm && <DeleteConfirmModal onClose={closeModal} />}
+      {modals.loginModal && <LoginModal />}
+      {modals.chargeModal && <ChargeModal />}
+      {modals.deleteConfirm && <DeleteConfirmModal />}
     </ModalContext.Provider>
   );
 };

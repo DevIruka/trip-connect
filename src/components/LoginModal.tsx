@@ -2,16 +2,16 @@ import Image from 'next/image';
 import React from 'react';
 import lock from '@/data/images/🔓️ 열린 자물쇠.svg';
 import { useTranslation } from 'react-i18next';
-type Props = {
-  onClose: (modalId: string) => void;
-};
-const LoginModal = ({ onClose }: Props) => {
+import { useModal } from '@/providers/ModalProvider';
+
+const LoginModal = () => {
   const { t } = useTranslation('home');
+  const { closeModal } = useModal();
 
   return (
     <div
       className="fixed top-0 z-[52] bg-[#111111]/60 w-full h-full grid items-end md:items-center md:justify-center"
-      onClick={() => onClose('loginModal')}
+      onClick={() => closeModal('loginModal')}
     >
       {/* 흰색 배경 모달 */}
       <div
@@ -33,7 +33,7 @@ const LoginModal = ({ onClose }: Props) => {
         <div className="flex justify-center items-center gap-2 w-full mt-2 md:max-w-[400px]">
           <div
             className="flex-1 py-[16.5px] text-base font-semibold text-Gray1 bg-Gray9Fill rounded-xl w-full text-center cursor-pointer"
-            onClick={() => onClose('loginModal')}
+            onClick={() => closeModal('loginModal')}
           >
             {t('later')}
           </div>

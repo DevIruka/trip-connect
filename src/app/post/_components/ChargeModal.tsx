@@ -1,11 +1,14 @@
 import ModalForm from '@/components/ModalForm';
 import React from 'react';
 import strong from '@/data/images/‼️ 두 개의 느낌표.svg';
+import { useModal } from '@/providers/ModalProvider';
 
-const ChargeModal = ({ onClose }: { onClose: (modalId: string) => void }) => {
+const ChargeModal = () => {
+  const { closeModal } = useModal();
+
   return (
     <ModalForm
-      onClose={() => onClose('chargeModal')}
+      onClose={() => closeModal('chargeModal')}
       imageSrc={strong}
       text="앗..!"
       text1={`크레딧이 부족해요.`}
