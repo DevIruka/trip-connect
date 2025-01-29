@@ -9,6 +9,7 @@ import { topicMapping } from '@/utils/topics';
 import { Post } from '@/app/home/_types/homeTypes';
 import { useGPTTranslation } from '@/app/post/_hooks/TranslatedText';
 import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
+import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 
 const ListResPost = ({ post }: { post: Post }) => {
   const router = useRouter();
@@ -91,7 +92,7 @@ const ListResPost = ({ post }: { post: Post }) => {
             </div>
           </div>
         </div>
-        <div>1일 전</div>
+        <TimeAgo createdAt={post.created_at} />
       </div>
     </li>
   );

@@ -134,7 +134,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   }
   return (
     <div key={post.id}>
-      <Profile postUserId={post.user_id} />
+      <Profile postUserId={post.user_id} createdAt={post.created_at} />
       <div className="px-5">
         <div>
           <div className="grid my-2 text-black text-lg font-bold leading-[28.80px]">

@@ -35,7 +35,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
       />
       {post ? (
         <div className="relative">
-          <Profile postUserId={post.user_id} />
+          <Profile postUserId={post.user_id} createdAt={post.created_at} />
           <div className="px-5 grid grid-cols-1 gap-4">
             <div className="grid gap-1">
               <h1 className="text-black text-xl font-bold leading-[28.80px]">
