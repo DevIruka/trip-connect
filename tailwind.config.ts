@@ -10,11 +10,7 @@ const config: Config = {
   theme: {
     screens: {
       md: '800px',
-<<<<<<< HEAD
-      lg : '1200px'
-=======
       lg: '1167px',
->>>>>>> 494cd3e51b2a7530e2995f5678d05d9113680f9a
     },
     extend: {
       colors: {
