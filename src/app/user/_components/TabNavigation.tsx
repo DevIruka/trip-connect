@@ -26,23 +26,25 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
   const { lang } = useLang();
   const tabsToUse = lang === 'en' ? translatedTabs : TABS;
   return (
-    <div className="flex justify-between px-5 pt-[27px] border-b border-[#DFE1E5] gap-2">
-      {tabsToUse.map((tab) => (
-        <button
-          key={tab.id}
-          className={`flex-1 py-3 text-center ${
-            activeTab === tab.id ? 'border-b-2 border-black' : ''
-          }`}
-          onClick={() =>
-            setActiveTab(tab.id as 'responses' | 'requests' | 'reviews')
-          }
-        >
-          <span className="text-[16px] font-semibold">{tab.label}</span>
-          <span className="ml-1 text-[#80BFFF]">
-            {counts[tab.id as keyof typeof counts]}
-          </span>
-        </button>
-      ))}
+    <div className="w-full max-w-[800px]">
+      <div className="flex justify-between px-5 pt-[27px] border-b border-[#DFE1E5] gap-2">
+        {tabsToUse.map((tab) => (
+          <button
+            key={tab.id}
+            className={`flex-1 py-3 text-center ${
+              activeTab === tab.id ? 'border-b-2 border-black' : ''
+            }`}
+            onClick={() =>
+              setActiveTab(tab.id as 'responses' | 'requests' | 'reviews')
+            }
+          >
+            <span className="text-[16px] font-semibold">{tab.label}</span>
+            <span className="ml-1 text-[#80BFFF]">
+              {counts[tab.id as keyof typeof counts]}
+            </span>
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

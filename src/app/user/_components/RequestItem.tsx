@@ -52,21 +52,9 @@ const RequestItem = ({
 
   return (
     <div
-      className="relative"
-      style={{
-        padding: '12px 20px 24px',
-      }}
+      className="relative border-b md:border md:rounded-xl mt-[12px] pb-[22px] md:px-[36px] md:py-[22px]"
       onClick={handleNavigate}
     >
-      <div
-        className="absolute inset-0 border-b"
-        style={{
-          borderColor: '#F4F4F4',
-          left: '20px',
-          right: '20px',
-        }}
-      ></div>
-
       <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
         <Dday postDateEnd={date_end!}/>
         <div className="flex gap-2 text-xs text-gray-500">
