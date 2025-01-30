@@ -14,9 +14,9 @@ import { Tables } from '@/types/supabase';
 import { useUserStore } from '@/store/userStore';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import SelectBox from '@/components/SelectBox';
-import DeleteConfirmModal from './DeleteConfirmModal';
 import { useRouter } from 'next/navigation';
 import translate from '@/data/images/translate.svg';
+import { useModal } from '@/providers/ModalProvider';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -26,10 +26,10 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isHydrated, setIsHydrated] = useState(false);
   const [isOriginal, setIsOriginal] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDModalOpen, setIsDModalOpen] = useState(false);
 
   const { user } = useUserStore();
   const router = useRouter();
+  const { openModal } = useModal();
 
   //mycredits: 로그인한 유저의 보유 크레딧 가져오기
   const fetchLoginuserData = async () => {
@@ -86,7 +86,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
         .eq('id', user?.id)
         .select();
       if (!response) {
-        throw new Error('크레딧 차감에 실패하였습니다다.');
+        throw new Error('크레딧 차감에 실패하였습니다.');
       }
     } catch (error) {
       Sentry.captureException(error);
@@ -115,14 +115,14 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   );
 
   const handlePurchase = () => {
-    if (!user) alert('로그인해주세요');
-    else if (!mycredits || mycredits < credit!) alert('충전해주세요');
+    if (!user) openModal('loginModal');
+    else if (!mycredits || mycredits < credit!) openModal('chargeModal');
     else if (mycredits >= credit!) {
       setMycredits((prev) => prev! - credit!); // 크레딧 차감
       fetchPurchasing();
       minusCredit();
     } else {
-      alert('크레딧이 부족합니다. 크레딧을 충전해주세요.');
+      openModal('chargeModal');
     }
   };
 
@@ -134,7 +134,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   }
   return (
     <div key={post.id}>
-      <Profile postUserId={post.user_id} />
+      <Profile postUserId={post.user_id} createdAt={post.created_at} />
       <div className="px-5">
         <div>
           <div className="grid my-2 text-black text-lg font-bold leading-[28.80px]">
@@ -239,12 +239,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
             onClick={() => setIsModalOpen(!isModalOpen)}
           >
             {isModalOpen && (
-              <SelectBox
-                user={user!}
-                post={post!}
-                setIsDModalOpen={setIsDModalOpen}
-                mode="response"
-              />
+              <SelectBox user={user!} responsePost={post!} mode="response" />
             )}
 
             <button onClick={() => setIsModalOpen(true)}>
@@ -254,12 +249,6 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
         </div>
       </div>
       <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
-
-      <DeleteConfirmModal
-        isOpen={isDModalOpen}
-        onClose={() => setIsDModalOpen(false)}
-        responsepost={post!}
-      />
     </div>
   );
 };

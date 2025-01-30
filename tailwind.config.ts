@@ -10,6 +10,7 @@ const config: Config = {
   theme: {
     screens: {
       md: '800px',
+      lg: '1167px',
     },
     extend: {
       colors: {

@@ -9,6 +9,7 @@ import location from '@/data/images/ic-location.svg';
 import Image from 'next/image';
 import { useLang } from '@/store/languageStore';
 import { useTranslation } from 'react-i18next';
+import { Desktop, Mobile } from './ui/Responsive';
 
 type Props = {
   isOpen: boolean;
@@ -131,41 +132,48 @@ export const LocationModal = ({
   return (
     <>
       <div
-        className="w-screen h-full flex justify-center fixed inset-y-0 z-[52] items-end md:items-center bg-black bg-opacity-50 pt-10"
+        className="w-full h-screen flex justify-center fixed inset-y-0 z-[52] items-end bg-black bg-opacity-50 md:items-center md:p-0"
         onClick={onClose} // 뒷배경 클릭 시 모달 닫기
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
       >
         <div
-          className="bg-white rounded-t-[20px] z-[52] w-full min-h-full max-h-[80%] px-5 md:w-[606px] md:rounded-[20px]"
+          className="bg-white rounded-t-[20px] z-[52] w-full h-[90%] px-5 md:rounded-[20px] md:max-w-[686px] md:h-[726px] md:py-9 md:px-10 relative"
           onClick={(e) => e.stopPropagation()}
         >
-          <div className="h-14 py-2.5 flex place-content-between items-center text-lg font-bold">
-            <button
-              onClick={onClose}
-              className="w-12 flex justify-start items-center"
-            >
-              <Image
-                className=""
-                src={close}
-                alt={'close btn'}
-                width={24}
-                height={24}
-              />
-            </button>
-            <h2 className="flex justify-start items-center text-center text-black text-lg font-semibold">
-              {t('select_country_city')}
-            </h2>
-            <button
-              onClick={() => {
-                onClose();
-                handleSelect();
-              }}
-              className="bg-[#0582FF] h-8 py-1.5 px-3 rounded-md text-white text-sm font-semibold"
-              disabled={!crntNation}
-            >
-              {t('select')}
-            </button>
-          </div>
+          <Mobile>
+            <div className="h-14 py-2.5 flex place-content-between items-center text-lg font-bold">
+              <button
+                onClick={onClose}
+                className="w-12 flex justify-start items-center"
+              >
+                <Image
+                  className=""
+                  src={close}
+                  alt={'close btn'}
+                  width={24}
+                  height={24}
+                />
+              </button>
+              <h2 className="flex justify-start items-center text-center text-black text-lg font-semibold">
+                {t('select_country_city')}
+              </h2>
+              <button
+                onClick={() => {
+                  onClose();
+                  handleSelect();
+                }}
+                className="bg-[#0582FF] h-8 py-1.5 px-3 rounded-md text-white text-sm font-semibold"
+                disabled={!crntNation}
+              >
+                {t('select')}
+              </button>{' '}
+            </div>
+          </Mobile>
+          <Desktop>
+            <div className="text-[#757575] text-xl font-semibold leading-loose py-2">
+              질문할 나라 또는 도시를 선택해주세요.
+            </div>
+          </Desktop>
           <div className="grid">
             {/* 검색창 */}
             <form
@@ -176,7 +184,7 @@ export const LocationModal = ({
             >
               <input
                 type="text"
-                className="w-full h-11 px-4 py-3 bg-[#f9f9f9] rounded-lg placeholder:text-[#797c80] placeholder:text-sm placeholder:font-medium placeholder:leading-tight" // 오른쪽 여백 추가 (버튼 겹침 방지)
+                className="w-full h-11 px-4 py-3 bg-[#f9f9f9] rounded-lg placeholder:text-[#797c80] placeholder:text-sm placeholder:font-medium placeholder:leading-tight md:placeholder:text-lg md:h-14" // 오른쪽 여백 추가 (버튼 겹침 방지)
                 value={searchTerm}
                 onChange={handleSearchChange} // 검색어 업데이트
                 placeholder={t('search_country_city')}
@@ -192,24 +200,48 @@ export const LocationModal = ({
             {/* 현재 선택 국가, 선택 해제 */}
             {selectedCountry && (
               <div className="flex place-content-between my-1">
-                <div className="flex gap-1 items-center text-center text-[#0582ff] text-sm font-semibold">
-                  <Image src={location} width={14} height={14} alt="location" />
-                  {`${selectedCountry.country}/${selectedCountry.city}`}
-                </div>
-                <button
-                  className="h-[29px] px-3 py-1.5 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-xs font-medium leading-none"
-                  onClick={handleDeselect}
-                >
-                  {t('initialize')}
-                </button>
+                <Mobile>
+                  <div className="flex gap-1 items-center text-center text-[#0582ff] text-sm font-semibold">
+                    <Image
+                      src={location}
+                      width={14}
+                      height={14}
+                      alt="location"
+                    />
+                    {`${selectedCountry.country}/${selectedCountry.city}`}
+                  </div>
+                  <button
+                    className="h-[29px] px-3 py-1.5 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-xs font-medium leading-none"
+                    onClick={handleDeselect}
+                  >
+                    {t('initialize')}
+                  </button>
+                </Mobile>
+                <Desktop>
+                  <div className="flex gap-1 items-center text-center text-[#0582ff] text-lg font-semibold">
+                    <Image
+                      src={location}
+                      width={20}
+                      height={20}
+                      alt="location"
+                    />
+                    {`${selectedCountry.country}/${selectedCountry.city}`}
+                  </div>
+                  <button
+                    className="h-[34px] px-3 py-1.5 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-base font-medium leading-none"
+                    onClick={handleDeselect}
+                  >
+                    {t('initialize')}
+                  </button>
+                </Desktop>
               </div>
             )}
 
-            <div className="h-[90%] overflow-y-auto menuscrollbar place-content-start mt-5">
+            <div className="overflow-y-auto menuscrollbar place-content-start mt-5 max-h-[60vh] md:grid md:grid-cols-2 md:my-9">
               {/* 필터링된 결과 */}
               {searchTerm ? (
                 filteredResults.length > 0 ? (
-                  <ul className="grid gap-3 text-[#44484c] text-sm font-medium leading-tight">
+                  <ul className="grid gap-3 text-[#44484c] text-sm font-medium leading-tight md:text-lg">
                     {filteredResults.map((result, index) => (
                       <li key={index}>
                         <ul className="grid gap-3">
@@ -290,7 +322,7 @@ export const LocationModal = ({
                     ))}
                   </ul>
                 ) : (
-                  <p className="pt-10 text-center text-[#797c80] text-base font-semibold leading-snug">{`"${searchTerm}${t(
+                  <p className="pt-10 text-center text-[#797c80] text-base font-semibold leading-snug md:absolute md:left-1/2 md:-translate-x-1/2">{`"${searchTerm}${t(
                     'noresults',
                   )}`}</p>
                 )
@@ -298,7 +330,7 @@ export const LocationModal = ({
 
               lang === 'en' ? (
                 enNations.map((continent, idx) => (
-                  <div key={idx} className="grid gap-2 min-h-[65px] mb-9">
+                  <div key={idx} className="grid gap-2 mb-9">
                     <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px]">
                       {continent.continent}
                     </h3>
@@ -331,8 +363,8 @@ export const LocationModal = ({
                 ))
               ) : (
                 nations.map((continent, idx) => (
-                  <div key={idx} className="grid gap-2 min-h-[65px] mb-9">
-                    <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px]">
+                  <div key={idx} className="grid gap-2 mb-9">
+                    <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px] md:text-xl md:font-semibold">
                       {continent.continent}
                     </h3>
                     <div className="flex gap-[7px] flex-wrap">
@@ -348,7 +380,7 @@ export const LocationModal = ({
                                 city,
                               );
                             }}
-                            className={`h-7 px-3 py-[7px] rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium ${
+                            className={`h-7 px-3 py-[7px] rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium md:text-base md:h-9 ${
                               JSON.stringify(crntNation) ===
                               `{"continent":"${continent.continent}","country":"${country.name}","city":"${city}"}`
                                 ? 'bg-[#f4f6f9] text-[#0582ff] border-[#0582ff]'
@@ -363,9 +395,27 @@ export const LocationModal = ({
                   </div>
                 ))
               )}
-              <div className="pb-[400px]"></div>
             </div>
           </div>
+          <Desktop>
+            <div className="absolute bottom-11 left-1/2 -translate-x-1/2 flex gap-2">
+              <button
+                onClick={onClose}
+                className="w-[196px] h-16 px-3 py-1.5 bg-[#f4f6f9] rounded-xl justify-center items-center gap-2.5 inline-flex text-[#44484c] text-xl font-semibold leading-loose"
+              >
+                닫기
+              </button>
+              <button
+                onClick={() => {
+                  onClose();
+                  handleSelect();
+                }}
+                className="w-[196px] h-16 px-3 py-1.5 bg-[#0582ff] rounded-xl justify-center items-center gap-2.5 inline-flex text-white text-xl font-semibold leading-loose"
+              >
+                확인
+              </button>
+            </div>
+          </Desktop>
         </div>
       </div>
     </>

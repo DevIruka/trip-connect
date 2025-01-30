@@ -1,17 +1,19 @@
 'use client';
 
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import heylocal from '@/data/images/HeyLocal.svg';
 import search from '@/data/images/ic-Search.svg';
 import profile from '@/data/images/ic-Profile.svg';
 import { useUserStore } from '@/store/userStore';
 import { useMediaQuery } from 'react-responsive';
+import { useModal } from '@/providers/ModalProvider';
 
 const Header = () => {
   const pathname = usePathname();
   const isDesktop = useMediaQuery({ minWidth: 800 });
+  const router = useRouter();
 
   const excludedPaths = [
     '/login',
@@ -34,9 +36,9 @@ const Header = () => {
     pathname.startsWith(path),
   );
   const { user } = useUserStore();
-  return shouldHideHeader && !isDesktop ? (
-    <></>
-  ) : (
+  const { openModal } = useModal();
+
+  return shouldHideHeader && !isDesktop ? null : (
     <>
       <div className="flex sticky top-0 h-[56px] bg-white z-50 w-full justify-between py-[13.5px] px-[20px] max-w-[1200px] md:px-9">
         <Link href="/" className="flex place-content-center">
@@ -58,7 +60,13 @@ const Header = () => {
               style={{ width: 24, height: 24 }}
             />
           </Link>
-          <Link href="/mypage" className="flex place-content-center">
+          <div
+            onClick={() => {
+              if (user) router.push('/mypage');
+              else openModal('loginModal');
+            }}
+            className="flex place-content-center cursor-pointer"
+          >
             <Image
               src={profile}
               alt="profile"
@@ -66,7 +74,7 @@ const Header = () => {
               height={24}
               style={{ width: 24, height: 24 }}
             />
-          </Link>
+          </div>
         </div>
       </div>
     </>
