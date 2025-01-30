@@ -15,18 +15,21 @@ import coin from '@/data/images/coin.svg';
 import dot from '@/data/images/Ellipse 14.svg';
 import bookmarkButton from '@/data/images/ic-bookmark-empty.svg';
 import { Post } from '@/app/home/_types/homeTypes';
+import { useModal } from '@/providers/ModalProvider';
+import { Desktop, Mobile } from './ui/Responsive';
+import { useResCount } from '@/utils/api/tanstack/home/useResCount';
+import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 
 const ListReqPost = ({
   post,
-  setIsModalOpen,
   isReqList,
 }: {
   post: Post;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isReqList?: boolean;
 }) => {
   const router = useRouter();
   const topicArr = Object.entries(topicMapping);
+  const { openModal } = useModal();
 
   //로그인한 유저
   const { user } = useUserStore();
@@ -44,11 +47,15 @@ const ListReqPost = ({
     router.push(address);
   };
 
+  const { resCounts } = useResCount(post.id);
+
   return (
     <li
       onClick={() => handleNavigation(post.id)}
       key={post.id}
-      className="h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full md:w-[365px] md:p-5 md:border md:border-gray7 md:rounded-xl"
+      className={`h-auto pt-3 pb-6 py-4 border-b border-[#f3f3f3] flex-col justify-start items-start gap-3 inline-flex cursor-pointer w-full md:p-5 md:border md:border-gray7 md:rounded-xl ${
+        isReqList && 'md:p-9'
+      }`}
     >
       <div className="h-6 w-full justify-between items-center inline-flex gap-3">
         <div className="flex place-content-between items-center gap-1">
@@ -86,7 +93,7 @@ const ListReqPost = ({
               if (userId) {
                 addBookmarkMutation.mutate(post.id);
               } else {
-                setIsModalOpen(true);
+                openModal('loginModal');
               }
             }}
           >
@@ -122,25 +129,55 @@ const ListReqPost = ({
               {post.credit}
             </div>
             <Image width={2} height={2} src={dot} alt="dot" />
-            <div>1명 답변</div>
+            <div>{resCounts}명 답변</div>
+            {isReqList && (
+              <Desktop>
+                <Image width={2} height={2} src={dot} alt="dot" />
+                <TimeAgo createdAt={post.created_at} />
+              </Desktop>
+            )}
           </div>
         </div>
-        <div>1일 전</div>
+        {isReqList && (
+          <Mobile>
+            <TimeAgo createdAt={post.created_at} />
+          </Mobile>
+        )}
+        {!isReqList && <TimeAgo createdAt={post.created_at} />}
+        {isReqList && (
+          <Desktop>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                if (userId) {
+                  handleResNavigation(`response/${post!.id}`);
+                } else {
+                  openModal('loginModal');
+                }
+              }}
+              className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold md:max-w-[136px]"
+            >
+              답변하기
+            </button>
+          </Desktop>
+        )}
       </div>
       {isReqList && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            if (userId) {
-              handleResNavigation(`response/${post!.id}`);
-            } else {
-              setIsModalOpen(true);
-            }
-          }}
-          className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold"
-        >
-          답변하기
-        </button>
+        <Mobile>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (userId) {
+                handleResNavigation(`response/${post!.id}`);
+              } else {
+                openModal('loginModal');
+              }
+            }}
+            className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold md:max-w-[136px]"
+          >
+            답변하기
+          </button>
+        </Mobile>
       )}
     </li>
   );

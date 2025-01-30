@@ -8,8 +8,15 @@ import profileImage from '@/data/images/profile-default.svg';
 import location from '@/data/images/ic-location.svg';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
+import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 
-const Profile = ({ postUserId }: { postUserId: string }) => {
+const Profile = ({
+  postUserId,
+  createdAt,
+}: {
+  postUserId: string;
+  createdAt: string;
+}) => {
   const [user, setUser] = useState<Tables<'users'>>();
   const { user: logginedUser } = useUserStore();
   const router = useRouter();
@@ -61,7 +68,7 @@ const Profile = ({ postUserId }: { postUserId: string }) => {
           )}
         </div>
         <div className="text-[#797c80] text-xs font-medium leading-none">
-          1시간 전
+          <TimeAgo createdAt={createdAt} />
         </div>
       </div>
     </div>

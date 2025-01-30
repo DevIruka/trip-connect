@@ -8,7 +8,7 @@ const AlertModal = ({ message, show }: AlertModalProps) => {
 
   return (
     <div
-      className="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-black text-white py-2 px-4 rounded shadow-lg transition-all duration-500 opacity-100 z-[100]"
+      className="w-full max-w-[324px] h-[41px] bg-black/50 rounded-lg justify-center items-center gap-1 inline-flex overflow-hidden text-center text-white text-sm font-semibold fixed bottom-5 left-1/2 z-[100] transform -translate-x-1/2 transition-all duration-500 opacity-100"
       style={{ transition: 'opacity 1s ease-in-out, transform 1s ease' }}
     >
       {message}
