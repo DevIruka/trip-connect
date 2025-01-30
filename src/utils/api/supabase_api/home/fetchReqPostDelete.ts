@@ -1,7 +1,7 @@
 import { Tables } from '@/types/supabase';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
-export const fetchPostDelete = async (
+export const fetchReqPostDelete = async (
   post: Tables<'request_posts'>,
   userId?: string,
 ) => {
@@ -14,8 +14,6 @@ export const fetchPostDelete = async (
         .eq('id', post.id);
 
       if (error) throw error;
-
-      alert('삭제되었습니다.');
       window.location.href = '/'; // 삭제 후 홈으로 리다이렉트
     } catch (error) {
       console.error('Error:', error);

@@ -1,3 +1,4 @@
+import { useModal } from '@/providers/ModalProvider';
 import { Tables } from '@/types/supabase';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
@@ -5,13 +6,15 @@ import React from 'react';
 
 type Props = {
   user: User;
-  post: Tables<'request_posts'> | Tables<'response_posts'>;
-  setIsDModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  requestPost?: Tables<'request_posts'>;
+  responsePost?: Tables<'response_posts'>;
   mode?: string;
 };
 
-const SelectBox = ({ user, post, setIsDModalOpen, mode }: Props) => {
+const SelectBox = ({ user, requestPost, responsePost, mode }: Props) => {
   const router = useRouter();
+  const { openModal } = useModal();
+
   return (
     <>
       <div
@@ -21,18 +24,16 @@ const SelectBox = ({ user, post, setIsDModalOpen, mode }: Props) => {
             : 'top-[45px] right-[23px]'
         }`}
       >
-        {user?.id === post?.user_id ? (
+        {user?.id === requestPost?.user_id ||
+        user?.id === responsePost?.user_id ? (
           <>
             <button
               onClick={() => {
-                if (user.id !== post?.user_id) {
-                  alert('작성자가 아닙니다.');
-                } else
-                  router.push(
-                    `/${
-                      mode === 'response' ? 'response-edit' : 'request-edit'
-                    }/${post?.id}`,
-                  );
+                router.push(
+                  `/${mode === 'response' ? 'response-edit' : 'request-edit'}/${
+                    mode === 'response' ? responsePost?.id : requestPost?.id
+                  }`,
+                );
               }}
               className="ml-2.5 mx-[4.5px] h-[29px]"
             >
@@ -40,9 +41,10 @@ const SelectBox = ({ user, post, setIsDModalOpen, mode }: Props) => {
             </button>
             <button
               onClick={() => {
-                if (user.id !== post?.user_id) {
-                  alert('작성자가 아닙니다.');
-                } else setIsDModalOpen(true);
+                openModal('deleteConfirm', {
+                  requestpost: requestPost,
+                  responsepost: responsePost,
+                });
               }}
               className="ml-2.5 mx-[4.5px] h-[29px]"
             >

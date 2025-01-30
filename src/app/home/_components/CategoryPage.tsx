@@ -5,42 +5,80 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import pencil from '@/data/images/ic-pencil.svg';
-import { usePosts } from '@/utils/api/tanstack/home/usePosts';
-
 import { useSearchStore } from '@/store/useSearchStore';
 
-import { nation } from '../_types/homeTypes';
+import { nation, Post } from '../_types/homeTypes';
 
-import LoginModal from '@/components/LoginModal';
 import ListReqPost from '@/components/ListReqPost';
 import ListResPost from '@/components/ListResPost';
 import QnaHeader from './QnaHeader';
 import Navbar from './NavBar';
 import { useUserStore } from '@/store/userStore';
-import { Mobile } from '@/components/ui/Responsive';
+import { useModal } from '@/providers/ModalProvider';
+import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
+import { useResPosts } from '@/utils/api/tanstack/home/useResPosts';
 
 const CategoryPage = () => {
   //서치파람스의 값으로 카테고리 1차구분
   const searchParams = useSearchParams();
-  const router = useRouter();
   const category = searchParams.get('category') || 'all';
+  const { user } = useUserStore();
+  const router = useRouter();
   const changeCategory = (category: string) => {
     router.push(`?category=${category}`); // URL 업데이트
   };
 
   //모든 게시물 가져오기
-  const { allPosts, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    usePosts('all');
+  const {
+    response_posts,
+    fetchNextPage: QfetchNextPage,
+    hasNextPage: QhasNextPage,
+    isFetchingNextPage: QisFetchingNextPage,
+  } = useResPosts();
+  const {
+    request_posts,
+    fetchNextPage: AfetchNextPage,
+    hasNextPage: AhasNextPage,
+    isFetchingNextPage: AisFetchingNextPage,
+  } = useReqPosts();
 
-  const categoryFilteredPosts = allPosts?.filter((post) => {
-    if (category === 'all') return post;
-    return (
-      post.category?.includes(category) ||
-      post.request_posts?.category.includes(category)
-    );
+  const [allPosts, setAllPosts] = useState<Post[] | []>([]);
+  useEffect(() => {
+    if (response_posts) {
+      setAllPosts((prevPosts) => {
+        return [...prevPosts, ...response_posts].filter(
+          (post, index, self) =>
+            index === self.findIndex((p) => p.id === post.id),
+        );
+      });
+    }
+  }, [response_posts]);
+  useEffect(() => {
+    if (request_posts) {
+      setAllPosts((prevPosts) => {
+        return [...prevPosts, ...request_posts].filter(
+          (post, index, self) =>
+            index === self.findIndex((p) => p.id === post.id),
+        );
+      });
+    }
+  }, [request_posts]);
+
+  const sortedPosts = allPosts.sort((a, b) => {
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
-  //filter로 카테고리 2차구분
+  //주제별 카테고리
+  const categoryFilteredPosts = sortedPosts?.filter((post) => {
+    if (category === 'all') return post;
+    if ('category' in post) {
+      return post.category?.includes(category);
+    } else if ('request_posts' in post && post.request_posts) {
+      return post.request_posts?.category.includes(category);
+    }
+  });
+
+  //질문 답변 카테고리
   const [filterType, setFilterType] = useState('latest');
   const filteredPosts = categoryFilteredPosts?.filter((post) => {
     if (filterType === 'request') return !post.request_id; // 질문글 (request_id가 없는 경우)
@@ -55,18 +93,39 @@ const CategoryPage = () => {
       : null,
   );
   const nationfilteredPosts = filteredPosts?.filter((post) => {
-    // Request 유형 처리
     if (nationFilter) {
-      if (!post.request_id && !post.country_city?.includes(nationFilter.city)) {
-        return false;
-      }
+      if (nationFilter.city) {
+        // Request 유형 처리
+        if (
+          !post.request_id &&
+          !post.country_city?.includes(nationFilter.city)
+        ) {
+          return false;
+        }
 
-      // Response 유형 처리
-      if (
-        post.request_id &&
-        !post.verified_country?.includes(nationFilter.city)
-      ) {
-        return false;
+        // Response 유형 처리
+        if (
+          post.request_id &&
+          !post.verified_country?.includes(nationFilter.city)
+        ) {
+          return false;
+        }
+      } else {
+        // Request 유형 처리
+        if (
+          !post.request_id &&
+          !post.country_city?.includes(nationFilter.country)
+        ) {
+          return false;
+        }
+
+        // Response 유형 처리
+        if (
+          post.request_id &&
+          !post.verified_country?.includes(nationFilter.country)
+        ) {
+          return false;
+        }
       }
     }
 
@@ -81,12 +140,12 @@ const CategoryPage = () => {
   }, [setKeyword]);
 
   //로그인해주세요 모달
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
-  const { user } = useUserStore();
+  const { openModal } = useModal();
+
   return (
     <>
-      <div className="w-full mx-auto relative overflow-y-scroll z-[51] menuscrollbar md:pb-[140px]">
-        <QnaHeader setIsModalOpen={setIsModalOpen} />
+      <div className="w-full h-screen mx-auto relative overflow-y-scroll z-[51] menuscrollbar md:pb-[140px]">
+        <QnaHeader />
         <Navbar
           setFilterType={setFilterType}
           changeCategory={changeCategory}
@@ -94,14 +153,10 @@ const CategoryPage = () => {
           filterType={filterType}
         />
         <div className="grid max-w-[1200px] mx-auto">
-          <ul className="px-5 grid md:flex md:flex-wrap gap-2 items-start md:gap-4 md:justify-center">
+          <ul className="px-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-start md:gap-4 md:justify-center md:px-9">
             {nationfilteredPosts?.map((post) => {
               return !post.request_id ? (
-                <ListReqPost
-                  key={post.id}
-                  post={post}
-                  setIsModalOpen={setIsModalOpen}
-                />
+                <ListReqPost key={post.id} post={post} />
               ) : (
                 <ListResPost key={post.id} post={post} />
               );
@@ -109,39 +164,34 @@ const CategoryPage = () => {
           </ul>
 
           {/* 더보기 버튼 */}
-          <div className="px-5">
-            {hasNextPage && (
+          <div className="px-5 flex justify-center">
+            {QhasNextPage || AhasNextPage ? (
               <button
                 onClick={() => {
-                  fetchNextPage();
+                  QfetchNextPage();
+                  AfetchNextPage();
                 }}
-                disabled={isFetchingNextPage}
-                className="mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-2.5 inline-flex text-center text-[#44484c] text-sm font-semibold w-full"
+                disabled={QisFetchingNextPage || AisFetchingNextPage}
+                className="gray-btn"
               >
-                {isFetchingNextPage ? '로딩 중...' : '더보기'}
+                {QisFetchingNextPage || AisFetchingNextPage
+                  ? '로딩 중...'
+                  : '더보기'}
               </button>
-            )}
+            ) : null}
           </div>
         </div>
 
-        <Mobile>
-          <button
-            className="sticky bottom-16 left-[79%] bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
-            onClick={() => {
-              if (!user) setIsModalOpen(true);
-              else router.push('/request');
-            }}
-          >
-            <Image width={36} height={36} src={pencil} alt="pencil" />
-          </button>
-        </Mobile>
+        <button
+          className="fixed bottom-10 right-10 bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
+          onClick={() => {
+            if (!user) openModal('loginModal');
+            else router.push('/request');
+          }}
+        >
+          <Image width={36} height={36} src={pencil} alt="pencil" />
+        </button>
       </div>
-      <LoginModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-      />
     </>
   );
 };

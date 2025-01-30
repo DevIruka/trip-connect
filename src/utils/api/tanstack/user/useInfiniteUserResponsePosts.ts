@@ -4,7 +4,8 @@ import {
   FetchResponsePostsResult,
 } from '@/app/search/[id]/_types/searchTypes';
 import { fetchUserResponsePosts } from '../../supabase_api/user/fetchResponse';
-const PAGE_SIZE = 5; // 페이지 사이즈
+import { pagination } from '@/constants/pagination';
+const PAGE_SIZE = pagination.user.posts; // 페이지 사이즈
 
 const useInfiniteUserResponsePosts = (
   user_id: string,

@@ -5,7 +5,8 @@ import {
   ExtendedResponsePostData,
   FetchResponsePostsResult,
 } from '@/app/search/[id]/_types/searchTypes';
-const PAGE_SIZE = 5; // 페이지 사이즈
+import { pagination } from '@/constants/pagination';
+const PAGE_SIZE = pagination.search.posts; // 페이지 사이즈
 
 const useInfiniteSearchResponsePosts = (
   keyword: string,
