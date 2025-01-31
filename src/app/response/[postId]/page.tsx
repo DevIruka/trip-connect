@@ -9,6 +9,7 @@ import HeaderWithButton from '../_components/HeaderButtons';
 import { useQuery } from '@tanstack/react-query';
 import { useUserStore } from '@/store/userStore';
 import { useTranslation } from 'react-i18next';
+import { Editor } from '@tiptap/core';
 
 type RequestDetails = {
   title: string;
@@ -38,6 +39,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
     freeContent: '',
   });
   const [isVisible, setIsVisible] = useState(false);
+  const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
 
   const {
     data: request,
@@ -144,14 +146,23 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
         </div>
       </div>
 
-      <div className="md:border md:border-[#DFE1E5] md:rounded-[16px] md:max-w-[800px] md:mx-auto w-full">
-        <div className="hidden md:block">
+      <div className="hidden md:flex flex-col items-center w-full">
+        <div className="w-full max-w-[800px] border border-[#DFE1E5] bg-white rounded-[8px] border-[1px] overflow: hidden;">
           <HeaderWithButton
             buttonKey={t('register')}
             onButtonClick={handleSubmit}
           />
-        </div>
 
+          <TiptapEditor
+            title={data.title}
+            contentHtml={data.contentHtml}
+            freeContent={data.freeContent}
+            onChange={(updatedData) => setData(updatedData)}
+          />
+        </div>
+      </div>
+
+      <div className="md:hidden">
         <TiptapEditor
           title={data.title}
           contentHtml={data.contentHtml}
