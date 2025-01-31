@@ -78,7 +78,7 @@ const FormFields: React.FC<Props> = ({
   return (
     <>
       <div className="flex flex-col gap-[28px]">
-        <div className="flex flex-col items-start gap-[8px]">
+        <div className="flex flex-col items-start gap-[8px] md:gap-[12px]">
           <label className="text-sm font-semibold text-[13px]">
             {t('titleLabel')}
           </label>
@@ -98,7 +98,7 @@ const FormFields: React.FC<Props> = ({
           )}
         </div>
 
-        <div className="flex flex-col items-start gap-[8px]">
+        <div className="flex flex-col items-start gap-[8px] md:gap-[12px]">
           <label className="text-sm font-semibold text-[13px]">
             {t('creditLabel')}
           </label>
@@ -124,7 +124,7 @@ const FormFields: React.FC<Props> = ({
           )}
         </div>
 
-        <div className="flex flex-col items-start gap-[8px]">
+        <div className="flex flex-col items-start gap-[8px] md:gap-[12px]">
           <label className="text-sm font-semibold text-[13px]">
             {t('contentLabel')}
           </label>
@@ -149,7 +149,7 @@ const FormFields: React.FC<Props> = ({
           )}
         </div>
 
-        <div className="flex flex-col items-start gap-[8px]">
+        <div className="flex flex-col items-start gap-[8px] md:gap-[12px]">
           <label className="text-sm font-semibold text-[13px]">
             {t('dateLabel')}
           </label>
