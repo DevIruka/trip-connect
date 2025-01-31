@@ -89,70 +89,76 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
 
   return (
     <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
-      <HeaderWithButton
-        buttonKey={t('register')}
-        onButtonClick={handleSubmit}
-      />
-
-      <div className="bg-[#F5F7FA] w-full mb-[16px] px-[20px] py-[16px]">
-        <div className="flex flex-col gap-[8px]">
-          {/* Q와 제목 */}
-          <div className="flex justify-between items-center gap-[8px]">
-            <div
-              className="flex items-center gap-[8px] overflow-hidden"
-              style={{
-                maxWidth: 'calc(100% - 40px)',
-              }}
-            >
-              <span
-                style={{
-                  color: '#0582FF',
-                  flexShrink: 0,
-                  fontWeight: 600,
-                  fontSize: '16px',
-                }}
-              >
-                Q
-              </span>
-
-              <span className="text-black text-[16px] font-semibold">
-                {!isVisible ? visibleTitle : title}
-              </span>
-            </div>
-            <button
-              onClick={() => setIsVisible(!isVisible)}
-              className="text-[#797C80] flex-shrink-0"
-              style={{
-                width: '20px',
-                height: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {isVisible ? (
-                <FaChevronUp width="9" height="5" />
-              ) : (
-                <FaChevronDown width="9" height="5" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* 본문 내용 */}
-        {isVisible && (
-          <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line">
-            {request?.content}
-          </p>
-        )}
+      <div className="md:hidden">
+        <HeaderWithButton
+          buttonKey={t('register')}
+          onButtonClick={handleSubmit}
+        />
       </div>
 
-      <TiptapEditor
-        title={data.title}
-        contentHtml={data.contentHtml}
-        freeContent={data.freeContent}
-        onChange={(updatedData) => setData(updatedData)}
-      />
+      <div className="bg-[#F5F7FA] w-full mb-[16px] px-[20px] py-[16px] md:py-[28px] md:mb-[40px]">
+        <div className="mx-auto max-w-[800px] box-border">
+          <div className="flex flex-col gap-[8px]">
+            {/* Q와 제목 */}
+            <div className="flex justify-between items-center gap-[8px]">
+              <div
+                className="flex items-center gap-[8px] overflow-hidden"
+                style={{
+                  maxWidth: 'calc(100% - 40px)',
+                }}
+              >
+                <span className="text-[16px] font-[600] text-[#0582FF] flex-shrink-0 md:text-lg md:font-semibold">
+                  Q
+                </span>
+
+                <span className="text-black text-[16px] font-semibold">
+                  {!isVisible ? visibleTitle : title}
+                </span>
+              </div>
+              <button
+                onClick={() => setIsVisible(!isVisible)}
+                className="text-[#797C80] flex-shrink-0"
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {isVisible ? (
+                  <FaChevronUp width="9" height="5" />
+                ) : (
+                  <FaChevronDown width="9" height="5" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* 본문 내용 */}
+          {isVisible && (
+            <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line md:mt-5">
+              {request?.content}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="md:border md:border-[#DFE1E5] md:rounded-[16px] md:max-w-[800px] md:mx-auto w-full">
+        <div className="hidden md:block">
+          <HeaderWithButton
+            buttonKey={t('register')}
+            onButtonClick={handleSubmit}
+          />
+        </div>
+
+        <TiptapEditor
+          title={data.title}
+          contentHtml={data.contentHtml}
+          freeContent={data.freeContent}
+          onChange={(updatedData) => setData(updatedData)}
+        />
+      </div>
     </div>
   );
 };
