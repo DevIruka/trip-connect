@@ -29,7 +29,7 @@ const SearchToolTip = ({
             alt="Help icon"
             width={16}
             height={16}
-            className="ml-[3px] cursor-pointer"
+            className="ml-[3px] md:ml-[10px] cursor-pointer"
             onClick={handleTooltipToggle}
           />
         </div>

@@ -243,7 +243,6 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
               <button>
                 <TextHeightIcon color={getTextHeightColor()} />
               </button>
-
               <label
                 htmlFor="image-upload"
                 className="w-6 h-6 flex items-center justify-center cursor-pointer hover:text-[#0582FF]"
@@ -259,7 +258,6 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
                   handleImageUpload(e);
                 }}
               />
-
               <button
                 className="w-6 h-6 flex items-center justify-center hover:text-[#0582FF]"
                 onClick={() => setIsModalOpen(true)}
@@ -313,13 +311,6 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
           </div>
         </>
       )}
-
-      {/* Google Modal */}
-      <GoogleModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSelectLocation={handleInsertMap}
-      />
     </div>
   );
 };

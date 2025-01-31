@@ -5,10 +5,10 @@ export const pagination = {
     comments: 5,
   },
   search: {
-    posts: 5,
+    posts: 20,
   },
   user: {
-    posts: 5,
-    reviews: 5,
+    posts: 20,
+    reviews: 20,
   },
 };

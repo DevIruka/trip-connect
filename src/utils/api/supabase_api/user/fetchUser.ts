@@ -3,7 +3,7 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 export const fetchUser = async (id: string) => {
   const { data, error } = await supabase
     .from('users')
-    .select('profile_img, id, nickname, country_verified, introduction')
+    .select('profile_img, id, nickname, country_verified, country, introduction')
     .eq('id', id)
     .single();
 

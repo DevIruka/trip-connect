@@ -1,4 +1,3 @@
-import { supabase } from '@/utils/supabase/supabaseClient';
 import { getUser } from './getUser';
 
 export const fetchUserProfile = async () => {

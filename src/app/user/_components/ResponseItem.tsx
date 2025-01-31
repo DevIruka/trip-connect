@@ -37,29 +37,18 @@ const ResponseItem: React.FC<ResponseItemProps> = ({
   const handleNavigate = () => {
     router.push(`/post/${post.request_id}`); // 이동할 경로
   };
+
   return (
     <div
-      className="relative"
-      style={{
-        padding: '12px 20px 24px',
-      }}
+      className="relative border-b md:border md:rounded-xl mt-[12px] pb-[22px] md:px-[36px] md:py-[22px]"
       onClick={handleNavigate}
     >
-      <div
-        className="absolute inset-0 border-b"
-        style={{
-          borderColor: '#F4F4F4',
-          left: '20px',
-          right: '20px',
-        }}
-      ></div>
-
       <div className="flex gap-2 text-xs text-gray-500 mb-2">
         <div
-          className="flex items-center gap-1 bg-[#F5F7FA] rounded-[4px] px-1.5 py-0.5"
+          className="flex gap-1 bg-[#F5F7FA] rounded-[4px] items-center justify-center"
           style={{
-            paddingLeft: '4px',
-            paddingRight: '6px',
+            padding: '0 6px',
+            minHeight: '24px',
           }}
         >
           <img

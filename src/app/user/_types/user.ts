@@ -1,8 +1,9 @@
 export type UserData = {
   profile_img: string;
   nickname: string;
-  country_verified: string;
+  country_verified: null | boolean;
   introduction: string;
+  country: string;
 };
 
 export type ResponsePost = {

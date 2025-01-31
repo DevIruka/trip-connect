@@ -10,6 +10,7 @@ import CreditBalance from './_components/CreditBalance';
 import PaymentOptions from './_components/PaymentOptions';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
+import { Mobile } from '@/components/ui/Responsive';
 
 const leftIcon = '/images/ic-left.svg';
 
@@ -77,36 +78,39 @@ const CreditPage: React.FC = () => {
 
   return (
     <div className="inner bg-white h-screen">
-      {/* 상단 제목 및 뒤로가기 */}
-      <div className="flex items-center my-[10px]">
-        <Image
-          src={leftIcon}
-          width={24}
-          height={24}
-          alt="back"
-          onClick={() => router.push('/mypage')}
-        />
-      </div>
-
+      <Mobile>
+        {/* 상단 제목 및 뒤로가기 */}
+        <div className="flex items-center my-[10px]">
+          <Image
+            src={leftIcon}
+            width={24}
+            height={24}
+            alt="back"
+            onClick={() => router.push('/mypage')}
+          />
+        </div>
+      </Mobile>
       {/* 보유 크레딧 */}
       <CreditBalance credit={credit} />
 
-      {/* 충전하기 */}
-      <h2 className="text-black text-[20px] font-[700] mb-[16px]">
-        {t('recharge')}
-      </h2>
-      <PaymentOptions
-        options={[
-          { amount: 1000, bonusRate: 0 },
-          { amount: 5000, bonusRate: 0.02 },
-          { amount: 10000, bonusRate: 0.02 },
-          { amount: 15000, bonusRate: 0.02 },
-          { amount: 20000, bonusRate: 0.02 },
-        ]}
-        onPayment={(amount, bonus) =>
-          handlePayment(amount, bonus, user?.email || '')
-        }
-      />
+      <div className="max-w-[800px] mx-auto">
+        {/* 충전하기 */}
+        <h2 className="text-black text-[20px] font-[700] mb-[16px]">
+          {t('recharge')}
+        </h2>
+        <PaymentOptions
+          options={[
+            { amount: 1000, bonusRate: 0 },
+            { amount: 5000, bonusRate: 0.02 },
+            { amount: 10000, bonusRate: 0.02 },
+            { amount: 15000, bonusRate: 0.02 },
+            { amount: 20000, bonusRate: 0.02 },
+          ]}
+          onPayment={(amount, bonus) =>
+            handlePayment(amount, bonus, user?.email || '')
+          }
+        />
+      </div>
     </div>
   );
 };

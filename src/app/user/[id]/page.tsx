@@ -60,6 +60,7 @@ const UserPage = () => {
 
   return (
     <div className="inner">
+      <div className="w-full items-center justify-center mx-auto max-w-[800px]">
       <Header />
       {isUserPending ? <></> : <ProfileSection userData={userData!} />}
       <TabNavigation
@@ -71,65 +72,66 @@ const UserPage = () => {
           reviews: userReviewPost ? userReviewPost.length : 0,
         }}
       />
-      <div className="mt-4">
-        {activeTab === 'responses' && (
-          <>
-            {userResponsePost?.map((post, i) => {
-              const review = reviewCount![i];
-              return (
-                <ResponseItem
-                  key={post.id}
-                  post={post}
-                  review={review}
-                  userData={userData!}
-                />
-              );
-            })}
-            <LoadMoreButton
-              hasNextPage={responseHasNextPage}
-              isFetchingNextPage={responseIsFetchingNextPage}
-              onClick={resmoreBtnHandler}
-            >
-              더보기
-            </LoadMoreButton>
-          </>
-        )}
-        {activeTab === 'requests' && (
-          <>
-            {userRequestPost?.map((post, i) => {
-              const response = responseCount![i];
-              return (
-                <RequestItem
-                  key={post.id}
-                  post={post}
-                  responseCount={response}
-                />
-              );
-            })}
-            <LoadMoreButton
-              hasNextPage={requestHasNextPage}
-              isFetchingNextPage={requestIsFetchingNextPage}
-              onClick={reqmoreBtnHandler}
-            >
-              더보기
-            </LoadMoreButton>
-          </>
-        )}
-        {activeTab === 'reviews' && (
-          <>
-            {userReviewPost?.map((review) => (
-              <ReviewItem key={review.id} review={review} />
-            ))}
+        <div className="mt-4">
+          {activeTab === 'responses' && (
+            <>
+              {userResponsePost?.map((post, i) => {
+                const review = reviewCount![i];
+                return (
+                  <ResponseItem
+                    key={post.id}
+                    post={post}
+                    review={review}
+                    userData={userData!}
+                  />
+                );
+              })}
+              <LoadMoreButton
+                hasNextPage={responseHasNextPage}
+                isFetchingNextPage={responseIsFetchingNextPage}
+                onClick={resmoreBtnHandler}
+              >
+                더보기
+              </LoadMoreButton>
+            </>
+          )}
+          {activeTab === 'requests' && (
+            <>
+              {userRequestPost?.map((post, i) => {
+                const response = responseCount![i];
+                return (
+                  <RequestItem
+                    key={post.id}
+                    post={post}
+                    responseCount={response}
+                  />
+                );
+              })}
+              <LoadMoreButton
+                hasNextPage={requestHasNextPage}
+                isFetchingNextPage={requestIsFetchingNextPage}
+                onClick={reqmoreBtnHandler}
+              >
+                더보기
+              </LoadMoreButton>
+            </>
+          )}
+          {activeTab === 'reviews' && (
+            <>
+              {userReviewPost?.map((review) => (
+                <ReviewItem key={review.id} review={review} />
+              ))}
 
-            <LoadMoreButton
-              hasNextPage={reviewHasNextPage}
-              isFetchingNextPage={reviewIsFetchingNextPage}
-              onClick={revmoreBtnHandler}
-            >
-              더보기
-            </LoadMoreButton>
-          </>
-        )}
+              <LoadMoreButton
+                hasNextPage={reviewHasNextPage}
+                isFetchingNextPage={reviewIsFetchingNextPage}
+                onClick={revmoreBtnHandler}
+              >
+                더보기
+              </LoadMoreButton>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
