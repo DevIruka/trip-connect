@@ -11,17 +11,23 @@ import { useRouter } from 'next/navigation';
 import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 import { Desktop } from '@/components/ui/Responsive';
 import MoreButton from '@/data/images/ic-More.svg';
+import SelectBox from '@/components/SelectBox';
 
 const Profile = ({
   postUserId,
   createdAt,
+  mode,
+  post,
 }: {
   postUserId: string;
   createdAt: string;
+  mode?: string;
+  post?: Tables<'request_posts'>;
 }) => {
   const [user, setUser] = useState<Tables<'users'>>();
   const { user: logginedUser } = useUserStore();
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -80,11 +86,22 @@ const Profile = ({
           </div>
         </div>
       </div>
-      <Desktop>
-        <button>
-          <Image width={20} height={20} alt="MoreButton" src={MoreButton} />
-        </button>
-      </Desktop>
+      {mode === 'request' && (
+        <Desktop>
+          <button onClick={() => setIsModalOpen(!isModalOpen)}>
+            <Image width={20} height={20} alt="MoreButton" src={MoreButton} />
+          </button>
+        </Desktop>
+      )}
+
+      {isModalOpen && (
+        <div
+          className="w-full h-screen absolute top-0 right-0"
+          onClick={() => setIsModalOpen(!isModalOpen)}
+        >
+          <SelectBox user={logginedUser!} requestPost={post!} />
+        </div>
+      )}
     </div>
   );
 };

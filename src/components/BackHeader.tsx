@@ -21,7 +21,7 @@ const BackHeader = ({
   text: string;
   isThreeDots?: boolean;
   post?: Tables<'request_posts'>;
-  link: string;
+  link?: string;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
