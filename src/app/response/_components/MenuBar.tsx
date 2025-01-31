@@ -146,9 +146,9 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
             <div
               className="w-full h-14 flex-col justify-start items-start inline-flex fixed z-[60] top-0 left-0"
               style={{
-                position:'fixed',
+                position: 'fixed',
                 top: 'auto',
-                bottom:`${keyboardHeight + 56}px`,
+                bottom: `${keyboardHeight + 56}px`,
               }}
             >
               <div className="self-stretch px-5 py-[16px] bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] py-[12px]">
@@ -236,9 +236,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       ) : (
         <>
           {/* Main Menu */}
-          <div
-            className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 md:px-[20px] md:py-[12px]"
-          >
+          <div className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 md:px-[20px] md:py-[12px]">
             <div className="justify-start items-center gap-6 flex">
               <button>
                 <TextHeightIcon color={getTextHeightColor()} />
@@ -311,6 +309,11 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
           </div>
         </>
       )}
+      <GoogleModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSelectLocation={handleInsertMap}
+      />
     </div>
   );
 };
