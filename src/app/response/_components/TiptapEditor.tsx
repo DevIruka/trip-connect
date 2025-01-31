@@ -12,7 +12,7 @@ import MapNode from './MapNode';
 import TextStyle from '@tiptap/extension-text-style';
 import Placeholder from '@tiptap/extension-placeholder';
 import { useTranslation } from 'react-i18next';
-import { MediaQueryAllQueryable, useMediaQuery } from 'react-responsive';
+import { useMediaQuery } from 'react-responsive';
 
 type Props = {
   title: string;
@@ -111,19 +111,20 @@ const TiptapEditor: React.FC<Props> = ({
 
   return (
     <>
-      <div className="px-5 pb-0 w-full max-w-[800px] mx-auto">
+      <div className="px-5 pb-0 w-full max-w-[800px] mx-auto md:px-0">
         <div className="hidden md:block">
           <MenuBar editor={activeEditor} />
         </div>
 
-          <div className="mb-[24px]">
+        <div className="md:px-[20px]">
+          <div className="mb-[24px] md:mb-[12px]">
             <label className="sr-only">{t('titlePlaceholder')}</label>
             <textarea
               ref={textareaRef}
               value={title}
               onChange={handleTitleChange}
               placeholder={t('titlePlaceholder')}
-              className="w-full py-2 bg-transparent border-0 border-b max-w-[800px] focus:outline-none focus:ring-0 focus:border-[#DFE1E5] placeholder:text-[#A9A9A9] text-[18px] font-bold resize-none"
+              className="w-full py-2 bg-transparent border-0 border-b max-w-[800px] focus:outline-none focus:ring-0 focus:border-[#DFE1E5] placeholder:text-[#A9A9A9] text-[18px] font-bold resize-none md:px-[16px] md:py-[8px]"
               style={{
                 color: '#000000',
                 lineHeight: '1.5',
@@ -133,42 +134,47 @@ const TiptapEditor: React.FC<Props> = ({
             />
           </div>
 
-          <div className="mb-[24px]">
-          <div className="relative rounded-[8px] border border-[#DFE1E5]">
-              <div className=" px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
+          <div className="mb-[24px] md:mb-[12px]">
+            <div className="relative rounded-[8px] border border-[#DFE1E5] md:border-transparent">
+              <div className=" px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m md:border-transparent">
                 {!previewEditor?.getText() && t('previewPlaceholder')}
               </div>
-              <div className="rounded-[8px] ">
+              <div className="rounded-[8px] md:min-h-[210px]">
                 <EditorContent editor={previewEditor} />
               </div>
             </div>
           </div>
 
-          <div className="relative my-[16px] flex items-center justify-center">
-          <div className="flex-grow border-t border-[#DFE1E5]"></div>
+          <div className="relative my-[16px] flex items-center justify-center md:hidden">
+            <div className="flex-grow border-t border-[#DFE1E5]"></div>
             <p className="px-4 text-sm whitespace-nowrap bg-white text-[#80BFFF]">
               {t('paidOnlyMessage')}
             </p>
             <div className="flex-grow border-t border-[#DFE1E5]"></div>
           </div>
 
-          <div className="mb-[150px]">
-            <div className="relative rounded-[8px] border border-[#DFE1E5]">
-              <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
+          <div className="hidden md:block bg-[#f4f6f9] rounded-lg py-2 px-5 text-center md:mb-[12px]">
+            <p className="text-[#0582ff] text-sm font-medium leading-tight">
+              {t('paidOnlyMessage')}
+            </p>
+          </div>
+
+          <div className="mb-[150px] md:mb-[12px]">
+            <div className="relative rounded-[8px] border border-[#DFE1E5] md:border-transparent">
+              <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m md:border-transparent">
                 {!editor?.getText() && t('paidContentPlaceholder')}
               </div>
-              <div className="rounded-[8px] ">
+              <div className="rounded-[8px] md:min-h-[210px]">
                 <EditorContent editor={editor} />
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-      {isMobile && (
-        <div className="md:fixed top-0 w-full z-50 md:hidden">
-          <MenuBar editor={activeEditor} />
-        </div>
-      )}
+      <div className="fixed bottom-0 w-full z-50 md:hidden">
+        <MenuBar editor={activeEditor} />
+      </div>
     </>
   );
 };
