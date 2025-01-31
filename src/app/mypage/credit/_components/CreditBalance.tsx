@@ -8,7 +8,7 @@ const coin = '/images/goldcoin.svg';
 const CreditBalance: React.FC<CreditBalanceProps> = ({ credit }) => {
   const{t} = useTranslation('credit')
   return (
-    <div className="mb-[34px]">
+    <div className="mb-[34px] md:mt-[40px] max-w-[800px] mx-auto">
       <h2 className="text-black text-[20px] font-[700] mb-[20px]">
       {t('creditBalance')}
       </h2>

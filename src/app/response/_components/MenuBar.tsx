@@ -196,7 +196,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
       {/* Main Menu */}
       <div
-        className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50 md:px-[20px] py-[12px]"
+        className="w-full h-[56px] px-5 py-[16px] bg-white border-t md:border-t-0 border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50 md:px-[20px] py-[12px]"
         style={{
           position: isMobile ? 'fixed' : 'static',
           bottom: isMobile ? `${keyboardHeight}px` : 'auto',

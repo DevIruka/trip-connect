@@ -4,11 +4,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import heylocal from '@/data/images/HeyLocal.svg';
+import biglogo from '@/data/images/biglogo.svg';
 import search from '@/data/images/ic-Search.svg';
 import profile from '@/data/images/ic-Profile.svg';
 import { useUserStore } from '@/store/userStore';
 import { useMediaQuery } from 'react-responsive';
 import { useModal } from '@/providers/ModalProvider';
+import { Desktop, Mobile } from './ui/Responsive';
+
 
 const Header = () => {
   const pathname = usePathname();
@@ -40,17 +43,27 @@ const Header = () => {
 
   return shouldHideHeader && !isDesktop ? null : (
     <>
-      <div className="flex sticky top-0 h-[56px] bg-white z-50 w-full justify-between py-[13.5px] px-[20px] max-w-[1200px] md:px-9">
+      <div className="flex sticky top-0 h-[56px] md:h-[84px] bg-white z-50 w-full justify-between py-[13.5px] md:py-0 px-[20px] max-w-[1200px] md:px-9">
         <Link href="/" className="flex place-content-center">
-          <Image
-            src={heylocal}
-            alt="헤이로컬 로고"
-            width={115}
-            height={29}
-            style={{ width: 115, height: 29 }}
-          />
+          <Mobile>
+            <Image
+              src={heylocal}
+              alt="헤이로컬 로고"
+              width={115}
+              height={29}
+              style={{ width: 115, height: 29 }}
+            />
+          </Mobile>
+          <Desktop>
+            <Image
+              src={biglogo}
+              alt="헤이로컬 로고"
+              width={84}
+              height={84}
+            />
+          </Desktop>
         </Link>
-        <div className="flex gap-[20px]">
+        <div className="flex items-center gap-[20px]">
           <Link href="/search" className="flex place-content-center">
             <Image
               src={search}

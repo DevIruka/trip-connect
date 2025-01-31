@@ -22,7 +22,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   amount,
   onConfirm,
 }) => {
-  const {t} = useTranslation('credit')
+  const { t } = useTranslation('credit');
   const [selectedMethod, setSelectedMethod] = useState('tosspay');
 
   const handleConfirm = () => {
@@ -68,7 +68,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               <div className="w-[10px] h-[10px] bg-white rounded-full"></div>
             </div>
             <label htmlFor="tosspay" className="ml-2 font-semibold text-[16px]">
-            {t('tossPay')}
+              {t('tossPay')}
             </label>
           </div>
           <div className="flex items-center justify-between">
@@ -89,7 +89,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
               </label>
             </div>
             <span className="text-[12px] font-[500] text-[#A9A9A9]">
-            {t('comingSoon')}
+              {t('comingSoon')}
             </span>
           </div>
           <div className="flex items-center justify-between">
@@ -106,17 +106,19 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
                 <div className="w-[10px] h-[10px] bg-white rounded-full"></div>
               </div>
               <label htmlFor="card" className="ml-2 text-[#A9A9A9]">
-              {t('creditCard')}
+                {t('creditCard')}
               </label>
             </div>
             <span className="text-[12px] font-[500] text-[#A9A9A9]">
-            {t('comingSoon')}
+              {t('comingSoon')}
             </span>
           </div>
         </div>
-        <BlueButton className="mt-[28px] mb-[16px]" onClick={handleConfirm}>
-        {t('confirmPayment', { amount: amount.toLocaleString() })}
-        </BlueButton>
+        <div className="w-full flex items-center justify-center">
+          <BlueButton className="mt-[28px] mb-[16px] mx-auto" onClick={handleConfirm}>
+            {t('confirmPayment', { amount: amount.toLocaleString() })}
+          </BlueButton>
+        </div>
       </div>
     </div>
   );
