@@ -28,6 +28,7 @@ const BookmarkPage = () => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState<BookmarkedPost[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  
 
   useEffect(() => {
     const fetchBookmarks = async () => {

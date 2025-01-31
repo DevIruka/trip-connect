@@ -140,23 +140,27 @@ const MyPage = () => {
   };
 
   return (
-    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar">
-      <div className="px-5">
-        <div className="flex flex-row justify-between items-center h-[56px] mb-[16px]">
+    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar container max-w-screen-md lg:max-w-[872px]">
+      <div className="px-5 lg:px-[36px]">
+        {/* 헤더 */}
+        <div className="flex flex-row justify-between items-center h-[56px] mb-[16px] md:justify-start">
+          {/* 모바일에서만 뒤로 가기 버튼 표시 */}
           <Image
             src={lefticon}
             width={24}
             height={24}
             alt="back"
-            className="cursor-pointer"
+            className="cursor-pointer md:hidden"
             onClick={() => {
               router.push('/');
             }}
           />
-          <div className="text-black text-[20px] font-semibold leading-none">
+
+          <div className="text-black text-[20px] font-semibold leading-none md:ml-0 md:text-[28px] md:w-[800px] md:h-[50px] md:mt-[60px] md:mb-[28px] md:py-[10px]">
             {t('page_title')}
           </div>
-          <Link href={'/search'}>
+
+          <Link href={'/search'} className="md:hidden">
             <Image
               src={search}
               width={24}
@@ -167,74 +171,70 @@ const MyPage = () => {
           </Link>
         </div>
         {/* 프로필 카드 */}
-        <div className="mb-[16px]">
-          <div className="flex flex-row justify-between items-center">
-            <div className="flex items-center">
-              {/* 프로필 사진 */}
-              <div className="w-[52px] h-[52px] rounded-full bg-gray-200 overflow-hidden">
-                {userProfile.profileImg ? (
-                  <Image
-                    src={userProfile.profileImg}
-                    alt="Profile"
-                    width={52}
-                    height={52}
-                    className="object-cover"
-                  />
-                ) : (
-                  <Image
-                    src="/images/default-profile.svg"
-                    alt="Default Profile"
-                    width={52}
-                    height={52}
-                    className="object-cover"
-                  />
-                )}
-              </div>
-
-              {/* 닉네임, 국가 정보 */}
-              <div
-                className="flex flex-col ml-[8px] relative"
-                style={{ top: '-5px' }}
-              >
-                <h2
-                  className="text-[16px] font-semibold mb-[2px] flex items-center"
-                  style={{
-                    minWidth: '120px',
-                    maxWidth: '200px',
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {userProfile.nickname}
-                  {/* 인증 뱃지 */}
-                  {userProfile.authenticated && (
-                    <Image
-                      src={badge}
-                      width={16}
-                      height={16}
-                      alt="badge"
-                      className="ml-[4px]"
-                    />
-                  )}
-                </h2>
-                {userProfile.country ? (
-                  <div className="absolute top-[24px] left-0 flex items-center justify-center h-[20px] min-w-[80px] bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] px-[4px]">
-                    <Image src={marker} width={10} height={10} alt="marker" />
-                    <p className="text-[12px] font-medium tracking-[-0.24px] ml-[4px]">
-                      {userProfile.country}
-                    </p>
-                  </div>
-                ) : (
-                  <p className="absolute top-[24px] left-0 text-[#45484D] text-[12px]">
-                    {t('not_verified_country')}
-                  </p>
-                )}
-              </div>
+        <div className="mb-[16px] lg:flex lg:items-center lg:justify-between lg:mb-[32px]">
+          <div className="flex items-center lg:flex-row md:mt-[45px]">
+            {/* 프로필 사진 */}
+            <div className="w-[52px] h-[52px] lg:w-[80px] lg:h-[80px] rounded-full bg-gray-200 overflow-hidden">
+              {userProfile.profileImg ? (
+                <Image
+                  src={userProfile.profileImg}
+                  alt="Profile"
+                  width={80}
+                  height={80}
+                  className="object-cover"
+                />
+              ) : (
+                <Image
+                  src="/images/default-profile.svg"
+                  alt="Default Profile"
+                  width={80}
+                  height={80}
+                  className="object-cover"
+                />
+              )}
             </div>
+
+            {/* 닉네임, 국가 정보 및 편집 버튼 */}
+            <div className="flex flex-col ml-[8px] lg:ml-[16px] relative">
+              <h2
+                className="text-[16px] lg:text-[20px] font-semibold mb-[2px] flex items-center"
+                style={{
+                  minWidth: '120px',
+                  maxWidth: '200px',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
+                {userProfile.nickname}
+                {/* 인증 뱃지 */}
+                {userProfile.authenticated && (
+                  <Image
+                    src={badge}
+                    width={16}
+                    height={16}
+                    alt="badge"
+                    className="ml-[4px]"
+                  />
+                )}
+              </h2>
+              {userProfile.country ? (
+                <div className="absolute top-[24px] lg:top-[32px] left-0 flex items-center justify-center h-[20px] min-w-[80px] bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] px-[4px]">
+                  <Image src={marker} width={10} height={10} alt="marker" />
+                  <p className="text-[12px] font-medium tracking-[-0.24px] ml-[4px]">
+                    {userProfile.country}
+                  </p>
+                </div>
+              ) : (
+                <p className="absolute top-[24px] lg:top-[32px] left-0 text-[#45484D] text-[12px]">
+                  {t('not_verified_country')}
+                </p>
+              )}
+            </div>
+
             {/* 프로필 편집 버튼 */}
             <button
-              className="flex justify-center items-center gap-[10px] px-[12px] py-[6px] rounded-full bg-[#F5F7FA] text-[12px] text-[#45484D]"
+              className="absolute right-12 flex justify-center items-center gap-[10px] px-[12px] py-[6px] lg:px-[16px] lg:py-[8px] rounded-full bg-[#F5F7FA] text-[12px] lg:text-[14px] text-[#45484D]"
               onClick={() => setIsModalOpen(true)}
             >
               {t('edit_profile')}
@@ -242,35 +242,43 @@ const MyPage = () => {
           </div>
         </div>
         {/* 자기소개 */}
-        <div className="pb-[16px] border-b border-[#F4F4F4]">
-          <div className="text-black font-[500]">
+        <div className="pb-[16px] lg:pb-[24px] border-b border-[#F4F4F4]">
+          <div className="text-black font-[500] text-[14px] lg:text-[16px]">
             {userProfile.introduction}
           </div>
         </div>
+
+        <div className="border-b border-[#F4F4F4] mb-[16px] md:mb-[32px]"></div>
+
         {/* 크레딧 섹션 */}
-        <div className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] rounded-lg p-4 flex items-center mt-[20px] mb-[28px]">
-          <div className="flex flex-row justify-between items-center">
+        <div
+          className="border-solid border-[#F4F4F4] shadow-[0px_0px_24px_0px_rgba(0,0,0,0.05)] 
+  rounded-lg p-4 flex items-center mt-[20px] md:mt-[28px] mb-[28px] lg:mb-[40px] 
+  px-[24px] md:px-[38px] lg:px-[38px] h-[62px] md:h-[72px]"
+        >
+          <div className="flex items-center w-full">
             <Image src={coin} width={24} height={24} alt="coin" />
-            <p className="w-[205px] text-[18px] pt-[1px] ml-[8px] font-[600]">
+            <p className="text-[18px] lg:text-[20px] pt-[1px] font-[600] ml-[8px]">
               {new Intl.NumberFormat().format(Number(userProfile.credit))} C
             </p>
-            <Link href="/mypage/credit" className="ml-[16px]">
-              <p className="text-[#0582ff] text-sm font-medium ">
+            <Link href="/mypage/credit" className="ml-auto">
+              <p className="text-[#0582ff] text-sm font-medium">
                 {t('charge_credits')}
               </p>
             </Link>
           </div>
         </div>
         {/* 셀러 인증 */}
-        <div className="mb-[24px]">
-          <h2 className="text-lg font-[700] mb-[12px]">
+        <div className="md:mt-[28px] mb-[24px] lg:mb-[32px]">
+          <h2 className="text-lg lg:text-xl font-[700] mb-[12px] md:mb-[16px]">
             {t('seller_verification')}
           </h2>
           <Link
             href="/mypage/seller-auth"
-            className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full"
+            className="flex justify-between items-center gap-[23px] p-[16px] lg:p-[20px] rounded-[8px] bg-[#F9F9F9] w-full 
+  h-[54px] md:h-[72px]"
           >
-            <span className="text-[16px] text-[#45484D] font-[500]">
+            <span className="text-[16px] lg:text-[18px] text-[#45484D] font-[500]">
               {t('verify')}
             </span>
             <Image
@@ -282,14 +290,17 @@ const MyPage = () => {
           </Link>
         </div>
         {/* 활동 내역 */}
-        <div className="mb-[24px]">
-          <h2 className="text-lg font-[700] mb-[12px]">{t('activity_logs')}</h2>
-          <div className="mt-2">
+        <div className="mb-[24px] lg:mb-[32px]">
+          <h2 className="text-lg lg:text-xl font-[700] mb-[12px]">
+            {t('activity_logs')}
+          </h2>
+          <div className="mt-[12px] lg:mt-4">
             <Link
               href="/mypage/filters/all"
-              className="flex justify-between items-center gap-[23px] p-[16px] rounded-t-[8px] bg-[#F9F9F9] w-full"
+              className="flex justify-between items-center gap-[23px] p-[16px] lg:p-[20px] rounded-t-[8px] bg-[#F9F9F9] w-full 
+      h-[54px] md:h-[72px]"
             >
-              <span className="text-[16px] text-[#45484D] font-[500]">
+              <span className="text-[16px] lg:text-[18px] text-[#45484D] font-[500]">
                 {t('written_posts')}
               </span>
               <Image
@@ -297,15 +308,15 @@ const MyPage = () => {
                 alt="Arrow Right"
                 width={18}
                 height={18}
-                className="ml-2"
               />
             </Link>
             <div className="flex flex-row justify-center items-center border-b w-[90%] border-[#EBEBEB] mx-auto"></div>
             <Link
               href="/mypage/purchase"
-              className="flex justify-between items-center gap-[23px] p-[16px] bg-[#F9F9F9] w-full"
+              className="flex justify-between items-center gap-[23px] p-[16px] lg:p-[20px] bg-[#F9F9F9] w-full 
+      h-[54px] md:h-[72px]"
             >
-              <span className="text-[16px] text-[#45484D] font-[500]">
+              <span className="text-[16px] lg:text-[18px] text-[#45484D] font-[500]">
                 {t('purchased_posts')}
               </span>
               <Image
@@ -313,15 +324,15 @@ const MyPage = () => {
                 alt="Arrow Right"
                 width={18}
                 height={18}
-                className="ml-2"
               />
             </Link>
             <div className="flex flex-row justify-center items-center border-b w-[90%] border-[#EBEBEB] mx-auto"></div>
             <Link
               href="/mypage/bookmark"
-              className="flex justify-between items-center gap-[23px] p-[16px] rounded-b-[8px] bg-[#F9F9F9] w-full"
+              className="flex justify-between items-center gap-[23px] p-[16px] lg:p-[20px] rounded-b-[8px] bg-[#F9F9F9] w-full 
+      h-[54px] md:h-[72px]"
             >
-              <span className="text-[16px] text-[#45484D] font-[500]">
+              <span className="text-[16px] lg:text-[18px] text-[#45484D] font-[500]">
                 {t('bookmark_posts')}
               </span>
               <Image
@@ -329,21 +340,21 @@ const MyPage = () => {
                 alt="Arrow Right"
                 width={18}
                 height={18}
-                className="ml-2"
               />
             </Link>
           </div>
         </div>
+
         {/* 설정 */}
-        <h2 className="text-lg font-[700] mb-[12px]">
-          {' '}
+        <h2 className="text-lg lg:text-xl font-[700] mb-[12px]">
           {t('language_settings')}
         </h2>
         <Link
           href="/mypage/language"
-          className="flex justify-between items-center gap-[23px] p-[16px] rounded-[8px] bg-[#F9F9F9] w-full mb-[50px]"
+          className="flex justify-between items-center gap-[23px] p-[16px] lg:p-[20px] rounded-[8px] bg-[#F9F9F9] w-full mb-[50px] 
+  h-[54px] md:h-[72px]"
         >
-          <span className="text-[16px] text-[#45484D] font-[500]">
+          <span className="text-[16px] lg:text-[18px] text-[#45484D] font-[500]">
             {t('language_settings')}
           </span>
           <Image
@@ -351,153 +362,62 @@ const MyPage = () => {
             alt="Arrow Right"
             width={18}
             height={18}
-            className="ml-2"
           />
         </Link>
+
         {/* 모달 */}
         {isModalOpen && (
-          <div
-            style={{
-              position: 'fixed',
-              top: '0',
-              left: '0',
-              width: '100vw',
-              height: '100vh',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              background: 'rgba(0, 0, 0, 0.5)',
-              zIndex: '50',
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                width: '335px',
-                padding: '10px 20px',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '16px',
-                borderRadius: '12px',
-                background: '#FFF',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: '90px',
-                  padding: '8px 0px',
-                  position: 'relative',
-                  width: '100%',
-                  height: '50px',
-                }}
-              >
-                {/* 프로필 편집 텍스트 */}
-                <h2
-                  style={{
-                    position: 'absolute',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    margin: '0',
-                    color: 'var(--Grayscale-Black, #000)',
-                    fontFamily: 'Pretendard',
-                    fontSize: '16px',
-                    fontStyle: 'normal',
-                    fontWeight: '600',
-                    lineHeight: '140%',
-                    letterSpacing: '-0.32px',
-                  }}
-                >
+          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50 px-4 lg:px-0">
+            <div className="bg-white rounded-[12px] flex flex-col items-center gap-[16px] p-[10px_20px] md:w-[686px] md:h-[726px] md:p-[36px_40px]">
+              {/* 헤더 */}
+              <div className="relative w-full flex items-center md:items-start justify-center md:justify-start h-[50px]">
+                <h2 className="absolute md:static left-1/2 md:left-0 transform -translate-x-1/2 md:translate-x-0 text-black text-[16px] font-semibold leading-[140%]">
                   {t('edit_profile')}
                 </h2>
-
-                {/* 닫기 버튼 */}
+                {/* 모바일에서만 X 버튼 표시 */}
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  style={{
-                    position: 'absolute',
-                    right: '0',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                  }}
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer md:hidden"
                 >
                   <Image src={close} alt="닫기" width={24} height={24} />
                 </button>
               </div>
 
-              <div className="flex flex-col items-center mb-4">
-                {/* 프로필 이미지 */}
-                <div
-                  style={{
-                    width: '295px',
-                    height: '100px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginBottom: '16px',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '103px',
-                      height: '100px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      position: 'relative',
-                      overflow: 'hidden',
-                      borderRadius: '50%',
-                    }}
-                  >
-                    <label
-                      htmlFor="profileImageInput"
-                      className="cursor-pointer"
-                      style={{
-                        position: 'relative',
-                        width: '100%',
-                        height: '100%',
-                      }}
-                    >
-                      {previewImage ? (
-                        <Image
-                          src={previewImage}
-                          alt="Preview"
-                          width={100}
-                          height={100}
-                          className="object-cover"
-                        />
-                      ) : (
-                        <Image
-                          src="/images/default-profile.svg"
-                          alt="Default Profile"
-                          width={100}
-                          height={100}
-                          className="object-cover"
-                        />
-                      )}
-                    </label>
-
-                    <input
-                      id="profileImageInput"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                  </div>
+              {/* 프로필 이미지 */}
+              <div className="flex justify-center items-center mb-[16px] w-[295px] h-[100px]">
+                <div className="relative w-[103px] h-[100px] rounded-full overflow-hidden flex items-center justify-center">
+                  <label htmlFor="profileImageInput" className="cursor-pointer">
+                    {previewImage ? (
+                      <Image
+                        src={previewImage}
+                        alt="Preview"
+                        width={100}
+                        height={100}
+                        className="object-cover"
+                      />
+                    ) : (
+                      <Image
+                        src="/images/default-profile.svg"
+                        alt="Default Profile"
+                        width={100}
+                        height={100}
+                        className="object-cover"
+                      />
+                    )}
+                  </label>
+                  <input
+                    id="profileImageInput"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
                 </div>
-                {/* 닉네임 */}
+              </div>
 
-                <label
-                  className="
-    w-full text-sm text-black font-pretendard font-semibold leading-[140%] tracking-[-0.28px] mb-2
-  "
-                >
+              {/* 닉네임 입력 */}
+              <div className="w-full">
+                <label className="text-black text-sm font-semibold leading-[140%] mb-2">
                   {t('nickname')}
                 </label>
                 <input
@@ -505,99 +425,52 @@ const MyPage = () => {
                   value={nicknameInput}
                   onChange={(e) => setNicknameInput(e.target.value)}
                   placeholder={t('nickname_input')}
-                  className="
-    flex flex-col items-start 
-    border rounded-[8px] border-gray-300 bg-white w-full
-    text-gray-400 text-[14px] font-medium leading-[140%] tracking-[-0.28px]
-    overflow-hidden whitespace-nowrap mb-[12px]
-  "
-                  style={{
-                    height: '48px',
-                    padding: '14px 16px',
-                  }}
+                  className="w-full border border-gray-300 bg-white text-gray-400 text-[14px] rounded-[8px] px-[14px] py-[16px] md:h-[60px] mb-[12px]"
                 />
+              </div>
 
-                {/* 자기소개 */}
-
-                <label
-                  className="
-    w-full text-sm font-pretendard font-semibold leading-[140%] tracking-[-0.28px] text-black mb-[8px]
-  "
-                >
+              {/* 자기소개 입력 */}
+              <div className="w-full">
+                <label className="text-black text-sm font-semibold leading-[140%] mb-[8px]">
                   {t('self_intro')}
                 </label>
                 <textarea
                   value={bioInput}
                   onChange={(e) => setBioInput(e.target.value)}
                   placeholder={t('travel_experience')}
-                  className="
-    flex flex-col items-start 
-    border rounded-[8px] border-gray-300 bg-white w-full
-    text-gray-400 text-[14px] font-normal leading-[142.857%] tracking-[-0.35px]
-    overflow-y-auto resize-none
-  "
-                  style={{
-                    height: '140px',
-                    padding: '14px 16px',
-                  }}
+                  className="w-full border border-gray-300 bg-white text-gray-400 text-[14px] rounded-[8px] px-[14px] py-[16px] overflow-y-auto resize-none md:h-[140px]"
                 ></textarea>
+              </div>
 
-                <div
-                  className="flex items-center mt-[24px]"
-                  style={{
-                    width: '295px',
-                    padding: '8px 0px',
-                    gap: '8px',
-                  }}
+              {/* 버튼 */}
+              <div className="flex justify-center gap-[8px] w-full mt-[24px]">
+                <button
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex justify-center items-center bg-[#DFE1E5] text-[#45484D] text-[14px] font-semibold rounded-[12px] px-[12px] py-[6px] w-[72px] h-[48px] md:w-[168px] md:h-[64px]"
                 >
-                  {/* 취소하기 버튼 */}
-                  <button
-                    className="
-      flex justify-center items-center
-      text-[#45484D] text-[14px] font-pretendard font-semibold tracking-[-0.28px]
-      bg-[#DFE1E5] rounded-[12px]
-    "
-                    style={{
-                      width: '72px',
-                      height: '48px',
-                      padding: '6px 12px',
-                    }}
-                    onClick={() => setIsModalOpen(false)}
-                  >
-                    {t('cancel')}
-                  </button>
-
-                  {/* 저장하기 버튼 */}
-                  <button
-                    className="
-      flex justify-center items-center
-      text-white text-[14px] font-pretendard font-semibold tracking-[-0.28px]
-      bg-[#0582FF] rounded-[12px]
-    "
-                    style={{
-                      width: '215px',
-                      height: '48px',
-                      padding: '6px 12px',
-                    }}
-                    onClick={handleSaveProfile}
-                  >
-                    {t('save')}
-                  </button>
-                </div>
+                  {t('cancel')}
+                </button>
+                <button
+                  onClick={handleSaveProfile}
+                  className="flex justify-center items-center bg-[#0582FF] text-white text-[14px] font-semibold rounded-[12px] px-[12px] py-[6px] w-[215px] h-[48px] md:w-[168px] md:h-[64px]"
+                >
+                  {t('save')}
+                </button>
               </div>
             </div>
           </div>
         )}
-      </div>
-      {/* 로그아웃 버튼 */}
-      <div className="w-full h-[12px] bg-[#f4f6f9]"></div>
-      <div className="h-[92px]">
-        <button
-          className="text-[#44484c] text-sm font-medium ml-[28px] mt-[32px] mb-[43px] cursor-pointer"
-          onClick={handleLogout}
-        >
-          {t('logout')}
-        </button>
+
+        {/* 로그아웃 버튼 */}
+        <div className="w-full h-[12px] bg-[#f4f6f9]"></div>
+        <div className="h-[92px] lg:mt-8 lg:flex lg:justify-center">
+          <button
+            className="text-[#44484c] text-sm font-medium ml-[28px] mt-[32px] mb-[43px] lg:ml-0 lg:mt-0 lg:mb-0 cursor-pointer"
+            onClick={handleLogout}
+          >
+            {t('logout')}
+          </button>
+        </div>
       </div>
     </div>
   );

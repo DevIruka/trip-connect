@@ -28,20 +28,25 @@ const Button = ({
     </Link>
   );
 };
+
 const SellerAuthCard = ({
   isVerified,
   title,
   content,
   link,
+  className,
 }: {
   isVerified: boolean;
   title: string;
   content: string;
   link: string;
+  className?: string;
 }) => {
   const { t } = useTranslation('mypage');
   return (
-    <div className="h-auto p-4 rounded-xl border border-[#dee1e5] grid gap-3">
+    <div
+      className={`h-auto p-4 rounded-xl border border-[#dee1e5] grid gap-3 md:h-[174px] md:w-[800px] md:p-[24px] ${className}`}
+    >
       <div className="grid gap-2">
         <div className="flex space-x-1.5">
           <h3 className="text-black text-base font-semibold leading-snug">
@@ -56,7 +61,9 @@ const SellerAuthCard = ({
         </div>
         <p className="text-[#797c80] text-sm font-medium">{content}</p>
       </div>
-      <Button isVerified={isVerified} text={title} link={link} />
+      <div className="flex justify-start mt-[22px]">
+        <Button isVerified={isVerified} text={title} link={link} />
+      </div>
     </div>
   );
 };
@@ -108,14 +115,9 @@ const SellerPage = () => {
   }, [user, router, searchParams, t]);
 
   return (
-    <div className="h-full w-full px-5 relative">
+    <div className="h-full w-full max-w-[872px] px-5 md:px-[36px] lg:px-[36px] mx-auto">
       {/* 헤더 섹션 */}
-      <div
-        className="flex flex-row justify-between items-center"
-        style={{
-          height: '56px',
-        }}
-      >
+      <div className="h-14 py-2.5 flex flex-row justify-between items-center md:hidden">
         <button
           onClick={() => router.push('/mypage')}
           className="flex items-center justify-center"
@@ -124,34 +126,37 @@ const SellerPage = () => {
         </button>
       </div>
 
-      <div className="w-full py-[20px] text-left text-black font-semibold text-[18px] leading-normal tracking-[-0.36px]">
+      <div className="w-full py-[20px] text-left text-black font-semibold text-[20px] leading-normal tracking-[-0.36px] md:text-[32px] md:h-[91px]">
         {t('seller_verification')}
       </div>
 
       {/* 인증 섹션 */}
-      <div className="mt-4 space-y-3">
+      <div className="mt-2 space-y-3">
         <SellerAuthCard
           isVerified={isCountryVerified}
           title={t('country')}
           content={t('verify_country_region')}
           link={'country-verification'}
+          className="text-[16px] md:text-[20px]" // 16px -> 20px for PC
         />
         <SellerAuthCard
           isVerified={isIdentityVerified}
           title={t('identity')}
           content={t('profile_verification')}
           link={'identity-verification'}
+          className="text-[16px] md:text-[20px]" // 16px -> 20px for PC
         />
         <div className="h-[140px] p-4 rounded-xl grid gap-3">
           <div className="grid gap-2">
             <div className="flex space-x-1.5">
-              <h3 className="text-[#a9a9a9] text-base font-semibold leading-snug">
+              <p className="text-[#a9a9a9] text-base font-semibold leading-snug ">
                 {t('account_verification')}
-              </h3>
+              </p>
             </div>
-            <p className="text-center text-[#797c80] text-xs font-medium leading-none">
+            <p className="text-center text-[#797c80] text-xs font-medium leading-none md:text-[16px]">
               {t('account_verification_description')}
-            </p>
+            </p>{' '}
+            {/* 14px -> 16px for PC */}
           </div>
         </div>
       </div>
