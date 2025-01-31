@@ -118,14 +118,14 @@ const SearchResultComponent = () => {
               <p></p>
             )}
             <SearchResults filteredPosts={filteredPosts} filter={filter} />
-            <div className="flex flex-col w-full items-center justify-center">
+            <div className="flex flex-col w-full items-center justify-center mt-[40px]">
               {(requestHasNextPage || responseHasNextPage) && (
                 <button
                   onClick={() => moreBtnHandler()}
                   disabled={
                     requestIsFetchingNextPage || responseIsFetchingNextPage
                   }
-                  className="border-2 rounded-lg p-2 grid cursor-pointer w-full"
+                  className="border rounded-[100px] p-2 grid cursor-pointer w-full max-w-[324px]"
                 >
                   {requestIsFetchingNextPage || responseIsFetchingNextPage
                     ? '검색 결과 로드 중'

@@ -7,7 +7,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 const BlueButton = ({ children, className = '', disabled, ...props }: ButtonProps) => {
   return (
     <button
-      className={`w-full h-[52px] rounded-[12px] text-white text-[16px] font-[600] 
+      className={`w-full max-w-[480px] h-[52px] md:h-[60px] rounded-[12px] text-white text-[16px] font-[600] 
         ${disabled ? 'bg-[#C6C9CC] cursor-not-allowed' : 'bg-[#0582FF] cursor-pointer'} 
         ${className}`}
       disabled={disabled}

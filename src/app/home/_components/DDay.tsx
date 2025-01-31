@@ -1,4 +1,3 @@
-import { useLang } from '@/store/languageStore';
 import React from 'react';
 
 const calculateDday = (dateEnd: string): number => {
