@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
-import CategoryPage from './_components/CategoryPage';
+import Categorizing from './_components/Categorizing';
 import LoadingPage from '../loading';
 
 const Homepage = async () => {
   return (
     <>
       <Suspense fallback={<LoadingPage />}>
-        <CategoryPage />
+        <Categorizing />
       </Suspense>
     </>
   );

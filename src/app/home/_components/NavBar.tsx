@@ -13,7 +13,9 @@ import { useTranslation } from 'react-i18next';
 import { useLang } from '@/store/languageStore';
 
 type Props = {
-  setFilterType: React.Dispatch<React.SetStateAction<string>>;
+  setFilterType: React.Dispatch<
+    React.SetStateAction<'latest' | 'request' | 'response'>
+  >;
   changeCategory: (category: string) => void;
   setNationFilter: React.Dispatch<React.SetStateAction<nation | null>>;
   filterType: string;
