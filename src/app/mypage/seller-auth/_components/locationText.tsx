@@ -9,14 +9,13 @@ const LocationText = ({ locationDescription, country }: LocationTextProps) => {
   if (locationDescription) {
     return (
       <div className="mt-7 text-[#44484c] text-base font-semibold leading-snug">
-        현재 위치가
         <div className="flex w-full whitespace-nowrap gap-1">
-          내 국가로 설정한
-          <div className="text-[#0079f2]">
-            {country} / {locationDescription}
-          </div>
+          현재 위치가 내 국가로 설정한
         </div>
-        에 있습니다.
+        <div className="text-[#0079f2] inline">
+          {country} / {locationDescription}
+        </div>
+        <div className="inline">에 있습니다.</div>
       </div>
     );
   } else {

@@ -82,7 +82,6 @@ const CountryVerification = () => {
       return;
     }
 
-    // 인증 완료 시 인증 상태를 전달하며 페이지 이동
     router.push('/mypage/seller-auth?newlyVerified=true');
   };
 
@@ -90,16 +89,18 @@ const CountryVerification = () => {
   if (loadError) return <div>{t('map_error')}</div>;
 
   return (
-    <div className="h-full w-full px-5 bg-white">
-      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
-        <BackButton />
-        <h1 className="text-center text-black text-lg font-semibold">
+    <div className="h-full w-full max-w-[872px] px-5 md:px-[36px] lg:px-[36px] mx-auto bg-white">
+      {/* 헤더 섹션 */}
+      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white md:h-[71px] md:text-[32px] md:mb-[28px]">
+        <div className="md:hidden">
+          <BackButton />
+        </div>
+        <h1 className="text-center text-black text-lg font-semibold md:text-[32px] md:mt-[20] absolute left-1/2 transform -translate-x-1/2 md:left-auto md:transform-none md:text-left  ">
           {t('country_verification')}
         </h1>
-        <div className="w-6"></div>
       </div>
 
-      <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
+      <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center md:w-[800px] md:h-[400px]">
         {userLocation.lat && userLocation.lng ? (
           <GoogleMap
             center={{ lat: userLocation.lat, lng: userLocation.lng }}
@@ -121,7 +122,7 @@ const CountryVerification = () => {
       />
 
       <button
-        className="bg-[#0582ff] h-[52px] rounded-xl text-center my-3 text-white text-base font-semibold absolute bottom-0 w-[335px]"
+        className="bg-[#0582ff] text-white text-sm font-semibold rounded-md w-full max-w-[800px] h-[52px] md:h-[64px] mx-auto mt-4"
         onClick={handleVerificationComplete}
         disabled={!locationDescription || !country}
       >

@@ -59,6 +59,7 @@ const PurchasePage: React.FC = () => {
             category: [],
             img_url: [],
             type: 'answer',
+            credit: null,
           }),
         );
 
@@ -67,7 +68,7 @@ const PurchasePage: React.FC = () => {
             if (post.request_id) {
               const { data: requestData, error: requestError } = await supabase
                 .from('request_posts')
-                .select('category')
+                .select('category, credit')
                 .eq('id', post.request_id)
                 .single();
 
@@ -92,6 +93,7 @@ const PurchasePage: React.FC = () => {
               return {
                 ...post,
                 category: koreanCategories,
+                credit: requestData?.credit || null,
               };
             }
 
@@ -136,7 +138,6 @@ const PurchasePage: React.FC = () => {
         {purchasedPosts.length > 0 ? (
           <ul className="space-y-4">
             {purchasedPosts.map((post) => (
-              // editable을 false로 설정
               <ResponsePostCard key={post.id} post={post} editable={false} />
             ))}
           </ul>

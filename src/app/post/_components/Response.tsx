@@ -133,7 +133,10 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
     return <div>로딩중</div>;
   }
   return (
-    <div key={post.id}>
+    <div
+      key={post.id}
+      className="md:border md:border-Gray5Line md:mb-5 md:rounded-2xl"
+    >
       <Profile postUserId={post.user_id} createdAt={post.created_at} />
       <div className="px-5">
         <div>
@@ -248,7 +251,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
           </div>
         </div>
       </div>
-      <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
+      <div className="h-[5px] bg-[#f4f6f9] z-50 md:bg-transparent"></div>
     </div>
   );
 };

@@ -46,7 +46,12 @@ const ResponseListPage = () => {
   return (
     <>
       <div className="h-full w-full relative overflow-y-scroll menuscrollbar md:w-[800px]">
-        <BackHeader image={search} text="답변하기" imagesize={24} />
+        <BackHeader
+          image={search}
+          text="답변하기"
+          imagesize={24}
+          link="/search"
+        />
         <div className="px-5">
           <Desktop>
             <div className="text-[#44484c] text-[28px] font-bold leading-[44.80px] py-5">
