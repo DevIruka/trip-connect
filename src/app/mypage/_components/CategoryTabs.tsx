@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
 import Image from 'next/image';
-import search from '@/data/images/ic-Search.svg';
 import { useTranslation } from 'react-i18next';
 const lefticon = '/images/ic-left.svg';
 
@@ -83,21 +82,19 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
   ];
 
   return (
-    <div>
+    <div className="w-full bg-white md:max-w-[872px] mx-auto md:px-[36px]">
       {/* 헤더 섹션 */}
-      <div className="flex flex-row justify-between items-center h-14 px-5">
-        <button
-          onClick={() => router.push('/mypage')}
-          className="flex items-center justify-center"
-        >
-          <Image src={lefticon} width={24} height={24} alt={t('back')} />
-        </button>
-        <Image src={search} width={24} height={24} alt={t('search')} />
-      </div>
+
+      <button
+        onClick={() => router.push('/mypage')}
+        className="flex items-center justify-center pt-4 md:hidden"
+      >
+        <Image src={lefticon} width={24} height={24} alt={t('back')} />
+      </button>
 
       {/* 프로필 섹션 */}
-      <div className="flex items-center h-12 px-5">
-        <h2 className="text-[20px] font-bold text-[#45484D] leading-8 tracking-tight font-Pretendard">
+      <div className="flex items-center h-12 px-5 md:px-0 md:h-[71px] md:w-[800px] md:mx-auto md:my-[50px] md:mb-[28px] md:pt-[10px] md:pb-[10px]">
+        <h2 className="text-[20px] font-bold text-[#45484D] leading-8 tracking-tight font-Pretendard md:text-[32px]">
           {t('title')}
         </h2>
       </div>
@@ -115,7 +112,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
             }`}
           >
             <span
-              className={`text-[14px] leading-5 tracking-tight ${
+              className={`text-[16px] leading-5 tracking-tight md:text-[18px] ${
                 activeTab === tab.key ? 'font-semibold' : 'font-normal'
               }`}
             >
@@ -123,7 +120,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
             </span>
             {counts && (
               <span
-                className={`ml-2 text-[16px] leading-5 font-semibold font-Pretendard ${
+                className={`ml-2 text-[16px] leading-5 font-semibold font-Pretendard md:text-[18px] ${
                   activeTab === tab.key ? 'text-[#80BFFF]' : 'text-gray-500'
                 }`}
               >

@@ -89,9 +89,16 @@ const handleDelete = async () => {
       <div className="flex justify-between items-center w-full gap-2">
         {/* 왼쪽 - D-Day, 위치 및 카테고리 */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center text-orange-500 text-sm bg-orange-100 rounded-md px-2 py-1">
+          <div
+            className={`flex items-center justify-center text-sm rounded-md px-2 py-1 ${
+              dDay === '기한 만료'
+                ? 'bg-gray-200 text-gray-500' 
+                : 'bg-orange-100 text-orange-500'
+            }`}
+          >
             {dDay}
           </div>
+
           <div className="flex items-center text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1">
             <Image
               src="/images/ic-location.svg"
@@ -171,8 +178,8 @@ const handleDelete = async () => {
                   letterSpacing: '-0.28px',
                 }}
                 onClick={(e) => {
-                  e.stopPropagation(); // 클릭 이벤트 전파 중단
-                  router.push(`/request-edit/${post.id}`); // 해당 경로로 이동
+                  e.stopPropagation();
+                  router.push(`/request-edit/${post.id}`);
                 }}
               >
                 수정하기
@@ -197,8 +204,8 @@ const handleDelete = async () => {
                   letterSpacing: '-0.28px',
                 }}
                 onClick={(e) => {
-                  e.stopPropagation(); // 클릭 이벤트 전파 중단
-                  handleDelete(); // 삭제 함수 호출
+                  e.stopPropagation();
+                  handleDelete();
                 }}
               >
                 삭제하기
@@ -224,14 +231,12 @@ const handleDelete = async () => {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <Image src="/images/coin.svg" alt="coin" width={14} height={14} />
-            <span>{post.credit} C</span>
+            <span>{post.credit}</span>
           </div>
-          {responseCount > 0 && (
-            <>
-              <span>·</span>
-              <span>{responseCount}명 답변</span>
-            </>
-          )}
+          <>
+            <span>·</span>
+            <span>{responseCount}명 답변</span>
+          </>
         </div>
         <TimeAgo createdAt={post.created_at || new Date().toISOString()} />
       </div>
