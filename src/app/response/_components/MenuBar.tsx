@@ -243,7 +243,6 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
               <button>
                 <TextHeightIcon color={getTextHeightColor()} />
               </button>
-
               <label
                 htmlFor="image-upload"
                 className="w-6 h-6 flex items-center justify-center cursor-pointer hover:text-[#0582FF]"
@@ -259,7 +258,6 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
                   handleImageUpload(e);
                 }}
               />
-
               <button
                 className="w-6 h-6 flex items-center justify-center hover:text-[#0582FF]"
                 onClick={() => setIsModalOpen(true)}
@@ -313,49 +311,6 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
           </div>
         </>
       )}
-      {/* Main Menu */}
-      <div
-        className="w-full h-[56px] px-5 py-[16px] bg-white border-t md:border-t-0 border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50 md:px-[20px] py-[12px]"
-        style={{
-          position: isMobile ? 'fixed' : 'static',
-          bottom: isMobile ? `${keyboardHeight}px` : 'auto',
-        }}
-      >
-        <div className="justify-start items-center gap-6 flex">
-          <button onClick={() => handleTextHeightClick()}>
-            <TextHeightIcon color={getTextHeightColor()} />
-          </button>
-
-          <label
-            htmlFor="image-upload"
-            className="w-6 h-6 flex items-center justify-center cursor-pointer hover:text-[#0582FF]"
-          >
-            <ImageIcon />
-          </label>
-          <input
-            type="file"
-            id="image-upload"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              handleImageUpload(e);
-            }}
-          />
-
-          <button
-            className="w-6 h-6 flex items-center justify-center hover:text-[#0582FF]"
-            onClick={() => setIsModalOpen(true)} // Open modal on click
-          >
-            <MapMarkerIcon />
-          </button>
-        </div>
-      </div>
-      {/* Google Modal */}
-      <GoogleModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSelectLocation={handleInsertMap}
-      />
     </div>
   );
 };
