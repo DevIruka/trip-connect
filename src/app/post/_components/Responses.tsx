@@ -1,24 +1,8 @@
-'use client';
-import { supabase } from '@/utils/supabase/supabaseClient';
-
-import { useEffect, useState } from 'react';
-import { Tables } from '@/types/supabase';
-
 import Response from './Response';
+import { fetchResPosts } from '../../../utils/api/supabase_api/post/fetchResPosts';
 
-const Responses = ({ postId }: { postId: string }) => {
-  const [resPosts, setResPosts] = useState<Tables<'response_posts'>[] | null>();
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const { data: response_posts } = await supabase
-        .from('response_posts')
-        .select('*')
-        .eq('request_id', postId);
-      setResPosts(response_posts);
-    };
-    fetchPosts();
-  }, [postId]);
+const Responses = async ({ postId }: { postId: string }) => {
+  const { post: resPosts } = await fetchResPosts(postId);
 
   return (
     <>

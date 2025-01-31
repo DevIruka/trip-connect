@@ -1,7 +1,6 @@
 import { topicMapping } from '@/utils/topics';
 import Responses from '../_components/Responses';
 import BookmarkBtn from '../_components/BookmarkBtn';
-import { supabase } from '@/utils/supabase/supabaseClient';
 import Profile from '../_components/Profile';
 import MoreButton from '@/data/images/ic-More.svg';
 import Image from 'next/image';
@@ -11,16 +10,13 @@ import BackHeader from '@/components/BackHeader';
 import PostDday from '@/app/home/_components/DDay';
 import ResponseBtn from '../_components/ResponseBtn';
 import ShareBtn from '../_components/ShareBtn';
+import { fetchReqPost } from '../../../utils/api/supabase_api/post/fetchReqPost';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
-  const { data: post, error } = await supabase
-    .from('request_posts')
-    .select('*')
-    .eq('id', postId)
-    .single(); // 단일 게시물 조회
 
   const topicArr = Object.entries(topicMapping);
+  const { post, error } = await fetchReqPost(postId);
 
   if (error) return <div>에러 발생: {error.message}</div>;
 
