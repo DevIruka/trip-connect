@@ -7,8 +7,10 @@ import TiptapEditor from '../../response/_components/TiptapEditor';
 import HeaderWithButton from '../../response/_components/HeaderButtons';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 const EditResponsePage: React.FC = () => {
+  const { t } = useTranslation('response');
   const { responseId } = useParams();
   const router = useRouter();
   const [data, setData] = useState({
@@ -88,71 +90,86 @@ const EditResponsePage: React.FC = () => {
 
   return (
     <div className="w-full h-screen bg-white flex flex-col overflow-y-auto">
-      <HeaderWithButton
-        buttonKey="edit"
-        onButtonClick={handleSubmit}
-        disabled={!data.title || !data.contentHtml}
-      />
-
-      <div className="bg-[#F5F7FA] w-full mb-[16px] px-[20px] py-[16px]">
-        <div className="flex flex-col gap-[8px]">
-          {/* Q와 제목 */}
-          <div className="flex justify-between items-center gap-[8px]">
-            <div
-              className="flex items-center gap-[8px] overflow-hidden"
-              style={{
-                maxWidth: 'calc(100% - 40px)',
-              }}
-            >
-              <span
-                style={{
-                  color: '#0582FF',
-                  flexShrink: 0,
-                  fontWeight: 600,
-                  fontSize: '16px',
-                }}
-              >
-                Q
-              </span>
-
-              <span className="text-black text-[16px] font-semibold">
-                {!isVisible ? visibleTitle : title}
-              </span>
-            </div>
-            <button
-              onClick={() => setIsVisible(!isVisible)}
-              className="text-[#797C80] flex-shrink-0"
-              style={{
-                width: '20px',
-                height: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {isVisible ? (
-                <FaChevronUp width="9" height="5" />
-              ) : (
-                <FaChevronDown width="9" height="5" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* 본문 내용 */}
-        {isVisible && (
-          <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line">
-            {responseData?.requestData?.content}
-            </p>
-        )}
+      <div className="md:hidden">
+        <HeaderWithButton
+          buttonKey="edit"
+          onButtonClick={handleSubmit}
+          disabled={!data.title || !data.contentHtml}
+        />
       </div>
 
-      <TiptapEditor
-        title={data.title}
-        contentHtml={data.contentHtml}
-        freeContent={data.freeContent}
-        onChange={(updatedData) => setData(updatedData)}
-      />
+      <div className="bg-[#F5F7FA] w-full mb-[16px] px-[20px] py-[16px] md:py-[28px] md:mb-[40px]">
+        <div className="mx-auto max-w-[800px] box-border">
+          <div className="flex flex-col gap-[8px]">
+            {/* Q와 제목 */}
+            <div className="flex justify-between items-center gap-[8px]">
+              <div
+                className="flex items-center gap-[8px] overflow-hidden"
+                style={{
+                  maxWidth: 'calc(100% - 40px)',
+                }}
+              >
+                <span className="text-[16px] font-[600] text-[#0582FF] flex-shrink-0 md:text-lg md:font-semibold">
+                  Q
+                </span>
+
+                <span className="text-black text-[16px] font-semibold">
+                  {!isVisible ? visibleTitle : title}
+                </span>
+              </div>
+              <button
+                onClick={() => setIsVisible(!isVisible)}
+                className="text-[#797C80] flex-shrink-0"
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                {isVisible ? (
+                  <FaChevronUp width="9" height="5" />
+                ) : (
+                  <FaChevronDown width="9" height="5" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* 본문 내용 */}
+          {isVisible && (
+            <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line md:mt-5">
+              {responseData?.requestData?.content}
+            </p>
+          )}
+        </div>
+      </div>
+
+      <div className="hidden md:flex flex-col items-center w-full">
+        <div className="w-full max-w-[800px] border border-[#DFE1E5] bg-white rounded-[8px] border-[1px] overflow: hidden;">
+          <HeaderWithButton
+            buttonKey={t('edit')}
+            onButtonClick={handleSubmit}
+          />
+
+          <TiptapEditor
+            title={data.title}
+            contentHtml={data.contentHtml}
+            freeContent={data.freeContent}
+            onChange={(updatedData) => setData(updatedData)}
+          />
+        </div>
+      </div>
+
+      <div className="md:hidden">
+        <TiptapEditor
+          title={data.title}
+          contentHtml={data.contentHtml}
+          freeContent={data.freeContent}
+          onChange={(updatedData) => setData(updatedData)}
+        />
+      </div>
     </div>
   );
 };
