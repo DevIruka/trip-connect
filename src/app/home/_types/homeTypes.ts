@@ -15,7 +15,7 @@ export type Post = {
   content?: string;
   country_city?: string;
   credit?: number;
-  date_end?: string;
+  date_end?: string | null;
   img_url?: string | null;
 
   content_html?: string;

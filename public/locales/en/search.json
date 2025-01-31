@@ -7,5 +7,9 @@
   "result": "Search Results",
   "q&a": "Q&A",
   "q": "Question",
-  "a": "Answer"
+  "a": "Answer",
+  "writer": "Writer",
+  "totalAnswers": " Responses",
+  "expired": "Expired",
+  "reply" : "replied"
 }

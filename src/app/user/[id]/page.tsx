@@ -59,7 +59,7 @@ const UserPage = () => {
   };
 
   return (
-    <div className="h-screen overflow-y-auto bg-white">
+    <div className="inner">
       <Header />
       {isUserPending ? <></> : <ProfileSection userData={userData!} />}
       <TabNavigation

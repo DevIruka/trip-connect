@@ -1,17 +1,20 @@
 import React from 'react';
 import TimeAgo from '@/app/review/[response_id]/_components/TimeAgo';
 import { Tables } from '@/types/supabase';
+import { useLang } from '@/store/languageStore';
+import { countryNameMapping } from '@/data/nation';
 
 type ReviewItemProps = {
-  review: (Tables<'reviews'> & {
+  review: Tables<'reviews'> & {
     response_posts: Tables<'response_posts'>;
     users: Tables<'users'>;
     purchased_user_created_at: string | null;
-  })
+  };
 };
 
 const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
-  console.log(review)
+  const { lang } = useLang();
+  console.log(review.users.country);
   return (
     <div
       className="relative"
@@ -39,7 +42,10 @@ const ReviewItem: React.FC<ReviewItemProps> = ({ review }) => {
                   className="w-[10px] h-[10px]"
                 />
                 <span className="text-[12px] font-medium text-[#45484D] ml-1">
-                  {review.users.country}
+                  {review.users.country &&
+                    (lang === 'en'
+                      ? countryNameMapping[review.users.country]
+                      : review.users.country)}
                 </span>
               </div>
             )}

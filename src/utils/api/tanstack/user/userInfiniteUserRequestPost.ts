@@ -2,7 +2,8 @@ import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 import { FetchRequestPostsResult } from '@/app/search/[id]/_types/searchTypes';
 import { fetchUserRequestPosts } from '../../supabase_api/user/fetchRequest';
 import { ReqResPost } from '@/app/search/[id]/_components/SearchResults';
-const PAGE_SIZE = 5; // 페이지 사이즈
+import { pagination } from '@/constants/pagination';
+const PAGE_SIZE = pagination.user.posts; // 페이지 사이즈
 
 const useInfiniteUserRequestPosts = (
   user_id: string,

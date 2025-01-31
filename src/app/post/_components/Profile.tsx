@@ -6,13 +6,20 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import profileImage from '@/data/images/profile-default.svg';
 import location from '@/data/images/ic-location.svg';
-// import { useUserStore } from '@/store/userStore';
-// import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/userStore';
+import { useRouter } from 'next/navigation';
+import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 
-const Profile = ({ postUserId }: { postUserId: string }) => {
+const Profile = ({
+  postUserId,
+  createdAt,
+}: {
+  postUserId: string;
+  createdAt: string;
+}) => {
   const [user, setUser] = useState<Tables<'users'>>();
-  // const { user: logginedUser } = useUserStore();
-  // const router = useRouter();
+  const { user: logginedUser } = useUserStore();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,15 +34,15 @@ const Profile = ({ postUserId }: { postUserId: string }) => {
   if (!user || !postUserId) {
     return <div>loading</div>;
   }
-  // const handleClick = () => {
-  //   if (!logginedUser || logginedUser.id !== user.id) {
-  //     router.push(`/user/${user.id}`);
-  //   } else if (logginedUser.id === user.id) router.push('/mypage');
-  // };
+  const handleClick = () => {
+    if (!logginedUser || logginedUser.id !== user.id) {
+      router.push(`/user/${user.id}`);
+    } else if (logginedUser.id === user.id) router.push('/mypage');
+  };
   return (
     <div
-      // onClick={handleClick}
-      className="bg-white flex items-center gap-2 py-4 px-5"
+      onClick={handleClick}
+      className="bg-white flex items-center gap-2 py-4 px-5 cursor-pointer"
     >
       {user.profile_img ? (
         <Image
@@ -61,7 +68,7 @@ const Profile = ({ postUserId }: { postUserId: string }) => {
           )}
         </div>
         <div className="text-[#797c80] text-xs font-medium leading-none">
-          1시간 전
+          <TimeAgo createdAt={createdAt} />
         </div>
       </div>
     </div>

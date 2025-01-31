@@ -35,6 +35,10 @@
     @apply bg-[#0582ff] h-[52px] rounded-xl flex justify-center items-center mx-5 my-3 text-white text-base font-semibold;
   }
 
+  .gray-btn {
+    @apply mt-[25px] mb-[25px] h-11 px-3 py-1.5 rounded-[100px] border border-Gray5Line justify-center items-center gap-2.5 inline-flex text-center text-Gray1 text-sm font-semibold w-full md:max-w-[324px];
+  }
+
   :root {
     --font-pretendard: 'Pretendard', sans-serif;
     --background: 0 0% 100%;

@@ -2,10 +2,11 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 const Header: React.FC = () => {
+  const { t } = useTranslation('user');
   const router = useRouter();
-
   return (
     <div className="flex items-center px-5 py-2.5 bg-white">
       <button
@@ -30,7 +31,7 @@ const Header: React.FC = () => {
       </button>
 
       <div className="flex-grow text-lg font-semibold text-black text-center">
-        프로필
+        {t('profile')}
       </div>
     </div>
   );

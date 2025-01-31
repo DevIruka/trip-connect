@@ -14,7 +14,6 @@ const calculateDday = (dateEnd: string): number => {
 
 const PostDday = ({ postDateEnd }: { postDateEnd: string }) => {
   const dDay = calculateDday(postDateEnd!);
-
   return (
     <>
       {dDay >= 0 ? (

@@ -3,7 +3,7 @@ export const nations = [
     continent: '아시아',
     countries: [
       {
-        name: '한국',
+        name: '대한민국',
         cities: ['서울'],
       },
       {
@@ -173,3 +173,14 @@ export const enNations = [
     ],
   },
 ];
+
+export const countryNameMapping: Record<string, string> = {};
+
+nations.forEach((continent, i) => {
+  continent.countries.forEach((country, j) => {
+    const enCountry = enNations[i]?.countries[j]?.name; // 동일한 인덱스의 나라 가져오기
+    if (enCountry) {
+      countryNameMapping[country.name] = enCountry;
+    }
+  });
+});

@@ -14,7 +14,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           type={type}
           placeholder={placeholder}
           ref={ref}
-          className={`border border-[#DFE1E5] rounded-md h-[52px] w-full px-[16px] py-[14px] ${className}`}
+          className={`border border-[#DFE1E5] rounded-md h-[52px] md:h-[60px] w-full min-w-[335px] max-w-[480px] px-[16px] py-[14px] ${className}`}
           {...props}
         />
       </>
