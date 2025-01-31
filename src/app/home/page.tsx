@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
-import Categorizing from './_components/Categorizing';
-import LoadingPage from '../loading';
+import Home from './_components/Home';
+import HomeSkeleton from './_components/HomeSkeleton';
 
 const Homepage = async () => {
   return (
     <>
-      <Suspense fallback={<LoadingPage />}>
-        <Categorizing />
+      <Suspense fallback={<HomeSkeleton />}>
+        <Home />
       </Suspense>
     </>
   );

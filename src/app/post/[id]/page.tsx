@@ -47,19 +47,18 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
                 {post.title}
               </h1>
               <div className="flex gap-2 flex-wrap">
-                {post.category
-                  ? topicArr
-                      .filter(([_, value]) => post.category.includes(value))
-                      .map(([key, value]) => (
-                        <div
-                          className="h-8 px-3 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-1 inline-flex text-center text-black text-sm font-semibold"
-                          key={key}
-                        >
-                          <Icon type={value} size={20} />
-                          <div className="pl-1">{key}</div>
-                        </div>
-                      ))
-                  : ''}
+                {post.category &&
+                  topicArr
+                    .filter(([_, value]) => post.category.includes(value))
+                    .map(([key, value]) => (
+                      <div
+                        className="h-8 px-3 bg-[#f4f6f9] rounded-[100px] justify-center items-center gap-1 inline-flex text-center text-black text-sm font-semibold"
+                        key={key}
+                      >
+                        <Icon type={value} size={20} />
+                        <div className="pl-1">{key}</div>
+                      </div>
+                    ))}
               </div>
             </div>
             <div className="flex gap-4 items-center py-1">
