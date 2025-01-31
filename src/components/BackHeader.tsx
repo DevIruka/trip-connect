@@ -6,6 +6,7 @@ import { useUserStore } from '@/store/userStore';
 import { Tables } from '@/types/supabase';
 import SelectBox from './SelectBox';
 import { Mobile } from './ui/Responsive';
+import Link from 'next/link';
 
 const BackHeader = ({
   image,
@@ -13,12 +14,14 @@ const BackHeader = ({
   text,
   isThreeDots,
   post,
+  link,
 }: {
   image: string;
   imagesize: number;
   text: string;
   isThreeDots?: boolean;
   post?: Tables<'request_posts'>;
+  link: string;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -39,6 +42,15 @@ const BackHeader = ({
               src={image}
             />
           </button>
+        ) : link ? (
+          <Link href={link}>
+            <Image
+              width={imagesize}
+              height={imagesize}
+              alt={image}
+              src={image}
+            />
+          </Link>
         ) : (
           <Image width={imagesize} height={imagesize} alt={image} src={image} />
         )}

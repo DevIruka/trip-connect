@@ -9,6 +9,8 @@ import location from '@/data/images/ic-location.svg';
 import { useUserStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
 import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
+import { Desktop } from '@/components/ui/Responsive';
+import MoreButton from '@/data/images/ic-More.svg';
 
 const Profile = ({
   postUserId,
@@ -40,37 +42,49 @@ const Profile = ({
     } else if (logginedUser.id === user.id) router.push('/mypage');
   };
   return (
-    <div
-      onClick={handleClick}
-      className="bg-white flex items-center gap-2 py-4 px-5 cursor-pointer"
-    >
-      {user.profile_img ? (
-        <Image
-          width={36}
-          height={36}
-          src={`${user.profile_img}`}
-          alt="profile_image"
-          className="rounded-full w-10 h-10"
-        />
-      ) : (
-        <Image width={36} height={36} src={profileImage} alt="profile_image" />
-      )}
-      <div className="grid gap-1">
-        <div className="flex items-center gap-1">
-          <div className="text-center text-black text-sm font-semibold leading-tight">
-            {user.nickname}
-          </div>
-          {user.country && (
-            <div className="h-[20px] pl-1 pr-1.5 bg-[#f4f6f9] rounded-full justify-start items-center gap-0.5 inline-flex text-center text-[#44484c] text-xs font-medium">
-              <Image width={10} height={10} src={location} alt="location" />
-              {user.country}
+    <div className="flex justify-between">
+      <div
+        onClick={handleClick}
+        className="bg-white flex items-center gap-2 py-4 px-5 cursor-pointer"
+      >
+        {user.profile_img ? (
+          <Image
+            width={36}
+            height={36}
+            src={`${user.profile_img}`}
+            alt="profile_image"
+            className="rounded-full w-10 h-10"
+          />
+        ) : (
+          <Image
+            width={36}
+            height={36}
+            src={profileImage}
+            alt="profile_image"
+          />
+        )}
+        <div className="grid gap-1">
+          <div className="flex items-center gap-1">
+            <div className="text-center text-black text-sm font-semibold leading-tight">
+              {user.nickname}
             </div>
-          )}
-        </div>
-        <div className="text-[#797c80] text-xs font-medium leading-none">
-          <TimeAgo createdAt={createdAt} />
+            {user.country && (
+              <div className="h-[20px] pl-1 pr-1.5 bg-[#f4f6f9] rounded-full justify-start items-center gap-0.5 inline-flex text-center text-[#44484c] text-xs font-medium">
+                <Image width={10} height={10} src={location} alt="location" />
+                {user.country}
+              </div>
+            )}
+          </div>
+          <div className="text-[#797c80] text-xs font-medium leading-none">
+            <TimeAgo createdAt={createdAt} />
+          </div>
         </div>
       </div>
+      <Desktop>
+        <button>
+          <Image width={20} height={20} alt="MoreButton" src={MoreButton} />
+        </button>
+      </Desktop>
     </div>
   );
 };
