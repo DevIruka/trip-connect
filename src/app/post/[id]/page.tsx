@@ -99,7 +99,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               </div>
             </div>
           </div>
-          <div className="h-[5px] bg-[#f4f6f9] z-50"></div>
+          <div className="h-[5px] bg-[#f4f6f9] z-50 md:bg-transparent"></div>
           <ResponseBtn post={post} />
         </div>
       ) : (

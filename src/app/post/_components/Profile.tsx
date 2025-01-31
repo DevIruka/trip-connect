@@ -51,7 +51,7 @@ const Profile = ({
     <div className="flex justify-between">
       <div
         onClick={handleClick}
-        className="bg-white flex items-center gap-2 py-4 px-5 cursor-pointer"
+        className="flex items-center gap-2 py-4 px-5 cursor-pointer"
       >
         {user.profile_img ? (
           <Image
