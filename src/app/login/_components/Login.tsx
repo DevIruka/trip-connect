@@ -13,6 +13,7 @@ import { useState } from 'react';
 import WarningModal from './Warning';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/userStore';
 
 const googleImage = '/images/google.png';
 const kakaoImage = '/images/kakao.png';
@@ -21,6 +22,7 @@ const leftIcon = '/images/ic-left.svg';
 const Login = () => {
   const route = useRouter();
   const { t } = useTranslation('login');
+  const { fetchUser } = useUserStore();
 
   const {
     register,
@@ -38,6 +40,9 @@ const Login = () => {
       setErrorMessage(response.message); // 에러 메시지 상태 업데이트
       return;
     }
+
+    //fetchuser
+    fetchUser();
     route.push('/');
   };
 
