@@ -10,6 +10,7 @@ import ItalicIcon from '../_icons/ItalicIcon';
 import AlignLeftIcon from '../_icons/AlignLeftIcon';
 import AlignCenterIcon from '../_icons/AlignCenterIcon';
 import AlignRightIcon from '../_icons/AlignRightIcon';
+import { useMediaQuery } from 'react-responsive';
 
 type Props = {
   editor: Editor | null;
@@ -23,6 +24,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
     'bold' | 'italic' | null
   >(null);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
+  const isMobile = useMediaQuery({ maxWidth: 799 });
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,9 +34,12 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
         const keyboardHeight = windowHeight - viewport.height;
         setKeyboardHeight(keyboardHeight);
       }
+
+      setIsTextMenuVisible(window.innerWidth >= 800);
     };
 
     if (window.visualViewport) {
+      handleResize();
       window.visualViewport.addEventListener('resize', handleResize);
     }
 
@@ -137,17 +142,17 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       {/* Text Menu */}
       {isTextMenuVisible && (
         <div
-          className="w-full h-14 flex-col justify-start items-start inline-flex"
+          className="w-full h-14 flex-col justify-start items-start inline-flex fixed z-[60] top-0 left-0"
           style={{
-            position: 'fixed', // 고정 위치
+            position: isMobile ? 'fixed' : 'static',
             top: 'auto', // 상단이 아닌 메인 메뉴 위에 나타나도록 설정
-            bottom: `${keyboardHeight + 56}px`,
+            bottom: isMobile ? `${keyboardHeight + 50}px` : 'auto',
             left: 0,
             right: 0,
             zIndex: 60, // 메인 메뉴보다 높은 z-index 설정
           }}
         >
-          <div className="self-stretch px-5 py-4 bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex">
+          <div className="self-stretch px-5 py-4 bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] py-[12px]">
             <div className="h-6 justify-start items-center gap-6 flex">
               <div className="h-6 justify-start items-center gap-6 flex">
                 <button
@@ -191,9 +196,10 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
       {/* Main Menu */}
       <div
-        className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50"
+        className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50 md:px-[20px] py-[12px]"
         style={{
-          bottom: `${keyboardHeight}px`,
+          position: isMobile ? 'fixed' : 'static',
+          bottom: isMobile ? `${keyboardHeight}px` : 'auto',
         }}
       >
         <div className="justify-start items-center gap-6 flex">
