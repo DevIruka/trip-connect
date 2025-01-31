@@ -14,7 +14,7 @@ const SearchResultCount = ({
   const { t } = useTranslation('search');
   return (
     <>
-      <div className="flex flex-row items-center h-[29px]">
+      <div className="flex flex-row items-center h-[29px] md:px-[36px]">
         <p className="font-bold text-[18px]">{t('result')} </p>
         <span className="font-semibold ml-2 text-[16px] text-gray-500">
           {filter === 'all'

@@ -1,3 +1,4 @@
+import { Desktop, Mobile } from '@/components/ui/Responsive';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -6,6 +7,7 @@ import {
   UseFormSetValue,
 } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import search from '@/data/images/ic-Search.svg';
 
 const iconLeft = '/images/ic-left.svg';
 const iconclose = '/images/ic-xmark.svg';
@@ -38,35 +40,67 @@ const SearchBar = ({
   const { t } = useTranslation('search');
   return (
     <>
-      <form
-        onSubmit={handleSubmit(handleSearch)}
-        className="flex flex-row items-center"
-      >
-        <Link href="/">
-          <Image
-            src={iconLeft}
-            alt="left icon"
-            width={24}
-            height={24}
-            className="ml-[20px] mr-[8px]"
-          />
-        </Link>
-        <div className="flex flex-row justify-center items-center relative">
-          <input
-            {...register('searchQuery')}
-            type="text"
-            placeholder={t('placeHolder')}
-            className="bg-[#F9F9F9] rounded-[12px] text-[14px] h-[44px] w-[303px] mt-[6px] mb-[11px] py-[12px] px-[16px]"
-          />
-          <button
-            type="button"
-            className="absolute top-[16px] right-[10px]"
-            onClick={() => setValue('searchQuery', '')}
-          >
-            <Image src={iconclose} alt="close icon" width={24} height={24} />
-          </button>
-        </div>
-      </form>
+      <Mobile>
+        <form
+          onSubmit={handleSubmit(handleSearch)}
+          className="flex flex-row items-center"
+        >
+          <Link href="/">
+            <Image
+              src={iconLeft}
+              alt="left icon"
+              width={24}
+              height={24}
+              className="ml-[20px] mr-[8px]"
+            />
+          </Link>
+          <div className="flex flex-row justify-center items-center relative">
+            <input
+              {...register('searchQuery')}
+              type="text"
+              placeholder={t('placeHolder')}
+              className="bg-[#F9F9F9] rounded-[12px] text-[14px] h-[44px] w-[303px] mt-[6px] mb-[11px] py-[12px] px-[16px]"
+            />
+            <button
+              type="button"
+              className="absolute top-[16px] right-[10px]"
+              onClick={() => setValue('searchQuery', '')}
+            >
+              <Image src={iconclose} alt="close icon" width={24} height={24} />
+            </button>
+          </div>
+        </form>
+      </Mobile>
+      <Desktop>
+        <form
+          onSubmit={handleSubmit(handleSearch)}
+          className="flex flex-col max-w-[1200px] w-full relative"
+        >
+          <span className="text-[#44484c] text-[32px] font-bold font-['Pretendard'] leading-[51.20px] ml-[36px]">
+            검색
+          </span>
+          <div className="flex flex-row justify-center items-center relative w-full">
+            <input
+              {...register('searchQuery')}
+              type="text"
+              placeholder={t('placeHolder')}
+              className="bg-[#F9F9F9] rounded-[12px] text-xl h-[70px] w-full max-w-[1128px] mt-[6px] mb-[11px] py-[12px] pr-[16px] px-[42px] mx-[36px]"
+            />
+            <Image
+              src={search}
+              width={20}
+              height={20}
+              alt="search"
+              className="absolute left-[50px] top-[31px] filter invert-[40%] brightness-[80%]"
+            />
+            <button
+              type="button"
+              className="absolute top-[16px] right-[10px]"
+              onClick={() => setValue('searchQuery', '')}
+            ></button>
+          </div>
+        </form>
+      </Desktop>
     </>
   );
 };

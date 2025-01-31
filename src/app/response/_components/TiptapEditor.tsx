@@ -12,6 +12,7 @@ import MapNode from './MapNode';
 import TextStyle from '@tiptap/extension-text-style';
 import Placeholder from '@tiptap/extension-placeholder';
 import { useTranslation } from 'react-i18next';
+import { MediaQueryAllQueryable, useMediaQuery } from 'react-responsive';
 
 type Props = {
   title: string;
@@ -33,6 +34,8 @@ const TiptapEditor: React.FC<Props> = ({
   const { t } = useTranslation('response');
   const [activeEditor, setActiveEditor] = useState<Editor | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const isMobile = useMediaQuery({ maxWidth: 799 });
+
   const extensions = [
     StarterKit,
     Placeholder.configure({
@@ -108,51 +111,64 @@ const TiptapEditor: React.FC<Props> = ({
 
   return (
     <>
-      <div className="px-5 pb-0">
-        <div className="mb-[24px]">
-          <label className="sr-only">{t('titlePlaceholder')}</label>
-          <textarea
-            ref={textareaRef}
-            value={title}
-            onChange={handleTitleChange}
-            placeholder={t('titlePlaceholder')}
-            className="w-full py-2 bg-transparent border-0 border-b focus:outline-none focus:ring-0 focus:border-[#DFE1E5] placeholder:text-[#A9A9A9] text-[18px] font-bold resize-none"
-            style={{ color: '#000000', lineHeight: '1.5', overflow: 'hidden' }}
-            rows={1}
-          />
+      <div className="px-5 pb-0 w-full max-w-[800px] mx-auto">
+        <div className="hidden md:block">
+          <MenuBar editor={activeEditor} />
         </div>
 
-        <div className="mb-[24px]">
-          <div className=" relative rounded-[8px] border border-[#DFE1E5]">
-            <div className=" px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
-              {!previewEditor?.getText() && t('previewPlaceholder')}
+          <div className="mb-[24px]">
+            <label className="sr-only">{t('titlePlaceholder')}</label>
+            <textarea
+              ref={textareaRef}
+              value={title}
+              onChange={handleTitleChange}
+              placeholder={t('titlePlaceholder')}
+              className="w-full py-2 bg-transparent border-0 border-b max-w-[800px] focus:outline-none focus:ring-0 focus:border-[#DFE1E5] placeholder:text-[#A9A9A9] text-[18px] font-bold resize-none"
+              style={{
+                color: '#000000',
+                lineHeight: '1.5',
+                overflow: 'hidden',
+              }}
+              rows={1}
+            />
+          </div>
+
+          <div className="mb-[24px]">
+          <div className="relative rounded-[8px] border border-[#DFE1E5]">
+              <div className=" px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
+                {!previewEditor?.getText() && t('previewPlaceholder')}
+              </div>
+              <div className="rounded-[8px] ">
+                <EditorContent editor={previewEditor} />
+              </div>
             </div>
-            <div className="rounded-[8px] ">
-              <EditorContent editor={previewEditor} />
+          </div>
+
+          <div className="relative my-[16px] flex items-center justify-center">
+          <div className="flex-grow border-t border-[#DFE1E5]"></div>
+            <p className="px-4 text-sm whitespace-nowrap bg-white text-[#80BFFF]">
+              {t('paidOnlyMessage')}
+            </p>
+            <div className="flex-grow border-t border-[#DFE1E5]"></div>
+          </div>
+
+          <div className="mb-[150px]">
+            <div className="relative rounded-[8px] border border-[#DFE1E5]">
+              <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
+                {!editor?.getText() && t('paidContentPlaceholder')}
+              </div>
+              <div className="rounded-[8px] ">
+                <EditorContent editor={editor} />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="relative my-[16px] flex items-center justify-center ">
-          <div className="flex-grow border-t border-[#DFE1E5]"></div>
-          <p className="px-4 text-sm whitespace-nowrap bg-white text-[#80BFFF]">
-            {t('paidOnlyMessage')}
-          </p>
-          <div className="flex-grow border-t border-[#DFE1E5]"></div>
+      {isMobile && (
+        <div className="md:fixed top-0 w-full z-50 md:hidden">
+          <MenuBar editor={activeEditor} />
         </div>
-
-        <div className="mb-[150px]">
-          <div className="relative rounded-[8px] border border-[#DFE1E5] ">
-            <div className="px-[16px] py-[14px] absolute inset-0 pointer-events-none flex text-[#A9A9A9] text-[14px] font-m">
-              {!editor?.getText() && t('paidContentPlaceholder')}
-            </div>
-            <div className="rounded-[8px] ">
-              <EditorContent editor={editor} />
-            </div>
-          </div>
-        </div>
-      </div>
-      <MenuBar editor={activeEditor} />
+      )}
     </>
   );
 };

@@ -3,6 +3,7 @@
   "email": "이메일",
   "password": "비밀번호",
   "easyLogin": "간편 로그인",
+  "loginwithemail" : "이메일 로그인",
   "stillNot": "아직 회원이 아니신가요?",
   "signup": "회원가입",
   "beuser": "가입하기",
