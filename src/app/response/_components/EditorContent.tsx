@@ -10,7 +10,7 @@ const EditorContent: React.FC<Props> = ({ editor }) => {
   if (!editor) return null;
 
   return (
-    <div className="border border-[#DFE1E5] rounded-[8px] p-3 ProseMirror">
+    <div className="border border-[#DFE1E5] rounded-[8px] p-3 ProseMirror md:border-transparent">
       <TiptapEditorContent editor={editor} />
     </div>
   );

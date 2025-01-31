@@ -26,7 +26,7 @@ const Responses = ({ postId }: { postId: string }) => {
         <div className="text-[#0582ff]">{resPosts?.length}</div>개의 답변이
         있어요
       </div>
-      <div className="border-b border-[#f3f3f3]"></div>
+      <div className="border-b border-[#f3f3f3] md:border-transparent"></div>
 
       {resPosts
         ? resPosts.map((post) => {

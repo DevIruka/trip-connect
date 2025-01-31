@@ -59,30 +59,21 @@ const VerificationCodePage = () => {
   };
 
   return (
-    <div className="h-full w-full px-5 bg-white">
+    <div className="h-[461px] w-full px-[36px] bg-white mx-auto max-w-[872px]">
       {/* 상단 헤더 */}
       <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
-        <BackButton />
-        <div className="text-center text-black text-lg font-semibold">
-          {t('title')}
+        <div className="md:hidden">
+          <BackButton />
+        </div>
+        <div className="text-center text-black font-semibold md:text-[32px] text-[18px]">
+          {t('identity_verification')}
         </div>
         <div className="w-6"></div>
       </div>
 
       {/* 안내 텍스트 */}
-      <p
-        style={{
-          color: 'var(--Grayscale-Gray-1, #45484D)',
-          fontFamily: 'Pretendard',
-          fontSize: '18px',
-          fontStyle: 'normal',
-          fontWeight: 700,
-          lineHeight: '160%',
-          letterSpacing: '-0.36px',
-        }}
-        className="flex items-start gap-[10px] self-stretch py-[16px] mb-6 h-[56px]"
-      >
-        {t('enter_code')}
+      <p className="mb-6 text-[#45484D] font-semibold md:text-[20px] text-[18px] leading-[160%] tracking-[-0.36px]">
+        {t('enter_verification_code')}
       </p>
 
       {/* 인증 코드 입력 필드 */}
@@ -94,7 +85,7 @@ const VerificationCodePage = () => {
           type="text"
           value={verificationCode}
           readOnly
-          className="flex w-[315px] h-[52px] px-[16px] py-[14px] flex-col items-start gap-[10px] self-stretch rounded-lg border border-gray-300 bg-white text-black text-sm"
+          className="flex w-full h-[52px] px-[16px] py-[14px] flex-col items-start gap-[10px] self-stretch rounded-lg border border-gray-300 bg-white text-black text-sm md:w-[800px] md:h-[32px]"
         />
       </div>
 

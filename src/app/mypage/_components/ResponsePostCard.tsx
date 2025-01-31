@@ -21,6 +21,7 @@ const ResponsePostCard: React.FC<{
   const [nickname, setNickname] = useState<string | null>(null);
   const [country, setCountry] = useState<string | null>(null);
   const [category, setCategory] = useState<EnglishCategory[]>([]);
+  const [credit, setCredit] = useState<number | null>(null);
   const [commentCount, setCommentCount] = useState<number>(0);
   const [showActions, setShowActions] = useState<boolean>(false);
 
@@ -77,7 +78,7 @@ const ResponsePostCard: React.FC<{
     try {
       const { data, error } = await supabase
         .from('request_posts')
-        .select('country_city, category')
+        .select('country_city, category, credit')
         .eq('id', requestId)
         .single();
 
@@ -89,6 +90,7 @@ const ResponsePostCard: React.FC<{
         const countryCity = JSON.parse(data?.country_city || '{}');
         setCountry(countryCity.country || '알 수 없음');
         setCategory(data?.category || []);
+        setCredit(data?.credit || null); 
       }
     } catch (err) {
       console.error('질문글에서 정보 조회 중 오류 발생:', err);
@@ -283,7 +285,7 @@ const ResponsePostCard: React.FC<{
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <Image src={coinIcon} alt="coin" width={14} height={14} />
-            <span>50 C</span>
+            <span>{credit}</span>
           </div>
           <span>·</span>
           <span>작성자 {nickname}</span>
@@ -297,3 +299,4 @@ const ResponsePostCard: React.FC<{
 };
 
 export default ResponsePostCard;
+

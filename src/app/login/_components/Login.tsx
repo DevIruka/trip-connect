@@ -13,6 +13,7 @@ import { useState } from 'react';
 import WarningModal from './Warning';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/userStore';
 import { Desktop, Mobile } from '@/components/ui/Responsive';
 
 const googleImage = '/images/google.png';
@@ -23,6 +24,7 @@ const mailicon = '/images/ic-mail.svg';
 const Login = () => {
   const route = useRouter();
   const { t } = useTranslation('login');
+  const { fetchUser } = useUserStore();
 
   const {
     register,
@@ -40,6 +42,9 @@ const Login = () => {
       setErrorMessage(response.message); // 에러 메시지 상태 업데이트
       return;
     }
+
+    //fetchuser
+    fetchUser();
     route.push('/');
   };
 

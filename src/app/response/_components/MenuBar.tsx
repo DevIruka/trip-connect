@@ -139,61 +139,180 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
   return (
     <div>
-      {/* Text Menu */}
-      {isTextMenuVisible && (
-        <div
-          className="w-full h-14 flex-col justify-start items-start inline-flex fixed z-[60] top-0 left-0"
-          style={{
-            position: isMobile ? 'fixed' : 'static',
-            top: 'auto', // 상단이 아닌 메인 메뉴 위에 나타나도록 설정
-            bottom: isMobile ? `${keyboardHeight + 50}px` : 'auto',
-            left: 0,
-            right: 0,
-            zIndex: 60, // 메인 메뉴보다 높은 z-index 설정
-          }}
-        >
-          <div className="self-stretch px-5 py-4 bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] py-[12px]">
-            <div className="h-6 justify-start items-center gap-6 flex">
-              <div className="h-6 justify-start items-center gap-6 flex">
-                <button
-                  className="w-6 h-6 flex items-center justify-center"
-                  onClick={() => handleTextStyleClick('bold')}
-                >
-                  <BoldIcon color={getTextStyleColor('bold')} />
-                </button>
-                <button
-                  className="w-6 h-6 flex items-center justify-center"
-                  onClick={() => handleTextStyleClick('italic')}
-                >
-                  <ItalicIcon color={getTextStyleColor('italic')} />
-                </button>
+      {isMobile ? (
+        <>
+          {/* Text Menu */}
+          {isTextMenuVisible && (
+            <div
+              className="w-full h-14 flex-col justify-start items-start inline-flex fixed z-[60] top-0 left-0"
+              style={{
+                position:'fixed',
+                top: 'auto',
+                bottom:`${keyboardHeight + 56}px`,
+              }}
+            >
+              <div className="self-stretch px-5 py-[16px] bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] py-[12px]">
+                <div className="h-6 justify-start items-center gap-6 flex">
+                  <div className="h-6 justify-start items-center gap-6 flex">
+                    <button
+                      className="w-6 h-6 flex items-center justify-center"
+                      onClick={() => handleTextStyleClick('bold')}
+                    >
+                      <BoldIcon color={getTextStyleColor('bold')} />
+                    </button>
+                    <button
+                      className="w-6 h-6 flex items-center justify-center"
+                      onClick={() => handleTextStyleClick('italic')}
+                    >
+                      <ItalicIcon color={getTextStyleColor('italic')} />
+                    </button>
+                  </div>
+                  <div className="w-[1px] h-full bg-[#EBEBEB]"></div>
+                  <div className="justify-start items-center gap-6 flex">
+                    <button
+                      className="w-6 h-6 flex items-center justify-center"
+                      onClick={() => handleAlignmentClick('left')}
+                    >
+                      <AlignLeftIcon color={getAlignmentColor('left')} />
+                    </button>
+                    <button
+                      className="w-6 h-6 flex items-center justify-center"
+                      onClick={() => handleAlignmentClick('center')}
+                    >
+                      <AlignCenterIcon color={getAlignmentColor('center')} />
+                    </button>
+                    <button
+                      className="w-6 h-6 flex items-center justify-center"
+                      onClick={() => handleAlignmentClick('right')}
+                    >
+                      <AlignRightIcon color={getAlignmentColor('right')} />
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="w-[1px] h-full bg-[#EBEBEB]"></div>
-              <div className="justify-start items-center gap-6 flex">
-                <button
-                  className="w-6 h-6 flex items-center justify-center"
-                  onClick={() => handleAlignmentClick('left')}
-                >
-                  <AlignLeftIcon color={getAlignmentColor('left')} />
+            </div>
+          )}
+
+          {/* Main Menu */}
+          <div
+            className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50 md:px-[20px] py-[12px]"
+            style={{
+              position: 'fixed',
+              bottom: `${keyboardHeight}px`,
+            }}
+          >
+            <div className="justify-start items-center gap-6 flex">
+              {isMobile && (
+                <button onClick={handleTextHeightClick}>
+                  <TextHeightIcon color={getTextHeightColor()} />
                 </button>
-                <button
-                  className="w-6 h-6 flex items-center justify-center"
-                  onClick={() => handleAlignmentClick('center')}
-                >
-                  <AlignCenterIcon color={getAlignmentColor('center')} />
-                </button>
-                <button
-                  className="w-6 h-6 flex items-center justify-center"
-                  onClick={() => handleAlignmentClick('right')}
-                >
-                  <AlignRightIcon color={getAlignmentColor('right')} />
-                </button>
+              )}
+
+              <label
+                htmlFor="image-upload"
+                className="w-6 h-6 flex items-center justify-center cursor-pointer hover:text-[#0582FF]"
+              >
+                <ImageIcon />
+              </label>
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  handleImageUpload(e);
+                }}
+              />
+
+              <button
+                className="w-6 h-6 flex items-center justify-center hover:text-[#0582FF]"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <MapMarkerIcon />
+              </button>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          {/* Main Menu */}
+          <div
+            className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 md:px-[20px] md:py-[12px]"
+          >
+            <div className="justify-start items-center gap-6 flex">
+              <button>
+                <TextHeightIcon color={getTextHeightColor()} />
+              </button>
+
+              <label
+                htmlFor="image-upload"
+                className="w-6 h-6 flex items-center justify-center cursor-pointer hover:text-[#0582FF]"
+              >
+                <ImageIcon />
+              </label>
+              <input
+                type="file"
+                id="image-upload"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => {
+                  handleImageUpload(e);
+                }}
+              />
+
+              <button
+                className="w-6 h-6 flex items-center justify-center hover:text-[#0582FF]"
+                onClick={() => setIsModalOpen(true)}
+              >
+                <MapMarkerIcon />
+              </button>
+            </div>
+          </div>
+
+          {/* Text Menu */}
+          <div className="w-full h-14 flex-col justify-start items-start inline-flex">
+            <div className="self-stretch px-5 py-[16px] bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] md:py-[12px]">
+              <div className="h-6 justify-start items-center gap-6 flex">
+                <div className="h-6 justify-start items-center gap-6 flex">
+                  <button
+                    className="w-6 h-6 flex items-center justify-center"
+                    onClick={() => handleTextStyleClick('bold')}
+                  >
+                    <BoldIcon color={getTextStyleColor('bold')} />
+                  </button>
+                  <button
+                    className="w-6 h-6 flex items-center justify-center"
+                    onClick={() => handleTextStyleClick('italic')}
+                  >
+                    <ItalicIcon color={getTextStyleColor('italic')} />
+                  </button>
+                </div>
+                <div className="w-[1px] h-full bg-[#EBEBEB]"></div>
+                <div className="justify-start items-center gap-6 flex">
+                  <button
+                    className="w-6 h-6 flex items-center justify-center"
+                    onClick={() => handleAlignmentClick('left')}
+                  >
+                    <AlignLeftIcon color={getAlignmentColor('left')} />
+                  </button>
+                  <button
+                    className="w-6 h-6 flex items-center justify-center"
+                    onClick={() => handleAlignmentClick('center')}
+                  >
+                    <AlignCenterIcon color={getAlignmentColor('center')} />
+                  </button>
+                  <button
+                    className="w-6 h-6 flex items-center justify-center"
+                    onClick={() => handleAlignmentClick('right')}
+                  >
+                    <AlignRightIcon color={getAlignmentColor('right')} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </>
       )}
-
       {/* Main Menu */}
       <div
         className="w-full h-[56px] px-5 py-[16px] bg-white border-t md:border-t-0 border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50 md:px-[20px] py-[12px]"
@@ -231,12 +350,11 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
           </button>
         </div>
       </div>
-
       {/* Google Modal */}
       <GoogleModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)} // Close modal logic
-        onSelectLocation={handleInsertMap} // Callback for selecting a location
+        onClose={() => setIsModalOpen(false)}
+        onSelectLocation={handleInsertMap}
       />
     </div>
   );
