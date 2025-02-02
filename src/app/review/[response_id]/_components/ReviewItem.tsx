@@ -90,7 +90,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
               <textarea
                 value={updatedReview}
                 onChange={(e) => setUpdatedReview(e.target.value)}
-                className="w-full p-2 border border-[#80BFFF] rounded text-sm"
+                className="w-full p-2 border border-[#80BFFF] rounded text-sm focus:outline-none"
               />
               <div className="flex gap-[4px] mt-2 justify-end">
                 <button
@@ -111,7 +111,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
               </div>
             </div>
           ) : (
-            <p className="text-sm pl-[44px]">{review.review}</p>
+            <p className="text-sm pl-[44px] md:text-base md:font-medium">{review.review}</p>
           )}
       </div>
     </div>
