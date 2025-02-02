@@ -201,9 +201,9 @@ const FormFields: React.FC<Props> = ({
                       disabled={{ before: new Date() }}
                       className="text-[#333] font-medium"
                       style={{
-                        width: '100%', 
-                        maxWidth: '320px', 
-                        minWidth: '280px', 
+                        width: '100%',
+                        maxWidth: '320px',
+                        minWidth: '280px',
                         margin: 'auto',
                         padding: '5px 10px',
                         display: 'flex',
@@ -235,17 +235,17 @@ const FormFields: React.FC<Props> = ({
                 </div>
 
                 {/* 하단 버튼 */}
-                <div className="flex justify-between md:justify-center mt-4 gap-[8px] md:gap-[12px]">
+                <div className="flex justify-between mt-4 gap-[8px] md:gap-[12px] md:justify-center">
                   <button
                     type="button"
-                    className="w-[72px] h-[48px] md:w-[168px] md:h-[64px] px-[12px] py-[6px] border border-[#DFE1E5] rounded-[12px] text-[#333] text-[14px] font-semibold"
+                    className="w-[72px] h-[48px] px-[12px] py-[6px] border border-[#DFE1E5] rounded-[12px] text-[#333] text-[14px] font-semibold md:w-[168px] md:h-[64px]"
                     onClick={handleCancel}
                   >
                     {t('cancelButton')}
                   </button>
                   <button
                     type="button"
-                    className="w-[72px] h-[48px] md:w-[168px] md:h-[64px] px-[12px] py-[6px] bg-[#0582FF] rounded-[12px] text-white text-[14px] font-semibold"
+                    className="flex-1 h-[48px] px-[12px] py-[6px] bg-[#0582FF] rounded-[12px] text-white text-[14px] font-semibold md:w-[168px] md:h-[64px] md:flex-none"
                     onClick={handleConfirm}
                   >
                     {t('confirmButton')}
