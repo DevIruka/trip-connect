@@ -89,11 +89,11 @@ const GoogleModal: React.FC<Props> = ({
       style={{ zIndex: 1000 }}
     >
       <div
-        className="w-[335px] h-[416px] px-5 py-2.5 bg-white rounded-2xl flex flex-col justify-between"
+        className="w-[335px] h-[416px] px-5 py-2.5 bg-white rounded-2xl flex flex-col justify-between md:w-[606px] md:px-[40px] md:py-[36px] md:min-h-[600px] max-h-[90vh]"
         style={{ zIndex: 1001 }}
       >
         {/* 헤더 */}
-        <div className="flex flex-col justify-start gap-3">
+        <div className="flex flex-col justify-start gap-3 md:gap-4">
           <div className="flex justify-between items-center py-2">
             <h2 className="text-[#757575] text-base font-semibold leading-snug">
               장소 추가하기
@@ -139,7 +139,7 @@ const GoogleModal: React.FC<Props> = ({
         </div>
 
         {/* 결과 영역 */}
-        <div className="flex-grow pt-[12px] overflow-y-auto">
+        <div className="flex-grow pt-[12px] overflow-y-auto md:pt-[20px]">
           {isLoading ? (
             <p className="text-[#797c80] text-sm font-semibold text-center mt-4">
               검색 중...
@@ -182,10 +182,10 @@ const GoogleModal: React.FC<Props> = ({
         </div>
 
         {/* 하단 버튼 */}
-        <div className="self-stretch py-2 flex justify-between items-center gap-2">
+        <div className="self-stretch py-2 flex justify-between items-center gap-2 md:pt-[10px]">
           <button
             onClick={onClose}
-            className="w-[72px] h-12 px-3 py-1.5 rounded-xl border border-[#dee1e5] text-[#44484c] text-sm font-semibold"
+            className="w-[72px] h-12 px-3 py-1.5 rounded-xl border border-[#dee1e5] text-[#44484c] text-sm font-semibold md:w-[130px]"
           >
             취소
           </button>
