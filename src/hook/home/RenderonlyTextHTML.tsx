@@ -1,4 +1,4 @@
-import { parseHtmlToArray } from '@/app/post/_hooks/parseHtmlToArray';
+import { parseHtmlToArray } from '@/app/post/_utils/parseHtmlToArray';
 import { parsedData } from '@/app/post/_types/parsedData';
 
 import React from 'react';

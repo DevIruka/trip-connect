@@ -10,6 +10,7 @@ import Image from 'next/image';
 import { useLang } from '@/store/languageStore';
 import { useTranslation } from 'react-i18next';
 import { Desktop, Mobile } from './ui/Responsive';
+import renderContinents from './renderContinents';
 
 type Props = {
   isOpen: boolean;
@@ -132,12 +133,12 @@ export const LocationModal = ({
   return (
     <>
       <div
-        className="w-full h-screen flex justify-center fixed inset-y-0 z-[52] items-end bg-black bg-opacity-50 md:items-center md:p-0"
+        className="w-full h-screen flex justify-center fixed inset-y-0 z-[100] items-end bg-black bg-opacity-50 md:items-center md:p-0"
         onClick={onClose} // 뒷배경 클릭 시 모달 닫기
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
       >
         <div
-          className="bg-white rounded-t-[20px] z-[52] w-full h-[90%] px-5 md:rounded-[20px] md:max-w-[686px] md:h-[726px] md:py-9 md:px-10 relative"
+          className="bg-white rounded-t-[20px] z-[52] w-full h-[90%] px-5 md:rounded-[20px] md:w-[686px] md:h-[726px] md:py-9 md:px-10 relative"
           onClick={(e) => e.stopPropagation()}
         >
           <Mobile>
@@ -326,74 +327,14 @@ export const LocationModal = ({
                     'noresults',
                   )}`}</p>
                 )
-              ) : // 대륙 > 나라 버튼 표시
-
-              lang === 'en' ? (
-                enNations.map((continent, idx) => (
-                  <div key={idx} className="grid gap-2 mb-9">
-                    <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px]">
-                      {continent.continent}
-                    </h3>
-                    <div className="flex gap-[7px] flex-wrap">
-                      {continent.countries.map((country) =>
-                        country.cities.map((city, cityIndex) => (
-                          <button
-                            key={cityIndex}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleTempSelect(
-                                continent.continent,
-                                country.name,
-                                city,
-                              );
-                            }}
-                            className={`h-7 px-3 py-[7px] rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium ${
-                              JSON.stringify(crntNation) ===
-                              `{"continent":"${continent.continent}","country":"${country.name}","city":"${city}"}`
-                                ? 'bg-[#f4f6f9] text-[#0582ff] border-[#0582ff]'
-                                : 'bg-white text-[#797c80] border-[#dee1e5]'
-                            }`}
-                          >
-                            {city}
-                          </button>
-                        )),
-                      )}
-                    </div>
-                  </div>
-                ))
               ) : (
-                nations.map((continent, idx) => (
-                  <div key={idx} className="grid gap-2 mb-9">
-                    <h3 className="text-[#44484c] text-lg font-bold leading-[28.80px] md:text-xl md:font-semibold">
-                      {continent.continent}
-                    </h3>
-                    <div className="flex gap-[7px] flex-wrap">
-                      {continent.countries.map((country) =>
-                        country.cities.map((city, cityIndex) => (
-                          <button
-                            key={cityIndex}
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleTempSelect(
-                                continent.continent,
-                                country.name,
-                                city,
-                              );
-                            }}
-                            className={`h-7 px-3 py-[7px] rounded-[100px] border justify-center items-center inline-flex text-center text-xs font-medium md:text-base md:h-9 ${
-                              JSON.stringify(crntNation) ===
-                              `{"continent":"${continent.continent}","country":"${country.name}","city":"${city}"}`
-                                ? 'bg-[#f4f6f9] text-[#0582ff] border-[#0582ff]'
-                                : 'bg-white text-[#797c80] border-[#dee1e5]'
-                            }`}
-                          >
-                            {city}
-                          </button>
-                        )),
-                      )}
-                    </div>
-                  </div>
-                ))
+                // 대륙 > 나라 버튼 표시
+
+                renderContinents(
+                  lang === 'en' ? enNations : nations,
+                  handleTempSelect,
+                  crntNation,
+                )
               )}
             </div>
           </div>
