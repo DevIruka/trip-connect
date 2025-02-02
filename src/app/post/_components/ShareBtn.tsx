@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import share from '@/data/images/ic-share.svg';
-import AlertModal from './AlertModal';
+import AlertModal from '../../../components/AlertModal';
 
 const ShareBtn = () => {
   const [showAlert, setShowAlert] = useState(false);

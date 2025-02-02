@@ -8,7 +8,7 @@ import original from '@/data/images/original.svg';
 import comment from '@/data/images/ic-comment.svg';
 import updown from '@/data/images/ic-up&down.svg';
 import MoreButton from '@/data/images/ic-More.svg';
-import { useGPTTranslation } from '../_hooks/TranslatedText';
+import { useGPTTranslation } from '../_hooks/useGPTTranslation';
 import RenderTranslatedHTML from './RenderTranslatedHTML';
 import { Tables } from '@/types/supabase';
 import { useUserStore } from '@/store/userStore';

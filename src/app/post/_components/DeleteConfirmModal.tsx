@@ -3,7 +3,7 @@ import caution from '@/data/images/⚠️ 주의.svg';
 import { useUserStore } from '@/store/userStore';
 import { fetchResPostDelete } from '@/utils/api/supabase_api/home/fetchResPostDelete';
 import ModalForm from '@/components/ModalForm';
-import AlertModal from './AlertModal';
+import AlertModal from '../../../components/AlertModal';
 import { useModal } from '@/providers/ModalProvider';
 import { fetchReqPostDelete } from '@/utils/api/supabase_api/home/fetchReqPostDelete';
 

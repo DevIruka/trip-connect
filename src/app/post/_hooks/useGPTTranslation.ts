@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getGPTTranslator } from './GPTTranslator';
+import { getGPTTranslator } from './getGPTTranslator';
 import * as Sentry from '@sentry/nextjs';
 
 // GPT 번역 로직을 위한 커스텀 훅
