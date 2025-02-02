@@ -3,14 +3,13 @@ import Responses from '../_components/Responses';
 import BookmarkBtn from '../_components/BookmarkBtn';
 import Profile from '../_components/Profile';
 import MoreButton from '@/data/images/ic-More.svg';
-import Image from 'next/image';
 import Icon from '@/components/Icons';
-import Imoji from '@/data/images/ic-imoji.svg';
 import BackHeader from '@/components/BackHeader';
 import PostDday from '@/app/home/_components/DDay';
 import ResponseBtn from '../_components/ResponseBtn';
 import ShareBtn from '../_components/ShareBtn';
 import { fetchReqPost } from '../../../utils/api/supabase_api/post/fetchReqPost';
+import LikeBtn from '../_components/LikeBtn';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
@@ -83,11 +82,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               한국어로 작성된 글이에요
             </div>
             <div className="border-t border-[#dee1e5] py-4 flex place-content-between">
-              <button className="flex place-items-center text-[#797c80] text-xs font-medium border border-[#dee1e5] py-1.5 pl-2 pr-2.5 rounded-full">
-                <Image src={Imoji} alt="Imoji" height={20} width={20} />
-                <div className="pl-[3px] pr-[5px]">나도 궁금해요</div>
-                <div className="font-bold leading-none">0</div>
-              </button>
+              <LikeBtn postId={postId} />
               <div className="flex gap-5">
                 <BookmarkBtn postId={postId} />
                 <ShareBtn />
