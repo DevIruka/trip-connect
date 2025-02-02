@@ -21,8 +21,8 @@ const LikeBtn = ({ postId }: { postId: string }) => {
 
   return (
     <button
-      className={`flex place-items-center text-[#797c80] text-xs font-medium border border-[#dee1e5] py-1.5 pl-2 pr-2.5 rounded-full ${
-        Liked && 'border-Blue1'
+      className={`flex place-items-center text-[#797c80] text-xs font-medium border py-1.5 pl-2 pr-2.5 rounded-full ${
+        Liked ? 'border-Blue1' : 'border-[#dee1e5]'
       }`}
       onClick={() => {
         toggleLikeMutation.mutate({ postId, isLiked: Liked });
