@@ -4,6 +4,16 @@ export type nation = {
   city: string;
 };
 
+type countries = {
+  name: string;
+  cities: string[];
+};
+
+export type nations = {
+  continent: string;
+  countries: countries[];
+};
+
 // 게시물 데이터 타입 정의
 export type Post = {
   created_at: string;
