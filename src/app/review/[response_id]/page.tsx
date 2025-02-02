@@ -160,9 +160,8 @@ const ReviewPage = () => {
   return (
     <div className="w-full h-screen flex flex-col bg-white">
       <div className="w-full max-w-none mx-auto md:w-[800px] px-4 md:px-0 flex flex-col flex-grow">
-        <div className='md:hidden'>
-
-      <ReviewHeader onBack={() => router.back()} />
+        <div className="md:hidden">
+          <ReviewHeader onBack={() => router.back()} />
         </div>
 
         {nickname && (
@@ -178,7 +177,7 @@ const ReviewPage = () => {
           </>
         )}
 
-<div className="flex-grow overflow-auto">
+<div className="flex-grow min-h-0 overflow-auto">
 <ReviewList
             reviews={reviews}
             isLoading={isLoading}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import TimeAgo from './TimeAgo';
 import { Review } from '../_utils/review';
@@ -23,6 +23,7 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
   const [visibleDropdown, setVisibleDropdown] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedReview, setUpdatedReview] = useState(review.review);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSave = () => {
     if (updatedReview.trim()) {
@@ -32,6 +33,15 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
       alert(t('reviewEmptyError'));
     }
   };
+
+  useEffect(() => {
+    if (isEditing && textareaRef.current) {
+      textareaRef.current.style.height = 'auto'; 
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; 
+    }
+  }, [isEditing, updatedReview]);
+
+
 
   return (
     <div className="flex flex-col p-[20px] gap-[12px]">
@@ -88,10 +98,12 @@ const ReviewItem: React.FC<ReviewItemProps> = ({
           {isEditing ? (
             <div>
               <textarea
-                value={updatedReview}
-                onChange={(e) => setUpdatedReview(e.target.value)}
-                className="w-full p-2 border border-[#80BFFF] rounded text-sm focus:outline-none"
-              />
+                 ref={textareaRef}
+                 value={updatedReview}
+                 onChange={(e) => setUpdatedReview(e.target.value)}
+                 className="w-full p-2 border border-[#80BFFF] rounded text-sm focus:outline-none resize-none"
+                 rows={2} 
+                 />
               <div className="flex gap-[4px] mt-2 justify-end">
                 <button
                   onClick={() => {

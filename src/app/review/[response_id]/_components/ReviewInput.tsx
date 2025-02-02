@@ -30,7 +30,7 @@ const ReviewInput: React.FC<Props> = ({
   }, []);
 
   return (
-    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-[#f2f2f2]">
+    <div className="sticky bottom-0 left-0 right-0 bg-white border-t border-[#f2f2f2] md:border-none">
       {isMd ? (
         <div className="flex flex-col items-center w-full border rounded-[8px] border-[#f2f2f2] px-[24px] pt-[24px] pb-[20px]">
           <div className="relative w-full">
