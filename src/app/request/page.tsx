@@ -91,7 +91,7 @@ const RequestPage: React.FC = () => {
   return (
     <>
       <div className="w-full h-screen bg-white flex flex-col overflow-y-auto menuscrollbar max-w-[800px]">
-        <div className="top-0 h-[56px] w-full flex justify-between items-center px-[20px] py-[10px] relative sticky z-[51] bg-white md:px-0">
+        <div className="top-0 h-[56px] w-full flex justify-between items-center px-[20px] py-[10px] relative sticky z-[50] bg-white md:px-0">
           <button
             className="w-[24px] h-[24px] text-black flex items-center justify-center"
             onClick={() => history.back()}
@@ -223,8 +223,8 @@ const RequestPage: React.FC = () => {
           />
         </form>
 
-        <div className="hidden md:block md:pt-[28px] md:w-[168px]">
-            <button
+        <div className="hidden md:flex justify-end pt-[28px]">
+        <button
               onClick={handleSubmit(onSubmit)}
               disabled={
                 !watch('country_city') ||
@@ -233,7 +233,7 @@ const RequestPage: React.FC = () => {
                 !watch('content') ||
                 !watch('date_end')
               } //getValue로 변환
-              className={`rounded-[6px] px-[12px] py-[6px] text-[14px] font-semibold ${
+              className={`w-[168px] rounded-[12px] px-[12px] py-[6px] text-lg font-bold h-[64px] ${
                 watch('country_city') &&
                 watch('category') &&
                 watch('title') &&

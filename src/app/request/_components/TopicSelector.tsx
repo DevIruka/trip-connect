@@ -61,7 +61,7 @@ const TopicSelector: React.FC<Props> = ({
             type="button"
             disabled={disabled} // 버튼 비활성화 여부
             onClick={() => handleTopicClick(topic, currentCategories || [])} // 클릭 처리
-            className={`px-3 py-1.5 border rounded-full font-semibold text-sm flex items-center md:px-[16px] md:py-[7px] md:text-m ${
+            className={`px-3 py-1.5 border rounded-full font-semibold text-sm flex items-center md:px-[16px] md:py-[7px] md:text-m md:min-w-[80px] md:min-h-[46px] ${
               isSelected
                 ? disabled
                   ? 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed' // 비활성화 + 선택된 상태
