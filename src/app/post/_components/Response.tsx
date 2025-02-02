@@ -17,6 +17,7 @@ import SelectBox from '@/components/SelectBox';
 import { useRouter } from 'next/navigation';
 import translate from '@/data/images/translate.svg';
 import { useModal } from '@/providers/ModalProvider';
+import { useReviewCount } from '@/utils/api/tanstack/home/useReviewCount';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -30,6 +31,9 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const { user } = useUserStore();
   const router = useRouter();
   const { openModal } = useModal();
+
+  //리뷰 갯수
+  const { reviewCount } = useReviewCount(post.id);
 
   //mycredits: 로그인한 유저의 보유 크레딧 가져오기
   const fetchLoginuserData = async () => {
@@ -235,7 +239,8 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
             className="flex gap-1 text-[#44484c] text-xs font-bold leading-none items-center cursor-pointer"
             onClick={() => router.push(`/review/${post.id}`)}
           >
-            <Image width={20} height={20} src={comment} alt="comment" />0
+            <Image width={20} height={20} src={comment} alt="comment" />
+            {reviewCount}
           </div>
           <div
             className="relative"
