@@ -135,7 +135,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   return (
     <div
       key={post.id}
-      className="md:border md:border-Gray5Line md:mb-5 md:rounded-2xl"
+      className="md:border md:border-Gray5Line md:mb-5 md:rounded-2xl md:w-[760px]"
     >
       <Profile postUserId={post.user_id} createdAt={post.created_at} />
       <div className="px-5">

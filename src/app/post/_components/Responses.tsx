@@ -12,11 +12,12 @@ const Responses = async ({ postId }: { postId: string }) => {
       </div>
       <div className="border-b border-[#f3f3f3] md:border-transparent"></div>
 
-      {resPosts
-        ? resPosts.map((post) => {
+      <div className="md:place-items-center">
+        {resPosts &&
+          resPosts.map((post) => {
             return <Response key={post.id} post={post} />;
-          })
-        : '게시물이 없어요'}
+          })}
+      </div>
     </>
   );
 };
