@@ -84,14 +84,14 @@ const SearchBar = ({
               {...register('searchQuery')}
               type="text"
               placeholder={t('placeHolder')}
-              className="bg-[#F9F9F9] rounded-[12px] text-xl h-[70px] w-full max-w-[1128px] mt-[6px] mb-[11px] md:mb-[24px] py-[12px] pr-[16px] px-[42px] mx-[36px]"
+              className="bg-[#F9F9F9] rounded-[12px] text-xl h-[70px] w-full max-w-[1128px] mt-[20px] mb-[11px] md:mb-[24px] py-[12px] pr-[16px] px-[42px] mx-[36px]"
             />
             <Image
               src={search}
               width={20}
               height={20}
               alt="search"
-              className="absolute left-[50px] top-[31px] filter invert-[40%] brightness-[80%]"
+              className="absolute left-[50px] top-[45px] filter invert-[40%] brightness-[80%]"
             />
             <button
               type="button"

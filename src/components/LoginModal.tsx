@@ -3,10 +3,12 @@ import React from 'react';
 import lock from '@/data/images/🔓️ 열린 자물쇠.svg';
 import { useTranslation } from 'react-i18next';
 import { useModal } from '@/providers/ModalProvider';
+import { useMediaQuery } from 'react-responsive';
 
 const LoginModal = () => {
   const { t } = useTranslation('home');
-  const { closeModal } = useModal();
+  const { openModal, closeModal } = useModal();
+  const isDesktop = useMediaQuery({ minWidth: 800 });
 
   return (
     <div
@@ -39,7 +41,14 @@ const LoginModal = () => {
           </div>
           <div
             className="flex-1 py-[16.5px] text-base font-semibold text-white bg-Blue2 rounded-xl w-full text-center cursor-pointer"
-            onClick={() => (window.location.href = '/login')}
+            onClick={() => {
+              if (isDesktop) {
+                openModal('DesktopLogin');
+                closeModal('loginModal');
+              } else {
+                window.location.href = '/login';
+              }
+            }}
           >
             {t('now')}
           </div>

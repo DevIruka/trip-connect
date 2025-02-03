@@ -35,7 +35,7 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
       {isOpen && (
         <ul className="flex flex-col items-center justify-center absolute top-7 right-0 bg-white border rounded-[8px] mt-2 w-[129px] shadow-lg z-10">
           <li
-            className={`flex items-center h-[29px] justify-start my-[4px] w-[113px] px-3 py-2 cursor-pointer border-black rounded-[8px] ${
+            className={`flex items-center h-[29px] justify-start mt-[8px] mb-[2px] w-[113px] px-3 py-2 cursor-pointer border-black rounded-[8px] ${
               filter === 'all'
                 ? 'bg-[#EBF5FF] text-[#0582FF] font-semibold'
                 : 'hover:bg-gray-200'
@@ -45,7 +45,7 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
             {t('q&a')}
           </li>
           <li
-            className={`flex items-center justify-start h-[29px] my-[4px] w-[113px] px-3 py-2 cursor-pointer border-black rounded-[8px] ${
+            className={`flex items-center justify-start h-[29px] my-[2px] w-[113px] px-3 py-2 cursor-pointer border-black rounded-[8px] ${
               filter === 'question'
                 ? 'bg-[#EBF5FF] text-[#0582FF] font-semibold'
                 : 'hover:bg-gray-200'
@@ -55,7 +55,7 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
             {t('q')}
           </li>
           <li
-            className={`flex items-center justify-start h-[29px] my-[4px] w-[113px] px-3 py-2 cursor-pointer border-black rounded-[8px] ${
+            className={`flex items-center justify-start h-[29px] mt-[2px] mb-[8px] w-[113px] px-3 py-2 cursor-pointer border-black rounded-[8px] ${
               filter === 'answer'
                 ? 'bg-[#EBF5FF] text-[#0582FF] font-semibold'
                 : 'hover:bg-gray-200'

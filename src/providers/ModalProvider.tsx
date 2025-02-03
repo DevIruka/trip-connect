@@ -1,5 +1,6 @@
 import ChargeModal from '@/app/post/_components/ChargeModal';
 import DeleteConfirmModal from '@/app/post/_components/DeleteConfirmModal';
+import DesktopLoginModal from '@/components/DesktopLoginModal';
 import LoginModal from '@/components/LoginModal';
 import { Tables } from '@/types/supabase';
 import React, { createContext, useContext, useState } from 'react';
@@ -50,6 +51,7 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modals.loginModal && <LoginModal />}
       {modals.chargeModal && <ChargeModal />}
       {modals.deleteConfirm && <DeleteConfirmModal />}
+      {modals.DesktopLogin && <DesktopLoginModal />}
     </ModalContext.Provider>
   );
 };
