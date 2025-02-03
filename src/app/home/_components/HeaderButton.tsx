@@ -23,7 +23,7 @@ const HeaderButton = ({
       <Link
         href={`/${url}`}
         onClick={handleClick}
-        className="w-[50%] h-[92px] bg-white rounded-lg px-[16px] py-[13px] relative md:max-w-[276px] md:h-[108px]"
+        className="w-[50%] h-[92px] bg-white rounded-lg px-[16px] py-[13px] relative md:max-w-[276px] md:h-fit md:px-5 md:py-[18px]"
       >
         <div className="flex flex-col space-y-[8px]">
           <div className="text-black text-base font-semibold leading-normal md:text-lg">
@@ -36,7 +36,7 @@ const HeaderButton = ({
           </div>
         </div>
         <Image
-          className="absolute top-[12px] right-[12px]"
+          className="absolute top-[12px] right-[12px] md:top-[18px] md:right-5"
           src={url === 'request' ? pencil : ball}
           alt={title}
           width={40}
