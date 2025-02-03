@@ -1,6 +1,8 @@
+import { nation } from '@/app/home/_types/homeTypes';
 import ChargeModal from '@/app/post/_components/ChargeModal';
 import DeleteConfirmModal from '@/app/post/_components/DeleteConfirmModal';
 import DesktopLoginModal from '@/components/DesktopLoginModal';
+import { LocationModal } from '@/components/LocationModalNew';
 import LoginModal from '@/components/LoginModal';
 import { Tables } from '@/types/supabase';
 import React, { createContext, useContext, useState } from 'react';
@@ -12,12 +14,14 @@ type ModalState = {
 type ModalData = {
   requestpost?: Tables<'request_posts'> | null;
   responsepost?: Tables<'response_posts'> | null;
+  setCountry?: (country: nation | null) => void;
+  selectedCountry?: nation | null;
 };
 
 type ModalContextType = {
   modals: ModalState;
   modalData?: ModalData | null;
-  openModal: (modalId: string, data?: ModalData | null) => void;
+  openModal: (modalId: string, data?: ModalData) => void;
   closeModal: (modalId: string) => void;
 };
 
@@ -52,6 +56,7 @@ const ModalProvider = ({ children }: { children: React.ReactNode }) => {
       {modals.chargeModal && <ChargeModal />}
       {modals.deleteConfirm && <DeleteConfirmModal />}
       {modals.DesktopLogin && <DesktopLoginModal />}
+      {modals.locationModal && <LocationModal />}
     </ModalContext.Provider>
   );
 };

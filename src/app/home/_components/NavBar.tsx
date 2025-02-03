@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 
 import { topicMapping } from '@/utils/topics';
 
-import { LocationModal } from '../../../components/LocationModalNew';
 import { nation } from '../_types/homeTypes';
 import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
@@ -11,6 +10,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import Icon from '@/components/Icons';
 import { useTranslation } from 'react-i18next';
 import { useLang } from '@/store/languageStore';
+import { useModal } from '@/providers/ModalProvider';
 
 type Props = {
   setFilterType: React.Dispatch<
@@ -30,7 +30,7 @@ const Navbar = ({
   const { t } = useTranslation('home');
   const { lang } = useLang();
 
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 관리
+  const { openModal } = useModal();
   const [selectedCountry, setSelectedCountry] = useState<nation | null>(() => {
     return typeof window !== 'undefined'
       ? JSON.parse(sessionStorage.getItem('selectedLocation')!)
@@ -116,7 +116,15 @@ const Navbar = ({
                 ? 'text-[#0079f2]'
                 : 'text-[#797c80]'
             }`}
-            onClick={() => setIsModalOpen(true)} // 모달 열기
+            onClick={() =>
+              openModal('locationModal', {
+                setCountry: (country: nation | null) => {
+                  setSelectedCountry(country); // 선택된 나라 업데이트
+                  setNationFilter(country);
+                },
+                selectedCountry: selectedCountry,
+              })
+            } // 모달 열기
           >
             <div className="truncate max-w-[68px] md:overflow-visible md:max-w-full">
               {isHydrated && getSelectedCountryLabel(selectedCountry)}
@@ -130,18 +138,7 @@ const Navbar = ({
             />
           </button>
         </div>
-      </div>{' '}
-      <LocationModal
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-        }}
-        setCountry={(country: nation | null) => {
-          setSelectedCountry(country); // 선택된 나라 업데이트
-          setNationFilter(country);
-        }}
-        selectedCountry={selectedCountry}
-      />
+      </div>
     </>
   );
 };

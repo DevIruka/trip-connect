@@ -67,7 +67,7 @@ const ListReqPost = ({
           {topicArr
             .filter(([_, value]) => post.category?.includes(value))
             .map(([key, _]) => (
-              <div className="tag" key={key}>
+              <div className="tag pl-1.5" key={key}>
                 {key}
               </div>
             ))}

@@ -15,9 +15,9 @@ import {
   KoreanCategory,
   topicMapping,
 } from '@/utils/topics';
-import { LocationModal } from '@/components/LocationModalNew';
 import IconInfoCircle from '@/app/request/_components/icons/InfoCircle';
 import { useTranslation } from 'react-i18next';
+import { useModal } from '@/providers/ModalProvider';
 
 type Nation = {
   continent: string;
@@ -29,6 +29,7 @@ const EditRequestPage: React.FC = () => {
   const { t } = useTranslation('request');
   const { request_id } = useParams();
   const router = useRouter();
+  const { openModal, closeModal } = useModal();
 
   const {
     register,
@@ -41,15 +42,12 @@ const EditRequestPage: React.FC = () => {
     formState: { errors },
   } = useForm<FormInputs>();
 
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Nation>({
     continent: '',
     country: '',
     city: '',
   });
   const [isRestricted, setIsRestricted] = useState(false);
-
-  const toggleModal = () => setIsModalOpen((prev) => !prev);
 
   const handleLocationSelect = (location: Nation | null) => {
     if (location) {
@@ -62,7 +60,7 @@ const EditRequestPage: React.FC = () => {
       setValue('country_city', '');
       sessionStorage.removeItem('selectedLocation');
     }
-    setIsModalOpen(false);
+    closeModal('locationModal');
   };
 
   useEffect(() => {
@@ -209,7 +207,15 @@ const EditRequestPage: React.FC = () => {
                   ? 'cursor-not-allowed bg-gray-100 text-gray-500'
                   : 'bg-white text-black'
               }`}
-              onClick={!isRestricted ? toggleModal : undefined}
+              onClick={
+                !isRestricted
+                  ? () =>
+                      openModal('locationModal', {
+                        setCountry: handleLocationSelect,
+                        selectedCountry: selectedLocation,
+                      })
+                  : undefined
+              }
             />
             {errors.country_city && (
               <p className="text-red-500 text-sm mt-1">
@@ -268,17 +274,10 @@ const EditRequestPage: React.FC = () => {
             date_end: false, // 기한 수정은 항상 가능
           }}
         />
-
-        <LocationModal
-          isOpen={isModalOpen}
-          onClose={toggleModal}
-          setCountry={handleLocationSelect}
-          selectedCountry={selectedLocation}
-        />
       </div>
 
       <div className="hidden md:flex justify-end pt-[28px]">
-      <button
+        <button
           onClick={handleSubmit(onSubmit)}
           className="w-[168px] h-[64px] rounded-[12px] px-[12px] py-[6px] text-lg font-bold bg-[#0582FF] text-white"
           disabled={false}
