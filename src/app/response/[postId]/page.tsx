@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import TiptapEditor from '../_components/TiptapEditor';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import HeaderWithButton from '../_components/HeaderButtons';
 import { useQuery } from '@tanstack/react-query';
 import { useUserStore } from '@/store/userStore';
