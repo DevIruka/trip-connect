@@ -32,7 +32,8 @@ export const useLikeMutations = (userId: string | undefined) => {
   const toggleLikeMutation = useMutation<
     unknown,
     Error,
-    { postId: string | number; isLiked: boolean }
+    { postId: string | number; isLiked: boolean },
+    { previousLikes?: Array<{ request_id: string | number }> }
   >({
     mutationFn: async ({ postId, isLiked }) => {
       if (!userId) {
@@ -40,6 +41,37 @@ export const useLikeMutations = (userId: string | undefined) => {
       }
       return isLiked ? deleteLike(postId, userId) : addLike(postId, userId);
     },
+
+    onMutate: async ({ postId, isLiked }) => {
+      if (!userId) return;
+
+      await queryClient.cancelQueries({ queryKey: ['like', userId] });
+
+      const previousLikes = queryClient.getQueryData<
+        Array<{ request_id: string | number }>
+      >(['like', userId]);
+
+      queryClient.setQueryData<Array<{ request_id: string | number }>>(
+        ['like', userId],
+        (old) => {
+          const currentLikes = old || [];
+          return isLiked
+            ? currentLikes.filter((like) => like.request_id !== postId) // 삭제
+            : [...currentLikes, { request_id: postId }]; // 추가
+        },
+      );
+
+      return { previousLikes }; // 이전 상태 저장 (rollback 대비)
+    },
+
+    onError: (err, newLike, context) => {
+      queryClient.setQueryData(['like', userId], context?.previousLikes); // 롤백
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['like', userId] }); // 최신 데이터 동기화
+    },
+
     onSuccess: (_, { postId, isLiked }) => {
       queryClient.setQueryData<Array<{ request_id: string | number }>>(
         ['like', userId],
