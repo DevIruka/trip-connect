@@ -11,13 +11,7 @@ import { useLang } from '@/store/languageStore';
 import { useTranslation } from 'react-i18next';
 import { Desktop, Mobile } from './ui/Responsive';
 import renderContinents from './renderContinents';
-
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  setCountry: (country: nation | null) => void;
-  selectedCountry?: nation | null;
-};
+import { useModal } from '@/providers/ModalProvider';
 
 type nationProps = {
   continent: string;
@@ -26,12 +20,7 @@ type nationProps = {
 };
 
 // 모달 컴포넌트
-export const LocationModal = ({
-  isOpen,
-  onClose,
-  setCountry,
-  selectedCountry,
-}: Props) => {
+export const LocationModal = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredResults, setFilteredResults] = useState<nationProps[] | []>(
     [],
@@ -40,8 +29,10 @@ export const LocationModal = ({
   const [crntNation, setCrntNation] = useState<nation | null>();
   const { t } = useTranslation('location');
   const { lang } = useLang();
+  const { modals, closeModal, modalData } = useModal();
 
-  if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
+  if (!modals.locationModal || !modalData) return null;
+  const { setCountry, selectedCountry } = modalData;
 
   // 검색 입력 변경 처리
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,14 +99,14 @@ export const LocationModal = ({
 
   // 위치 선택
   const handleSelect = (): void => {
-    setCountry(crntNation!);
+    setCountry!(crntNation!);
     setSelectedValue(JSON.stringify(crntNation));
     sessionStorage.setItem('selectedLocation', JSON.stringify(crntNation));
   };
 
   const handleDeselect = (): void => {
     setCrntNation(null);
-    setCountry(null);
+    setCountry!(null);
     sessionStorage.removeItem('selectedLocation');
   };
 
@@ -128,13 +119,11 @@ export const LocationModal = ({
     setCrntNation(location);
   };
 
-  if (!isOpen) return null; // 모달이 열리지 않으면 렌더링하지 않음
-
   return (
     <>
       <div
         className="w-full h-screen flex justify-center fixed inset-y-0 z-[100] items-end bg-black bg-opacity-50 md:items-center md:p-0"
-        onClick={onClose} // 뒷배경 클릭 시 모달 닫기
+        onClick={() => closeModal('locationModal')} // 뒷배경 클릭 시 모달 닫기
         style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
       >
         <div
@@ -144,7 +133,7 @@ export const LocationModal = ({
           <Mobile>
             <div className="h-14 py-2.5 flex place-content-between items-center text-lg font-bold">
               <button
-                onClick={onClose}
+                onClick={() => closeModal('locationModal')}
                 className="w-12 flex justify-start items-center"
               >
                 <Image
@@ -160,7 +149,7 @@ export const LocationModal = ({
               </h2>
               <button
                 onClick={() => {
-                  onClose();
+                  closeModal('locationModal');
                   handleSelect();
                 }}
                 className="bg-[#0582FF] h-8 py-1.5 px-3 rounded-md text-white text-sm font-semibold"
@@ -341,14 +330,14 @@ export const LocationModal = ({
           <Desktop>
             <div className="absolute bottom-11 left-1/2 -translate-x-1/2 flex gap-2">
               <button
-                onClick={onClose}
+                onClick={() => closeModal('locationModal')}
                 className="w-[196px] h-16 px-3 py-1.5 bg-[#f4f6f9] rounded-xl justify-center items-center gap-2.5 inline-flex text-[#44484c] text-xl font-semibold leading-loose"
               >
                 닫기
               </button>
               <button
                 onClick={() => {
-                  onClose();
+                  closeModal('locationModal');
                   handleSelect();
                 }}
                 className="w-[196px] h-16 px-3 py-1.5 bg-[#0582ff] rounded-xl justify-center items-center gap-2.5 inline-flex text-white text-xl font-semibold leading-loose"

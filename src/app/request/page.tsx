@@ -13,10 +13,10 @@ import {
   topicMapping,
 } from '@/utils/topics';
 import { useUserStore } from '@/store/userStore';
-import { LocationModal } from '../../components/LocationModalNew';
 import IconInfoCircle from './_components/icons/InfoCircle';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
+import { useModal } from '@/providers/ModalProvider';
 
 const RequestPage: React.FC = () => {
   const { t } = useTranslation('request');
@@ -35,6 +35,7 @@ const RequestPage: React.FC = () => {
   } = useFormState();
 
   const { user } = useUserStore();
+  const { openModal, closeModal } = useModal();
   const router = useRouter();
 
   const onSubmit: SubmitHandler<FormInputs> = async (data) => {
@@ -153,7 +154,16 @@ const RequestPage: React.FC = () => {
                   className="w-full text-[14px] font-medium placeholder-[#A9A9A9] bg-transparent focus:outline-none"
                   onClick={() => {
                     clearErrors('country_city');
-                    toggleModal();
+
+                    if (!isModalOpen) {
+                      openModal('locationModal', {
+                        setCountry: (location) => {
+                          handleLocationSelect(location!); // 기존 로직 수행
+                          setValue('country_city', location!.country); // react-hook-form에 선택된 값 설정
+                          clearErrors('country_city'); // 에러 메시지 제거
+                        },
+                      });
+                    } else closeModal('locationModal');
                   }}
                 />
                 {errors.country_city && (
@@ -224,39 +234,29 @@ const RequestPage: React.FC = () => {
         </form>
 
         <div className="hidden md:flex justify-end pt-[28px]">
-        <button
-              onClick={handleSubmit(onSubmit)}
-              disabled={
-                !watch('country_city') ||
-                !watch('category') ||
-                !watch('title') ||
-                !watch('content') ||
-                !watch('date_end')
-              } //getValue로 변환
-              className={`w-[168px] rounded-[12px] px-[12px] py-[6px] text-lg font-bold h-[64px] ${
-                watch('country_city') &&
-                watch('category') &&
-                watch('title') &&
-                watch('content') &&
-                watch('date_end')
-                  ? 'bg-[#0582FF] text-white hover:bg-[#0079F2]'
-                  : 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed'
-              }`}
-            >
-              {t('submitButton')}
-            </button>
-          </div>
-
+          <button
+            onClick={handleSubmit(onSubmit)}
+            disabled={
+              !watch('country_city') ||
+              !watch('category') ||
+              !watch('title') ||
+              !watch('content') ||
+              !watch('date_end')
+            } //getValue로 변환
+            className={`w-[168px] rounded-[12px] px-[12px] py-[6px] text-lg font-bold h-[64px] ${
+              watch('country_city') &&
+              watch('category') &&
+              watch('title') &&
+              watch('content') &&
+              watch('date_end')
+                ? 'bg-[#0582FF] text-white hover:bg-[#0079F2]'
+                : 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed'
+            }`}
+          >
+            {t('submitButton')}
+          </button>
+        </div>
       </div>
-      <LocationModal
-        isOpen={isModalOpen}
-        onClose={toggleModal}
-        setCountry={(location) => {
-          handleLocationSelect(location!); // 기존 로직 수행
-          setValue('country_city', location!.country); // react-hook-form에 선택된 값 설정
-          clearErrors('country_city'); // 에러 메시지 제거
-        }}
-      />
     </>
   );
 };

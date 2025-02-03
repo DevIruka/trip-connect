@@ -6,9 +6,9 @@ import updown from '@/data/images/ic-up&down.svg';
 import Image from 'next/image';
 import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
 import ListReqPost from '@/components/ListReqPost';
-import { LocationModal } from '@/components/LocationModalNew';
 import { nation } from '../home/_types/homeTypes';
 import { Desktop } from '@/components/ui/Responsive';
+import { useModal } from '@/providers/ModalProvider';
 
 const ResponseListPage = () => {
   const {
@@ -18,8 +18,7 @@ const ResponseListPage = () => {
     hasNextPage,
     isFetchingNextPage,
   } = useReqPosts();
-
-  const [isLModalOpen, setIsLModalOpen] = useState(false);
+  const { openModal } = useModal();
 
   //nation filter
   const [nationFilter, setNationFilter] = useState<nation | null>(
@@ -63,7 +62,14 @@ const ResponseListPage = () => {
               className={`px-4 py-2 rounded-[100px] border border-[#dee1e5] bg-[#F9F9F9] gap-1 justify-center items-center flex overflow-hidden text-center text-sm font-semibold ${
                 nationFilter ? 'text-[#0079f2]' : 'text-Gray2'
               }`}
-              onClick={() => setIsLModalOpen(true)} // 모달 열기
+              onClick={() =>
+                openModal('locationModal', {
+                  setCountry: (country: nation | null) => {
+                    setNationFilter(country);
+                  },
+                  selectedCountry: nationFilter,
+                })
+              } // 모달 열기
             >
               {nationFilter
                 ? `${nationFilter.country}/${nationFilter.city}`
@@ -99,16 +105,6 @@ const ResponseListPage = () => {
           )}
         </div>
       </div>
-      <LocationModal
-        isOpen={isLModalOpen}
-        onClose={() => {
-          setIsLModalOpen(false);
-        }}
-        setCountry={(country: nation | null) => {
-          setNationFilter(country);
-        }}
-        selectedCountry={nationFilter}
-      />
     </>
   );
 };
