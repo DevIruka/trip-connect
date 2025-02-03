@@ -1,35 +1,38 @@
 import { Tables } from '@/types/supabase';
 import { QueryKey, useInfiniteQuery } from '@tanstack/react-query';
+import { fetchReqPosts } from '../../supabase_api/home/fetchReqPosts';
 import { fetchResPosts } from '../../supabase_api/home/fetchResPosts';
 
-export type FetchResPostsResponse = {
-  data: Tables<'response_posts'>[] | null;
+type PostType = 'request' | 'response';
+
+export type FetchPostsResponse = {
+  data: (Tables<'request_posts'> | Tables<'response_posts'>)[] | null;
   nextPage: number | null;
 };
 
-export const useResPosts = () => {
+export const usePosts = (postType: PostType) => {
   const {
-    data: response_posts,
+    data: posts,
     isPending,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery<
-    FetchResPostsResponse,
+    FetchPostsResponse,
     Error,
-    Tables<'response_posts'>[],
+    (Tables<'request_posts'> | Tables<'response_posts'>)[],
     QueryKey,
     number
   >({
-    queryKey: ['response_posts'],
-    queryFn: fetchResPosts,
+    queryKey: [postType === 'request' ? 'request_posts' : 'response_posts'],
+    queryFn: postType === 'request' ? fetchReqPosts : fetchResPosts,
     getNextPageParam: (lastPage) => lastPage.nextPage,
     select: (data) => data.pages.flatMap((page) => page.data || []),
-    initialPageParam: 0, // 여기에 초기 페이지를 지정
+    initialPageParam: 0,
   });
 
   return {
-    response_posts,
+    posts,
     isPending,
     fetchNextPage,
     hasNextPage,

@@ -1,8 +1,13 @@
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { FetchResPostsResponse } from '../../tanstack/home/useResPosts';
 import { pagination } from '@/constants/pagination';
+import { Tables } from '@/types/supabase';
 
 const PAGE_SIZE = pagination.home.posts; // 페이지당 불러올 항목 수
+
+type FetchResPostsResponse = {
+  data: Tables<'response_posts'>[] | null;
+  nextPage: number | null;
+};
 
 export const fetchResPosts = async ({
   pageParam = 0,
