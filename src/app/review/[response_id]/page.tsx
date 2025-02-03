@@ -11,6 +11,7 @@ import {
   canWriteReview,
   checkUserCommented,
   fetchReviews,
+  useReviewNickname,
 } from './_utils/review';
 import { supabase } from '@/utils/supabase/supabaseClient';
 
@@ -21,58 +22,8 @@ const ReviewPage = () => {
   const [review, setReview] = useState('');
   const router = useRouter();
   const queryClient = useQueryClient();
-  const [nickname, setNickname] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchNickname = async () => {
-      if (!responseId) return;
-
-      // 1️⃣ response_posts 테이블에서 request_id 가져오기
-      const { data: responsePost, error: responseError } = await supabase
-        .from('response_posts')
-        .select('request_id')
-        .eq('id', responseId)
-        .single();
-
-      if (responseError || !responsePost?.request_id) {
-        console.error('response_posts 조회 실패:', responseError);
-        return;
-      }
-
-      const requestId = responsePost.request_id;
-
-      // 2️⃣ request_posts 테이블에서 user_id 가져오기
-      const { data: requestPost, error: requestError } = await supabase
-        .from('request_posts')
-        .select('user_id')
-        .eq('id', requestId)
-        .single();
-
-      if (requestError || !requestPost?.user_id) {
-        console.error('request_posts 조회 실패:', requestError);
-        return;
-      }
-
-      const userId = requestPost.user_id;
-
-      // 3️⃣ users 테이블에서 nickname 가져오기
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('nickname')
-        .eq('id', userId)
-        .single();
-
-      if (userError || !userData?.nickname) {
-        console.error('users 조회 실패:', userError);
-        setNickname('익명');
-        return;
-      }
-
-      setNickname(userData.nickname);
-    };
-
-    fetchNickname();
-  }, [responseId]);
+  const { data: nickname } = useReviewNickname(responseId);
 
   const { data: canWrite = false } = useQuery({
     queryKey: ['canWriteReview', response_id, user?.id],
@@ -117,20 +68,12 @@ const ReviewPage = () => {
   });
 
   const { data: reviewCount = 0 } = useQuery({
-    queryKey: ['reviewCount', response_id],
+    queryKey: ['reviews', response_id, 'count'],
     queryFn: async () => {
-      if (!response_id) return 0;
-
-      const { count, error } = await supabase
+      const { count } = await supabase
         .from('reviews')
-        .select('*', { count: 'exact', head: true }) // 총 개수 가져오기
+        .select('*', { count: 'exact', head: true })
         .eq('response_id', response_id);
-
-      if (error) {
-        console.error('리뷰 개수 불러오기 실패:', error);
-        return 0;
-      }
-
       return count || 0;
     },
     enabled: !!response_id,
@@ -177,8 +120,8 @@ const ReviewPage = () => {
           </>
         )}
 
-<div className="flex-grow min-h-0 overflow-auto">
-<ReviewList
+        <div className="flex-grow min-h-0 overflow-auto">
+          <ReviewList
             reviews={reviews}
             isLoading={isLoading}
             userId={user?.id || ''}
