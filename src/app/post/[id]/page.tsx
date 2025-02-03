@@ -20,7 +20,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
-    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar mb-[76px] md:max-w-[800px]">
+    <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar mb-[76px] md:max-w-[800px] md:mb-0">
       <BackHeader
         image={MoreButton}
         text=""
