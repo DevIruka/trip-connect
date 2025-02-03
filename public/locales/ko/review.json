@@ -5,5 +5,6 @@
     "reviewNone" : "아직 작성된 리뷰가 없어요",
     "reviewEdit" : "수정하기",
     "reviewEditSave" : "수정 완료",
-    "reviewEditCancel" : "취소"
+    "reviewEditCancel" : "취소",
+    "paidReviewMessage":"리뷰는 유료 결제자만 작성 가능해요"
 }

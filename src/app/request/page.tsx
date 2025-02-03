@@ -90,47 +90,49 @@ const RequestPage: React.FC = () => {
 
   return (
     <>
-      <div className="w-full h-screen bg-white flex flex-col overflow-y-auto menuscrollbar">
-        <div className="top-0 h-[56px] w-full flex justify-between items-center px-[20px] py-[10px] relative sticky z-[51] bg-white">
+      <div className="w-full h-screen bg-white flex flex-col overflow-y-auto menuscrollbar max-w-[800px]">
+        <div className="top-0 h-[56px] w-full flex justify-between items-center px-[20px] py-[10px] relative sticky z-[50] bg-white md:px-0">
           <button
             className="w-[24px] h-[24px] text-black flex items-center justify-center"
             onClick={() => history.back()}
           >
-            <span className="font-semibold">✕</span>
+            <span className="font-semibold md:hidden">✕</span>
           </button>
-          <h1 className="text-lg font-semibold absolute left-1/2 transform -translate-x-1/2">
+          <h1 className="text-lg font-semibold absolute left-1/2 transform -translate-x-1/2 md:left-0 md:translate-x-0">
             {t('pageTitle')}
           </h1>
-          <button
-            onClick={handleSubmit(onSubmit)}
-            disabled={
-              !watch('country_city') ||
-              !watch('category') ||
-              !watch('title') ||
-              !watch('content') ||
-              !watch('date_end')
-            } //getValue로 변환
-            className={`rounded-[6px] px-[12px] py-[6px] text-[14px] font-semibold ${
-              watch('country_city') &&
-              watch('category') &&
-              watch('title') &&
-              watch('content') &&
-              watch('date_end')
-                ? 'bg-[#0582FF] text-white hover:bg-[#0079F2]'
-                : 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed'
-            }`}
-          >
-            {t('submitButton')}
-          </button>
+          <div className="md:hidden">
+            <button
+              onClick={handleSubmit(onSubmit)}
+              disabled={
+                !watch('country_city') ||
+                !watch('category') ||
+                !watch('title') ||
+                !watch('content') ||
+                !watch('date_end')
+              } //getValue로 변환
+              className={`rounded-[6px] px-[12px] py-[6px] text-[14px] font-semibold ${
+                watch('country_city') &&
+                watch('category') &&
+                watch('title') &&
+                watch('content') &&
+                watch('date_end')
+                  ? 'bg-[#0582FF] text-white hover:bg-[#0079F2]'
+                  : 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed'
+              }`}
+            >
+              {t('submitButton')}
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-[4px] text-[#80BFFF] text-[14px] font-semibold px-[15px] pt-[12px]">
+        <div className="flex items-center gap-[4px] text-[#80BFFF] text-[14px] font-semibold px-[15px] pt-[12px] md:px-0 md:pb-[20px]">
           <IconInfoCircle />
           <span>{t('restrictedMessage')}</span>
         </div>
 
-        <form className="p-4 space-y-[28px]">
-          <div className="flex flex-col items-start gap-[8px]">
+        <form className="p-4 space-y-[28px] md:px-[30px] md:py-[36px] md:border-[#DFE1E5] md:border md:rounded-[24px]">
+          <div className="flex flex-col items-start gap-[8px] md:gap-[12px]">
             <label className="text-sm font-semibold ">
               {t('countryCityLabel')}
             </label>
@@ -180,7 +182,7 @@ const RequestPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex flex-col items-start gap-[8px]">
+          <div className="flex flex-col items-start gap-[8px] md:gap-[12px]">
             <label className="text-sm font-semibold ">{t('topicLabel')}</label>
             <TopicSelector
               topics={[
@@ -220,6 +222,31 @@ const RequestPage: React.FC = () => {
             }}
           />
         </form>
+
+        <div className="hidden md:flex justify-end pt-[28px]">
+        <button
+              onClick={handleSubmit(onSubmit)}
+              disabled={
+                !watch('country_city') ||
+                !watch('category') ||
+                !watch('title') ||
+                !watch('content') ||
+                !watch('date_end')
+              } //getValue로 변환
+              className={`w-[168px] rounded-[12px] px-[12px] py-[6px] text-lg font-bold h-[64px] ${
+                watch('country_city') &&
+                watch('category') &&
+                watch('title') &&
+                watch('content') &&
+                watch('date_end')
+                  ? 'bg-[#0582FF] text-white hover:bg-[#0079F2]'
+                  : 'bg-[#DFE1E5] text-[#797C80] cursor-not-allowed'
+              }`}
+            >
+              {t('submitButton')}
+            </button>
+          </div>
+
       </div>
       <LocationModal
         isOpen={isModalOpen}

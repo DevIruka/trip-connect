@@ -115,6 +115,65 @@ input:focus {
   outline: none; /* 기본 포커스 스타일 제거 */
 }
 
+@media (min-width: 800px) {
+  .rdp-month_caption {
+    width: 600px !important;
+    text-align: center;
+  }
+
+  .rdp-table {
+    width: 600px !important; /* 📌 달력 전체 너비 */
+    max-width: 100%;
+    border-collapse: collapse; /* 📌 테이블 간격 없애기 */
+  }
+
+  .rdp-head_row {
+    display: table-row !important; /* 📌 요일을 가로로 정렬 */
+    width: 100%;
+  }
+
+  .rdp-head_cell {
+    display: table-cell !important;
+    text-align: center;
+    font-weight: bold;
+    width: calc(100% / 7); /* 📌 요일을 7등분 */
+  }
+
+  .rdp-month_grid {
+    display: table !important; /* 📌 grid 대신 table 유지 */
+    width: 100% !important;
+  }
+
+  .rdp-week {
+    display: table-row !important; /* 📌 각 주를 한 줄씩 정렬 */
+  }
+
+  .rdp-day {
+    display: table-cell !important; /* 📌 날짜를 한 줄로 정렬 */
+    vertical-align: middle !important;
+    text-align: center !important;
+    width: 42px !important; /* ✅ 정사각형 */
+    height: 42px !important;
+    aspect-ratio: 1/1 !important; /* ✅ 가로 세로 비율 유지 */
+    border-radius: 50%; /* ✅ 동그랗게 만들기 */
+    padding: 20px !important; /* ✅ 숫자 간격을 주는 패딩 추가 */
+  }
+
+  .rdp-day.today-day {
+    background-color: #ebf5ff;
+    color: #0582ff;
+    font-weight: bold;
+    padding: 20px !important; /* ✅ 선택된 날짜도 동일한 간격 적용 */
+  }
+
+  .rdp-day.selected-day {
+    background-color: #0582ff;
+    color: white;
+    font-weight: bold;
+    padding: 20px !important; /* ✅ 선택된 날짜도 동일한 간격 적용 */
+  }
+}
+
 @layer utilities {
   .menuscrollbar::-webkit-scrollbar {
     display: none;

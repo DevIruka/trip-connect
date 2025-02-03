@@ -1,7 +1,7 @@
 export const pagination = {
   home: {
     default: 10,
-    posts: 5,
+    posts: 6,
     comments: 5,
   },
   search: {

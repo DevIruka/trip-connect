@@ -8,7 +8,7 @@ import TimeAgo from './TimeAgo';
 import { useRouter } from 'next/navigation';
 import { convertToKorean } from '../_util/convertTopicMapping';
 import { EnglishCategory } from '@/utils/topics';
-import { useGPTTranslation } from '@/app/post/_hooks/TranslatedText';
+import { useGPTTranslation } from '@/app/post/_hooks/useGPTTranslation';
 
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
@@ -90,7 +90,7 @@ const ResponsePostCard: React.FC<{
         const countryCity = JSON.parse(data?.country_city || '{}');
         setCountry(countryCity.country || '알 수 없음');
         setCategory(data?.category || []);
-        setCredit(data?.credit || null); 
+        setCredit(data?.credit || null);
       }
     } catch (err) {
       console.error('질문글에서 정보 조회 중 오류 발생:', err);
@@ -299,4 +299,3 @@ const ResponsePostCard: React.FC<{
 };
 
 export default ResponsePostCard;
-

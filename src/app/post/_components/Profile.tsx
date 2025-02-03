@@ -88,7 +88,7 @@ const Profile = ({
       </div>
       {mode === 'request' && (
         <Desktop>
-          <button onClick={() => setIsModalOpen(!isModalOpen)}>
+          <button onClick={() => setIsModalOpen(!isModalOpen)} className="pr-5">
             <Image width={20} height={20} alt="MoreButton" src={MoreButton} />
           </button>
         </Desktop>
