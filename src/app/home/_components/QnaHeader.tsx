@@ -1,8 +1,18 @@
 import { useTranslation } from 'react-i18next';
 import HeaderButton from './HeaderButton';
+import { useUserStore } from '@/store/userStore';
+import { useModal } from '@/providers/ModalProvider';
 
 export default function QnaHeader() {
   const { t } = useTranslation('home');
+  const { user } = useUserStore();
+  const { openModal } = useModal();
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    if (!user) {
+      e.preventDefault(); // 링크 기본 동작 방지
+      openModal('loginModal'); // 모달 열기
+    }
+  };
 
   return (
     <header className="h-[268px] pt-[28px] pb-[40px] bg-Gray9Fill md:h-[238px]">
@@ -22,6 +32,7 @@ export default function QnaHeader() {
             title={t('ask_now')}
             text1={t('locals_answer')}
             text2={t('locals_answer_2')}
+            handleClick={handleClick}
           />
           <HeaderButton
             url="response-list"
