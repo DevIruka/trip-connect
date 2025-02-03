@@ -106,7 +106,7 @@ const SearchResultComponent = () => {
         {!(noReqResults && noResResults) && (
           <>
             {countReq! + countRes! !== 0 ? (
-              <div className="flex justify-between mt-[20px] mb-[16px]">
+              <div className="flex max-w-[1200px] mx-auto justify-between mt-[20px] mb-[16px]">
                 <SearchResultCount
                   countReq={countReq}
                   countRes={countRes}
