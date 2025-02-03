@@ -156,7 +156,7 @@ const MyPage = () => {
             }}
           />
 
-          <div className="text-black text-[20px] font-semibold leading-none md:ml-0 md:text-[28px] md:w-[800px] md:h-[50px] md:mt-[60px] md:mb-[28px] md:py-[10px]">
+          <div className="text-black text-[20px] font-semibold leading-none md:ml-0 md:text-[28px] md:w-[800px] md:h-[50px] md:mt-[120px] md:mb-[28px] md:py-[10px]">
             {t('page_title')}
           </div>
 
@@ -197,7 +197,7 @@ const MyPage = () => {
             {/* 닉네임, 국가 정보 및 편집 버튼 */}
             <div className="flex flex-col ml-[8px] lg:ml-[16px] relative">
               <h2
-                className="text-[16px] lg:text-[20px] font-semibold mb-[2px] flex items-center"
+                className="text-[16px] lg:text-[20px] font-semibold mb-[4px] flex items-start"
                 style={{
                   minWidth: '120px',
                   maxWidth: '200px',
@@ -226,7 +226,7 @@ const MyPage = () => {
                   </p>
                 </div>
               ) : (
-                <p className="absolute top-[24px] lg:top-[32px] left-0 text-[#45484D] text-[12px]">
+                <p className="absolute top-[24px] lg:top-[32px]  left-0 text-[#45484D] text-[12px]">
                   {t('not_verified_country')}
                 </p>
               )}
@@ -270,7 +270,7 @@ const MyPage = () => {
         </div>
         {/* 셀러 인증 */}
         <div className="md:mt-[28px] mb-[24px] lg:mb-[32px]">
-          <h2 className="text-lg lg:text-xl font-[700] mb-[12px] md:mb-[16px]">
+          <h2 className="md:h-[38px] text-lg lg:text-xl font-[700] mb-[12px] md:mb-[16px]">
             {t('seller_verification')}
           </h2>
           <Link
@@ -291,7 +291,7 @@ const MyPage = () => {
         </div>
         {/* 활동 내역 */}
         <div className="mb-[24px] lg:mb-[32px]">
-          <h2 className="text-lg lg:text-xl font-[700] mb-[12px]">
+          <h2 className="md:h-[38px] text-lg lg:text-xl font-[700] mb-[12px]">
             {t('activity_logs')}
           </h2>
           <div className="mt-[12px] lg:mt-4">
@@ -346,7 +346,7 @@ const MyPage = () => {
         </div>
 
         {/* 설정 */}
-        <h2 className="text-lg lg:text-xl font-[700] mb-[12px]">
+        <h2 className="md:h-[38px] text-lg lg:text-xl font-[700] mb-[12px]">
           {t('language_settings')}
         </h2>
         <Link
@@ -368,10 +368,10 @@ const MyPage = () => {
         {/* 모달 */}
         {isModalOpen && (
           <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50 px-4 lg:px-0">
-            <div className="bg-white rounded-[12px] flex flex-col items-center gap-[16px] p-[10px_20px] md:w-[686px] md:h-[726px] md:p-[36px_40px]">
+            <div className="bg-white rounded-[12px] flex flex-col items-center gap-[16px] md:gap-[0px] p-[10px_20px] md:w-[686px] md:h-[726px] md:p-[36px]">
               {/* 헤더 */}
-              <div className="relative w-full flex items-center md:items-start justify-center md:justify-start h-[50px]">
-                <h2 className="absolute md:static left-1/2 md:left-0 transform -translate-x-1/2 md:translate-x-0 text-black text-[16px] font-semibold leading-[140%]">
+              <div className="relative w-full flex items-center md:items-start justify-center md:justify-start h-[50px] md:h-[48px] md:py-[8px] md:mb-[38px]">
+                <h2 className="absolute md:static left-1/2 md:left-0 transform -translate-x-1/2 md:translate-x-0 text-black text-[16px] md:text-[20px] font-semibold leading-[140%]">
                   {t('edit_profile')}
                 </h2>
                 {/* 모바일에서만 X 버튼 표시 */}
@@ -384,7 +384,7 @@ const MyPage = () => {
               </div>
 
               {/* 프로필 이미지 */}
-              <div className="flex justify-center items-center mb-[16px] w-[295px] h-[100px]">
+              <div className="flex justify-center items-center mb-[16px] w-[295px] h-[100px] md:mb-[38px]">
                 <div className="relative w-[103px] h-[100px] rounded-full overflow-hidden flex items-center justify-center">
                   <label htmlFor="profileImageInput" className="cursor-pointer">
                     {previewImage ? (
@@ -417,7 +417,7 @@ const MyPage = () => {
 
               {/* 닉네임 입력 */}
               <div className="w-full">
-                <label className="text-black text-sm font-semibold leading-[140%] mb-2">
+                <label className="text-black text-sm font-semibold leading-[140%] mb-2 md:mb-[8px]">
                   {t('nickname')}
                 </label>
                 <input
@@ -425,7 +425,10 @@ const MyPage = () => {
                   value={nicknameInput}
                   onChange={(e) => setNicknameInput(e.target.value)}
                   placeholder={t('nickname_input')}
-                  className="w-full border border-gray-300 bg-white text-gray-400 text-[14px] rounded-[8px] px-[14px] py-[16px] md:h-[60px] mb-[12px]"
+                  className={`w-full border border-gray-300 bg-white text-[14px] md:mb-[20px] rounded-[8px] px-[14px] py-[16px] md:h-[60px] mb-[12px] 
+      ${
+        nicknameInput ? 'text-black' : 'text-gray-400'
+      } placeholder:text-gray-400 focus:text-black focus:outline-none`}
                 />
               </div>
 
@@ -438,7 +441,10 @@ const MyPage = () => {
                   value={bioInput}
                   onChange={(e) => setBioInput(e.target.value)}
                   placeholder={t('travel_experience')}
-                  className="w-full border border-gray-300 bg-white text-gray-400 text-[14px] rounded-[8px] px-[14px] py-[16px] overflow-y-auto resize-none md:h-[140px]"
+                  className={`w-full border border-gray-300 bg-white md:mb-[38px] text-[14px] rounded-[8px] px-[14px] py-[16px] overflow-y-auto resize-none md:h-[140px] 
+      ${
+        bioInput ? 'text-black' : 'text-gray-400'
+      } focus:text-black focus:outline-none placeholder:text-gray-400`}
                 ></textarea>
               </div>
 
@@ -463,9 +469,9 @@ const MyPage = () => {
 
         {/* 로그아웃 버튼 */}
         <div className="w-full h-[12px] bg-[#f4f6f9]"></div>
-        <div className="h-[92px] lg:mt-8 lg:flex lg:justify-center">
+        <div className="h-[92px] lg:mt-8 md:mt-17 flex justify-start ml-[28px] mt-[32px] mb-[43px]">
           <button
-            className="text-[#44484c] text-sm font-medium ml-[28px] mt-[32px] mb-[43px] lg:ml-0 lg:mt-0 lg:mb-0 cursor-pointer"
+            className="text-[#44484c] text-sm font-medium cursor-pointer"
             onClick={handleLogout}
           >
             {t('logout')}

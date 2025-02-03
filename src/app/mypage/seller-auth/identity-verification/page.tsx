@@ -3,10 +3,10 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import BackButton from '@/app/post/_components/BackBtn';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 const IdentityVerification = () => {
-  const { t } = useTranslation('mypage'); 
+  const { t } = useTranslation('mypage');
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
@@ -29,20 +29,22 @@ const IdentityVerification = () => {
   };
 
   return (
-    <div className="h-full w-full px-5 bg-white md:px-[36px] lg:px-[36px] mx-auto max-w-[872px]">
-      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white md:h-[71px] md:text-[32px]">
+    <div className="h-full w-full px-5 bg-white md:px-[36px] lg:px-[36px] mx-auto max-w-[872px] relative">
+      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white md:mt-[40px] md:py-[10px] md:h-[71px] md:text-[32px]">
         <div className="md:hidden">
           <BackButton />
         </div>
         <h1 className="text-center text-black font-semibold md:text-[32px] text-[18px]">
-          {t('identity_verification')} 
+          {t('identity_verification')}
         </h1>
         <div className="w-6"></div>
       </div>
 
       <div>
-        <p className="mb-6 text-[#45484D] font-semibold md:text-[20px] text-[18px] leading-[160%] tracking-[-0.36px] md:h-[32px]">
-          {t('identity_verification_description')}
+        <p className="mb-2 text-[#45484D] font-semibold md:text-[20px] text-[18px] leading-[160%] tracking-[-0.36px] h-[90px] py-[16px] md:mb-[20px] md:h-[96px] md:py-[16px]">
+          {t('identity_verification_descriptionA')}
+          <br></br>
+          {t('identity_verification_descriptionB')}
         </p>
       </div>
 
@@ -57,7 +59,7 @@ const IdentityVerification = () => {
           className="w-full h-[52px] px-4 py-3 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-black text-sm font-medium leading-[140%] tracking-[-0.28px] whitespace-nowrap md:w-[800px] md:h-[60px] appearance-none"
         >
           <option value="" disabled className="text-gray-400">
-            {t('country')} 
+            {t('country')}
           </option>
           <option value="kr">{t('korea')}</option>
           <option value="us">{t('usa')}</option>
@@ -68,7 +70,7 @@ const IdentityVerification = () => {
       <div className="mb-6">
         {/* 전화번호 라벨 */}
         <label className="mb-2 block text-[#797C80] text-sm font-medium leading-[140%] tracking-[-0.28px]">
-          {t('phone_number')} 
+          {t('phone_number')}
         </label>
         <input
           type="text"
@@ -81,19 +83,19 @@ const IdentityVerification = () => {
       </div>
 
       {/* 인증 코드 받기 버튼 */}
-        <button
-          className={`h-[52px] rounded-xl text-center my-3 text-white text-base font-semibold absolute bottom-0 w-[calc(100%-40px)] md:right-0 md:w-[164px] md:h-[64px] md:mr-4 ${
-            phoneNumber.length === 11 && selectedCountry
-              ? 'bg-[#0582FF] text-white'
-              : 'bg-gray-300 text-gray-600 cursor-not-allowed'
-          }`}
-          onClick={handleSendCode}
-          disabled={!(phoneNumber.length === 11 && selectedCountry)} 
-        >
-          <span className="text-[16px] font-pretendard font-semibold leading-normal tracking-[-0.32px] text-white">
-            {t('get_verification_code')} {/* 번역 적용 */}
-          </span>
-        </button>
+      <button
+        className={`h-[52px] rounded-xl text-center my-3 text-white text-base font-semibold w-[calc(100%-40px)] md:w-[164px] md:h-[64px] md:mr-9 ${
+          phoneNumber.length === 11 && selectedCountry
+            ? 'bg-[#0582FF] text-white'
+            : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+        } mt-[215px] md:mt-[80px] absolute md:right-[0px]`}
+        onClick={handleSendCode}
+        disabled={!(phoneNumber.length === 11 && selectedCountry)}
+      >
+        <span className="text-[16px] font-pretendard font-semibold leading-normal tracking-[-0.32px] text-white">
+          {t('get_verification_code')} {/* 번역 적용 */}
+        </span>
+      </button>
     </div>
   );
 };

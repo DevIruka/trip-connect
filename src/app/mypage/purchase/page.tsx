@@ -46,7 +46,9 @@ const PurchasePage: React.FC = () => {
         const { data: responsePostsData, error: responsePostsError } =
           await supabase
             .from('response_posts')
-            .select('id, title, content_html, free_content, created_at, user_id, request_id')
+            .select(
+              'id, title, content_html, free_content, created_at, user_id, request_id',
+            )
             .in('id', responseIds);
 
         if (responsePostsError) throw responsePostsError;

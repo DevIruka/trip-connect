@@ -1,4 +1,5 @@
 import { supabase } from '@/utils/supabase/supabaseClient';
+import { useQuery } from '@tanstack/react-query';
 
 type SupabaseReview = {
     id: string;
@@ -99,4 +100,48 @@ export const canWriteReview = async (response_id: string, user_id: string): Prom
 
   if (error) throw new Error(`권한 확인 실패: ${error.message}`);
   return data.length > 0;
+};
+
+export const useReviewNickname = (responseId: string) => {
+  return useQuery({
+    queryKey: ['reviewNickname', responseId],
+    queryFn: async () => {
+      if (!responseId) return null;
+
+      const { data: responsePost, error: responseError } = await supabase
+        .from('response_posts')
+        .select('request_id')
+        .eq('id', responseId)
+        .single();
+
+      if (responseError || !responsePost?.request_id) {
+        throw new Error('답변 게시물 조회 실패');
+      }
+
+      const { data: requestPost, error: requestError } = await supabase
+        .from('request_posts')
+        .select('user_id')
+        .eq('id', responsePost.request_id)
+        .single();
+
+      if (requestError || !requestPost?.user_id) {
+        throw new Error('요청 게시물 조회 실패');
+      }
+
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('nickname')
+        .eq('id', requestPost.user_id)
+        .single();
+
+      if (userError || !userData?.nickname) {
+        return '익명';
+      }
+
+      return userData.nickname;
+    },
+    enabled: !!responseId,
+    staleTime: 60 * 1000, 
+    retry: 1 
+  });
 };
