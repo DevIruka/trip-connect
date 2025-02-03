@@ -1,5 +1,5 @@
 import React from 'react';
-import { parseHtmlToArray } from '../_hooks/parseHtmlToArray';
+import { parseHtmlToArray } from '../_utils/parseHtmlToArray';
 import { ContentRenderer } from './MapComponent';
 
 const RenderTranslatedHTML = ({

@@ -7,9 +7,10 @@ import dot from '@/data/images/Ellipse 14.svg';
 import { useRouter } from 'next/navigation';
 import { topicMapping } from '@/utils/topics';
 import { Post } from '@/app/home/_types/homeTypes';
-import { useGPTTranslation } from '@/app/post/_hooks/TranslatedText';
+import { useGPTTranslation } from '@/app/post/_hooks/useGPTTranslation';
 import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
 import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
+import { useReviewCount } from '@/utils/api/tanstack/home/useReviewCount';
 
 const ListResPost = ({ post }: { post: Post }) => {
   const router = useRouter();
@@ -30,6 +31,10 @@ const ListResPost = ({ post }: { post: Post }) => {
     ${post.id}freetext`,
     `${post.free_content}`,
   );
+
+  //리뷰 갯수
+  const { reviewCount } = useReviewCount(post.id);
+
   return (
     <li
       onClick={() => handleNavigation(post.request_id!)}
@@ -89,6 +94,11 @@ const ListResPost = ({ post }: { post: Post }) => {
             <div className="flex gap-[2px]">
               작성자
               <div className="font-bold">{post.users?.nickname}</div>
+            </div>
+            <Image width={2} height={2} src={dot} alt="dot" />
+            <div className="flex gap-[2px]">
+              댓글
+              <div className="font-bold">{reviewCount}</div>
             </div>
           </div>
         </div>

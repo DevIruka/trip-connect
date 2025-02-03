@@ -15,7 +15,7 @@ import { useFilteredPosts } from '../_hooks/useFilteredPosts';
 import LoadMoreButton from './LoadMoreButton';
 import PostList from './PostList';
 
-const Categorizing = () => {
+const Home = () => {
   //서치파람스의 값으로 카테고리 1차구분
   const searchParams = useSearchParams();
   const category = searchParams.get('category') || 'all';
@@ -79,4 +79,4 @@ const Categorizing = () => {
   );
 };
 
-export default Categorizing;
+export default Home;
