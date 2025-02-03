@@ -8,8 +8,11 @@ import TimeAgo from './TimeAgo';
 import { useRouter } from 'next/navigation';
 import { convertToKorean } from '../_util/convertTopicMapping';
 import { EnglishCategory } from '@/utils/topics';
+import { useTranslation } from 'react-i18next';
+import { useLang } from '@/store/languageStore';
+import { countryNameMapping } from '@/data/nation';
+import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
 import { useGPTTranslation } from '@/app/post/_hooks/useGPTTranslation';
-
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
 
@@ -17,6 +20,8 @@ const ResponsePostCard: React.FC<{
   post: ResponsePost;
   editable?: boolean;
 }> = ({ post, editable = true }) => {
+  const { lang } = useLang();
+  const { t } = useTranslation('mypage');
   const router = useRouter();
   const [nickname, setNickname] = useState<string | null>(null);
   const [country, setCountry] = useState<string | null>(null);
@@ -176,7 +181,7 @@ const ResponsePostCard: React.FC<{
   return (
     <div
       onClick={handleCardClick}
-      className="flex flex-col items-start gap-3 border-b bg-white w-full p-6 border-gray-200"
+      className="flex flex-col items-start gap-3 border-b bg-white w-full p-6 border-gray-200 md:w-[800px] md:h-[252px] md:p-[36px] md:mb-[10px] md:rounded-[12px] md:border md:border-[#DFE1E5] md:bg-white md:mx-auto"
     >
       {/* 상단 - 위치와 카테고리 */}
       <div className="flex items-center justify-between w-full gap-2">
@@ -184,7 +189,13 @@ const ResponsePostCard: React.FC<{
           {/* 위치 */}
           <div className="flex items-center text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1">
             <Image src={markerIcon} alt="location" width={12} height={12} />
-            {country && <span className="ml-1">{country}</span>}
+            {country && (
+              <span className="ml-1">
+                {lang === 'en'
+                  ? countryNameMapping[country] || 'Unknown'
+                  : country}
+              </span>
+            )}
           </div>
           {/* 카테고리 */}
           {(category || []).slice(0, 2).map((cat, i) => (
@@ -192,7 +203,9 @@ const ResponsePostCard: React.FC<{
               key={i}
               className="text-gray-700 text-sm bg-gray-100 rounded-md px-2 py-1"
             >
-              {convertToKorean(cat)}
+              {lang === 'en'
+                ? capitalizeFirstLetter(cat)
+                : convertToKorean(cat)}
             </div>
           ))}
         </div>
@@ -256,7 +269,7 @@ const ResponsePostCard: React.FC<{
         <p className="text-red-500 text-base font-semibold leading-6">A.</p>
         <div className="flex flex-col">
           <div className="mb-2">
-            <p className="text-base font-bold text-black leading-6 line-clamp-2">
+            <p className="text-base font-bold text-black leading-6 md:h-[50px] line-clamp-2">
               {translatedTitle && (
                 <span
                   dangerouslySetInnerHTML={{
@@ -267,7 +280,7 @@ const ResponsePostCard: React.FC<{
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500 line-clamp-2">
+            <p className="text-sm text-gray-500 md:h-[50px] line-clamp-2">
               {translatedContent && (
                 <span
                   dangerouslySetInnerHTML={{
@@ -288,9 +301,13 @@ const ResponsePostCard: React.FC<{
             <span>{credit}</span>
           </div>
           <span>·</span>
-          <span>작성자 {nickname}</span>
+          <span>
+            {t('writer')} {nickname}
+          </span>
           <span>·</span>
-          <span>댓글 {commentCount}</span>
+          <span>
+            {t('reply')} {commentCount}
+          </span>
         </div>
         <TimeAgo createdAt={post.created_at || new Date().toISOString()} />
       </div>

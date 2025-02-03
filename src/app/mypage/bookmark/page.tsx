@@ -9,6 +9,9 @@ import { convertTopicsToKorean, EnglishCategory } from '@/utils/topics';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useLang } from '@/store/languageStore';
+import { countryNameMapping } from '@/data/nation';
+import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
 
 type BookmarkedPost = {
   id: string;
@@ -22,13 +25,13 @@ type BookmarkedPost = {
 };
 
 const BookmarkPage = () => {
+  const { lang } = useLang();
   const { t } = useTranslation('mypage');
   const { user } = useUserStore();
   const router = useRouter();
   const [bookmarkedPosts, setBookmarkedPosts] = useState<BookmarkedPost[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -151,15 +154,15 @@ const BookmarkPage = () => {
               <div
                 key={post.id}
                 onClick={handleCardClick}
-                className="flex flex-col items-start gap-3 border-b bg-white w-full relative"
+                className="flex flex-col items-start gap-3 pt-[12px] pr-[20px] pb-[24px] pl-[20px] md:mb-[10px]
+            md:rounded-[12px] md:border md:mx-auto md:border-[#DFE1E5] md:bg-white border-b bg-white w-full relative md:w-[800px] md:h-[252px] md:p-[36px]"
                 style={{
-                  padding: '12px 20px 24px 20px',
                   borderBottom: '1px solid #F4F4F4',
                   background: '#FFF',
                   cursor: 'pointer',
                 }}
               >
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-2 md:mb-[8px]">
                   {dDay !== null && (
                     <div
                       className="flex items-center justify-center text-[#FF810B] text-[12px]"
@@ -174,17 +177,28 @@ const BookmarkPage = () => {
                       D-{dDay}
                     </div>
                   )}
-                  <div className="bg-gray-100 px-2 py-1 rounded text-sm text-gray-700">
-                    {post.country_city
-                      ? JSON.parse(post.country_city).country
-                      : t('noLocation')}
+
+                  <div className="flex bg-gray-100 px-2 py-1 rounded text-sm text-gray-700">
+                    <Image
+                      src="/images/ic-location.svg"
+                      alt="Location"
+                      width={12}
+                      height={12}
+                    />
+                    {lang === 'en'
+                      ? countryNameMapping[
+                          JSON.parse(post.country_city).country
+                        ]
+                      : JSON.parse(post.country_city).country}
                   </div>
                   {post.category.map((cat, idx) => (
                     <div
                       key={idx}
                       className="bg-gray-100 px-2 py-1 rounded text-sm text-gray-700"
                     >
-                      {convertTopicsToKorean([cat])[0]}
+                      {lang === 'en'
+                        ? capitalizeFirstLetter(cat)
+                        : convertTopicsToKorean([cat])[0]}
                     </div>
                   ))}
                 </div>
@@ -194,12 +208,12 @@ const BookmarkPage = () => {
                     Q.
                   </p>
                   <div className="flex flex-col">
-                    <div className="mb-[8px]">
+                    <div className="md:h-[50px]">
                       <p className="text-[16px] font-bold text-black leading-[22.4px] max-w-[315px] line-clamp-2">
                         {post.title}
                       </p>
                     </div>
-                    <div>
+                    <div className="md:h-[50px]">
                       <p className="text-[14px] text-[#797C80] line-clamp-2">
                         {post.content || ''}
                       </p>
@@ -216,7 +230,7 @@ const BookmarkPage = () => {
                         width={14}
                         height={14}
                       />
-                      <span>{post.credit || 0} C</span>
+                      <span>{post.credit || 0}</span>
                     </div>
                     <>
                       <div
@@ -235,7 +249,7 @@ const BookmarkPage = () => {
                   />
                 </div>
 
-                <div className="absolute top-3 right-3">
+                <div className="absolute top-3 right-3 md:top-10 md:right-8">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

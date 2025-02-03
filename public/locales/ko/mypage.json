@@ -10,7 +10,8 @@
   "verification_error": "인증 상태를 가져오는 중 오류가 발생했습니다.",
 
   "identity_verification": "본인 인증",
-  "identity_verification_description": "본인 인증을 위해 국가와 전화번호를 입력해 주세요",
+  "identity_verification_descriptionA": "본인 인증을 위해",
+  "identity_verification_descriptionB": "국가와 전화번호를 입력해 주세요",
   "select_country": "국가 선택",
   "korea": "대한민국",
   "usa": "미국",
@@ -39,12 +40,6 @@
   "completed": "완료",
   "retry": "다시",
   "verify": "인증하기",
-
-  "current_location_is": "현재 위치가",
-  "set_to_your_country": "내 국가로 설정한",
-  "exists_here": "에 있습니다.",
-  "verify_with_current_location": "현재 위치로",
-  "please_verify_country_and_region": "국가와 지역을 인증해 주세요",
 
   "page_title": "마이페이지",
   "edit_profile": "프로필 편집",
@@ -125,6 +120,17 @@
 
   "korean": "한국어",
   "english": "English",
-  "more_languages_coming": "다른 언어들은 나중에 추가될 예정이에요."
+  "japanese": "日本語",
+  "chinese": "中文",
+  "coming_soon": "조금만 기다려주세요!",
+  "more_languages_coming": "다른 언어들은 나중에 추가될 예정이에요.",
 
+  "writer": "작성자",
+  "totalAnswers": "명 답변",
+  "expired": "기한 만료",
+  "reply": "댓글",
+  "verify_locationA": "현재 위치로",
+  "verify_locationB": "국가와 지역을 인증해 주세요.",
+  "current_location_prefix": "현재 위치가 내 국가로 설정한 ",
+  "current_location_suffix": "에 있습니다."
 }

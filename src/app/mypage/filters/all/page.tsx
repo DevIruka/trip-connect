@@ -76,10 +76,7 @@ const WrittenPostsPage: React.FC = () => {
       <CategoryTabs activeTab="written" />
 
       {/* 필터 버튼 */}
-      <div
-        className="flex items-start gap-2 mt-4"
-        style={{ paddingLeft: '20px' }}
-      >
+      <div className="flex items-start gap-2 mt-4 md:mt-6 pl-5 md:pl-9">
         {['all', 'question', 'answer'].map((filter) => (
           <button
             key={filter}
