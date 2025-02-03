@@ -49,7 +49,7 @@ const SellerAuthCard = ({
     >
       <div className="grid gap-2">
         <div className="flex space-x-1.5">
-          <h3 className="text-black text-base font-semibold leading-snug">
+          <h3 className="text-black text-base font-semibold leading-snug text-[16px] md:text-[20px]">
             {title} {t('verify')}
           </h3>
           {/* 완료 상태 박스 */}
@@ -59,7 +59,9 @@ const SellerAuthCard = ({
             </div>
           )}
         </div>
-        <p className="text-[#797c80] text-sm font-medium">{content}</p>
+        <p className="text-[#797c80] text-sm font-medium text-[14px] md:text-[16px]">
+          {content}
+        </p>
       </div>
       <div className="flex justify-start mt-[22px]">
         <Button isVerified={isVerified} text={title} link={link} />
@@ -126,29 +128,29 @@ const SellerPage = () => {
         </button>
       </div>
 
-      <div className="w-full py-[20px] text-left text-black font-semibold text-[20px] leading-normal tracking-[-0.36px] md:text-[32px] md:h-[91px]">
+      <div className="w-full py-[20px] md:mt-[40px] text-left text-black font-semibold text-[20px] leading-normal tracking-[-0.36px] md:text-[32px] md:py-[10px] md:h-[71px] ">
         {t('seller_verification')}
       </div>
 
       {/* 인증 섹션 */}
-      <div className="mt-2 space-y-3">
+      <div className="mt-2 space-y-3 md:mt-[28px]">
         <SellerAuthCard
           isVerified={isCountryVerified}
           title={t('country')}
           content={t('verify_country_region')}
           link={'country-verification'}
-          className="text-[16px] md:text-[20px]" // 16px -> 20px for PC
+          className="text-[16px] md:text-[20px]"
         />
         <SellerAuthCard
           isVerified={isIdentityVerified}
           title={t('identity')}
           content={t('profile_verification')}
           link={'identity-verification'}
-          className="text-[16px] md:text-[20px]" // 16px -> 20px for PC
+          className="text-[16px] md:text-[20px]"
         />
         <div className="h-[140px] p-4 rounded-xl grid gap-3">
-          <div className="grid gap-2">
-            <div className="flex space-x-1.5">
+          <div className="grid gap-3">
+            <div className="flex space-x-2">
               <p className="text-[#a9a9a9] text-base font-semibold leading-snug ">
                 {t('account_verification')}
               </p>

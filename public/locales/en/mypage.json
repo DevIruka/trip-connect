@@ -10,7 +10,8 @@
   "verification_error": "An error occurred while fetching the verification status.",
 
   "identity_verification": "Identity Verification",
-  "identity_verification_description": "To verify your identity, please enter your country and phone number.",
+  "identity_verification_descriptionA": "To verify your identity,",
+  "identity_verification_descriptionB": "please enter your country and phone number.",
   "select_country": "Select Country",
   "korea": "South Korea",
   "usa": "United States",
@@ -39,12 +40,6 @@
   "completed": "Completed",
   "retry": "Retry",
   "verify": "Verify",
-
-  "current_location_is": "Your current location is",
-  "set_to_your_country": "set to your country",
-  "exists_here": ".",
-  "verify_with_current_location": "Verify with current location",
-  "please_verify_country_and_region": "Please verify your country and region.",
 
   "page_title": "My Page",
   "edit_profile": "Edit Profile",
@@ -124,7 +119,18 @@
   "author": "Author",
   "comments": "Comments",
 
-  "korean": "Korean",
+  "korean": "한국어",
   "english": "English",
-  "more_languages_coming": "More languages will be added later."
+  "japanese": "日本語",
+  "chinese": "中文",
+  "coming_soon": "Coming soon!",
+  "more_languages_coming": "More languages will be added later.",
+  "writer": "Writer",
+  "totalAnswers": " Responses",
+  "expired": "Expired",
+  "reply": "replied",
+  "verify_locationA": "Please verify your country and region",
+  "verify_locationB": "based on your current location.",
+
+  "current_location_prefix": "Your current location is set to "
 }

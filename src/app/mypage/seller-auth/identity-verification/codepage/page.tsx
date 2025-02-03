@@ -55,13 +55,12 @@ const VerificationCodePage = () => {
   const handleResendCode = () => {
     const newCode = Math.floor(100000 + Math.random() * 900000).toString();
     setVerificationCode(newCode);
-    alert(t('new_code', { code: newCode }));
+    alert(newCode);
   };
 
   return (
-    <div className="h-[461px] w-full px-[36px] bg-white mx-auto max-w-[872px]">
-      {/* 상단 헤더 */}
-      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white">
+    <div className="h-full w-full px-5 bg-white md:px-[36px] lg:px-[36px] mx-auto max-w-[872px] relative">
+      <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white md:mt-[40px] md:py-[10px] md:h-[71px] md:text-[32px]">
         <div className="md:hidden">
           <BackButton />
         </div>
@@ -72,20 +71,20 @@ const VerificationCodePage = () => {
       </div>
 
       {/* 안내 텍스트 */}
-      <p className="mb-6 text-[#45484D] font-semibold md:text-[20px] text-[18px] leading-[160%] tracking-[-0.36px]">
+      <p className="mb-6 text-[#45484D] font-semibold md:text-[20px] md:mt-[21px] text-[18px] leading-[160%] tracking-[-0.36px]">
         {t('enter_verification_code')}
       </p>
 
       {/* 인증 코드 입력 필드 */}
       <div className="mb-4">
-        <label className="text-gray-600 text-sm mb-2 block">
+        <label className="text-gray-600 text-sm mb-2 md:text-[16px] block">
           {t('verification_code')}
         </label>
         <input
           type="text"
           value={verificationCode}
           readOnly
-          className="flex w-full h-[52px] px-[16px] py-[14px] flex-col items-start gap-[10px] self-stretch rounded-lg border border-gray-300 bg-white text-black text-sm md:w-[800px] md:h-[32px]"
+          className="flex w-full h-[52px] px-[16px] py-[14px] md:h-[60px] flex-col items-start gap-[10px] self-stretch rounded-lg border border-gray-300 bg-white text-black text-sm md:w-[800px] md:h-[32px]"
         />
       </div>
 
@@ -100,21 +99,20 @@ const VerificationCodePage = () => {
       </div>
 
       {/* 이전 및 제출 버튼 */}
-      <div className="flex justify-between mt-[315px] ">
+      <div className="flex justify-between mt-[350px] md:mt-[200px] md:justify-end md:relative ">
         {/* 이전 버튼 */}
         <button
-          className="flex h-[52px] px-[12px] py-[6px] justify-center items-center gap-[10px] flex-1 rounded-[12px] bg-[#F5F7FA] text-black text-[16px] font-semibold tracking-[-0.32px]"
+          className="flex h-[52px] px-[12px] py-[6px] justify-center items-center gap-[10px] flex-1 md:flex-none rounded-[12px] md:w-[164px] md:h-[64px] bg-[#F5F7FA] text-black text-[16px] font-semibold tracking-[-0.32px] md:mr-[172px]"
           onClick={() => router.back()}
         >
           {t('previous')}
         </button>
 
-        {/* 버튼 간격 */}
-        <div className="w-[20px]"></div>
+        <div className="w-[20px] md:hidden"></div>
 
         {/* 제출 버튼 */}
         <button
-          className="flex h-[52px] px-[12px] py-[6px] justify-center items-center gap-[10px] flex-1 rounded-[12px] bg-[#0582FF] text-white text-[16px] font-semibold tracking-[-0.32px]"
+          className="flex h-[52px] px-[12px] py-[6px] justify-center items-center gap-[10px] flex-1 rounded-[12px] md:w-[164px] md:h-[64px] bg-[#0582FF] text-white text-[16px] font-semibold tracking-[-0.32px]  md:absolute md:right-0"
           onClick={handleSubmit}
         >
           {t('submit')}
