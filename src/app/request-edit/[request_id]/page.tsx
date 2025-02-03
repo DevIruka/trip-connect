@@ -276,7 +276,7 @@ const EditRequestPage: React.FC = () => {
         />
       </div>
 
-      <div className="hidden md:flex justify-end pt-[28px]">
+      <div className="hidden md:flex justify-end pt-[28px] pb-[50px]">
         <button
           onClick={handleSubmit(onSubmit)}
           className="w-[168px] h-[64px] rounded-[12px] px-[12px] py-[6px] text-lg font-bold bg-[#0582FF] text-white"
