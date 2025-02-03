@@ -33,7 +33,10 @@ export const useLikeMutations = (userId: string | undefined) => {
     unknown,
     Error,
     { postId: string | number; isLiked: boolean },
-    { previousLikes?: Array<{ request_id: string | number }> }
+    {
+      previousLikes?: Array<{ request_id: string | number }>;
+      previousLikeCount?: number;
+    }
   >({
     mutationFn: async ({ postId, isLiked }) => {
       if (!userId) {
@@ -46,10 +49,15 @@ export const useLikeMutations = (userId: string | undefined) => {
       if (!userId) return;
 
       await queryClient.cancelQueries({ queryKey: ['like', userId] });
+      await queryClient.cancelQueries({ queryKey: ['likeCount', postId] }); // ✅ likeCount 캐시 취소
 
       const previousLikes = queryClient.getQueryData<
         Array<{ request_id: string | number }>
       >(['like', userId]);
+      const previousLikeCount = queryClient.getQueryData<number>([
+        'likeCount',
+        postId,
+      ]); // ✅ 기존 likeCount 저장
 
       queryClient.setQueryData<Array<{ request_id: string | number }>>(
         ['like', userId],
@@ -60,28 +68,24 @@ export const useLikeMutations = (userId: string | undefined) => {
             : [...currentLikes, { request_id: postId }]; // 추가
         },
       );
-
-      return { previousLikes }; // 이전 상태 저장 (rollback 대비)
+      queryClient.setQueryData<number>(
+        ['likeCount', postId],
+        (old) => (old !== undefined ? (isLiked ? old - 1 : old + 1) : old), // ✅ 화면상에서 즉시 반영
+      );
+      return { previousLikes, previousLikeCount }; // 이전 상태 저장 (rollback 대비)
     },
 
-    onError: (err, newLike, context) => {
+    onError: (err, { postId }, context) => {
       queryClient.setQueryData(['like', userId], context?.previousLikes); // 롤백
+      queryClient.setQueryData(
+        ['likeCount', postId],
+        context?.previousLikeCount,
+      ); // ✅ likeCount 롤백
     },
 
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['like', userId] }); // 최신 데이터 동기화
-    },
-
-    onSuccess: (_, { postId, isLiked }) => {
-      queryClient.setQueryData<Array<{ request_id: string | number }>>(
-        ['like', userId],
-        (old) => {
-          const currentLikes = old || [];
-          return isLiked
-            ? currentLikes.filter((like) => like.request_id !== postId) // 삭제
-            : [...currentLikes, { request_id: postId }]; // 추가
-        },
-      );
+    onSettled: (_, __, { postId }) => {
+      queryClient.invalidateQueries({ queryKey: ['like', userId] });
+      queryClient.invalidateQueries({ queryKey: ['likeCount', postId] });
     },
   });
 
