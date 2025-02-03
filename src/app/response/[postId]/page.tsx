@@ -120,18 +120,37 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
               <button
                 onClick={() => setIsVisible(!isVisible)}
                 className="text-[#797C80] flex-shrink-0"
-                style={{
-                  width: '20px',
-                  height: '20px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
               >
                 {isVisible ? (
-                  <FaChevronUp width="9" height="5" />
+                  <svg
+                    className="w-[18px] h-[18px] md:w-[24px] md:h-[24px]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 15L12 9L18 15"
+                      stroke="#797C80"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 ) : (
-                  <FaChevronDown width="9" height="5" />
+                  <svg
+                    className="w-[18px] h-[18px] md:w-[24px] md:h-[24px]"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M6 9L12 15L18 9"
+                      stroke="#797C80"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 )}
               </button>
             </div>
@@ -147,7 +166,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
       </div>
 
       <div className="hidden md:flex flex-col items-center w-full">
-        <div className="w-full max-w-[800px] border border-[#DFE1E5] bg-white rounded-[8px] border-[1px] overflow: hidden;">
+        <div className="w-full max-w-[800px] border border-[#DFE1E5] rounded-[8px] border-[1px] overflow: hidden;">
           <HeaderWithButton
             buttonKey={t('register')}
             onButtonClick={handleSubmit}

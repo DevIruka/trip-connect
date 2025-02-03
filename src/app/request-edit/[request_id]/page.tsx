@@ -7,7 +7,6 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 import { FormInputs } from '../../request/_types/form';
 import FormFields from '../../request/_components/FormFields';
 import TopicSelector from '../../request/_components/TopicSelector';
-import { FaSearch } from 'react-icons/fa';
 import {
   convertTopicsToEnglish,
   convertTopicsToKorean,
@@ -181,7 +180,6 @@ const EditRequestPage: React.FC = () => {
       </div>
 
       <div className="flex items-center gap-[4px] text-[#80BFFF] text-[14px] font-semibold px-[15px] pt-[12px] md:px-0 md:pb-[20px]">
-        {' '}
         <IconInfoCircle />
         <span>{t('restrictedMessage')}</span>
       </div>
@@ -223,11 +221,22 @@ const EditRequestPage: React.FC = () => {
               </p>
             )}
             {!isRestricted && (
-              <FaSearch
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-                style={{ color: 'black' }}
-                size={18}
-              />
+              <div className="absolute right-[16px] top-1/2 transform -translate-y-1/2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  viewBox="0 0 5 10"
+                  className="w-[5px] h-[10px] text-[#797C80]"
+                >
+                  <path
+                    d="M1 1L4 5L1 9"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
             )}
           </div>
         </div>

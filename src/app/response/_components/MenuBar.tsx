@@ -151,7 +151,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
                 bottom: `${keyboardHeight + 56}px`,
               }}
             >
-              <div className="self-stretch px-5 py-[16px] bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] py-[12px]">
+              <div className="self-stretch px-5 py-[16px] border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] py-[12px]">
                 <div className="h-6 justify-start items-center gap-6 flex">
                   <div className="h-6 justify-start items-center gap-6 flex">
                     <button
@@ -195,7 +195,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
           {/* Main Menu */}
           <div
-            className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50 md:px-[20px] py-[12px]"
+            className="w-full h-[56px] px-5 py-[16px] border-t border-[#dee1e5] flex justify-start items-center gap-6 fixed bottom-0 left-0 z-50 md:px-[20px] py-[12px]"
             style={{
               position: 'fixed',
               bottom: `${keyboardHeight}px`,
@@ -236,7 +236,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
       ) : (
         <>
           {/* Main Menu */}
-          <div className="w-full h-[56px] px-5 py-[16px] bg-white border-t border-[#dee1e5] flex justify-start items-center gap-6 md:px-[20px] md:py-[12px]">
+          <div className="w-full h-[56px] px-5 py-[16px] border-t border-[#dee1e5] flex justify-start items-center gap-6 md:px-[20px] md:py-[12px]">
             <div className="justify-start items-center gap-6 flex">
               <button>
                 <TextHeightIcon color={getTextHeightColor()} />
@@ -267,7 +267,7 @@ const MenuBar: React.FC<Props> = ({ editor }) => {
 
           {/* Text Menu */}
           <div className="w-full h-14 flex-col justify-start items-start inline-flex">
-            <div className="self-stretch px-5 py-[16px] bg-white border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] md:py-[12px]">
+            <div className="self-stretch px-5 py-[16px] border-b border-t border-[#dee1e5] justify-start items-center gap-2.5 inline-flex md:px-[20px] md:py-[12px]">
               <div className="h-6 justify-start items-center gap-6 flex">
                 <div className="h-6 justify-start items-center gap-6 flex">
                   <button
