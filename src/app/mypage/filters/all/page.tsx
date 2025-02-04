@@ -72,7 +72,7 @@ const WrittenPostsPage: React.FC = () => {
   if (error) return <div>error</div>;
 
   return (
-    <div className="px-5 space-y-4 min-h-screen">
+    <div className="flex flex-col px-5 space-y-4 min-h-[calc(100vh-84px)]">
       <CategoryTabs activeTab="written" />
 
       {/* 필터 버튼 */}
@@ -108,14 +108,8 @@ const WrittenPostsPage: React.FC = () => {
 
       {/* 필터링된 글 */}
       <div
-        className="overflow-y-auto"
-        style={{
-          height: 'calc(100vh - 190px)',
-          paddingBottom: '50px',
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          marginTop: '12px',
-        }}
+        className="overflow-y-auto flex-grow pb-[50px] mt-[12px]"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         <style jsx>{`
           div::-webkit-scrollbar {
