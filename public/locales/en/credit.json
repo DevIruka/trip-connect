@@ -8,5 +8,6 @@
   "tossPay": "TossPay",
   "creditCard": "Credit/Debit Card",
   "comingSoon": "Coming soon!",
-  "won" : "KRW"
+  "won" : "KRW",
+  "selectAmount" : "Checkout"
 }
