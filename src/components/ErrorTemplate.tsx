@@ -1,7 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
+
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const siren = '/images/siren.svg';
 

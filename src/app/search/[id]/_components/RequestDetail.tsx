@@ -40,7 +40,6 @@ const RequestDetail = ({
   responseCount,
 }: RequestDetailProps) => {
   const { lang } = useLang();
-  console.log(lang);
   const { t } = useTranslation('search');
   return (
     <>
