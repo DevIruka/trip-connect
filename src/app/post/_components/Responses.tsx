@@ -18,6 +18,8 @@ const Responses = async ({ postId }: { postId: string }) => {
             return <Response key={post.id} post={post} />;
           })}
       </div>
+
+      <div className="md:h-[200px]"></div>
     </>
   );
 };
