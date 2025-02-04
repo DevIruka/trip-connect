@@ -15,7 +15,7 @@ const HeaderWithButton: React.FC<Props> = ({ buttonKey, onButtonClick }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex justify-between items-center px-[20px] py-[10px] bg-white sticky top-0 z-50 md:py-[16px]">
+    <div className="flex justify-between items-center px-[20px] py-[10px] sticky top-0 z-50 md:py-[16px]">
       <button
         onClick={() => router.back()}
         className="text-lg font-bold text-black"
