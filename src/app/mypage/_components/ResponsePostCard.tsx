@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useLang } from '@/store/languageStore';
 import { countryNameMapping } from '@/data/nation';
 import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
-import { useGPTTranslation } from '@/app/post/_hooks/useGPTTranslation';
+import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
 
@@ -29,16 +29,6 @@ const ResponsePostCard: React.FC<{
   const [credit, setCredit] = useState<number | null>(null);
   const [commentCount, setCommentCount] = useState<number>(0);
   const [showActions, setShowActions] = useState<boolean>(false);
-
-  const { data: translatedTitle } = useGPTTranslation(
-    `${post.id}-title`,
-    post.title,
-  );
-
-  const { data: translatedContent } = useGPTTranslation(
-    `${post.id}-content`,
-    post.free_content || '',
-  );
 
   const fetchCommentCount = useCallback(async () => {
     if (!post.request_id) return;
@@ -270,24 +260,21 @@ const ResponsePostCard: React.FC<{
         <div className="flex flex-col">
           <div className="mb-2">
             <p className="text-base md:text-[18px] font-bold text-black leading-6 md:h-[50px] line-clamp-2">
-              {translatedTitle && (
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: JSON.parse(translatedTitle).translated,
-                  }}
-                />
-              )}
+              <span
+                dangerouslySetInnerHTML={{
+                  __html: post.translated_title!,
+                }}
+              />
             </p>
           </div>
           <div>
             <p className="text-sm md:text-[16px] text-gray-500 md:h-[50px] line-clamp-2">
-              {translatedContent && (
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: JSON.parse(translatedContent).translated,
-                  }}
-                />
-              )}
+              <RenderonlyTextHTML
+                data={{
+                  original: '',
+                  translated: post.translated_free_content,
+                }}
+              />
             </p>
           </div>
         </div>

@@ -8,7 +8,6 @@ import original from '@/data/images/original.svg';
 import comment from '@/data/images/ic-comment.svg';
 import updown from '@/data/images/ic-up&down.svg';
 import MoreButton from '@/data/images/ic-More.svg';
-import { useGPTTranslation } from '../_hooks/useGPTTranslation';
 import RenderTranslatedHTML from './RenderTranslatedHTML';
 import { Tables } from '@/types/supabase';
 import { useUserStore } from '@/store/userStore';
@@ -104,20 +103,6 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
     fetchPurchased(); // 구매 상태 확인
   }, []);
 
-  const { data: translatedTitle } = useGPTTranslation(
-    `${post.id}title`,
-    `${post.title}`,
-  );
-  const { data: translatedFreeText } = useGPTTranslation(
-    `
-  ${post.id}freetext`,
-    `${post.free_content}`,
-  );
-  const { data: translatedText } = useGPTTranslation(
-    `${post.id}text`,
-    post.content_html,
-  );
-
   const handlePurchase = () => {
     if (!user) openModal('loginModal');
     else if (!mycredits || mycredits < credit!) openModal('chargeModal');
@@ -146,15 +131,11 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
         <div>
           <div className="grid my-2 text-black text-lg font-bold leading-[28.80px]">
             {!isOriginal ? (
-              translatedTitle ? (
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: JSON.parse(translatedTitle).translated,
-                  }}
-                />
-              ) : (
-                '제목로딩중'
-              )
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: post.translated_title!,
+                }}
+              />
             ) : (
               post.title
             )}
@@ -177,11 +158,12 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
           <div className="grid gap-4">
             <div className="text-[#44484c] text-base font-medium leading-relaxed">
               {!isOriginal ? (
-                translatedFreeText ? (
-                  <RenderTranslatedHTML data={JSON.parse(translatedFreeText)} />
-                ) : (
-                  '무료내용 로딩중'
-                )
+                <RenderTranslatedHTML
+                  data={{
+                    original: '',
+                    translated: post.translated_free_content!,
+                  }}
+                />
               ) : (
                 <RenderTranslatedHTML
                   data={{ original: '', translated: post.free_content }}
@@ -191,11 +173,12 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
             {isContentVisible && (
               <div className="text-[#44484c] text-base font-medium leading-relaxed pb-[18px]">
                 {!isOriginal ? (
-                  translatedText ? (
-                    <RenderTranslatedHTML data={JSON.parse(translatedText)} />
-                  ) : (
-                    '유료내용 로딩중'
-                  )
+                  <RenderTranslatedHTML
+                    data={{
+                      original: '',
+                      translated: post.translated_content!,
+                    }}
+                  />
                 ) : (
                   <RenderTranslatedHTML
                     data={{ original: '', translated: post.content_html }}
@@ -204,7 +187,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
               </div>
             )}
           </div>
-          {!isPurchased ? (
+          {!isPurchased && user?.id !== post.user_id ? (
             // 구매 버튼
             <button
               onClick={handlePurchase}
@@ -217,11 +200,11 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
             <button
               onClick={toggleContent}
               className="w-full h-11 px-3 py-1.5 rounded-[100px] border border-[#dee1e5] justify-center items-center gap-1 inline-flex my-2.5 text-center text-[#44484c] text-sm font-semibold"
-              disabled={!translatedText}
+              disabled={!post.translated_content}
             >
               {isContentVisible
                 ? '접기'
-                : !translatedText
+                : !post.translated_content
                 ? '로딩중'
                 : '펼쳐 보기'}
               <Image
