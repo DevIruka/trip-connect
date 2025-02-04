@@ -3,27 +3,21 @@ import Link from 'next/link';
 import React from 'react';
 import pencil from '@/data/images/✏️ 연필.svg';
 import ball from '@/data/images/💡 전구.svg';
-import { useUserStore } from '@/store/userStore';
-import { useModal } from '@/providers/ModalProvider';
 
 type HeaderButtonProps = {
   url: string;
   text1: string;
   text2: string;
   title: string;
+  handleClick?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
 };
-const HeaderButton = ({ url, text1, text2, title }: HeaderButtonProps) => {
-  const { user } = useUserStore();
-  const { openModal } = useModal();
-
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    // `url`이 `request`이고 `user`가 없으면 모달 열기
-    if (url === 'request' && !user) {
-      e.preventDefault(); // 링크 기본 동작 방지
-      openModal('loginModal'); // 모달 열기
-    }
-  };
-
+const HeaderButton = ({
+  url,
+  text1,
+  text2,
+  title,
+  handleClick,
+}: HeaderButtonProps) => {
   return (
     <>
       <Link

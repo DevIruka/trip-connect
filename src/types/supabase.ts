@@ -169,6 +169,9 @@ export type Database = {
           id: number
           request_id: string
           title: string
+          translated_content: string | null
+          translated_free_content: string | null
+          translated_title: string | null
           user_id: string
           verified_country: string | null
         }
@@ -179,6 +182,9 @@ export type Database = {
           id?: number
           request_id?: string
           title: string
+          translated_content?: string | null
+          translated_free_content?: string | null
+          translated_title?: string | null
           user_id: string
           verified_country?: string | null
         }
@@ -189,22 +195,25 @@ export type Database = {
           id?: number
           request_id?: string
           title?: string
+          translated_content?: string | null
+          translated_free_content?: string | null
+          translated_title?: string | null
           user_id?: string
           verified_country?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "response_post_request_id_fkey"
-            columns: ["request_id"]
-            isOneToOne: false
-            referencedRelation: "request_posts"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "response_post_user_id_fkey1"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "response_posts_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "request_posts"
             referencedColumns: ["id"]
           },
         ]
