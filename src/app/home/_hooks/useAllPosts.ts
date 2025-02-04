@@ -1,22 +1,21 @@
-import { useReqPosts } from '@/utils/api/tanstack/home/useReqPosts';
-import { useResPosts } from '@/utils/api/tanstack/home/useResPosts';
 import { useEffect, useState } from 'react';
 import { Post } from '../_types/homeTypes';
+import { usePosts } from '@/utils/api/tanstack/home/usePosts';
 
 export const useAllPosts = () => {
   // 요청 및 응답 게시물 데이터 불러오기
   const {
-    response_posts,
+    posts: response_posts,
     fetchNextPage: AfetchNextPage,
     hasNextPage: AhasNextPage,
     isFetchingNextPage: AisFetchingNextPage,
-  } = useResPosts();
+  } = usePosts('response');
   const {
-    request_posts,
+    posts: request_posts,
     fetchNextPage: QfetchNextPage,
     hasNextPage: QhasNextPage,
     isFetchingNextPage: QisFetchingNextPage,
-  } = useReqPosts();
+  } = usePosts('request');
 
   // 모든 게시물 상태 관리
   const [allPosts, setAllPosts] = useState<Post[]>([]);
