@@ -7,7 +7,6 @@ import dot from '@/data/images/Ellipse 14.svg';
 import { useRouter } from 'next/navigation';
 import { topicMapping } from '@/utils/topics';
 import { Post } from '@/app/home/_types/homeTypes';
-import { useGPTTranslation } from '@/app/post/_hooks/useGPTTranslation';
 import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
 import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 import { useReviewCount } from '@/utils/api/tanstack/home/useReviewCount';
@@ -19,18 +18,6 @@ const ListResPost = ({ post }: { post: Post }) => {
   const handleNavigation = (id: string | number) => {
     router.push(`/post/${id}`);
   };
-
-  const { data: translatedTitle } = useGPTTranslation(
-    `
-    ${post.id}title`,
-    `${post.title}`,
-  );
-
-  const { data: translatedContent } = useGPTTranslation(
-    `
-    ${post.id}freetext`,
-    `${post.free_content}`,
-  );
 
   //리뷰 갯수
   const { reviewCount } = useReviewCount(post.id);
@@ -68,19 +55,17 @@ const ListResPost = ({ post }: { post: Post }) => {
             A.
           </div>
           <h1 className="text-black text-base font-semibold leading-snug grow line-clamp-2 md:line-clamp-1">
-            {translatedTitle && (
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: JSON.parse(translatedTitle).translated,
-                }}
-              />
-            )}
+            <p
+              dangerouslySetInnerHTML={{
+                __html: post.translated_title!,
+              }}
+            />
           </h1>
         </div>
         <div className="pl-[22px] max-h-[38.5px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2 md:h-[38px]">
-          {translatedContent && (
-            <RenderonlyTextHTML data={JSON.parse(translatedContent)} />
-          )}
+          <RenderonlyTextHTML
+            data={{ original: '', translated: post.translated_free_content }}
+          />
         </div>
       </div>
       <div className="flex gap-4 items-center text-[#797c80] text-xs font-medium justify-between w-full">
