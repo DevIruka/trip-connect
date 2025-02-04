@@ -138,7 +138,7 @@ const MyPage = () => {
   const handleLogout = async () => {
     await signOut();
   };
-
+  
   return (
     <div className="h-full w-full mx-auto relative overflow-y-scroll menuscrollbar container max-w-screen-md lg:max-w-[872px]">
       <div className="px-5 lg:px-[36px]">

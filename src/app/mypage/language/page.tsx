@@ -27,7 +27,8 @@ const LanguagePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white md:flex md:w-[872px] md:px-[36px] md:py-0 md:flex-col md:items-start md:gap-[28px] px-5 py-4">
+    <div className="min-h-[calc(100vh-84px)] bg-white md:flex md:w-[872px] md:px-[36px] md:py-0 md:flex-col md:items-start md:gap-[28px] px-5 py-4">
+
       <div className="flex flex-row items-center w-[375px] h-[56px] px-[20px] py-[10px] gap-[206px] flex-shrink-0 md:hidden">
         <button
           onClick={() => router.push('/mypage')}
@@ -37,7 +38,7 @@ const LanguagePage = () => {
         </button>
       </div>
 
-      <div className="flex items-center w-[375px] px-[20px] md:mt-[70px] py-[8px] gap-[8px] md:w-[800px] md:h-[65px] md:px-[0px] md:py-[10px] md:gap-[10px] md:items-center md:self-stretch">
+      <div className="flex items-center w-[375px] px-[20px] md:mt-[40px] py-[8px] gap-[8px] md:w-[800px] md:h-[65px] md:px-[0px] md:py-[10px] md:gap-[10px] md:items-center md:self-stretch">
         <h2 className="text-[20px] md:text-[28px] font-[700] text-[#45484D] text-center font-pretendard leading-[32px] tracking-[-0.4px]">
           {t('language_settings')}
         </h2>
