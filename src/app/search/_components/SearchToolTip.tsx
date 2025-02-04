@@ -23,7 +23,7 @@ const SearchToolTip = ({
     <>
       {/* 중앙 정렬을 위해 flex 컨테이너 추가 */}
       <div className="w-full flex justify-center relative">
-        <div className="flex flex-row max-w-[1200px] w-full items-center justify-between mx-[16px]">
+        <div className="flex flex-row max-w-[1128px] w-full items-center justify-between mx-[16px]">
           <div className="flex flex-row relative">
             {' '}
             {/* 툴팁 위치 기준이 될 부모 div */}

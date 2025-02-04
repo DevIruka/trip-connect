@@ -28,7 +28,7 @@ const RecentSearchList = ({
     <>
       {/* 중앙 정렬을 위한 부모 컨테이너 */}
       <div className="w-full flex justify-center">
-        <ul className="flex max-w-[1200px] w-full flex-row gap-[8px] md:gap-[12px] items-center overflow-x-auto whitespace-nowrap menuscrollbar md:mx-[25px]">
+        <ul className="flex max-w-[1128px] w-full flex-row gap-[8px] md:gap-[12px] items-center overflow-x-auto whitespace-nowrap menuscrollbar md:mx-[25px]">
           {recentSearches && recentSearches.length > 0 ? (
             recentSearches.map((term, index) => (
               <li
