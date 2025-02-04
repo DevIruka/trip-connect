@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RxCross2 } from 'react-icons/rx';
 
 const iconHelp = '/images/ic-help.svg';
+const xmark = '/images/ic-Close.svg';
 
 type SearchToolTip = {
   handleClearRecentSearches: () => void;
@@ -43,11 +43,13 @@ const SearchToolTip = ({
                   <p className="text-[12px] text-white pr-[4px] font-[500] tracking-[-0.24px]">
                     {t('limit')}
                   </p>
-                  <RxCross2
-                    size={18}
+                  <Image
+                    src={xmark}
+                    width={18}
+                    height={18}
+                    alt="close"
                     onClick={handleTooltipToggle}
-                    className="cursor-pointer"
-                    style={{ color: 'white' }}
+                    className="cursor-pointer filter invert-[100%] brightness-[100%]"
                   />
                   {/* 삼각형 아이콘 */}
                   <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-[#3A474E]"></div>
