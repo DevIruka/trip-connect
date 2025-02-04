@@ -165,7 +165,7 @@ const EditResponsePage: React.FC = () => {
       </div>
 
       <div className="hidden md:flex flex-col items-center w-full">
-        <div className="w-full max-w-[800px] border border-[#DFE1E5] bg-white rounded-[8px] border-[1px] overflow: hidden;">
+        <div className="w-full max-w-[800px] border border-[#DFE1E5] rounded-[8px] border-[1px] overflow: hidden;">
           <HeaderWithButton
             buttonKey={t('edit')}
             onButtonClick={handleSubmit}
