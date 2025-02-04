@@ -38,11 +38,11 @@ const ResponseDetail = ({
           <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px] ">
             <Image src={marker} width={10} height={10} alt="marker" />
             <p className="text-[12px]">
-              {typeof post.country_city === 'string'
-                ? ''
-                : lang === 'en'
-                ? countryNameMapping[post.country_city?.country || '']
-                : post.country_city?.country}
+              {lang === 'en'
+                ? countryNameMapping[
+                    JSON.parse(String(post.country_city!)).country
+                  ]
+                : JSON.parse(String(post.country_city!)).country}
             </p>
           </div>
           <div className="flex flex-row">
@@ -54,7 +54,9 @@ const ResponseDetail = ({
                   className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
                 >
                   <p className="text-[12px]">
-                    {lang === 'en' ? capitalizeFirstLetter(element) : koreanCategory}
+                    {lang === 'en'
+                      ? capitalizeFirstLetter(element)
+                      : koreanCategory}
                   </p>
                 </div>
               );

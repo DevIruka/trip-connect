@@ -10,7 +10,6 @@ import {
 import { useCredit } from '@/utils/api/tanstack/search/useCredit';
 import ResponseDetail from './ResponseDetail';
 import RequestDetail from './RequestDetail';
-import { useLang } from '@/store/languageStore';
 
 type SearchResultsProps = {
   filteredPosts: ReqResPost[];
@@ -107,7 +106,7 @@ const SearchResults = ({ filteredPosts, filter }: SearchResultsProps) => {
               onClick={() => onClickHandler(post)}
             >
               <div className="flex border-b-2 md:border md:border-[#eaeaea] md:rounded-lg md:p-[20px] border-[#F4F4F4] cursor-pointer w-full">
-                {'request_id' in post ? (
+                {post.request_id ? (
                   <ResponseDetail
                     credit={credit}
                     isError={isError}

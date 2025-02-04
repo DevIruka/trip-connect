@@ -1,6 +1,7 @@
 import { useQueries } from '@tanstack/react-query';
 import { getResponseCount, getReviewCount } from '@/utils/api/supabase_api/search/getResponseCount';
 
+
 export const useResponseCounts = (postIds: (string | number)[]) => {
   const queries = postIds.map((postId) => ({
     queryKey: ['responseCount', postId],

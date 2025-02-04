@@ -169,9 +169,9 @@ export type Database = {
           id: number
           request_id: string
           title: string
-          translated_content: string | null
-          translated_free_content: string | null
-          translated_title: string | null
+          translated_content: string
+          translated_free_content: string
+          translated_title: string
           user_id: string
           verified_country: string | null
         }
@@ -182,9 +182,9 @@ export type Database = {
           id?: number
           request_id?: string
           title: string
-          translated_content?: string | null
-          translated_free_content?: string | null
-          translated_title?: string | null
+          translated_content: string
+          translated_free_content: string
+          translated_title: string
           user_id: string
           verified_country?: string | null
         }
@@ -195,9 +195,9 @@ export type Database = {
           id?: number
           request_id?: string
           title?: string
-          translated_content?: string | null
-          translated_free_content?: string | null
-          translated_title?: string | null
+          translated_content?: string
+          translated_free_content?: string
+          translated_title?: string
           user_id?: string
           verified_country?: string | null
         }
@@ -301,7 +301,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      search_and_sort_posts: {
+        Args: {
+          keyword: string
+          page_limit?: number
+          page_offset?: number
+        }
+        Returns: Json
+      }
     }
     Enums: {
       [_ in never]: never
