@@ -1,6 +1,8 @@
+import Image from 'next/image';
 import { UseFormHandleSubmit } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { RxCross2 } from 'react-icons/rx';
+
+const xmark = '/images/ic-Close.svg';
 
 type RecentSearchListProps = {
   recentSearches: string[];
@@ -28,7 +30,7 @@ const RecentSearchList = ({
     <>
       {/* 중앙 정렬을 위한 부모 컨테이너 */}
       <div className="w-full flex justify-center">
-        <ul className="flex max-w-[1200px] w-full flex-row gap-[8px] md:gap-[12px] items-center overflow-x-auto whitespace-nowrap menuscrollbar md:mx-[25px]">
+        <ul className="flex max-w-[1128px] w-full flex-row gap-[8px] md:gap-[12px] items-center overflow-x-auto whitespace-nowrap menuscrollbar md:mx-[25px]">
           {recentSearches && recentSearches.length > 0 ? (
             recentSearches.map((term, index) => (
               <li
@@ -37,7 +39,7 @@ const RecentSearchList = ({
               >
                 <form
                   onSubmit={handleSubmit(handleSearch)}
-                  className="flex flex-row items-center px-[16px] py-[9.5px]"
+                  className="flex flex-row items-center justify-center px-[16px] py-[9.5px]"
                 >
                   <button
                     type="submit"
@@ -50,10 +52,12 @@ const RecentSearchList = ({
                     type="button"
                     onClick={() => handleRecentSearchDelete(term)}
                   >
-                    <RxCross2
-                      size={16}
-                      className="cursor-pointer"
-                      style={{ color: '#797C80' }}
+                    <Image
+                      src={xmark}
+                      alt="close"
+                      width={20}
+                      height={20}
+                      className="cursor-pointer filter invert-[40%] brightness-[80%]"
                     />
                   </button>
                 </form>
@@ -70,6 +74,5 @@ const RecentSearchList = ({
       </div>
     </>
   );
-  
 };
 export default RecentSearchList;
