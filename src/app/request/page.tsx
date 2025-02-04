@@ -17,6 +17,7 @@ import IconInfoCircle from './_components/icons/InfoCircle';
 import { useTranslation } from 'react-i18next';
 import { useRouter } from 'next/navigation';
 import { useModal } from '@/providers/ModalProvider';
+import { getGPTTranslator } from '../post/_hooks/getGPTTranslator';
 
 const RequestPage: React.FC = () => {
   const { t } = useTranslation('request');
@@ -46,6 +47,14 @@ const RequestPage: React.FC = () => {
       }
 
       const selectedCategories = data.category as KoreanCategory[];
+      const response = await getGPTTranslator(
+        `${data.title}`,
+        selectedLocation.country,
+      );
+      const contentResponse = await getGPTTranslator(
+        `${data.content}`,
+        selectedLocation.country,
+      );
 
       // 유효성 검사
       if (
@@ -67,6 +76,12 @@ const RequestPage: React.FC = () => {
             category: selectedTopicsInEnglish, // 영어로 저장
             country_city: selectedLocation,
             user_id: user.id,
+            translated_title: JSON.parse(
+              response?.choices[0]?.message?.content ?? '{}',
+            ).translated,
+            translated_content: JSON.parse(
+              contentResponse?.choices[0]?.message?.content ?? '{}',
+            ).translated,
           },
         ])
         .select('id')
