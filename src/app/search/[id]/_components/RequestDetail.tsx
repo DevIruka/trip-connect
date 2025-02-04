@@ -49,7 +49,7 @@ const RequestDetail = ({
           <div className="flex flex-row w-full items-center justify-between mt-[12px] mb-[12px] md:mt-0">
             <div className="flex flex-row items-center justify-center">
               <Dday postDateEnd={post.date_end!} />
-              <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]">
+              <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px] ml-[4px]">
                 <Image src={marker} width={10} height={10} alt="marker" />
                 <p className="text-[12px]">
                   {lang === 'en'

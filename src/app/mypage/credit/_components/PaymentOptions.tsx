@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { PaymentOptionsProps } from '../_types/credit';
 import PaymentModal from './PaymentModal';
 import { useTranslation } from 'react-i18next';
-import { Desktop } from '@/components/ui/Responsive';
 import { useMediaQuery } from 'react-responsive';
-import DesktopPaymentOptions from './DesktopPaymentOptions';
 
 const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   options,
@@ -14,8 +12,8 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(0);
   const [selectedBonus, setSelectedBonus] = useState(0);
-  const [selectedMethod, setSelectedMethod] = useState('tosspay');
-  const isDesktop = useMediaQuery({ minWidth: 800 });
+
+  const isMd = useMediaQuery({ minWidth: 800 });
 
   const openModal = (amount: number) => {
     const selectedOption = options.find((option) => option.amount === amount);
@@ -31,6 +29,9 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
     if (selectedOption) {
       setSelectedAmount(amount);
       setSelectedBonus(Math.floor(amount * (selectedOption.bonusRate || 0)));
+      if (!isMd) {
+        setIsModalOpen(true);
+      }
     }
   };
 
@@ -44,7 +45,6 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
     }
     closeModal();
   };
-
 
   return (
     <div className="space-y-[12px] md:space-y-[18px] mb-[33px]">
@@ -72,11 +72,7 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
             </div>
             <button
               className="bg-[#EBF5FF] text-center text-[#0582ff] text-sm font-medium px-[19px] py-[8px] rounded-[8px]"
-              onClick={
-                isDesktop
-                  ? () => calculateCredit(amount)
-                  : () => openModal(amount)
-              }
+              onClick={() => calculateCredit(amount)}
             >
               {amount.toLocaleString()}
               {t('won')}
@@ -84,14 +80,28 @@ const PaymentOptions: React.FC<PaymentOptionsProps> = ({
           </div>
         );
       })}
-      <Desktop>
-        <DesktopPaymentOptions
-          onConfirm={onConfirm}
-          selectedAmount={selectedAmount}
-          selectedMethod={selectedMethod}
-          setSelectedMethod={setSelectedMethod}
-        />
-      </Desktop>
+
+      {isMd && (
+        <div className="hidden md:flex w-full items-center justify-center sticky bottom-0 py-4">
+          <button
+            className={`mt-[28px] mb-[16px] mx-auto w-[180px] h-[50px] rounded-full text-lg font-semibold shadow-md
+              ${
+                selectedAmount !== 0
+                  ? 'bg-[#0582ff] text-white'
+                  : 'bg-[#DFE1E5] text-[#A9A9A9] cursor-not-allowed'
+              }`}
+            onClick={() => openModal(selectedAmount)}
+            disabled={selectedAmount === 0}
+          >
+            {selectedAmount !== 0
+              ? t('confirmPayment', {
+                  amount: selectedAmount.toLocaleString(),
+                })
+              : t('selectAmount')}
+          </button>
+        </div>
+      )}
+
       <PaymentModal
         isOpen={isModalOpen}
         onClose={closeModal}

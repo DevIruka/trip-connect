@@ -9,6 +9,7 @@ import { googleLogin, kakaoLogin } from '@/app/login/_auth/oauth';
 const mailicon = '/images/ic-mail.svg';
 const kakao = '/images/kakao.svg';
 const google = '/images/google.svg';
+const xmark = '/images/ic-Close.svg';
 
 const DesktopLoginModal = () => {
   const { t } = useTranslation('login');
@@ -21,11 +22,19 @@ const DesktopLoginModal = () => {
     >
       {/* 흰색 배경 모달 */}
       <div
-        className="bg-white h-auto rounded-t-2xl p-5 grid place-items-center md:rounded-2xl md:w-[558px] md:p-8 md:gap-7"
+        className="bg-white h-auto rounded-t-2xl p-5 grid place-items-center md:rounded-2xl md:w-[558px] md:p-8 md:gap-7 relative"
         onClick={(e) => e.stopPropagation()} // 클릭 이벤트 전파 방지
       >
         {/* 모달 내용 */}
         <Image src={biglogo} alt="lock" width={180} height={180} />
+        <Image
+          src={xmark}
+          alt="close"
+          width={28}
+          height={28}
+          className="absolute top-[36px] right-[36px] cursor-pointer filter invert-[40%] brightness-[80%]"
+          onClick={() => closeModal('DesktopLogin')}
+        />
         {/* 버튼 영역 */}
         <div className="flex flex-col justify-center items-center gap-2 w-full mt-2 md:max-w-[426px]">
           <div
@@ -39,8 +48,14 @@ const DesktopLoginModal = () => {
             className="flex justify-center items-center py-[10px] text-base font-semibold text-black bg-[#f9db00] rounded-xl w-full text-center cursor-pointer"
             onClick={kakaoLogin}
           >
-            <Image src={kakao} width={44} height={44} alt="mailicon" className='mr-[4px]' /> KaKao{' '}
-            {t('login')}
+            <Image
+              src={kakao}
+              width={44}
+              height={44}
+              alt="mailicon"
+              className="mr-[4px]"
+            />{' '}
+            KaKao {t('login')}
           </div>
           <div
             className="flex justify-center items-center py-[10px] text-base font-semibold text-black bg-white rounded-xl border border-[#dee1e5] w-full text-center cursor-pointer relative"

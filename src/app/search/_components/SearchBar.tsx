@@ -77,7 +77,7 @@ const SearchBar = ({
           className="flex flex-col max-w-[1200px] w-full relative"
         >
           <span className="text-[#44484c] text-[32px] font-bold font-['Pretendard'] leading-[51.20px] ml-[36px] md:mt-[40px]">
-            검색
+            {t('search')}
           </span>
           <div className="flex flex-row justify-center items-center relative w-full">
             <input

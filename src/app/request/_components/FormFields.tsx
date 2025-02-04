@@ -238,7 +238,7 @@ const FormFields: React.FC<Props> = ({
                 <div className="flex justify-between mt-4 gap-[8px] md:gap-[12px] md:justify-center">
                   <button
                     type="button"
-                    className="w-[72px] h-[48px] px-[12px] py-[6px] border border-[#DFE1E5] rounded-[12px] text-[#333] text-[14px] font-semibold md:w-[168px] md:h-[64px]"
+                    className="w-[72px] h-[48px] px-[12px] py-[6px] border border-[#DFE1E5] rounded-[12px] text-[#333] text-[14px] font-semibold md:w-[168px] md:h-[64px] md:bg-[#f4f6f9] md:border-transparent"
                     onClick={handleCancel}
                   >
                     {t('cancelButton')}

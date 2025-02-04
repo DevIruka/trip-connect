@@ -78,7 +78,7 @@ const DetailedSearchBar = ({
       <Desktop>
         <div className="flex flex-col max-w-[1200px] w-full relative">
           <span className="text-[#44484c] text-[32px] font-bold font-['Pretendard'] leading-[51.20px] ml-[36px] md:mt-[40px]">
-            검색
+            {t('search')}
           </span>
           <div className="flex flex-row justify-center items-center relative w-full">
             <input
@@ -99,22 +99,22 @@ const DetailedSearchBar = ({
           </div>
         </div>
       </Desktop>
-      <div className="w-full max-w-[1128px]">
-        <div className="grid sticky top-[0px] bg-white z-10 max-w-[1128px] mx-auto">
-          <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b border-[#dee1e5] px-[42px]">
+      <div className="w-full max-w-[1200px]">
+        <div className="grid sticky top-[0px] bg-white z-10 max-w-[1200px] mx-auto">
+          <div className="w-full overflow-auto whitespace-nowrap menuscrollbar px-[42px]">
             <Tabs
               value={selectedCategory ?? undefined}
               onValueChange={(value: string) =>
                 setSelectedCategory(value as KoreanCategory | '전체')
               }
-              className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex"
+              className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex border-b border-[#dee1e5]"
             >
-              <TabsList className="md:justify-between">
+              <TabsList className="md:justify-between w-full flex">
                 {category.map((cat) => (
                   <TabsTrigger
                     key={cat}
                     value={convertToKorean(cat)}
-                    className="mx-1 md:mx-2"
+                    className="px-3 py-2 text-sm"
                   >
                     <TabDetail category={cat} />
                   </TabsTrigger>
