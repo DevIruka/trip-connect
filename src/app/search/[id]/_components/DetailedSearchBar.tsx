@@ -99,17 +99,17 @@ const DetailedSearchBar = ({
           </div>
         </div>
       </Desktop>
-      <div className="w-full max-w-[1128px]">
-        <div className="grid sticky top-[0px] bg-white z-10 max-w-[1128px] mx-auto">
-          <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b border-[#dee1e5] px-[42px]">
+      <div className="w-full max-w-[1200px]">
+        <div className="grid sticky top-[0px] bg-white z-10 max-w-[1200px] mx-auto">
+          <div className="w-full overflow-auto whitespace-nowrap menuscrollbar px-[42px]">
             <Tabs
               value={selectedCategory ?? undefined}
               onValueChange={(value: string) =>
                 setSelectedCategory(value as KoreanCategory | '전체')
               }
-              className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex"
+              className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex border-b border-[#dee1e5]"
             >
-              <TabsList className="md:justify-between">
+              <TabsList className="md:justify-between w-full flex">
                 {category.map((cat) => (
                   <TabsTrigger
                     key={cat}

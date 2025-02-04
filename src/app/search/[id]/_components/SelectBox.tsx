@@ -1,6 +1,8 @@
+import Image from 'next/image';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaAngleDown } from 'react-icons/fa6';
+
+const down = '/images/ic-down.svg';
 
 type SelectBoxProps = {
   filter: 'all' | 'question' | 'answer';
@@ -29,7 +31,7 @@ const CustomSelectBox = ({ filter, setFilter }: SelectBoxProps) => {
             ? t('q')
             : t('a')}
         </p>
-        <FaAngleDown color="gray" className="ml-1" />
+        <Image src={down} width={20} height={20} alt="down" className='ml-1'/>
       </div>
 
       {isOpen && (
