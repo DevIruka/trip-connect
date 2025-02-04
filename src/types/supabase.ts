@@ -127,6 +127,8 @@ export type Database = {
           date_end: string | null
           id: string
           title: string
+          translated_content: string | null
+          translated_title: string | null
           user_id: string
         }
         Insert: {
@@ -138,6 +140,8 @@ export type Database = {
           date_end?: string | null
           id?: string
           title: string
+          translated_content?: string | null
+          translated_title?: string | null
           user_id: string
         }
         Update: {
@@ -149,6 +153,8 @@ export type Database = {
           date_end?: string | null
           id?: string
           title?: string
+          translated_content?: string | null
+          translated_title?: string | null
           user_id?: string
         }
         Relationships: [
