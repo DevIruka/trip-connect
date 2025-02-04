@@ -269,7 +269,7 @@ const ResponsePostCard: React.FC<{
         <p className="text-red-500 text-base font-semibold leading-6">A.</p>
         <div className="flex flex-col">
           <div className="mb-2">
-            <p className="text-base font-bold text-black leading-6 md:h-[50px] line-clamp-2">
+            <p className="text-base md:text-[18px] font-bold text-black leading-6 md:h-[50px] line-clamp-2">
               {translatedTitle && (
                 <span
                   dangerouslySetInnerHTML={{
@@ -280,7 +280,7 @@ const ResponsePostCard: React.FC<{
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500 md:h-[50px] line-clamp-2">
+            <p className="text-sm md:text-[16px] text-gray-500 md:h-[50px] line-clamp-2">
               {translatedContent && (
                 <span
                   dangerouslySetInnerHTML={{
@@ -294,7 +294,7 @@ const ResponsePostCard: React.FC<{
       </div>
 
       {/* 하단 - 크레딧, 댓글 수, 작성 시간 */}
-      <div className="flex items-center justify-between text-sm text-gray-500 w-full">
+      <div className="flex items-center md:text-[14px] justify-between text-sm text-gray-500 w-full">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <Image src={coinIcon} alt="coin" width={14} height={14} />

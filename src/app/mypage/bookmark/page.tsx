@@ -119,15 +119,7 @@ const BookmarkPage = () => {
     <div className="px-5 space-y-4 min-h-screen">
       <CategoryTabs activeTab="bookmark" />
 
-      <div
-        className="overflow-y-auto"
-        style={{
-          scrollbarWidth: 'none',
-          msOverflowStyle: 'none',
-          height: 'calc(100vh - 120px)',
-          paddingBottom: '50px',
-        }}
-      >
+      <div className="overflow-y-auto h-[calc(100vh-120px)] pb-[50px] md:pb-[140px] scrollbar-hide">
         <style jsx>{`
           div::-webkit-scrollbar {
             display: none;
@@ -209,19 +201,19 @@ const BookmarkPage = () => {
                   </p>
                   <div className="flex flex-col">
                     <div className="md:h-[50px]">
-                      <p className="text-[16px] font-bold text-black leading-[22.4px] max-w-[315px] line-clamp-2">
+                      <p className="text-[16px] font-bold md:text-[18px] text-black leading-[22.4px] max-w-[315px] line-clamp-2">
                         {post.title}
                       </p>
                     </div>
                     <div className="md:h-[50px]">
-                      <p className="text-[14px] text-[#797C80] line-clamp-2">
+                      <p className="text-[14px] md:text-[16px] text-[#797C80] line-clamp-2">
                         {post.content || ''}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-[12px] text-[#797C80] w-full">
+                <div className="flex items-center justify-between text-[12px] md:text-[14px] text-[#797C80] w-full">
                   <div className="flex items-center gap-[6px]">
                     <div className="flex items-center gap-[6px]">
                       <Image

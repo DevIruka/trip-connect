@@ -6,6 +6,7 @@ import BackButton from '@/app/post/_components/BackBtn';
 import { useTranslation } from 'react-i18next';
 
 const IdentityVerification = () => {
+  
   const { t } = useTranslation('mypage');
   const router = useRouter();
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -49,14 +50,14 @@ const IdentityVerification = () => {
       </div>
 
       {/* 국가 선택 */}
-      <div className="mb-4">
+      <div className="mb-4 ">
         <label className="mb-2 block text-[#797C80] text-sm font-medium leading-[140%] tracking-[-0.28px]">
           {t('select_country')}
         </label>
         <select
           value={selectedCountry}
           onChange={handleCountryChange}
-          className="w-full h-[52px] px-4 py-3 flex items-center justify-center rounded-lg border border-gray-300 bg-white text-black text-sm font-medium leading-[140%] tracking-[-0.28px] whitespace-nowrap md:w-[800px] md:h-[60px] appearance-none"
+          className="w-full h-[52px] px-4 py-3 flex items-center bg-[calc(100%-18px)] bg-[url('/images/ic-up&down.svg')] bg-no-repeat bg-right justify-center rounded-lg border border-gray-300 bg-white appearance-none text-black text-sm font-medium leading-[140%] tracking-[-0.28px] whitespace-nowrap md:w-[800px] md:h-[60px]"
         >
           <option value="" disabled className="text-gray-400">
             {t('country')}
