@@ -123,10 +123,8 @@ const PurchasePage: React.FC = () => {
       <CategoryTabs activeTab="purchased" />
 
       <div
-        className="overflow-y-auto"
+        className="overflow-y-auto h-[calc(100vh-190px)] pb-[24px] md:pb-[100px]"
         style={{
-          height: 'calc(100vh - 190px)',
-          paddingBottom: '24px',
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
         }}

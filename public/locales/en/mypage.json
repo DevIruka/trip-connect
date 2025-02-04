@@ -132,5 +132,6 @@
   "verify_locationA": "Please verify your country and region",
   "verify_locationB": "based on your current location.",
 
-  "current_location_prefix": "Your current location is set to "
+  "current_location_prefix": "Your current location is set to ",
+  "current_location_suffix":"."
 }

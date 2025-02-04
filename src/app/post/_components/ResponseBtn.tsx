@@ -20,7 +20,7 @@ const ResponseBtn = ({ post }: { post: Tables<'request_posts'> }) => {
 
   return (
     <>
-      <div className="bg-white z-50 fixed bottom-0 w-full max-w-[800px] md:flex md:justify-center">
+      <div className="bg-white z-50 fixed bottom-0 w-full max-w-[800px] md:flex md:justify-center md:bg-transparent md:mb-20">
         <div
           className={`blue-btn cursor-pointer md:w-[324px] md:h-16 md:shadow-[0px_4px_20px_0px_rgba(0,0,0,0.14)] md:rounded-[100px] md:justify-center md:items-center md:text-xl md:font-bold ${
             isExpired ? 'bg-Gray4Icon text-white cursor-default' : ''

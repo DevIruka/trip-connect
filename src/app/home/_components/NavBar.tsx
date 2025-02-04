@@ -59,10 +59,10 @@ const Navbar = ({
   return (
     <>
       <div className="grid sticky top-[0px] bg-white z-10 max-w-[1200px] mx-auto">
-        <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b border-[#dee1e5] px-5 md:px-9">
+        <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b border-[#dee1e5] px-5 md:px-9 md:border-0">
           <Tabs
             defaultValue={category}
-            className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex"
+            className="h-12 overflow-auto whitespace-nowrap menuscrollbar flex md:border-b md:border-[#dee1e5]"
           >
             <TabsList className="md:justify-between">
               <TabsTrigger value="all" onClick={() => changeCategory('all')}>

@@ -11,6 +11,7 @@ import PaymentOptions from './_components/PaymentOptions';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 import { Mobile } from '@/components/ui/Responsive';
+import BlueButton from '@/components/BlueBtn';
 
 const leftIcon = '/images/ic-left.svg';
 

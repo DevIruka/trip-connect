@@ -7,10 +7,12 @@ import { useUserStore } from '@/store/userStore';
 import BackButton from '@/app/post/_components/BackBtn';
 import LocationText from '../_components/locationText';
 import { supabase } from '@/utils/supabase/supabaseClient';
-import { useTranslation } from 'react-i18next'; // i18n 추가
+import { useTranslation } from 'react-i18next'; 
+import { useLang } from '@/store/languageStore';
 
 const CountryVerification = () => {
-  const { t } = useTranslation('mypage'); // 번역 함수 추가
+  const { lang } = useLang();
+  const { t } = useTranslation('mypage'); 
   const router = useRouter();
   const { user } = useUserStore();
   const [userLocation, setUserLocation] = useState<{
@@ -40,9 +42,9 @@ const CountryVerification = () => {
 
   const fetchLocationDetails = async (latitude: number, longitude: number) => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    const response = await fetch(
-      `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`,
-    );
+  const response = await fetch(
+    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}&language=${lang}`,
+  );
     const data = await response.json();
 
     if (data.status === 'OK') {

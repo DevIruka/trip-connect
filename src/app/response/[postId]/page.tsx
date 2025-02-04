@@ -9,22 +9,26 @@ import { useQuery } from '@tanstack/react-query';
 import { useUserStore } from '@/store/userStore';
 import { useTranslation } from 'react-i18next';
 import { Editor } from '@tiptap/core';
+import { getGPTTranslator } from '@/app/post/_hooks/getGPTTranslator';
 
 type RequestDetails = {
   title: string;
   content: string;
+  country_city: string;
+  users: { country: string };
 };
 
 const fetchRequestDetails = async (postId: string): Promise<RequestDetails> => {
   const { data, error } = await supabase
     .from('request_posts')
-    .select('title, content')
+    .select('title, content, country_city, users!inner(country)')
     .eq('id', postId)
     .single();
 
   if (error) throw error;
 
-  return data;
+  // TODO: 타입 강제 변경
+  return data as unknown as RequestDetails;
 };
 
 const ResponsePage = ({ params }: { params: { postId: string } }) => {
@@ -58,6 +62,19 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
     }
 
     try {
+      const response = await getGPTTranslator(
+        `${data.title}`,
+        request?.users.country,
+      );
+      const freeResponse = await getGPTTranslator(
+        `${data.freeContent}`,
+        request?.users['country'],
+      );
+      const contentResponse = await getGPTTranslator(
+        `${data.contentHtml}`,
+        request?.users['country'],
+      );
+
       const { error } = await supabase.from('response_posts').insert([
         {
           user_id: user.id,
@@ -65,6 +82,15 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
           title: data.title,
           content_html: data.contentHtml,
           free_content: data.freeContent,
+          translated_title: JSON.parse(
+            response?.choices[0]?.message?.content ?? '{}',
+          ).translated,
+          translated_free_content: JSON.parse(
+            freeResponse?.choices[0]?.message?.content ?? '{}',
+          ).translated,
+          translated_content: JSON.parse(
+            contentResponse?.choices[0]?.message?.content ?? '{}',
+          ).translated,
         },
       ]);
 

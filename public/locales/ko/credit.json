@@ -8,6 +8,7 @@
     "tossPay": "토스페이",
     "creditCard": "신용/체크카드",
     "comingSoon": "조금만 기다려주세요!",
-    "won": "원"
+    "won": "원",
+    "selectAmount" : "결제하기"
 }
   
