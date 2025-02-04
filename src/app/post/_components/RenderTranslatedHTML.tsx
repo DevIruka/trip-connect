@@ -1,6 +1,6 @@
 import React from 'react';
 import { parseHtmlToArray } from '../_utils/parseHtmlToArray';
-import { ContentRenderer } from './MapComponent';
+import { ContentRenderer } from './ContentRenderer';
 
 const RenderTranslatedHTML = ({
   data,
