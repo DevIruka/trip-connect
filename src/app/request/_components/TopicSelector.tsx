@@ -4,6 +4,8 @@ import React from 'react';
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form';
 import { FormInputs } from '../_types/form';
 import Icon from '@/components/Icons';
+import { useLang } from '@/store/languageStore';
+import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
 
 type Props = {
   topics: string[];
@@ -50,6 +52,8 @@ const TopicSelector: React.FC<Props> = ({
     ? watch('category') || selectedCategories
     : selectedCategories;
 
+  const { lang } = useLang();
+
   return (
     <div className="flex flex-wrap gap-[8px]">
       {topics.map((topic) => {
@@ -72,7 +76,9 @@ const TopicSelector: React.FC<Props> = ({
             }`}
           >
             <Icon type={iconType} size={16} />
-            <span>{topic}</span>
+            <span>
+              {lang === 'ko' ? topic : capitalizeFirstLetter(topicIcons[topic])}
+            </span>
           </button>
         );
       })}
