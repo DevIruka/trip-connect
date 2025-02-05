@@ -19,7 +19,8 @@ const markerIcon = '/images/ic-location.svg';
 const ResponsePostCard: React.FC<{
   post: ResponsePost;
   editable?: boolean;
-}> = ({ post, editable = true }) => {
+  isLangEffects?: boolean;
+}> = ({ post, editable = true, isLangEffects }) => {
   const { lang } = useLang();
   const { t } = useTranslation('mypage');
   const router = useRouter();
@@ -171,7 +172,8 @@ const ResponsePostCard: React.FC<{
   return (
     <div
       onClick={handleCardClick}
-className="flex flex-col items-start gap-3 md:gap-[17px] border-b border-gray-200 bg-white w-full p-6 md:w-[800px] md:h-[252px] md:px-[36px] md:py-[28px] md:mb-[10px] md:rounded-[12px] md:border md:border-[#DFE1E5] md:bg-white md:mx-auto last:mb-[100px]">
+      className="flex flex-col items-start gap-3 md:gap-[17px] border-b border-gray-200 bg-white w-full p-6 md:w-[800px] md:h-[252px] md:px-[36px] md:py-[28px] md:mb-[10px] md:rounded-[12px] md:border md:border-[#DFE1E5] md:bg-white md:mx-auto last:mb-[100px]"
+    >
       {/* 상단 - 위치와 카테고리 */}
       <div className="flex items-center justify-between w-full gap-2">
         <div className="flex items-center gap-2">
@@ -259,21 +261,55 @@ className="flex flex-col items-start gap-3 md:gap-[17px] border-b border-gray-20
         <div className="flex flex-col">
           <div className="mb-2">
             <p className="text-base md:text-[18px] font-bold text-black leading-6 md:h-[50px] line-clamp-2">
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: post.translated_title || '제목이 없습니다.',
-                }}
-              />
+              {isLangEffects ? (
+                lang === 'ko' ? (
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: post.translated_title || '제목이 없습니다.',
+                    }}
+                  />
+                ) : (
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: post.title || '제목이 없습니다.',
+                    }}
+                  />
+                )
+              ) : (
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: post.translated_title || '제목이 없습니다.',
+                  }}
+                />
+              )}
             </p>
           </div>
           <div>
             <p className="text-sm md:text-[16px] text-gray-500 md:h-[50px] line-clamp-2">
-              <RenderonlyTextHTML
-                data={{
-                  original: '',
-                  translated: post.translated_free_content,
-                }}
-              />
+              {isLangEffects ? (
+                lang === 'ko' ? (
+                  <RenderonlyTextHTML
+                    data={{
+                      original: '',
+                      translated: post.translated_free_content,
+                    }}
+                  />
+                ) : (
+                  <RenderonlyTextHTML
+                    data={{
+                      original: '',
+                      translated: post.free_content,
+                    }}
+                  />
+                )
+              ) : (
+                <RenderonlyTextHTML
+                  data={{
+                    original: '',
+                    translated: post.free_content,
+                  }}
+                />
+              )}
             </p>
           </div>
         </div>
