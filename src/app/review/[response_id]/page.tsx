@@ -27,8 +27,10 @@ const ReviewPage = () => {
 
   const { data: canWrite = false } = useQuery({
     queryKey: ['canWriteReview', response_id, user?.id],
-    queryFn: () =>
-      user ? canWriteReview(response_id as string, user.id) : false,
+    queryFn: async () => {
+      if (!user) return false;
+      return canWriteReview(response_id as string, user.id);
+    },
     enabled: !!response_id && !!user?.id,
   });
 
@@ -135,7 +137,12 @@ const ReviewPage = () => {
           setReview={setReview}
           onSubmit={() => {
             if (!review.trim()) {
-              alert('리뷰를 입력해주세요!');
+              alert('리뷰를 입력해주세요.');
+              return;
+            }
+
+            if (canWrite === false) {
+              alert('리뷰 작성 권한이 없습니다.');
               return;
             }
 
