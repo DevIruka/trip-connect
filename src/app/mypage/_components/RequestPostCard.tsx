@@ -71,7 +71,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
 
   const handleDelete = async () => {
     if (responseCount > 0) {
-      setAlertMessage(t('cannot_delete_with_comments')); // "댓글이 달린 게시물은 삭제할 수 없습니다."
+      setAlertMessage(t('cannot_delete_with_comments')); 
       setShowAlert(true);
       setTimeout(() => setShowAlert(false), 2000);
     } else {
@@ -117,8 +117,15 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
                 {lang === 'en'
                   ? countryNameMapping[
                       JSON.parse(post.country_city || '{}').country
-                    ] || 'No Location'
-                  : JSON.parse(post.country_city || '{}').country ||
+                    ] ||
+                    JSON.parse(post.country_city || '{}').country ||
+                    'No Location'
+                  : Object.keys(countryNameMapping).find(
+                      (key) =>
+                        countryNameMapping[key] ===
+                        JSON.parse(post.country_city || '{}').country,
+                    ) ||
+                    JSON.parse(post.country_city || '{}').country ||
                     '위치 없음'}
               </span>
             </div>

@@ -204,6 +204,8 @@ const MyPage = () => {
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  position: 'relative',
+                  top: '-3px',
                 }}
               >
                 {userProfile.nickname}
@@ -214,7 +216,7 @@ const MyPage = () => {
                     width={16}
                     height={16}
                     alt="badge"
-                    className="ml-[4px]"
+                    className="ml-[4px] relative top-[1px]"
                   />
                 )}
               </h2>

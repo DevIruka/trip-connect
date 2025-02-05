@@ -1,11 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/utils/supabase/supabaseClient';
 import { useUserStore } from '@/store/userStore';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
+
 const lefticon = '/images/ic-left.svg';
 
 type Props = {
@@ -26,44 +27,39 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
 
   useEffect(() => {
     const fetchCounts = async () => {
-      if (!user?.id) {
-        console.error(t('noUserId'));
-        return;
-      }
+      if (!user?.id) return;
 
       try {
-        const { count: requestCount, error: requestError } = await supabase
-          .from('request_posts')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id);
+        const [
+          { count: requestCount, error: requestError },
+          { count: responseCount, error: responseError },
+          { count: purchasedCount, error: purchasedError },
+          { count: bookmarkCount, error: bookmarkError },
+        ] = await Promise.all([
+          supabase
+            .from('request_posts')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id),
+          supabase
+            .from('response_posts')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id),
+          supabase
+            .from('purchased_users')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id),
+          supabase
+            .from('bookmarks')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id),
+        ]);
 
-        if (requestError) throw requestError;
-
-        const { count: responseCount, error: responseError } = await supabase
-          .from('response_posts')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id);
-
-        if (responseError) throw responseError;
-
-        const totalWrittenCount = (requestCount || 0) + (responseCount || 0);
-
-        const { count: purchasedCount, error: purchasedError } = await supabase
-          .from('purchased_users')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id);
-
-        if (purchasedError) throw purchasedError;
-
-        const { count: bookmarkCount, error: bookmarkError } = await supabase
-          .from('bookmarks')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id);
-
-        if (bookmarkError) throw bookmarkError;
+        if (requestError || responseError || purchasedError || bookmarkError) {
+          throw new Error('Error fetching counts');
+        }
 
         setCounts({
-          written: totalWrittenCount,
+          written: (requestCount || 0) + (responseCount || 0),
           purchased: purchasedCount || 0,
           bookmark: bookmarkCount || 0,
         });
@@ -75,21 +71,32 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
     fetchCounts();
   }, [user?.id, t]);
 
-  const tabs = [
-    { key: 'written', label: t('written'), link: '/mypage/filters/all' },
-    { key: 'purchased', label: t('purchased'), link: '/mypage/purchase' },
-    { key: 'bookmark', label: t('bookmark'), link: '/mypage/bookmark' },
-  ];
+  // useMemo로 tabs 배열을 메모이제이션
+  const tabs = useMemo(
+    () => [
+      { key: 'written', label: t('written'), link: '/mypage/filters/all' },
+      { key: 'purchased', label: t('purchased'), link: '/mypage/purchase' },
+      { key: 'bookmark', label: t('bookmark'), link: '/mypage/bookmark' },
+    ],
+    [t],
+  );
+
+  // useCallback으로 클릭 핸들러 메모이제이션
+  const handleTabClick = useCallback(
+    (link: string) => {
+      router.push(link);
+    },
+    [router],
+  );
 
   return (
     <div className="w-full bg-white md:max-w-[872px] mx-auto md:px-[36px]">
       {/* 헤더 섹션 */}
-
       <button
         onClick={() => router.push('/mypage')}
         className="flex items-center justify-center pt-4 md:hidden"
       >
-        <Image src={lefticon} width={24} height={24} alt={t('back')} />
+        <Image src={lefticon} width={24} height={24} alt={t('back')} priority />
       </button>
 
       {/* 프로필 섹션 */}
@@ -104,7 +111,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
         {tabs.map((tab) => (
           <button
             key={tab.key}
-            onClick={() => router.push(tab.link)}
+            onClick={() => handleTabClick(tab.link)}
             className={`flex-1 text-center py-2 relative ${
               activeTab === tab.key
                 ? 'text-black font-bold'
