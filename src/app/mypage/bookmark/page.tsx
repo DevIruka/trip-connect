@@ -136,7 +136,7 @@ const BookmarkPage = () => {
     <div className="px-5 space-y-4 min-h-[calc(100vh-84px)]">
       <CategoryTabs activeTab="bookmark" />
 
-      <div className="overflow-y-auto h-[calc(100vh-130px)] pb-[50px] md:pb-[140px] scrollbar-hide">
+      <div className="overflow-y-auto h-[calc(100vh-140px)] pb-[50px] md:pb-[140px] scrollbar-hide">
         <style jsx>{`
           div::-webkit-scrollbar {
             display: none;
@@ -159,6 +159,7 @@ const BookmarkPage = () => {
                   borderBottom: '1px solid #F4F4F4',
                   background: '#FFF',
                   cursor: 'pointer',
+                  minHeight: '252px',
                 }}
               >
                 <div className="flex flex-row items-center gap-2 md:mb-[8px]">
@@ -170,6 +171,7 @@ const BookmarkPage = () => {
                       alt="Location"
                       width={12}
                       height={12}
+                      priority
                     />
                     {lang === 'en'
                       ? countryNameMapping[
@@ -189,7 +191,7 @@ const BookmarkPage = () => {
                   ))}
                 </div>
 
-                <div className="flex items-start gap-[6px]">
+                <div className="flex items-start gap-[6px] min-h-[50px]">
                   <p className="text-[16px] font-[600] text-[#0582FF] leading-[22.4px]">
                     Q.
                   </p>
@@ -225,7 +227,7 @@ const BookmarkPage = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-[12px] md:text-[14px] text-[#797C80] w-full">
+                <div className="flex items-center justify-between text-[12px] md:text-[14px] text-[#797C80] w-full ">
                   <div className="flex items-center gap-[6px]">
                     <div className="flex items-center gap-[6px]">
                       <Image
@@ -267,6 +269,8 @@ const BookmarkPage = () => {
                       alt={t('bookmarkIconAlt')}
                       width={24}
                       height={24}
+                      placeholder="blur"
+                      blurDataURL="/images/blur-placeholder.svg"
                     />
                   </button>
                 </div>

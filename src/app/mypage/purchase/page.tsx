@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useUserStore } from '@/store/userStore';
 import { ResponsePost } from '../_type/type';
-import ResponsePostCard from '../_components/ResponsePostCard';
+
 import CategoryTabs from '../_components/CategoryTabs';
 import {
   convertTopicsToKorean,
@@ -12,6 +12,7 @@ import {
   topicMapping,
 } from '@/utils/topics';
 import { supabase } from '@/utils/supabase/supabaseClient';
+import ResponsePostCard from '../_components/ResponsePostCard';
 
 const PurchasePage: React.FC = () => {
   const { user } = useUserStore();
@@ -136,9 +137,8 @@ const PurchasePage: React.FC = () => {
             display: none;
           }
         `}</style>
-
         {purchasedPosts.length > 0 ? (
-          <ul className="space-y-4">
+          <ul>
             {purchasedPosts.map((post) => (
               <ResponsePostCard
                 key={post.id}

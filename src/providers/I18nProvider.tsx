@@ -11,17 +11,23 @@ export default function I18nProvider({ children }: { children: ReactNode }) {
   const { setLang } = useLang();
 
   useEffect(() => {
+    const getCookie = (name: string) => {
+      const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+      return match ? match[2] : null;
+    };
+
+    if (getCookie('lang')) return;
     const fetchCountry = async () => {
       try {
-        const response = await fetch('http://ip-api.com/json/');
+        const response = await fetch('https://ipwho.is/');
         const data = await response.json();
 
-        if (data.countryCode !== 'KR') {
+        if (data.country_code !== 'KR') {
           const expires = new Date();
           expires.setFullYear(expires.getFullYear() + 1);
           document.cookie = `lang=${'en'}; path=/; expires=${expires.toUTCString()}; Secure; SameSite=Strict`;
           setLang('en');
-          route.refresh();
+          setTimeout(() => route.refresh(), 100);
         }
       } catch (error) {
         console.error('국가 정보를 가져오는 중 오류 발생:', error);

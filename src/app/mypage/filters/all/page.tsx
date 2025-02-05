@@ -25,52 +25,48 @@ const WrittenPostsPage: React.FC = () => {
     'all' | 'question' | 'answer'
   >('all');
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      if (!user?.id) {
-        setError(t('noUser'));
-        setLoading(false);
-        return;
-      }
+useEffect(() => {
+  if (!user?.id) return; 
 
-      try {
-        const data = await fetchFilterPost(activeFilter, user.id);
+  const fetchPosts = async () => {
+    try {
+      const data = await fetchFilterPost(activeFilter, user.id);
 
-        const processedData = data.map((post) => {
-          if ('category' in post && Array.isArray(post.category)) {
-            const filteredCategories = post.category.filter(
-              (cat): cat is EnglishCategory =>
-                Object.values<EnglishCategory | KoreanCategory>(
-                  topicMapping,
-                ).includes(cat),
-            );
+      const processedData = data.map((post) => {
+        if ('category' in post && Array.isArray(post.category)) {
+          const filteredCategories = post.category.filter(
+            (cat): cat is EnglishCategory =>
+              Object.values<EnglishCategory | KoreanCategory>(
+                topicMapping,
+              ).includes(cat),
+          );
 
-            const koreanCategories = convertTopicsToKorean(
-              filteredCategories,
-            ) as KoreanCategory[];
-            return {
-              ...post,
-              category: koreanCategories,
-            };
-          }
-          return post;
-        });
+          const koreanCategories = convertTopicsToKorean(
+            filteredCategories,
+          ) as KoreanCategory[];
+          return { ...post, category: koreanCategories };
+        }
+        return post;
+      });
 
-        setPosts(processedData);
-      } catch (err) {
-        console.error(t('fetchError'), err);
-        setError(t('tryAgain'));
-      } finally {
-        setLoading(false);
-      }
-    };
+      setPosts(processedData);
+    } catch (err) {
+      console.error(t('fetchError'), err);
+      setError(t('tryAgain'));
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPosts();
-  }, [user?.id, activeFilter, t]);
+  fetchPosts();
+}, [user?.id, activeFilter, t]);
 
-  if (loading) return <div>loaing...</div>;
-  if (error) return <div>error</div>;
-
+if (!user?.id || loading) {
+  return <div>로딩 중...</div>; 
+}
+if (error) {
+  return <div>{error}</div>; 
+}
   return (
     <div className="flex flex-col px-5 space-y-4 min-h-[calc(100vh-84px)]">
       <CategoryTabs activeTab="written" />

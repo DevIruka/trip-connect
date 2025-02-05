@@ -285,7 +285,7 @@ const ResponsePostCard: React.FC<{
             </p>
           </div>
           <div>
-            <p className="text-sm md:text-[16px] text-gray-500 md:h-[50px] line-clamp-2">
+            <div className="max-h-[38.5px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2 md:h-[38px]">
               {isLangEffects ? (
                 lang === 'ko' ? (
                   <RenderonlyTextHTML
@@ -310,7 +310,7 @@ const ResponsePostCard: React.FC<{
                   }}
                 />
               )}
-            </p>
+            </div>
           </div>
         </div>
       </div>
