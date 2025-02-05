@@ -2,20 +2,32 @@
 
 ## 📖 목차
 
-<img width="926" alt="Image" src="https://github.com/user-attachments/assets/32a23251-d5ff-4745-a5b6-ce5f93cbda01" />
+<img  width="926"  alt="Image"  src="https://github.com/user-attachments/assets/32a23251-d5ff-4745-a5b6-ce5f93cbda01"  />
 
 1. [프로젝트 소개](#프로젝트-소개)
+
 2. [팀소개](#팀소개)
+
 3. [기획 의도](#기획-의도)
+
 4. [주요기능](#주요기능)
+
 5. [적용 기술 및 기술적 의사결정](#적용-기술-및-기술적-의사결정)
+
 6. [개발기간](#개발기간)
+
 7. [기술스택](#기술스택)
+
 8. [와이어프레임](#와이어프레임)
+
 9. [ERD](#ERD)
+
 10. [프로젝트 파일 구조](#프로젝트-파일-구조)
+
 11. [Trouble Shooting](#trouble-shooting)
+
 12. [최적화](#최적화)
+
 13. [User Test](#User-Test)
 
 ## 👨‍🏫 프로젝트 소개
@@ -27,6 +39,7 @@
 ## 팀소개
 
 - 👑 악랄한 팀장 **박민준**
+
 - 👨‍💻 내 할일은 다 하는 팀원 **문다슬**
 
 ## 기획 의도
@@ -44,15 +57,19 @@
 - 수파베이스의 range API, useInfiniteQuery의 fetchNextPage로 더보기 기능을 구현하였습니다.
 
 <details>
+
 <summary>미리보기</summary>
-<div markdown="1">
+
+<div  markdown="1">
 
 - 홈화면
 
-  <img width="926" alt="Image" src="https://github.com/user-attachments/assets/32a23251-d5ff-4745-a5b6-ce5f93cbda01" />
+<img  width="926"  alt="Image"  src="https://github.com/user-attachments/assets/32a23251-d5ff-4745-a5b6-ce5f93cbda01"  />
 
 <br>
+
 </div>
+
 </details>
 
 ### 📝게시글 상세
@@ -62,6 +79,7 @@
 - 나도 궁금해요 기능에 optimistic update를 적용하여 컬러와 숫자가 바로 변경되도록 하였습니다.
 
 - 답변글 구매 및 크레딧 차감 로직을 구현하였습니다. (답변글 작성자는 바로 보기)
+
 - 북마크, 링크 공유 기능이 가능합니다.
 
 - 기한이 지나면 답변하기 버튼이 disabled 됩니다.
@@ -69,15 +87,19 @@
 - 셀렉트 박스 클릭 시 수정 삭제 기능이 구현되어 있습니다. (작성자가 아닐 시 신고하기)
 
 <details>
+
 <summary>미리보기</summary>
-<div markdown="1">
+
+<div  markdown="1">
 
 ![Image](https://github.com/user-attachments/assets/f0af8836-5f08-4f9e-a82d-bbe578cd47bf)
 
 ![Image](https://github.com/user-attachments/assets/cfdbedbd-4335-4c0d-b3b5-f596d07628f4)
 
 <br>
+
 </div>
+
 </details>
 
 ### 🖋 질문하기
@@ -89,13 +111,17 @@
 - 수정시 업로드한 질문글에 답변이 1개라도 달릴 시엔 기한만 수정 가능하도록 disabled 처리 답변이 없으면 전체 수정할 수 있습니다.
 
 <details>
-<summary>미리보기</summary>
-<div markdown="1">
 
-<img width="682" alt="Image" src="https://github.com/user-attachments/assets/eb014c76-a6d8-46c0-869c-542208c291e2" />
+<summary>미리보기</summary>
+
+<div  markdown="1">
+
+<img  width="682"  alt="Image"  src="https://github.com/user-attachments/assets/eb014c76-a6d8-46c0-869c-542208c291e2"  />
 
 <br>
+
 </div>
+
 </details>
 
 ### 🖋 답변하기
@@ -107,18 +133,23 @@
 - 구글맵스에서 장소를 검색하여 글에 추가하여 정확한 여행 정보를 전달할 수 있습니다.
 
 <details>
+
 <summary>미리보기</summary>
-<div markdown="1">
 
-<img width="650" alt="Image" src="https://github.com/user-attachments/assets/c26db8b6-08ee-47d7-bb80-c530c89d6be2" />
+<div  markdown="1">
 
-<img width="281" alt="Image" src="https://github.com/user-attachments/assets/a44dfb94-5d4f-4fdc-9fe6-8c3a400b1bb8" />
+<img  width="650"  alt="Image"  src="https://github.com/user-attachments/assets/c26db8b6-08ee-47d7-bb80-c530c89d6be2"  />
 
-모바일에서 하단 메뉴바가 키보드 toggle 시 키보드 높이를 반영하여 유저 사용의  
+<img  width="281"  alt="Image"  src="https://github.com/user-attachments/assets/a44dfb94-5d4f-4fdc-9fe6-8c3a400b1bb8"  />
+
+모바일에서 하단 메뉴바가 키보드 toggle 시 키보드 높이를 반영하여 유저 사용의
+
 편의성을 구현하였습니다.
 
 <br>
+
 </div>
+
 </details>
 
 ### 🔐로그인/회원가입
@@ -126,20 +157,25 @@
 - 로그인이 필요한 기능 클릭 시, 로그인이 필요하다는 모달 표시. 그 후, 로그인 하기 버튼을 누르면 여러 로그인 방법들이 제시됩니다.
 
 - 지원하는 로그인 방식은 세계적으로 많이 쓰이는 이메일, 구글 로그인과,
-  구글 로그인이 있다.
+
+구글 로그인이 있다.
 
 - 카카오, 구글을 이용해 로그인 시, 구글/카카오에서 사용하는 이름이 그대로 닉네임으로 정해집니다.
 
 <details>
+
 <summary>미리보기</summary>
-<div markdown="1">
 
-<img width="646" alt="Image" src="https://github.com/user-attachments/assets/33d4ab2b-276d-49b5-83f6-601a9722ddfd" />
+<div  markdown="1">
 
-<img width="512" alt="Image" src="https://github.com/user-attachments/assets/1eca323a-96b4-4f6f-91b6-ce9c599a8513" />
+<img  width="646"  alt="Image"  src="https://github.com/user-attachments/assets/33d4ab2b-276d-49b5-83f6-601a9722ddfd"  />
+
+<img  width="512"  alt="Image"  src="https://github.com/user-attachments/assets/1eca323a-96b4-4f6f-91b6-ce9c599a8513"  />
 
 <br>
+
 </div>
+
 </details>
 
 ### 🔍 검색
@@ -149,15 +185,19 @@
 - 최근 검색어는 총 10개까지 저장되며, 필요에 따라 삭제할 수도 있다.
 
 <details>
+
 <summary>미리보기</summary>
-<div markdown="1">
 
-<img width="888" alt="Image" src="https://github.com/user-attachments/assets/d2202daf-987a-4aa7-b188-c4d0e814bf8c" />
+<div  markdown="1">
 
-<img width="887" alt="Image" src="https://github.com/user-attachments/assets/74193d3b-be85-4cc1-bfb4-d1847e3f09a9" />
+<img  width="888"  alt="Image"  src="https://github.com/user-attachments/assets/d2202daf-987a-4aa7-b188-c4d0e814bf8c"  />
+
+<img  width="887"  alt="Image"  src="https://github.com/user-attachments/assets/74193d3b-be85-4cc1-bfb4-d1847e3f09a9"  />
 
 <br>
+
 </div>
+
 </details>
 
 ### 😃 마이페이지
@@ -171,21 +211,29 @@
 - 토스페이먼츠 API를 사용하여 가상결제로 크레딧을 충전하고 답변을 보는데 사용할 수 있습니다.
 
 <details>
+
 <summary>미리보기</summary>
-<div markdown="1">
+
+<div  markdown="1">
 
 - 국가인증
-  <img width="675" alt="Image" src="https://github.com/user-attachments/assets/66d54017-7c95-4118-ac08-42a886badbe4" />
+
+<img  width="675"  alt="Image"  src="https://github.com/user-attachments/assets/66d54017-7c95-4118-ac08-42a886badbe4"  />
 
 - 언어 설정
-  <img width="671" alt="Image" src="https://github.com/user-attachments/assets/dbd3a1f4-f330-44d9-9445-d63f003bd67e" />
+
+<img  width="671"  alt="Image"  src="https://github.com/user-attachments/assets/dbd3a1f4-f330-44d9-9445-d63f003bd67e"  />
 
 - 크레딧
-  <img width="647" alt="Image" src="https://github.com/user-attachments/assets/1c07a7bf-9a17-45b5-b4f7-060293ad3642" />
-  <img width="671" alt="Image" src="https://github.com/user-attachments/assets/c4a123eb-cc57-4295-9842-203fe655e715" />
+
+<img  width="647"  alt="Image"  src="https://github.com/user-attachments/assets/1c07a7bf-9a17-45b5-b4f7-060293ad3642"  />
+
+<img  width="671"  alt="Image"  src="https://github.com/user-attachments/assets/c4a123eb-cc57-4295-9842-203fe655e715"  />
 
 <br>
+
 </div>
+
 </details>
 
 ### ⭐ 리뷰
@@ -193,13 +241,17 @@
 - 실제 구매한 사용자만 쓸 수 있는 신뢰가능한 리뷰를 통해 정보의 이해도를 높일 수 있습니다.
 
 <details>
-<summary>미리보기</summary>
-<div markdown="1">
 
-<img width="572" alt="Image" src="https://github.com/user-attachments/assets/c80af778-2603-44b0-bebc-16d6e129bb1e" />
+<summary>미리보기</summary>
+
+<div  markdown="1">
+
+<img  width="572"  alt="Image"  src="https://github.com/user-attachments/assets/c80af778-2603-44b0-bebc-16d6e129bb1e"  />
 
 <br>
+
 </div>
+
 </details>
 
 ## 적용 기술 및 기술적 의사결정
@@ -207,7 +259,9 @@
 ### OpenAi Api
 
 1. OpenAI Chat Playground에서 프롬프터 테스트를 해본 후, text와 nation을 인자로 받는 getGPTTranslator 함수를 만들었습니다.
+
 2. 질문글 번역은 여행지 국가의 언어로, 답변글 번역은 질문자의 국가의 언어로 번역하여 데이터베이스에 저장하였습니다.
+
 3. 유저의 위치 또는 번역/원문보기 버튼에 따라 원문/번역문을 볼 수 있습니다.
 
 ![Image](https://github.com/user-attachments/assets/21085733-5cd8-436e-92a6-edc4c0111641)
@@ -227,7 +281,8 @@
 1. supabase의 signInWithOAuth API를 사용하여 googleLogin, kakaoLogin 커스텀훅을 만들었습니다.
 
 2. 트리거 설정: 유저가 회원가입을 하고 auth.users 테이블에 새로운 행이 추가될 때 자동으로 public.users 테이블에 해당 유저 정보를 추가하기 위해 설정합니다
-   ![Image](https://github.com/user-attachments/assets/100d6bb0-ac13-4a4d-9850-12333befc8b4)
+
+![Image](https://github.com/user-attachments/assets/100d6bb0-ac13-4a4d-9850-12333befc8b4)
 
 ![Image](https://github.com/user-attachments/assets/32618dc2-abd4-4509-b314-0fa66783f591)
 
@@ -254,8 +309,10 @@
 2. 하지만 프로바이더를 이용한 방식은 ssr 및 ssg에선 사용이 불가능합니다. useTranslation 훅은 클라이언트 컴포넌트에서만 사용이 가능하기 때문입니다.
 
 3. 따라서, 서버에서 사용할 수 있도록, 서버 측에서도 config를 만들었다. 이렇게 하면 inittranstation을 이용하여 서버 컴포넌트 상에서도 i18next를 이용하여 번역 데이터를 관리할 수 있습니다.
-   ![Image](https://github.com/user-attachments/assets/711b71a9-1107-4923-b537-3e9edf2575cb)
-   <img width="778" alt="Image" src="https://github.com/user-attachments/assets/c866fb41-7474-44ce-a677-e0cda3c7bd6c" />
+
+![Image](https://github.com/user-attachments/assets/711b71a9-1107-4923-b537-3e9edf2575cb)
+
+<img  width="778"  alt="Image"  src="https://github.com/user-attachments/assets/c866fb41-7474-44ce-a677-e0cda3c7bd6c"  />
 
 ### Sentry
 
@@ -270,10 +327,13 @@ UT 전 주요 로직에 sentry.captureException을 주요 로직(크레딧 차�
 1. 게시물의 질문-답변 형식
 
 - 문제: 게시글 작성 시 사용할 에디터 라이브러리에 구글 맵 API를 삽입해야 했음
+
 - 해결책 후보
 
 1. TipTap 장점 : 갖추고 있는 플러그인 종류가 다양하고 커스터마이징이 용이함. 커뮤니티에서 다른 사용자가 만든 플러그인을 가져올 수 있음 단점 : 테일윈드가 적용 안된다는 사용자들이 은근하게 있음
+
 2. Lexical 장점 : 커스터마이징과 경량화 면에서 훌륭함. 웬만한 플러그인은 구축하고 있음. DOM조작이 최적화돼서 셋 중 제일 성능이 빠름. 단점 : 플러그인 생태계가 처참. 한마디로 추가 기능을 구현할 때 개발자에게 더 많은 작업량을 요구함
+
 3. Slate.js 장점 : 완전한 커스터마이징이 가능함. 단점 : 장점이 단점. 기본 에디터 기능도 제공 안됨
 
 - 최종 선택: 팁탭 에디터-구글 맵 API를 사용할 수 있고 자유도가 적당해 러닝 커브가 비교적 낮음
@@ -285,6 +345,7 @@ UT 전 주요 로직에 sentry.captureException을 주요 로직(크레딧 차�
 - 해결책 후보
 
 1. Google Pay: 많은 국가를 지원하지만, 국내에서 많이 사용하지 않음
+
 2. 토스 페이먼츠: 최근 국내 많은 기업들이 실사용, 국내에 초점
 
 - 최종 선택: 토스 페이먼츠-토스에서 페이팔 해외 결제 시스템 지원함
@@ -296,7 +357,9 @@ UT 전 주요 로직에 sentry.captureException을 주요 로직(크레딧 차�
 - 해결책 후보
 
 1. 챗지피티: 문맥 이해가 필요한 자연어 처리, 대화형 응답 생성/사용량 제한과 가격 책정 구조가 명확
+
 2. perplexity: 대규모 언어 모델을 기반/사용자 응답의 신뢰성을 보장하는 프로젝트에 유리
+
 3. DeepL: ai 활용하지 않고 번역 기능만 필요한 간단한 서비스에 적합
 
 - 최종 선택: 챗지피티-높은 번역 퀄리티/간단한 REST API를 통해 통합 가능, 플레이그라운드로 프로토타이핑 지원하여 개발자 친화적
@@ -310,12 +373,15 @@ UT 전 주요 로직에 sentry.captureException을 주요 로직(크레딧 차�
 ### ✔️ Language
 
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=black)
+
 ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+
 ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 
 ### ✔️ Version Control
 
 ![Git](https://img.shields.io/badge/GIT-E44C30?style=for-the-badge&logo=git&logoColor=white)
+
 ![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
 
 ### ✔️ IDE
@@ -336,133 +402,257 @@ UT 전 주요 로직에 sentry.captureException을 주요 로직(크레딧 차�
 
 ## ERD
 
-<img width="1451" alt="Image" src="https://github.com/user-attachments/assets/9cf350ad-7af6-4a21-9bf7-2bb8b37bc859" />
+<img  width="1451"  alt="Image"  src="https://github.com/user-attachments/assets/9cf350ad-7af6-4a21-9bf7-2bb8b37bc859"  />
 
 ## 프로젝트 파일 구조
 
+```
 ┣ 📂public
+
 ┃ ┣ 📂image
+
 ┃ ┣ 📂locales
+
 ┃ ┃ ┣ 📂en
+
 ┃ ┃ ┗ 📂ko
+
 ┣ 📂src
+
 ┃ ┣ 📂app
+
 ┃ ┃ ┣ 📂api
+
 ┃ ┃ ┃ ┣ 📂response
+
 ┃ ┃ ┃ ┗ 📂sentry-example-api
+
 ┃ ┃ ┣ 📂auth
+
 ┃ ┃ ┃ ┣ 📂callback
+
 ┃ ┃ ┣ 📂fonts
+
 ┃ ┃ ┣ 📂home
+
 ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┣ 📂_types
+
 ┃ ┃ ┣ 📂i18n
+
 ┃ ┃ ┣ 📂login
+
 ┃ ┃ ┃ ┣ 📂_auth
+
 ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┣ 📂mypage
+
 ┃ ┃ ┃ ┣ 📂bookmark
+
 ┃ ┃ ┃ ┣ 📂credit
+
 ┃ ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┃ ┣ 📂_hooks
+
 ┃ ┃ ┃ ┃ ┣ 📂_types
+
 ┃ ┃ ┃ ┣ 📂filters
+
 ┃ ┃ ┃ ┃ ┗ 📂all
+
 ┃ ┃ ┃ ┣ 📂language
+
 ┃ ┃ ┃ ┣ 📂purchase
+
 ┃ ┃ ┃ ┣ 📂seller-auth
+
 ┃ ┃ ┃ ┃ ┣ 📂country-verification
+
 ┃ ┃ ┃ ┃ ┣ 📂identity-verification
+
 ┃ ┃ ┃ ┃ ┃ ┣ 📂codepage
+
 ┃ ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┣ 📂_type
+
 ┃ ┃ ┃ ┣ 📂_util
+
 ┃ ┃ ┣ 📂post
+
 ┃ ┃ ┃ ┣ 📂[id]
+
 ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┣ 📂_hooks
+
 ┃ ┃ ┃ ┗ 📂_types
+
 ┃ ┃ ┣ 📂request
+
 ┃ ┃ ┃ ┣ 📂_api
+
 ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┃ ┣ 📂icons
+
 ┃ ┃ ┃ ┣ 📂_hooks
+
 ┃ ┃ ┃ ┣ 📂_types
+
 ┃ ┃ ┣ 📂request-edit
+
 ┃ ┃ ┃ ┗ 📂[request_id]
+
 ┃ ┃ ┣ 📂response
+
 ┃ ┃ ┃ ┣ 📂[postId]
+
 ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┣ 📂_icons
+
 ┃ ┃ ┃ ┗ 📂_types
+
 ┃ ┃ ┣ 📂response-edit
+
 ┃ ┃ ┃ ┗ 📂[responseId]
+
 ┃ ┃ ┣ 📂response-list
+
 ┃ ┃ ┣ 📂review
+
 ┃ ┃ ┃ ┗ 📂[response_id]
+
 ┃ ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┃ ┣ 📂_utils
+
 ┃ ┃ ┣ 📂search
+
 ┃ ┃ ┃ ┣ 📂[id]
+
 ┃ ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┃ ┣ 📂_types
+
 ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┣ 📂_hooks
+
 ┃ ┃ ┃ ┣ 📂_utils
+
 ┃ ┃ ┣ 📂sentry-example-page
+
 ┃ ┃ ┣ 📂signup
+
 ┃ ┃ ┣ 📂user
+
 ┃ ┃ ┃ ┣ 📂[id]
+
 ┃ ┃ ┃ ┣ 📂_components
+
 ┃ ┃ ┃ ┗ 📂_types
+
 ┃ ┣ 📂components
+
 ┃ ┃ ┣ 📂ui
+
 ┃ ┣ 📂config
+
 ┃ ┃ ┣ 📂server
+
 ┃ ┣ 📂constants
+
 ┃ ┣ 📂data
+
 ┃ ┃ ┣ 📂images
+
 ┃ ┣ 📂hook
+
 ┃ ┃ ┣ 📂home
+
 ┃ ┣ 📂lib
+
 ┃ ┣ 📂providers
+
 ┃ ┣ 📂store
+
 ┃ ┣ 📂types
+
 ┃ ┣ 📂utils
+
 ┃ ┃ ┣ 📂api
+
 ┃ ┃ ┃ ┣ 📂supabase_api
+
 ┃ ┃ ┃ ┃ ┣ 📂home
+
 ┃ ┃ ┃ ┃ ┣ 📂post
+
 ┃ ┃ ┃ ┃ ┣ 📂search
+
 ┃ ┃ ┃ ┃ ┣ 📂user
+
 ┃ ┃ ┃ ┗ 📂tanstack
+
 ┃ ┃ ┃ ┃ ┣ 📂home
+
 ┃ ┃ ┃ ┃ ┣ 📂search
+
 ┃ ┃ ┃ ┃ ┗ 📂user
+
 ┃ ┃ ┣ 📂supabase
+
 ┣ 📂supabase
+
 ┃ ┣ 📂.temp
+
 ┣ 📜.env.local
+
 ┣ 📜.env.sentry-build-plugin
+
 ┣ 📜.eslintrc.json
+
 ┣ 📜.gitignore
+
 ┣ 📜.prettierrc
+
 ┣ 📜components.json
+
 ┣ 📜database.types.ts
+
 ┣ 📜i18nConfig.js
+
 ┣ 📜next-env.d.ts
+
 ┣ 📜next.config.mjs
+
 ┣ 📜package.json
+
 ┣ 📜postcss.config.mjs
+
 ┣ 📜pull_request_template.md
+
 ┣ 📜README.md
+
 ┣ 📜sentry.client.config.ts
+
 ┣ 📜sentry.edge.config.ts
+
 ┣ 📜sentry.server.config.ts
+
 ┣ 📜tailwind.config.ts
+
 ┣ 📜tsconfig.json
+
 ┗ 📜yarn.lock
+```
 
 ## Trouble Shooting
 

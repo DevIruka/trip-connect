@@ -12,8 +12,8 @@
   "q&a": "Q&A",
   "q": "Question",
   "a": "Answer",
-  "writer": "Writer",
-  "totalAnswers": " Responses",
+  "writer": "writer",
+  "totalAnswers": " responses",
   "expired": "Expired",
   "reply": "replied"
 }
