@@ -27,8 +27,10 @@ const ReviewPage = () => {
 
   const { data: canWrite = false } = useQuery({
     queryKey: ['canWriteReview', response_id, user?.id],
-    queryFn: () =>
-      user ? canWriteReview(response_id as string, user.id) : false,
+    queryFn: async () => {
+      if (!user) return false;
+      return canWriteReview(response_id as string, user.id);
+    },
     enabled: !!response_id && !!user?.id,
   });
 
@@ -101,7 +103,7 @@ const ReviewPage = () => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col bg-white">
+    <div className="w-full h-screen flex flex-col bg-white overflow-hidden">
       <div className="w-full max-w-none mx-auto md:w-[800px] px-4 md:px-0 flex flex-col flex-grow">
         <div className="md:hidden">
           <ReviewHeader onBack={() => router.back()} />
@@ -120,7 +122,7 @@ const ReviewPage = () => {
           </>
         )}
 
-        <div className="flex-grow min-h-0 overflow-auto">
+        <div className="flex-grow h-full min-h-0 overflow-y-auto max-h-[calc(100vh-160px)] pb-[300px]">
           <ReviewList
             reviews={reviews}
             isLoading={isLoading}
@@ -135,7 +137,12 @@ const ReviewPage = () => {
           setReview={setReview}
           onSubmit={() => {
             if (!review.trim()) {
-              alert('리뷰를 입력해주세요!');
+              alert('리뷰를 입력해주세요.');
+              return;
+            }
+
+            if (canWrite === false) {
+              alert('리뷰 작성 권한이 없습니다.');
               return;
             }
 
