@@ -171,7 +171,8 @@ const ResponsePostCard: React.FC<{
   return (
     <div
       onClick={handleCardClick}
-className="flex flex-col items-start gap-3 md:gap-[17px] border-b border-gray-200 bg-white w-full p-6 md:w-[800px] md:h-[252px] md:px-[36px] md:py-[28px] md:mb-[10px] md:rounded-[12px] md:border md:border-[#DFE1E5] md:bg-white md:mx-auto last:mb-[100px]">
+      className="flex flex-col items-start gap-3 md:gap-[17px] border-b border-gray-200 bg-white w-full p-6 md:w-[800px] md:h-[252px] md:px-[36px] md:py-[28px] md:mb-[10px] md:rounded-[12px] md:border md:border-[#DFE1E5] md:bg-white md:mx-auto last:mb-[100px]"
+    >
       {/* 상단 - 위치와 카테고리 */}
       <div className="flex items-center justify-between w-full gap-2">
         <div className="flex items-center gap-2">
@@ -258,7 +259,7 @@ className="flex flex-col items-start gap-3 md:gap-[17px] border-b border-gray-20
         <p className="text-red-500 text-base font-semibold leading-6">A.</p>
         <div className="flex flex-col">
           <div className="mb-2">
-            <p className="text-base md:text-[18px] font-bold text-black leading-6 md:h-[50px] line-clamp-2">
+            <p className="text-base md:text-[18px] font-bold text-black leading-6 md:h-[50px] line-clamp-1">
               <span
                 dangerouslySetInnerHTML={{
                   __html: post.translated_title || '제목이 없습니다.',
@@ -267,14 +268,14 @@ className="flex flex-col items-start gap-3 md:gap-[17px] border-b border-gray-20
             </p>
           </div>
           <div>
-            <p className="text-sm md:text-[16px] text-gray-500 md:h-[50px] line-clamp-2">
+            <div className="max-h-[38.5px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2 md:h-[38px]">
               <RenderonlyTextHTML
                 data={{
                   original: '',
                   translated: post.translated_free_content,
                 }}
               />
-            </p>
+            </div>
           </div>
         </div>
       </div>
