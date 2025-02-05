@@ -11,6 +11,9 @@ import ShareBtn from '../_components/ShareBtn';
 import { fetchReqPost } from '../../../utils/api/supabase_api/post/fetchReqPost';
 import LikeBtn from '../_components/LikeBtn';
 import { cookies } from 'next/headers';
+import initTranslation from '@/config/server/i18n';
+import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
+import { countryNameMapping } from '@/data/nation';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
@@ -20,6 +23,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
 
   const cookieStore = cookies();
   const locale = cookieStore.get('lang')?.value || 'en';
+  const { t } = await initTranslation(locale, ['post']);
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
@@ -62,20 +66,26 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
                         key={key}
                       >
                         <Icon type={value} size={20} />
-                        <div className="pl-1">{key}</div>
+                        <div className="pl-1">
+                          {locale === 'ko' ? key : capitalizeFirstLetter(value)}
+                        </div>
                       </div>
                     ))}
               </div>
             </div>
             <div className="flex gap-4 items-center py-1">
               <div className="text-[#797c80] text-sm font-medium leading-tight grid gap-3">
-                <div>여행 지역</div>
-                <div>답변 기한</div>
-                <div>크레딧</div>
+                <div>{t('destination')}</div>
+                <div>{t('deadline')}</div>
+                <div>{t('credit')}</div>
               </div>
               <div className="text-black text-sm font-medium leading-tight grid gap-2.5">
-                <div>{`${JSON.parse(post.country_city).country} / ${
-                  JSON.parse(post.country_city).city
+                <div>{`${
+                  locale === 'ko'
+                    ? `${JSON.parse(post.country_city).country} / ${
+                        JSON.parse(post.country_city).city
+                      }`
+                    : countryNameMapping[JSON.parse(post.country_city).country]
                 }`}</div>
                 <div className="flex gap-1 items-center">
                   {post.date_end}
@@ -98,7 +108,11 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               )}
             </p>
             <div className="text-[#7fbfff] text-xs font-medium leading-none py-1">
-              한국어로 작성된 글이에요
+              {locale === 'ko'
+                ? `${post.users.country}어로 작성된 글이에요`
+                : `written in the language of ${
+                    countryNameMapping[post.users.country]
+                  }`}
             </div>
             <div className="border-t border-[#dee1e5] py-4 flex place-content-between">
               <LikeBtn postId={postId} />
@@ -117,7 +131,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
 
       {/* 답변 게시물 */}
       <div>
-        <Responses postId={postId} />
+        <Responses postId={postId} locale={locale} />
       </div>
     </div>
   );

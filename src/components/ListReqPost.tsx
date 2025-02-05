@@ -71,7 +71,7 @@ const ListReqPost = ({
               ? countryNameMapping[
                   JSON.parse(String(post.country_city!)).country
                 ]
-              : JSON.parse(String(post.country_city!)).country}{' '}
+              : JSON.parse(String(post.country_city!)).country}
           </div>
           {topicArr
             .filter(([_, value]) => post.category?.includes(value))
