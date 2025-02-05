@@ -49,7 +49,7 @@ const RequestDetail = ({
             <div className="flex flex-row items-center justify-center">
               <Dday postDateEnd={post.date_end!} />
               <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px] ml-[4px]">
-                <Image src={marker} width={10} height={10} alt="marker" />
+                <Image src={marker} width={10} height={10} alt="marker" className='mr-[1px]' />
                 <p className="text-[12px]">
                   {lang === 'en'
                     ? countryNameMapping[
@@ -66,7 +66,7 @@ const RequestDetail = ({
                     className="flex items-center justify-center h-[22.017px] min-w-8 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
                   >
                     <p className="text-[12px]">
-                      {lang === 'en' ? capitalizeFirstLetter(element) : koreanCategory}
+                      {lang === 'en' ? element : koreanCategory}
                     </p>
                   </div>
                 );
@@ -107,7 +107,7 @@ const RequestDetail = ({
         <div className="flex flex-row items-start">
           <p className="text-[16px] font-[600] pt-[1px] text-[#0582FF]">Q.</p>
           <div>
-            <p className="max-w-[315px] text-[16px] font-[600] ml-[6px] mb-[6px] overflow-hidden text-ellipsis line-clamp-2">
+            <p className="max-w-[315px] text-[16px] font-[600] ml-[6px] mb-[6px] overflow-hidden text-ellipsis line-clamp-1">
               {post.title}
             </p>
             <p className="text-[14px] w-full text-[#797C80] font-[500] ml-[6px] overflow-hidden text-ellipsis line-clamp-2">
