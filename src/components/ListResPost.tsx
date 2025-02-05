@@ -10,6 +10,7 @@ import { Post } from '@/app/home/_types/homeTypes';
 import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
 import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 import { useReviewCount } from '@/utils/api/tanstack/home/useReviewCount';
+import { useLang } from '@/store/languageStore';
 
 const ListResPost = ({ post }: { post: Post }) => {
   const router = useRouter();
@@ -21,6 +22,7 @@ const ListResPost = ({ post }: { post: Post }) => {
 
   //리뷰 갯수
   const { reviewCount } = useReviewCount(post.id);
+  const { lang } = useLang();
 
   return (
     <li
@@ -40,9 +42,9 @@ const ListResPost = ({ post }: { post: Post }) => {
             .filter(([_, value]) =>
               post.request_posts?.category.includes(value),
             )
-            .map(([key, _]) => (
+            .map(([key, value]) => (
               <div className="tag pl-1.5" key={key}>
-                {key}
+                {lang === 'ko' ? key : value}
               </div>
             ))}
         </div>
@@ -55,17 +57,29 @@ const ListResPost = ({ post }: { post: Post }) => {
             A.
           </div>
           <h1 className="text-black text-base font-semibold leading-snug grow line-clamp-2 md:line-clamp-1">
-            <p
-              dangerouslySetInnerHTML={{
-                __html: post.translated_title!,
-              }}
-            />
+            {lang === 'ko' ? (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: post.translated_title!,
+                }}
+              />
+            ) : (
+              post.title
+            )}
           </h1>
         </div>
         <div className="pl-[22px] max-h-[38.5px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2 md:h-[38px]">
-          <RenderonlyTextHTML
-            data={{ original: '', translated: post.translated_free_content }}
-          />
+          {lang === 'ko' ? (
+            <RenderonlyTextHTML
+              data={{ original: '', translated: post.translated_free_content }}
+            />
+          ) : (
+            <p
+              dangerouslySetInnerHTML={{
+                __html: post.free_content!,
+              }}
+            />
+          )}
         </div>
       </div>
       <div className="flex gap-4 items-center text-[#797c80] text-xs font-medium justify-between w-full">
