@@ -1,6 +1,9 @@
 {
   "recentSearch": "Recent Searches",
-  "search" : "Search",
+  "search": "Search",
+  "search.no_results": "No search results found for '{{keyword}}'.",
+  "loading": "Loading search results",
+  "more": "See more",
   "deleteall": "Delete All",
   "limit": "You can only view up to 10 recent searches.",
   "placeHolder": "Search countries & categories.",
@@ -12,5 +15,5 @@
   "writer": "Writer",
   "totalAnswers": " Responses",
   "expired": "Expired",
-  "reply" : "replied"
+  "reply": "replied"
 }

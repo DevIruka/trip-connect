@@ -101,7 +101,7 @@ const DetailedSearchBar = ({
       </Desktop>
       <div className="w-full max-w-[1200px]">
         <div className="grid sticky top-[0px] bg-white z-10 max-w-[1200px] mx-auto">
-          <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b md:border-none px-[42px]">
+          <div className="w-full overflow-auto whitespace-nowrap menuscrollbar border-b md:border-none px-[39px]">
             <Tabs
               value={selectedCategory ?? undefined}
               onValueChange={(value: string) =>
