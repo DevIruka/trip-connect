@@ -13,10 +13,10 @@ export default function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const fetchCountry = async () => {
       try {
-        const response = await fetch('http://ip-api.com/json/');
+        const response = await fetch('https://ipwho.is/');
         const data = await response.json();
 
-        if (data.countryCode !== 'KR') {
+        if (data.country_code !== 'KR') {
           const expires = new Date();
           expires.setFullYear(expires.getFullYear() + 1);
           document.cookie = `lang=${'en'}; path=/; expires=${expires.toUTCString()}; Secure; SameSite=Strict`;
