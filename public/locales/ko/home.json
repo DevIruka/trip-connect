@@ -16,5 +16,9 @@
   "login_subtext_1": "간편하게 로그인하고",
   "login_subtext_2": "질문과 답변을 해보세요!",
   "later": "나중에 하기",
-  "now": "로그인 하기"
+  "now": "로그인 하기",
+  "responses": "명 답변",
+  "writer": "작성자",
+  "loading": "로딩 중...",
+  "loadMore": "더보기"
 }

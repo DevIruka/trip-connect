@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 type LoadMoreButtonProps = {
   hasNextPage: boolean;
@@ -11,6 +12,7 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
   isFetchingNextPage,
   fetchNextPage,
 }) => {
+  const { t } = useTranslation('home');
   if (!hasNextPage) return null;
 
   return (
@@ -20,7 +22,7 @@ const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
         disabled={isFetchingNextPage}
         className="gray-btn"
       >
-        {isFetchingNextPage ? '로딩 중...' : '더보기'}
+        {isFetchingNextPage ? t('loading') : t('loadMore')}
       </button>
     </div>
   );

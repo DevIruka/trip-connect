@@ -161,7 +161,7 @@ export const LocationModal = () => {
           </Mobile>
           <Desktop>
             <div className="text-[#757575] text-xl font-semibold leading-loose py-2">
-              질문할 나라 또는 도시를 선택해주세요.
+              {t('selectCountry')}
             </div>
           </Desktop>
           <div className="grid">
@@ -333,7 +333,7 @@ export const LocationModal = () => {
                 onClick={() => closeModal('locationModal')}
                 className="w-[196px] h-16 px-3 py-1.5 bg-[#f4f6f9] rounded-xl justify-center items-center gap-2.5 inline-flex text-[#44484c] text-xl font-semibold leading-loose"
               >
-                닫기
+                {t('close')}
               </button>
               <button
                 onClick={() => {
@@ -342,7 +342,7 @@ export const LocationModal = () => {
                 }}
                 className="w-[196px] h-16 px-3 py-1.5 bg-[#0582ff] rounded-xl justify-center items-center gap-2.5 inline-flex text-white text-xl font-semibold leading-loose"
               >
-                확인
+                {t('ok')}
               </button>
             </div>
           </Desktop>

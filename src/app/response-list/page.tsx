@@ -9,6 +9,7 @@ import ListReqPost from '@/components/ListReqPost';
 import { nation } from '../home/_types/homeTypes';
 import { Desktop } from '@/components/ui/Responsive';
 import { useModal } from '@/providers/ModalProvider';
+import { useTranslation } from 'react-i18next';
 
 const ResponseListPage = () => {
   const {
@@ -19,7 +20,7 @@ const ResponseListPage = () => {
     isFetchingNextPage,
   } = useReqPosts();
   const { openModal } = useModal();
-
+  const { t } = useTranslation('home');
   //nation filter
   const [nationFilter, setNationFilter] = useState<nation | null>(
     typeof window !== 'undefined'
@@ -47,14 +48,14 @@ const ResponseListPage = () => {
       <div className="h-full w-full relative overflow-y-scroll menuscrollbar md:w-[800px]">
         <BackHeader
           image={search}
-          text="답변하기"
+          text={t('answer_now')}
           imagesize={24}
           link="/search"
         />
         <div className="px-5">
           <Desktop>
             <div className="text-[#44484c] text-[28px] font-bold leading-[44.80px] py-5">
-              답변하기
+              {t('answer_now')}
             </div>
           </Desktop>
           <div className="py-4">
@@ -73,7 +74,7 @@ const ResponseListPage = () => {
             >
               {nationFilter
                 ? `${nationFilter.country}/${nationFilter.city}`
-                : '나라/도시'}
+                : t('city_country')}
               <Image
                 src={updown}
                 alt={'dropdown arrow'}
@@ -100,7 +101,7 @@ const ResponseListPage = () => {
               disabled={isFetchingNextPage}
               className="gray-btn"
             >
-              {isFetchingNextPage ? '로딩 중...' : '더보기'}
+              {isFetchingNextPage ? t('loading') : t('loadMore')}
             </button>
           )}
         </div>
