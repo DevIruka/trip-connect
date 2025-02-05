@@ -47,9 +47,7 @@ const PurchasePage: React.FC = () => {
         const { data: responsePostsData, error: responsePostsError } =
           await supabase
             .from('response_posts')
-            .select(
-              'id, translated_title, translated_content, translated_free_content, created_at, user_id, request_id',
-            )
+            .select('*')
             .in('id', responseIds);
 
         if (responsePostsError) throw responsePostsError;
@@ -57,9 +55,11 @@ const PurchasePage: React.FC = () => {
         const formattedPosts: ResponsePost[] = (responsePostsData || []).map(
           (post) => ({
             ...post,
-            title: post.translated_title || '',
+            title: post.title || '',
+            translated_title: post.translated_title || '',
             content_html: post.translated_content || '',
-            free_content: post.translated_free_content || '',
+            free_content: post.free_content || '',
+            translated_free_content: post.translated_free_content || '',
             verified_country: null,
             category: [],
             img_url: [],
@@ -73,7 +73,7 @@ const PurchasePage: React.FC = () => {
             if (post.request_id) {
               const { data: requestData, error: requestError } = await supabase
                 .from('request_posts')
-                .select('category, credit')
+                .select('*')
                 .eq('id', post.request_id)
                 .single();
 
@@ -121,35 +121,39 @@ const PurchasePage: React.FC = () => {
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div>{error}</div>;
 
-return (
-  <div className="flex flex-col px-5 space-y-4 min-h-[calc(100vh-84px)]">
-    <CategoryTabs activeTab="purchased" />
+  return (
+    <div className="flex flex-col px-5 space-y-4 min-h-[calc(100vh-84px)]">
+      <CategoryTabs activeTab="purchased" />
 
-    <div
-      className="overflow-y-auto h-[calc(100vh-120px)] pb-[24px] md:pb-[100px]"
-      style={{
-        scrollbarWidth: 'none',
-        msOverflowStyle: 'none',
-      }}
-    >
-      <style jsx>{`
-        div::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
-
-      {purchasedPosts.length > 0 ? (
-        <ul>
-          {purchasedPosts.map((post) => (
-            <ResponsePostCard key={post.id} post={post} editable={false} />
-          ))}
-        </ul>
-      ) : (
-        <p className="text-center text-gray-500">구매한 글이 없습니다.</p>
-      )}
+      <div
+        className="overflow-y-auto h-[calc(100vh-120px)] pb-[24px] md:pb-[100px]"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+        }}
+      >
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+        {purchasedPosts.length > 0 ? (
+          <ul>
+            {purchasedPosts.map((post) => (
+              <ResponsePostCard
+                key={post.id}
+                post={post}
+                editable={false}
+                isLangEffects={true}
+              />
+            ))}
+          </ul>
+        ) : (
+          <p className="text-center text-gray-500">구매한 글이 없습니다.</p>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default PurchasePage;

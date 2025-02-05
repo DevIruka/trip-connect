@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import translate from '@/data/images/translate.svg';
 import { useModal } from '@/providers/ModalProvider';
 import { useReviewCount } from '@/utils/api/tanstack/home/useReviewCount';
+import { useLang } from '@/store/languageStore';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -30,6 +31,13 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const { user } = useUserStore();
   const router = useRouter();
   const { openModal } = useModal();
+
+  //언어 설정에 따라 원문/번역보기 default값 정하기
+  const { lang } = useLang();
+  useEffect(() => {
+    if (lang === 'en') setIsOriginal(true);
+    if (lang === 'ko') setIsOriginal(false);
+  }, [lang]);
 
   //리뷰 갯수
   const { reviewCount } = useReviewCount(post.id);

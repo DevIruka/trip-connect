@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 
 type Props = {
-  user: User;
+  user: User | null;
   requestPost?: Tables<'request_posts'>;
   responsePost?: Tables<'response_posts'>;
   mode?: string;
@@ -24,8 +24,9 @@ const SelectBox = ({ user, requestPost, responsePost, mode }: Props) => {
             : 'top-[45px] right-[23px]'
         }`}
       >
-        {user?.id === requestPost?.user_id ||
-        user?.id === responsePost?.user_id ? (
+        {user &&
+        (user?.id === requestPost?.user_id ||
+          user?.id === responsePost?.user_id) ? (
           <>
             <button
               onClick={() => {

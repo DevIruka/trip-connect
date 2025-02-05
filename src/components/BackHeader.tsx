@@ -60,7 +60,7 @@ const BackHeader = ({
             className="w-full h-screen absolute top-0 right-0"
             onClick={() => setIsModalOpen(!isModalOpen)}
           >
-            <SelectBox user={user!} requestPost={post!} />
+            <SelectBox user={user} requestPost={post!} />
           </div>
         )}
       </div>

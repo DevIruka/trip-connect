@@ -13,6 +13,7 @@ import { useLang } from '@/store/languageStore';
 import { countryNameMapping } from '@/data/nation';
 import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
 import Dday from '@/app/search/[id]/_components/DDay';
+import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
 
 type BookmarkedPost = {
   id: string;
@@ -23,6 +24,8 @@ type BookmarkedPost = {
   date_end?: string | null;
   credit?: number | null;
   created_at: string | null;
+  translated_title: string;
+  translated_content: string;
 };
 
 const BookmarkPage = () => {
@@ -48,18 +51,7 @@ const BookmarkPage = () => {
       try {
         const { data: bookmarksData, error: bookmarksError } = await supabase
           .from('bookmarks')
-          .select(
-            `request_posts (
-            id,
-            title,
-            content,
-            country_city,
-            category,
-            date_end,
-            credit,
-            created_at
-          )`,
-          )
+          .select(`request_posts (*)`)
           .eq('user_id', user.id);
 
         if (bookmarksError) {
@@ -140,7 +132,6 @@ const BookmarkPage = () => {
   if (error) {
     return <div className="text-center text-red-500">{error}</div>;
   }
-
   return (
     <div className="px-5 space-y-4 min-h-[calc(100vh-84px)]">
       <CategoryTabs activeTab="bookmark" />
@@ -206,13 +197,31 @@ const BookmarkPage = () => {
                   </p>
                   <div className="flex flex-col">
                     <div className="md:h-[50px]">
-                      <p className="text-[16px] font-bold md:text-[18px] text-black leading-[22.4px] max-w-[315px] line-clamp-2">
-                        {post.title}
+                      <p className="text-[16px] font-bold md:text-[18px] text-black leading-[22.4px] max-w-[315px] line-clamp-2 md:max-w-full">
+                        {lang === 'ko' ? (
+                          post.title
+                        ) : (
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                post.translated_title || '제목이 없습니다.',
+                            }}
+                          />
+                        )}
                       </p>
                     </div>
                     <div className="md:h-[50px]">
                       <p className="text-[14px] md:text-[16px] text-[#797C80] line-clamp-2">
-                        {post.content || ''}
+                        {lang === 'ko' ? (
+                          post.content
+                        ) : (
+                          <RenderonlyTextHTML
+                            data={{
+                              original: '',
+                              translated: post.translated_content,
+                            }}
+                          />
+                        )}
                       </p>
                     </div>
                   </div>

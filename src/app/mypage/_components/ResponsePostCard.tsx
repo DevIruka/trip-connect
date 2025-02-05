@@ -19,7 +19,8 @@ const markerIcon = '/images/ic-location.svg';
 const ResponsePostCard: React.FC<{
   post: ResponsePost;
   editable?: boolean;
-}> = ({ post, editable = true }) => {
+  isLangEffects?: boolean;
+}> = ({ post, editable = true, isLangEffects }) => {
   const { lang } = useLang();
   const { t } = useTranslation('mypage');
   const router = useRouter();
@@ -259,22 +260,56 @@ const ResponsePostCard: React.FC<{
         <p className="text-red-500 text-base font-semibold leading-6">A.</p>
         <div className="flex flex-col">
           <div className="mb-2">
-            <p className="text-base md:text-[18px] font-bold text-black leading-6 md:h-[50px] line-clamp-1">
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: post.translated_title || '제목이 없습니다.',
-                }}
-              />
+            <p className="text-base md:text-[18px] font-bold text-black leading-6 md:h-[50px] line-clamp-2">
+              {isLangEffects ? (
+                lang === 'ko' ? (
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: post.translated_title || '제목이 없습니다.',
+                    }}
+                  />
+                ) : (
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: post.title || '제목이 없습니다.',
+                    }}
+                  />
+                )
+              ) : (
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: post.translated_title || '제목이 없습니다.',
+                  }}
+                />
+              )}
             </p>
           </div>
           <div>
             <div className="max-h-[38.5px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2 md:h-[38px]">
-              <RenderonlyTextHTML
-                data={{
-                  original: '',
-                  translated: post.translated_free_content,
-                }}
-              />
+              {isLangEffects ? (
+                lang === 'ko' ? (
+                  <RenderonlyTextHTML
+                    data={{
+                      original: '',
+                      translated: post.translated_free_content,
+                    }}
+                  />
+                ) : (
+                  <RenderonlyTextHTML
+                    data={{
+                      original: '',
+                      translated: post.free_content,
+                    }}
+                  />
+                )
+              ) : (
+                <RenderonlyTextHTML
+                  data={{
+                    original: '',
+                    translated: post.free_content,
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
