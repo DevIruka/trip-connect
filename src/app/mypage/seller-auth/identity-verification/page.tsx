@@ -57,7 +57,7 @@ const IdentityVerification = () => {
         <select
           value={selectedCountry}
           onChange={handleCountryChange}
-          className="w-full h-[52px] px-4 py-3 flex items-center bg-[calc(100%-18px)] bg-[url('/images/ic-up&down.svg')] bg-no-repeat bg-right justify-center rounded-lg border border-gray-300 bg-white appearance-none text-black text-sm font-medium leading-[140%] tracking-[-0.28px] whitespace-nowrap md:w-[800px] md:h-[60px]"
+          className="w-full h-[52px] px-4 py-3 flex items-center bg-[calc(100%-18px)] bg-[url('/images/ic-up&down.svg')] bg-no-repeat bg-[right_16px_center] justify-center rounded-lg border border-gray-300 bg-white appearance-none text-black text-sm font-medium leading-[140%] tracking-[-0.28px] whitespace-nowrap md:w-[800px] md:h-[60px]"
         >
           <option value="" disabled className="text-gray-400">
             {t('country')}

@@ -1,11 +1,29 @@
 import { nation } from '@/app/home/_types/homeTypes';
-import ChargeModal from '@/app/post/_components/ChargeModal';
-import DeleteConfirmModal from '@/app/post/_components/DeleteConfirmModal';
-import DesktopLoginModal from '@/components/DesktopLoginModal';
 import { LocationModal } from '@/components/LocationModalNew';
-import LoginModal from '@/components/LoginModal';
 import { Tables } from '@/types/supabase';
+import dynamic from 'next/dynamic';
 import React, { createContext, useContext, useState } from 'react';
+const LoginModal = dynamic(() => import('@/components/LoginModal'), {
+  ssr: false,
+});
+const DesktopLoginModal = dynamic(
+  () => import('@/components/DesktopLoginModal'),
+  {
+    ssr: false,
+  },
+);
+const ChargeModal = dynamic(
+  () => import('@/app/post/_components/ChargeModal'),
+  {
+    ssr: false,
+  },
+);
+const DeleteConfirmModal = dynamic(
+  () => import('@/app/post/_components/DeleteConfirmModal'),
+  {
+    ssr: false,
+  },
+);
 
 type ModalState = {
   [key: string]: boolean; // 각 모달의 상태를 모달 ID로 관리

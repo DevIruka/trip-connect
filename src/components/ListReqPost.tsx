@@ -19,6 +19,7 @@ import { useModal } from '@/providers/ModalProvider';
 import { Desktop, Mobile } from './ui/Responsive';
 import { useResCount } from '@/utils/api/tanstack/home/useResCount';
 import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
+import { useLang } from '@/store/languageStore';
 
 const ListReqPost = ({
   post,
@@ -48,6 +49,7 @@ const ListReqPost = ({
   };
 
   const { resCounts } = useResCount(post.id);
+  const { lang } = useLang();
 
   return (
     <li
@@ -66,9 +68,9 @@ const ListReqPost = ({
           </div>
           {topicArr
             .filter(([_, value]) => post.category?.includes(value))
-            .map(([key, _]) => (
+            .map(([key, value]) => (
               <div className="tag pl-1.5" key={key}>
-                {key}
+                {lang === 'ko' ? key : value}
               </div>
             ))}
         </div>
@@ -114,11 +116,27 @@ const ListReqPost = ({
             Q.
           </div>
           <h1 className="text-black text-base font-semibold leading-snug grow line-clamp-2 md:line-clamp-1">
-            {post.title}
+            {lang === 'ko' ? (
+              post.title
+            ) : (
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: post.translated_title!,
+                }}
+              />
+            )}
           </h1>
         </div>
         <div className="pl-[22px] text-[#797c80] text-sm font-medium leading-snug line-clamp-2 md:h-[38px]">
-          {post.content}
+          {lang === 'ko' ? (
+            post.content
+          ) : (
+            <p
+              dangerouslySetInnerHTML={{
+                __html: post.translated_content!,
+              }}
+            />
+          )}
         </div>
       </div>
       <div className="flex gap-4 items-center text-[#797c80] text-xs font-medium justify-between w-full">
