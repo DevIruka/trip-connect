@@ -190,7 +190,7 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
         </div>
       </div>
 
-      <div className="hidden md:flex flex-col items-center w-full">
+      <div className="hidden md:flex flex-col items-center w-full md:pb-[80px]">
         <div className="w-full max-w-[800px] border border-[#DFE1E5] rounded-[8px] border-[1px] overflow: hidden;">
           <HeaderWithButton
             buttonKey={t('register')}
