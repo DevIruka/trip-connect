@@ -8,9 +8,10 @@ import { useRouter } from 'next/navigation';
 
 export default function I18nProvider({ children }: { children: ReactNode }) {
   const route = useRouter();
-  const { setLang } = useLang();
+  const { lang, setLang } = useLang();
 
   useEffect(() => {
+    if (lang) return;
     const fetchCountry = async () => {
       try {
         const response = await fetch('https://ipwho.is/');
@@ -21,7 +22,7 @@ export default function I18nProvider({ children }: { children: ReactNode }) {
           expires.setFullYear(expires.getFullYear() + 1);
           document.cookie = `lang=${'en'}; path=/; expires=${expires.toUTCString()}; Secure; SameSite=Strict`;
           setLang('en');
-          route.refresh();
+          setTimeout(() => route.refresh(), 100);
         }
       } catch (error) {
         console.error('국가 정보를 가져오는 중 오류 발생:', error);
