@@ -1,6 +1,7 @@
 'use client';
 
 import ErrorTemplate from '@/components/ErrorTemplate';
+import { useTranslation } from 'react-i18next';
 
 const ErrorPage = ({
   error,
@@ -9,6 +10,7 @@ const ErrorPage = ({
   error: Error & { digest?: string };
   reset: () => void;
 }) => {
-  return <ErrorTemplate title="검색 페이지 로드 중 오류가 발생하였습니다." />;
+  const { t } = useTranslation();
+  return <ErrorTemplate title={t('error.search')} />;
 };
 export default ErrorPage;
