@@ -8,10 +8,15 @@ import { useRouter } from 'next/navigation';
 
 export default function I18nProvider({ children }: { children: ReactNode }) {
   const route = useRouter();
-  const { lang, setLang } = useLang();
+  const { setLang } = useLang();
 
   useEffect(() => {
-    if (lang) return;
+    const getCookie = (name: string) => {
+      const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
+      return match ? match[2] : null;
+    };
+
+    if (getCookie('lang')) return;
     const fetchCountry = async () => {
       try {
         const response = await fetch('https://ipwho.is/');
