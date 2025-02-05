@@ -36,7 +36,13 @@ const ResponseDetail = ({
       <div className="flex flex-row w-full ">
         <div className="flex flex-row w-full items-center mt-[12px] mb-[12px] md:mt-0 ">
           <div className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px] ">
-            <Image src={marker} width={10} height={10} alt="marker" />
+            <Image
+              src={marker}
+              width={10}
+              height={10}
+              alt="marker"
+              className="mr-[1px]"
+            />
             <p className="text-[12px]">
               {lang === 'en'
                 ? countryNameMapping[
@@ -54,9 +60,7 @@ const ResponseDetail = ({
                   className="flex items-center justify-center h-[22.017px] min-w-6 bg-[#F5F7FA] text-[#45484D] rounded-md py-[4px] px-[6px] mr-[4px]"
                 >
                   <p className="text-[12px]">
-                    {lang === 'en'
-                      ? capitalizeFirstLetter(element)
-                      : koreanCategory}
+                    {lang === 'en' ? element : koreanCategory}
                   </p>
                 </div>
               );
@@ -68,7 +72,7 @@ const ResponseDetail = ({
       <div className="flex flex-row items-start">
         <p className="text-[16px] font-[600] text-[#FA505B]">A.</p>
         <div>
-          <p className="max-w-[295px] text-[16px] font-bold ml-[6px] mb-[6px] overflow-hidden text-ellipsis">
+          <p className="max-w-[295px] text-[16px] font-bold ml-[6px] mb-[6px] overflow-hidden text-ellipsis line-clamp-1">
             {post.title}
           </p>
           <ResponseContent html={post.free_content!} />
