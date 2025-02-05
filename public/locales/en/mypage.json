@@ -93,7 +93,7 @@
   "noLocation": "No location",
   "creditIconAlt": "Credit Icon",
   "bookmarkIconAlt": "Bookmark Icon",
-  "responsesCount": "{{count}} responses",
+  "responsesCount": "responses",
   "noSession": "No active session. Please log in.",
   "unexpectedError": "An unexpected error occurred.",
   "removeError": "An error occurred while removing the bookmark.",
@@ -133,5 +133,9 @@
   "verify_locationB": "based on your current location.",
 
   "current_location_prefix": "Your current location is set to ",
-  "current_location_suffix":"."
+  "current_location_suffix": ".",
+  "delete_confirm_title": "Are you sure you want to delete?",
+  "delete_confirm_warning": "This action cannot be undone.",
+  "post_deleted": "The post has been deleted."
+
 }

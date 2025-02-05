@@ -34,7 +34,7 @@ export type Post = {
   request_posts?: { category: string[]; credit: number };
   verified_country?: string | null;
   users?: { nickname: string };
-  translated_title?: string;
+  translated_title?: string | null;
   translated_free_content?: string;
-  translated_content?: string;
+  translated_content?: string | null;
 };

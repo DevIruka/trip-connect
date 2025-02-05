@@ -93,7 +93,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
       </button>
 
       {/* 프로필 섹션 */}
-      <div className="flex items-center h-12 px-5 md:px-0 md:h-[71px] md:w-[800px] md:mx-auto md:my-[50px] md:mb-[28px] md:pt-[10px] md:pb-[10px]">
+      <div className="flex items-center h-12 px-5 md:px-0 md:h-[71px] md:w-[800px] md:mx-auto md:my-[40px] md:mb-[28px] md:pt-[10px] md:pb-[10px]">
         <h2 className="text-[20px] font-bold text-[#45484D] leading-8 tracking-tight font-Pretendard md:text-[32px]">
           {t('title')}
         </h2>

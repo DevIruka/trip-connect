@@ -92,7 +92,7 @@
   "noLocation": "위치 없음",
   "creditIconAlt": "크레딧 아이콘",
   "bookmarkIconAlt": "북마크 아이콘",
-  "responsesCount": "{{count}}명 답변",
+  "responsesCount": "명 답변",
   "noSession": "활성화된 세션이 없습니다. 로그인해주세요.",
   "unexpectedError": "예상치 못한 오류가 발생했습니다.",
   "removeError": "북마크를 삭제하는 중 문제가 발생했습니다.",
@@ -109,7 +109,6 @@
   "delete_error_generic": "게시물을 삭제하는 중 예상치 못한 오류가 발생했습니다.",
   "delete_success": "게시물이 성공적으로 삭제되었습니다.",
   "unexpected_error": "예상치 못한 오류가 발생했습니다.",
-  "cannot_delete_with_comments": "댓글이 달린 글은 삭제할 수 없습니다.",
   "confirm_delete": "정말 이 게시물을 삭제하시겠습니까?",
   "missing_request_id": "요청 ID가 없습니다.",
   "unknown": "알 수 없음",
@@ -132,5 +131,10 @@
   "verify_locationA": "현재 위치로",
   "verify_locationB": "국가와 지역을 인증해 주세요.",
   "current_location_prefix": "현재 위치가 내 국가로 설정한 ",
-  "current_location_suffix": "에 있습니다."
+  "current_location_suffix": "에 있습니다.",
+
+  "cannot_delete_with_comments": "댓글이 달린 게시물은 삭제할 수 없습니다.",
+  "post_deleted": "게시물이 삭제되었습니다.",
+  "delete_confirm_title": "정말 삭제하시겠습니까?",
+  "delete_confirm_warning": "이 작업은 되돌릴 수 없습니다."
 }

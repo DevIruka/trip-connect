@@ -94,7 +94,7 @@ const CountryVerification = () => {
   if (loadError) return <div>{t('map_error')}</div>;
 
   return (
-    <div className="h-full w-full max-w-[872px] px-5 md:px-[36px] lg:px-[36px] mx-auto bg-white">
+    <div className="min-h-[calc(100vh-84px)] w-full max-w-[872px] px-5 md:px-[36px] lg:px-[36px] mx-auto bg-white">
       {/* 헤더 섹션 */}
       <div className="h-14 py-2.5 place-content-center items-center flex justify-between sticky top-0 z-50 bg-white md:h-[71px] md:mt-[40px] md:text-[32px] md:mb-[28px]">
         <div className="md:hidden">
@@ -105,34 +105,42 @@ const CountryVerification = () => {
         </h1>
       </div>
 
-      <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mt-2 md:w-[800px] md:h-[400px]">
-        {userLocation.lat && userLocation.lng ? (
-          <GoogleMap
-            center={{ lat: userLocation.lat, lng: userLocation.lng }}
-            zoom={14}
-            mapContainerStyle={{ width: '100%', height: '100%' }}
-          >
-            <Marker
-              position={{ lat: userLocation.lat, lng: userLocation.lng }}
-            />
-          </GoogleMap>
-        ) : (
-          <span className="text-gray-500">{t('map_loading')}</span>
-        )}
+      <div className="overflow-y-auto h-[calc(100vh-130px)] pb-[50px] md:pb-[140px] scrollbar-hide">
+        <style jsx>{`
+          div::-webkit-scrollbar {
+            display: none;
+          }
+        `}</style>
+
+        <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center mt-2 md:w-[800px] md:h-[400px]">
+          {userLocation.lat && userLocation.lng ? (
+            <GoogleMap
+              center={{ lat: userLocation.lat, lng: userLocation.lng }}
+              zoom={14}
+              mapContainerStyle={{ width: '100%', height: '100%' }}
+            >
+              <Marker
+                position={{ lat: userLocation.lat, lng: userLocation.lng }}
+              />
+            </GoogleMap>
+          ) : (
+            <span className="text-gray-500">{t('map_loading')}</span>
+          )}
+        </div>
+
+        <LocationText
+          locationDescription={locationDescription}
+          country={country}
+        />
+
+        <button
+          className="bg-[#0582ff] mt-[161px] text-white text-sm font-semibold rounded-md w-full max-w-[800px] h-[52px] md:h-[64px] mx-auto md:mt-[100px]"
+          onClick={handleVerificationComplete}
+          disabled={!locationDescription || !country}
+        >
+          {t('complete_verification')}
+        </button>
       </div>
-
-      <LocationText
-        locationDescription={locationDescription}
-        country={country}
-      />
-
-      <button
-        className="bg-[#0582ff] mt-[161px] text-white text-sm font-semibold rounded-md w-full max-w-[800px] h-[52px] md:h-[64px] mx-auto mt-4 md:mt-16"
-        onClick={handleVerificationComplete}
-        disabled={!locationDescription || !country}
-      >
-        {t('complete_verification')}
-      </button>
     </div>
   );
 };

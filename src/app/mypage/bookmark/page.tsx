@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { useLang } from '@/store/languageStore';
 import { countryNameMapping } from '@/data/nation';
 import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
+import Dday from '@/app/search/[id]/_components/DDay';
 
 type BookmarkedPost = {
   id: string;
@@ -32,6 +33,9 @@ const BookmarkPage = () => {
   const [bookmarkedPosts, setBookmarkedPosts] = useState<BookmarkedPost[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [responseCounts, setResponseCounts] = useState<{
+    [key: string]: number;
+  }>({});
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -75,12 +79,34 @@ const BookmarkPage = () => {
         );
 
         setBookmarkedPosts(mappedPosts);
+        fetchResponseCounts(mappedPosts);
       } catch (e) {
         console.error(t('unexpectedError'), e);
         setError(t('unexpectedError'));
       } finally {
         setLoading(false);
       }
+    };
+
+    const fetchResponseCounts = async (posts: BookmarkedPost[]) => {
+      const counts: { [key: string]: number } = {};
+
+      await Promise.all(
+        posts.map(async (post) => {
+          const { count, error } = await supabase
+            .from('response_posts')
+            .select('*', { count: 'exact', head: true })
+            .eq('request_id', post.id);
+
+          if (!error && typeof count === 'number') {
+            counts[post.id] = count;
+          } else {
+            counts[post.id] = 0;
+          }
+        }),
+      );
+
+      setResponseCounts(counts);
     };
 
     fetchBookmarks();
@@ -116,10 +142,10 @@ const BookmarkPage = () => {
   }
 
   return (
-    <div className="px-5 space-y-4 min-h-screen">
+    <div className="px-5 space-y-4 min-h-[calc(100vh-84px)]">
       <CategoryTabs activeTab="bookmark" />
 
-      <div className="overflow-y-auto h-[calc(100vh-120px)] pb-[50px] md:pb-[140px] scrollbar-hide">
+      <div className="overflow-y-auto h-[calc(100vh-130px)] pb-[50px] md:pb-[140px] scrollbar-hide">
         <style jsx>{`
           div::-webkit-scrollbar {
             display: none;
@@ -128,15 +154,7 @@ const BookmarkPage = () => {
 
         {bookmarkedPosts.length > 0 ? (
           bookmarkedPosts.map((post) => {
-            const dDay = post.date_end
-              ? Math.max(
-                  Math.ceil(
-                    (new Date(post.date_end).getTime() - new Date().getTime()) /
-                      (1000 * 60 * 60 * 24),
-                  ),
-                  0,
-                )
-              : null;
+
 
             const handleCardClick = () => {
               router.push(`/post/${post.id}`);
@@ -146,8 +164,8 @@ const BookmarkPage = () => {
               <div
                 key={post.id}
                 onClick={handleCardClick}
-                className="flex flex-col items-start gap-3 pt-[12px] pr-[20px] pb-[24px] pl-[20px] md:mb-[10px]
-            md:rounded-[12px] md:border md:mx-auto md:border-[#DFE1E5] md:bg-white border-b bg-white w-full relative md:w-[800px] md:h-[252px] md:p-[36px]"
+                className="flex flex-col items-start gap-3 pt-[12px] pr-[20px] pb-[24px] pl-[20px] md:mb-[10px] md:gap-[17px]
+            md:rounded-[12px] md:border md:mx-auto md:border-[#DFE1E5] md:bg-white border-b bg-white w-full relative md:w-[800px] md:h-[252px] md:px-[36px] md:py-[28px]"
                 style={{
                   borderBottom: '1px solid #F4F4F4',
                   background: '#FFF',
@@ -155,20 +173,7 @@ const BookmarkPage = () => {
                 }}
               >
                 <div className="flex flex-row items-center gap-2 md:mb-[8px]">
-                  {dDay !== null && (
-                    <div
-                      className="flex items-center justify-center text-[#FF810B] text-[12px]"
-                      style={{
-                        height: '22.017px',
-                        padding: '0px 6px',
-                        transform: 'rotate(-0.024deg)',
-                        borderRadius: '4px',
-                        background: '#FFECD4',
-                      }}
-                    >
-                      D-{dDay}
-                    </div>
-                  )}
+                  <Dday postDateEnd={post.date_end!} />
 
                   <div className="flex bg-gray-100 px-2 py-1 rounded text-sm text-gray-700">
                     <Image
@@ -233,7 +238,9 @@ const BookmarkPage = () => {
                           backgroundColor: '#797C80',
                         }}
                       />
-                      <span>{t('responsesCount', { count: 1 })}</span>
+                      <span>
+                        {responseCounts[post.id] || 0} {t('responsesCount')}
+                      </span>
                     </>
                   </div>
                   <TimeAgo

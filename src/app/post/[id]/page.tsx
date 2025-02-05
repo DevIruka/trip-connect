@@ -10,6 +10,7 @@ import ResponseBtn from '../_components/ResponseBtn';
 import ShareBtn from '../_components/ShareBtn';
 import { fetchReqPost } from '../../../utils/api/supabase_api/post/fetchReqPost';
 import LikeBtn from '../_components/LikeBtn';
+import { cookies } from 'next/headers';
 
 const DetailPage = async ({ params }: { params: { id: string } }) => {
   const postId = params.id; // URL에서 전달된 게시물 ID
@@ -17,6 +18,8 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
   const topicArr = Object.entries(topicMapping);
   const { post, error } = await fetchReqPost(postId);
 
+  const cookieStore = cookies();
+  const locale = cookieStore.get('lang')?.value || 'en';
   if (error) return <div>에러 발생: {error.message}</div>;
 
   return (
@@ -39,7 +42,15 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
           <div className="px-5 grid grid-cols-1 gap-4">
             <div className="grid gap-1">
               <h1 className="text-black text-xl font-bold leading-[28.80px]">
-                {post.title}
+                {locale === 'ko' ? (
+                  post.title
+                ) : (
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: post.translated_title,
+                    }}
+                  />
+                )}
               </h1>
               <div className="flex gap-2 flex-wrap">
                 {post.category &&
@@ -76,7 +87,15 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               </div>
             </div>
             <p className="text-[#44484c] text-base font-medium leading-relaxed">
-              {post.content}
+              {locale === 'ko' ? (
+                post.content
+              ) : (
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: post.translated_content,
+                  }}
+                />
+              )}
             </p>
             <div className="text-[#7fbfff] text-xs font-medium leading-none py-1">
               한국어로 작성된 글이에요

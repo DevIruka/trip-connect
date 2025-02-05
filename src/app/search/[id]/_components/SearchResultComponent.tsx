@@ -14,11 +14,13 @@ import DetailedSearchBar from './DetailedSearchBar';
 import SearchResultCount from './SearchResultCount';
 import CustomSelectBox from './SelectBox';
 import useInfinitePosts from '@/utils/api/tanstack/search/useInfinitySearchPosts';
+import { useTranslation } from 'react-i18next';
 export type Post = ExtendedResponsePostData | RequestPostData;
 
 const SearchResultComponent = () => {
   const { id } = useParams<Params>();
   const keyword = decodeUrl(id);
+  const { t } = useTranslation('search');
   const [noResults, setNoResults] = useState<boolean>(false);
   const [countReq, setCountReq] = useState<number | null>(0);
   const [countRes, setCountRes] = useState<number | null>(0);
@@ -65,7 +67,7 @@ const SearchResultComponent = () => {
         {noResults && (
           <div className="flex justify-center items-center mt-[40px]">
             <p className="text-[16px] font-[600] text-[#797C80]">
-              {keyword}에 대한 검색 결과가 존재하지 않습니다.
+              {t('search.no_results', { keyword })}
             </p>
           </div>
         )}
@@ -91,7 +93,7 @@ const SearchResultComponent = () => {
                   disabled={isFetchingNextPage}
                   className="border rounded-[100px] p-2 grid cursor-pointer w-full max-w-[324px]"
                 >
-                  {isFetchingNextPage ? '검색 결과 로드 중' : '더보기'}
+                  {isFetchingNextPage ? t('loading') : t('more')}
                 </button>
               )}
             </div>
