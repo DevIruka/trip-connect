@@ -11,6 +11,7 @@ import {
   useLikeMutations,
 } from '@/utils/api/tanstack/post/useLike';
 import { useTranslation } from 'react-i18next';
+import { useModal } from '@/providers/ModalProvider';
 
 const LikeBtn = ({ postId }: { postId: string }) => {
   const { user } = useUserStore();
@@ -20,6 +21,7 @@ const LikeBtn = ({ postId }: { postId: string }) => {
   const { toggleLikeMutation } = useLikeMutations(userId);
   const { likeCount } = useLikeCount(postId);
   const { t } = useTranslation('post');
+  const { openModal } = useModal();
 
   return (
     <button
@@ -27,7 +29,8 @@ const LikeBtn = ({ postId }: { postId: string }) => {
         Liked ? 'border-Blue1 text-Blue1' : 'border-[#dee1e5] text-[#797c80]'
       }`}
       onClick={() => {
-        toggleLikeMutation.mutate({ postId, isLiked: Liked });
+        if (!user) openModal('loginModal');
+        else toggleLikeMutation.mutate({ postId, isLiked: Liked });
       }}
     >
       <Image
