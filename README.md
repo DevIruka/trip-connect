@@ -7,7 +7,7 @@
 ## 💪 Our Team
 |박주희|박현지|박민준|강민정|문다슬|김민정|
 |---|---|---|---|---|---|
-|[@juhuibag42](juhuibag42@gmail.com)|[@hjpark9955](hjpark9955@gmail.com)|[@DevIruka](https://github.com/DevIruka)|[@cara656513](https://github.com/cara656513)|[@Raina-Moon](https://github.com/Raina-Moon)|[@minjung7](https://github.com/minjung7)|
+|juhuibag42@gmail.com|hjpark9955@gmail.com|[@DevIruka](https://github.com/DevIruka)|[@cara656513](https://github.com/cara656513)|[@Raina-Moon](https://github.com/Raina-Moon)|[@minjung7](https://github.com/minjung7)|
 |UI/UX|UI/UX|TL,FE|FE|FE|FE|
 |🎨꼼꼼함의 끝판왕|📝스마트 능력자|👑해결사 리더|🫶팀 마스코트|👨‍💻멀티 플레이어|🔥코드 해석 열정러|
 
@@ -463,6 +463,26 @@
 
 ### LIGHTHOUSE 진단 결과 성능을 58점에서 82점으로 개선하였다.
 
+<details>
+
+<summary>자세히 보기</summary>
+
+<div  markdown="1">
+
+before
+
+![before](https://github.com/user-attachments/assets/b0f25d22-f0d6-4e8a-8706-b6523df07fff)
+
+after
+
+![after](https://github.com/user-attachments/assets/dbc0fc9c-43c6-458a-91df-f5c20175ad54)
+
+<br>
+
+</div>
+
+</details>
+
 1. 질문글과 답변글을 따로따로 불러와 클라이언트에서 병합 후, 최신순으로 정렬하는 식으로 데이터를 불러왔으나, **supabase에서 sql editor를 사용하여 요청만 한 번 하는 것**으로 원하는 데이터를 한 번에 빠르게 얻어올 수 있었다.
 
 2. svg 이미지들을 적극 활용하여 기존에 사용하고 있던 무거운 라이브러리인 react-icon를 지움으로서 **번들을 최적화**할 수 있었다.
@@ -501,6 +521,8 @@
 
 ## 기술 스택
 
+<div>
+
 ### ✔️ Language
 
 <img src="https://img.shields.io/badge/Typescript-3178C6?style=for-the-badge&logo=Typescript&logoColor=white"> 
@@ -515,11 +537,16 @@
 <img src="https://img.shields.io/badge/Tanstack Query-FF4154?style=for-the-badge&logo=TanstackQuery&logoColor=white">
 <img src="https://img.shields.io/badge/zustand-FF4154?style=for-the-badge&logo=TanstackQuery&logoColor=white">
 <img src="https://img.shields.io/badge/tailwind css-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
-<img src="https://img.shields.io/badge/supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white">
-<img src="https://img.shields.io/badge/react slick-FF4154?style=for-the-badge&logo=react-slick&logoColor=white">
-<img src="https://img.shields.io/badge/react spinners-FF4154?style=for-the-badge&logo=react-spinners&logoColor=white">
-<img src="https://img.shields.io/badge/react carousel-FF4154?style=for-the-badge&logo=react-carousel&logoColor=white">
-<img src="https://img.shields.io/badge/uuid-FF4154?style=for-the-badge&logo=uuid&logoColor=white">
+<img src="https://img.shields.io/badge/Tiptap-4640AA?style=for-the-badge&logo=tiptap&logoColor=white">
+<img src="https://img.shields.io/badge/ShadCN-000000?style=for-the-badge&logoColor=white">
+
+### ✔️ State Management & APIs
+
+<img src="https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white">
+<img src="https://img.shields.io/badge/Toss%20Payments-0075C0?style=for-the-badge&logoColor=white">
+<img src="https://img.shields.io/badge/i18next-26A69A?style=for-the-badge&logo=i18next&logoColor=white">
+<img src="https://img.shields.io/badge/Sentry-362D59?style=for-the-badge&logo=sentry&logoColor=white">
+<img src="https://img.shields.io/badge/Google%20Maps-4285F4?style=for-the-badge&logo=google-maps&logoColor=white">
 
 ### ✔️ Hosting & Deployment
 
@@ -534,17 +561,13 @@
 
 ![VSCode](https://img.shields.io/badge/Visual_Studio_Code-0078D4?style=for-the-badge&logo=visual%20studio%20code&logoColor=white)
 
+### ✔️ Database Manage System
+
+<img src="https://img.shields.io/badge/supabase-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white">
+
 ### ✔️System Architecture
 
 ![Image](https://github.com/user-attachments/assets/2a72b475-2b6d-4943-8814-756cdd356b8c)
-
-### ✔️ Deploy
-
-![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
-
-### ✔️ Database Manage System
-
-![Supabase](https://img.shields.io/badge/Supabase-181818?style=for-the-badge&logo=supabase&logoColor=white)
 
 ## ERD
 
