@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 
 import pencil from '@/data/images/ic-pencil.svg';
 import { useSearchStore } from '@/store/useSearchStore';
@@ -14,6 +14,9 @@ import { useModal } from '@/providers/ModalProvider';
 import { useFilteredPosts } from '../_hooks/useFilteredPosts';
 import LoadMoreButton from './LoadMoreButton';
 import PostList from './PostList';
+import HomeSkeleton from './HomeSkeleton';
+import HeaderSkeleton from './HeaderSkeleton';
+import NavBarSkeleton from './NavBarSkeleton';
 
 const Home = () => {
   //서치파람스의 값으로 카테고리 1차구분
@@ -47,33 +50,41 @@ const Home = () => {
   return (
     <>
       <div className="w-full h-screen mx-auto relative overflow-y-scroll z-[51] menuscrollbar pb-[140px]">
-        <QnaHeader />
-        <Navbar
-          setFilterType={setFilterType}
-          changeCategory={changeCategory}
-          setNationFilter={setNationFilter}
-          filterType={filterType}
-        />
-        <div className="grid max-w-[1200px] mx-auto">
-          <PostList posts={nationFilteredPosts} />
+        <Suspense fallback={<HeaderSkeleton />}>
+          <QnaHeader />
+        </Suspense>
 
-          {/* 더보기 버튼 */}
-          <LoadMoreButton
-            hasNextPage={hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
-            fetchNextPage={fetchNextPage}
+        <Suspense fallback={<NavBarSkeleton />}>
+          <Navbar
+            setFilterType={setFilterType}
+            changeCategory={changeCategory}
+            setNationFilter={setNationFilter}
+            filterType={filterType}
           />
-        </div>
+        </Suspense>
 
-        <button
-          className="fixed bottom-10 right-10 bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
-          onClick={() => {
-            if (!user) openModal('loginModal');
-            else router.push('/request');
-          }}
-        >
-          <Image width={36} height={36} src={pencil} alt="pencil" />
-        </button>
+        <Suspense fallback={<HomeSkeleton />}>
+          <div className="grid max-w-[1200px] mx-auto">
+            <PostList posts={nationFilteredPosts} />
+
+            {/* 더보기 버튼 */}
+            <LoadMoreButton
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
+              fetchNextPage={fetchNextPage}
+            />
+          </div>
+
+          <button
+            className="fixed bottom-10 right-10 bg-[#0582ff] text-white p-3 rounded-full shadow-lg"
+            onClick={() => {
+              if (!user) openModal('loginModal');
+              else router.push('/request');
+            }}
+          >
+            <Image width={36} height={36} src={pencil} alt="pencil" />
+          </button>
+        </Suspense>
       </div>
     </>
   );
