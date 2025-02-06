@@ -4,6 +4,7 @@ import { useUserStore } from '@/store/userStore';
 import { Tables } from '@/types/supabase';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const ResponseBtn = ({ post }: { post: Tables<'request_posts'> }) => {
   const { user } = useUserStore();
@@ -17,6 +18,7 @@ const ResponseBtn = ({ post }: { post: Tables<'request_posts'> }) => {
     router.push(`/response/${postId}`);
   };
   const { openModal } = useModal();
+  const { t } = useTranslation('post');
 
   return (
     <>
@@ -34,7 +36,7 @@ const ResponseBtn = ({ post }: { post: Tables<'request_posts'> }) => {
             }
           }}
         >
-          {isExpired ? '답변 기한이 만료된 질문이에요' : '답변하기'}
+          {isExpired ? t('expired') : t('answer')}
         </div>
       </div>
     </>

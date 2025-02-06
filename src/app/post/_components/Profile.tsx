@@ -12,6 +12,8 @@ import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 import { Desktop } from '@/components/ui/Responsive';
 import MoreButton from '@/data/images/ic-More.svg';
 import SelectBox from '@/components/SelectBox';
+import { countryNameMapping } from '@/data/nation';
+import { useLang } from '@/store/languageStore';
 
 const Profile = ({
   postUserId,
@@ -28,6 +30,7 @@ const Profile = ({
   const { user: logginedUser } = useUserStore();
   const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { lang } = useLang();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -77,7 +80,9 @@ const Profile = ({
             {user.country && (
               <div className="h-[20px] pl-1 pr-1.5 bg-[#f4f6f9] rounded-full justify-start items-center gap-0.5 inline-flex text-center text-[#44484c] text-xs font-medium">
                 <Image width={10} height={10} src={location} alt="location" />
-                {user.country}
+                {lang === 'en'
+                  ? countryNameMapping[user.country]
+                  : user.country}
               </div>
             )}
           </div>

@@ -46,7 +46,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="w-full h-screen mx-auto relative overflow-y-scroll z-[51] menuscrollbar md:pb-[140px]">
+      <div className="w-full h-screen mx-auto relative overflow-y-scroll z-[51] menuscrollbar pb-[140px]">
         <QnaHeader />
         <Navbar
           setFilterType={setFilterType}

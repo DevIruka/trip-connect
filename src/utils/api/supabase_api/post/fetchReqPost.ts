@@ -4,7 +4,10 @@ import { supabase } from '@/utils/supabase/supabaseClient';
 export const fetchReqPost = async (postId: string) => {
   const { data, error } = await supabase
     .from('request_posts')
-    .select('*')
+    .select(
+      `*,
+        users!inner(country)`,
+    )
     .eq('id', postId)
     .single(); // 단일 게시물 조회
 

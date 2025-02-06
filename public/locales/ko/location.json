@@ -3,5 +3,8 @@
   "select": "선택",
   "search_country_city": "나라 또는 도시를 검색해주세요",
   "initialize": "선택 초기화",
-  "noresults": "에 대한 검색 결과가 없어요."
+  "noresults": "에 대한 검색 결과가 없어요.",
+  "selectCountry": "질문할 나라 또는 도시를 선택해주세요.",
+  "close": "닫기",
+  "ok": "확인"
 }

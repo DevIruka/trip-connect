@@ -18,6 +18,7 @@ import translate from '@/data/images/translate.svg';
 import { useModal } from '@/providers/ModalProvider';
 import { useReviewCount } from '@/utils/api/tanstack/home/useReviewCount';
 import { useLang } from '@/store/languageStore';
+import { useTranslation } from 'react-i18next';
 
 const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const [isContentVisible, setContentVisible] = useState(false);
@@ -31,6 +32,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
   const { user } = useUserStore();
   const router = useRouter();
   const { openModal } = useModal();
+  const { t } = useTranslation('post');
 
   //언어 설정에 따라 원문/번역보기 default값 정하기
   const { lang } = useLang();
@@ -161,7 +163,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
             ) : (
               <Image src={translate} alt="translate" height={14} width={14} />
             )}
-            {!isOriginal ? '원문보기' : '번역보기'}
+            {!isOriginal ? t('original') : t('translate')}
           </button>
           <div className="grid gap-4">
             <div className="text-[#44484c] text-base font-medium leading-relaxed">
@@ -201,7 +203,7 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
               onClick={handlePurchase}
               className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center gap-2.5 inline-flex my-2.5 text-[#0079f2] text-sm font-semibold"
             >
-              구매하고 전체보기
+              {t('buy')}
             </button>
           ) : (
             // 콘텐츠 보기 버튼
@@ -211,10 +213,10 @@ const Response = ({ post }: { post: Tables<'response_posts'> }) => {
               disabled={!post.translated_content}
             >
               {isContentVisible
-                ? '접기'
+                ? t('summarize')
                 : !post.translated_content
-                ? '로딩중'
-                : '펼쳐 보기'}
+                ? t('loading')
+                : t('see_more')}
               <Image
                 width={18}
                 height={18}

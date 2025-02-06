@@ -20,6 +20,8 @@ import { Desktop, Mobile } from './ui/Responsive';
 import { useResCount } from '@/utils/api/tanstack/home/useResCount';
 import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 import { useLang } from '@/store/languageStore';
+import { countryNameMapping } from '@/data/nation';
+import { useTranslation } from 'react-i18next';
 
 const ListReqPost = ({
   post,
@@ -50,6 +52,7 @@ const ListReqPost = ({
 
   const { resCounts } = useResCount(post.id);
   const { lang } = useLang();
+  const { t } = useTranslation('home');
 
   return (
     <li
@@ -64,7 +67,11 @@ const ListReqPost = ({
           <PostDday postDateEnd={post.date_end!} />
           <div className="tag">
             <Image width={10} height={10} src={location} alt="location" />
-            {JSON.parse(post.country_city!).country}
+            {lang === 'en'
+              ? countryNameMapping[
+                  JSON.parse(String(post.country_city!)).country
+                ]
+              : JSON.parse(String(post.country_city!)).country}
           </div>
           {topicArr
             .filter(([_, value]) => post.category?.includes(value))
@@ -147,7 +154,10 @@ const ListReqPost = ({
               {post.credit}
             </div>
             <Image width={2} height={2} src={dot} alt="dot" />
-            <div>{resCounts}명 답변</div>
+            <div>
+              {resCounts}
+              {t('responses')}
+            </div>
             {isReqList && (
               <Desktop>
                 <Image width={2} height={2} src={dot} alt="dot" />
@@ -175,7 +185,7 @@ const ListReqPost = ({
               }}
               className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold md:max-w-[136px]"
             >
-              답변하기
+              {t('answer_now')}
             </button>
           </Desktop>
         )}
@@ -193,7 +203,7 @@ const ListReqPost = ({
             }}
             className="w-full h-11 bg-[#eaf4ff] rounded-[10px] justify-center items-center inline-flex text-[#0079f2] text-sm font-semibold md:max-w-[136px]"
           >
-            답변하기
+            {t('answer_now')}
           </button>
         </Mobile>
       )}
