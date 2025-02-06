@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useModal } from '@/providers/ModalProvider';
 import Link from 'next/link';
 import { googleLogin, kakaoLogin } from '@/app/login/_auth/oauth';
+import { useRouter } from 'next/navigation';
 
 const mailicon = '/images/ic-mail.svg';
 const kakao = '/images/kakao.svg';
@@ -14,6 +15,12 @@ const xmark = '/images/ic-Close.svg';
 const DesktopLoginModal = () => {
   const { t } = useTranslation('login');
   const { closeModal } = useModal();
+  const route = useRouter();
+
+  const handleClick = () => {
+    closeModal('DesktopLogin'); // 모달 닫기
+    route.push('/signup'); // 페이지 이동
+  };
 
   return (
     <div
@@ -68,13 +75,12 @@ const DesktopLoginModal = () => {
             <p className="text-[#797c80] text-base font-medium font-['Pretendard'] leading-snug">
               {t('stillNot')}
             </p>
-            <Link
-              href={'/signup'}
+            <button
               className="text-[#44484c] text-base font-medium font-['Pretendard'] underline underline-offset-[1px] ml-1 cursor-pointer"
-              onClick={() => closeModal('DesktopLogin')}
+              onClick={handleClick}
             >
               {t('signup')}
-            </Link>
+            </button>
           </div>
         </div>
       </div>
