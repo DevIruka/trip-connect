@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import LocationIcon from '../_icons/LocationIcon';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   isOpen: boolean;
@@ -35,6 +36,7 @@ const GoogleModal: React.FC<Props> = ({
     useState<GooglePlaceResult | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation('response');
 
   const handleSearch = async () => {
     setIsLoading(true);
@@ -96,7 +98,7 @@ const GoogleModal: React.FC<Props> = ({
         <div className="flex flex-col justify-start gap-3 md:gap-4">
           <div className="flex justify-between items-center py-2">
             <h2 className="text-[#757575] text-base font-semibold leading-snug">
-              장소 추가하기
+              {t('addPlace')}
             </h2>
             <button onClick={onClose} className="text-[#757575] font-bold">
               ✕
@@ -111,7 +113,7 @@ const GoogleModal: React.FC<Props> = ({
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="관광지/맛집/숙소 검색"
+                placeholder={t('searchPlaceholder')}
                 className={`grow shrink text-sm font-medium bg-transparent outline-none ${
                   search ? 'text-black' : 'text-[#797c80]'
                 }`}
@@ -131,7 +133,7 @@ const GoogleModal: React.FC<Props> = ({
                 }}
               >
                 <span className="text-[#0079f2] text-sm font-semibold">
-                  검색
+                  {t('search')}
                 </span>
               </button>
             </div>
@@ -142,7 +144,7 @@ const GoogleModal: React.FC<Props> = ({
         <div className="flex-grow pt-[12px] overflow-y-auto md:pt-[20px]">
           {isLoading ? (
             <p className="text-[#797c80] text-sm font-semibold text-center mt-4">
-              검색 중...
+              {t('searching')}
             </p>
           ) : hasSearched ? (
             results.length > 0 ? (
@@ -175,7 +177,7 @@ const GoogleModal: React.FC<Props> = ({
               ))
             ) : (
               <p className="text-[#797c80] text-sm font-semibold text-center mt-4">
-                검색 결과가 없어요.
+                {t('noResults')}
               </p>
             )
           ) : null}
@@ -187,14 +189,14 @@ const GoogleModal: React.FC<Props> = ({
             onClick={onClose}
             className="w-[72px] h-12 px-3 py-1.5 rounded-xl border border-[#dee1e5] text-[#44484c] text-sm font-semibold md:w-[130px]"
           >
-            취소
+            {t('cancel')}
           </button>
           <button
             onClick={handleLocationClick}
             className="grow h-12 px-3 py-1.5 bg-[#0582ff] rounded-xl text-white text-sm font-semibold"
             disabled={!selectedLocation}
           >
-            장소 추가
+            {t('addLocation')}
           </button>
         </div>
       </div>

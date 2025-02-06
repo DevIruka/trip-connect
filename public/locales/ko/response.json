@@ -4,5 +4,12 @@
   "titlePlaceholder": "제목",
   "previewPlaceholder": "미리보기 답변을 작성해 주세요",
   "paidOnlyMessage": "이후로는 유료 결제자만 볼 수 있어요",
-  "paidContentPlaceholder": "유료 분량의 답변을 작성해 주세요"
+  "paidContentPlaceholder": "유료 분량의 답변을 작성해 주세요",
+  "addPlace": "장소 추가하기",
+  "searchPlaceholder": "관광지/맛집/숙소 검색",
+  "searching": "검색 중...",
+  "noResults": "검색 결과가 없어요.",
+  "cancel": "취소",
+  "addLocation": "장소 추가",
+  "search":"검색"
 }

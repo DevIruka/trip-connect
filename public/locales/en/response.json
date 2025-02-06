@@ -4,5 +4,12 @@
   "titlePlaceholder": "Title",
   "previewPlaceholder": "Write your preview answer here",
   "paidOnlyMessage": "The rest is available to paid users only",
-  "paidContentPlaceholder": "Write your paid answer here"
+  "paidContentPlaceholder": "Write your paid answer here",
+  "addPlace": "Add a Place",
+  "searchPlaceholder": "Search for attractions/foods/lodgings",
+  "searching": "Searching...",
+  "noResults": "No results found",
+  "cancel": "Cancel",
+  "addLocation": "Add It",
+  "search":"Search"
 }
