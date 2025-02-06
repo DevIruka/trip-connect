@@ -136,7 +136,7 @@ const BookmarkPage = () => {
     <div className="px-5 space-y-4 min-h-[calc(100vh-84px)]">
       <CategoryTabs activeTab="bookmark" />
 
-      <div className="overflow-y-auto h-[calc(100vh-140px)] pb-[50px] md:pb-[140px] scrollbar-hide">
+      <div className="overflow-y-auto h-[calc(100vh-160px)] pb-[50px] md:pb-[140px] scrollbar-hide">
         <style jsx>{`
           div::-webkit-scrollbar {
             display: none;
