@@ -3,6 +3,7 @@ import { Tables } from '@/types/supabase';
 import { User } from '@supabase/supabase-js';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   user: User | null;
@@ -14,6 +15,7 @@ type Props = {
 const SelectBox = ({ user, requestPost, responsePost, mode }: Props) => {
   const router = useRouter();
   const { openModal } = useModal();
+  const { t } = useTranslation('modal');
 
   return (
     <>
@@ -36,9 +38,9 @@ const SelectBox = ({ user, requestPost, responsePost, mode }: Props) => {
                   }`,
                 );
               }}
-              className="ml-2.5 mx-[4.5px] h-[29px]"
+              className="ml-2.5 mx-[4.5px] h-[29px] text-left"
             >
-              수정하기
+              {t('edit')}
             </button>
             <button
               onClick={() => {
@@ -47,17 +49,17 @@ const SelectBox = ({ user, requestPost, responsePost, mode }: Props) => {
                   responsepost: responsePost,
                 });
               }}
-              className="ml-2.5 mx-[4.5px] h-[29px]"
+              className="ml-2.5 mx-[4.5px] h-[29px] text-left"
             >
-              삭제하기
+              {t('delete')}
             </button>
           </>
         ) : (
           <button
-            onClick={() => alert('신고하기 기능은 아직 준비중입니다.')}
+            onClick={() => alert(t('not_ready'))}
             className="ml-2.5 mx-[4.5px] h-[29px]"
           >
-            신고하기
+            {t('report')}
           </button>
         )}
       </div>

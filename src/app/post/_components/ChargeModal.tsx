@@ -2,19 +2,21 @@ import ModalForm from '@/components/ModalForm';
 import React from 'react';
 import strong from '@/data/images/‼️ 두 개의 느낌표.svg';
 import { useModal } from '@/providers/ModalProvider';
+import { useTranslation } from 'react-i18next';
 
 const ChargeModal = () => {
   const { closeModal } = useModal();
+  const { t } = useTranslation('modal');
 
   return (
     <ModalForm
       onClose={() => closeModal('chargeModal')}
       imageSrc={strong}
-      text="앗..!"
-      text1={`크레딧이 부족해요.`}
-      text2="충전을 먼저 해주세요."
-      buttonTxt1="취소"
-      buttonTxt2="충전하러 가기"
+      text={t('oh')}
+      text1={t('credit_lack')}
+      text2={t('charge')}
+      buttonTxt1={t('cancel')}
+      buttonTxt2={t('goto_charge')}
       onYesClick={() => (window.location.href = '/mypage/credit')}
       color="bg-Blue2"
     />
