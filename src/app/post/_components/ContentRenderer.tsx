@@ -48,7 +48,7 @@ export const ContentRenderer = ({
           );
         }
 
-        if (item.type === 'element' && item.tag === 'p') {
+        if (item.type === 'element') {
           return (
             <p key={index} dangerouslySetInnerHTML={{ __html: item.content }} />
           );
