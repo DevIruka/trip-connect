@@ -308,7 +308,7 @@
 
 <details>
 
-<summary>1. 게시물의 질문-답변 형식</summary>
+<summary><h3>1. 게시물의 질문-답변 형식</h3></summary>
 
 <div  markdown="1">
 
@@ -330,7 +330,7 @@
 
 <details>
 
-<summary>2. 크레딧 충전</summary>
+<summary><h3>2. 크레딧 충전</h3></summary>
 
 <div  markdown="1">
 
@@ -351,7 +351,7 @@
 
 <details>
 
-<summary>3. 국내-해외 유저 간 소통</summary>
+<summary><h3>3. 국내-해외 유저 간 소통</h3></summary>
 
 <div  markdown="1">
 
@@ -374,7 +374,7 @@
 
 <details>
 
-<summary>i18 next</summary>
+<summary><h3>i18 next</h3></summary>
 
 <div  markdown="1">
 
@@ -406,7 +406,7 @@
 
 <details>
 
-<summary>번역 데이터 저장</summary>
+<summary><h3>번역 데이터 저장</h3></summary>
 
 <div  markdown="1">
 
@@ -437,7 +437,7 @@
 
 <details>
 
-<summary>Vercel timeout</summary>
+<summary><h3>Vercel timeout</h3></summary>
 
 <div  markdown="1">
 
@@ -452,6 +452,29 @@
 ![Image](https://github.com/user-attachments/assets/e5f1e9d9-c4d0-4e7d-abec-d56c69495c33)
 
 ![Image](https://github.com/user-attachments/assets/bc003716-7b91-4dc5-8ccc-47b48c36eb40)
+
+<br>
+
+</div>
+
+</details>
+
+<details>
+
+<summary><h3>content_html text 데이터 파싱하기</h3></summary>
+
+<div  markdown="1">
+
+#### ⚙️ 문제 상황
+
+- 팁탭 에디터로 삽입된 게시글 content_html 데이터로 텍스트, 이미지 및 지도를 구분하여 순서 그대로 화면에 print하여야 함
+
+#### 🚀 해결 방법
+
+1. 수파베이스에서 데이터를 가져옴
+2. string을 html로 파싱하여 순서대로 태그, 데이터 타입, props, 내용으로 이루어진 배열로 저장
+3. 배열을 순회하며 데이터 타입이 map이라면 구글맵 컴포넌트를 반환, 일반 텍스트나 이미지라면 html로 반환
+4. 실제 화면 컴포넌트에 결과 데이터를 삽입
 
 <br>
 
