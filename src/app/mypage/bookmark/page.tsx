@@ -133,7 +133,7 @@ const BookmarkPage = () => {
     return <div className="text-center text-red-500">{error}</div>;
   }
   return (
-    <div className="px-5 space-y-4 min-h-[calc(100vh-84px)]">
+    <div className="px-5 space-y-4 w-full h-full min-h-[calc(100vh-84px)]">
       <CategoryTabs activeTab="bookmark" />
 
       <div className="overflow-y-auto h-[calc(100vh-160px)] pb-[50px] md:pb-[140px] scrollbar-hide">
@@ -153,13 +153,12 @@ const BookmarkPage = () => {
               <div
                 key={post.id}
                 onClick={handleCardClick}
-                className="flex flex-col items-start gap-3 pt-[12px] pr-[20px] pb-[24px] pl-[20px] md:mb-[10px] md:gap-[17px]
+                className="flex flex-col items-start gap-3 h-[200px] pt-[12px] pr-[20px] pb-[24px] pl-[20px] md:mb-[10px] md:gap-[17px]
             md:rounded-[12px] md:border md:mx-auto md:border-[#DFE1E5] md:bg-white border-b bg-white w-full relative md:w-[800px] md:h-[252px] md:px-[36px] md:py-[28px]"
                 style={{
                   borderBottom: '1px solid #F4F4F4',
                   background: '#FFF',
                   cursor: 'pointer',
-                  minHeight: '252px',
                 }}
               >
                 <div className="flex flex-row items-center gap-2 md:mb-[8px]">
