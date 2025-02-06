@@ -71,6 +71,7 @@ const DesktopLoginModal = () => {
             <Link
               href={'/signup'}
               className="text-[#44484c] text-base font-medium font-['Pretendard'] underline underline-offset-[1px] ml-1 cursor-pointer"
+              onClick={() => closeModal('DesktopLogin')}
             >
               {t('signup')}
             </Link>
