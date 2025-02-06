@@ -27,9 +27,8 @@ const LanguagePage = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-84px)] bg-white md:flex md:w-[872px] md:px-[36px] md:py-0 md:flex-col md:items-start md:gap-[28px] px-5 py-4">
-
-      <div className="flex flex-row items-center w-[375px] h-[56px] px-[20px] py-[10px] gap-[206px] flex-shrink-0 md:hidden">
+    <div className="md:min-h-[calc(100vh-84px)] h-full w-full bg-white md:flex md:w-[872px] md:px-[36px] md:py-0 md:flex-col md:items-start md:gap-[28px] px-5">
+      <div className="flex flex-row items-center w-[375px] h-[56px] mt-0 py-[10px] gap-[206px] flex-shrink-0 md:hidden">
         <button
           onClick={() => router.push('/mypage')}
           className="flex items-center justify-center"
