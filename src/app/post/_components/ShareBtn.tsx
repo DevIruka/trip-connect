@@ -3,9 +3,11 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import share from '@/data/images/ic-share.svg';
 import AlertModal from '../../../components/AlertModal';
+import { useTranslation } from 'react-i18next';
 
 const ShareBtn = () => {
   const [showAlert, setShowAlert] = useState(false);
+  const { t } = useTranslation('modal');
 
   const copyLink = async () => {
     const currentUrl = window.location.href;
@@ -26,7 +28,7 @@ const ShareBtn = () => {
       <button onClick={copyLink}>
         <Image width={24} height={24} src={share} alt="share button" />
       </button>
-      <AlertModal show={showAlert} message="링크가 복사되었습니다!" />
+      <AlertModal show={showAlert} message={t('copied')} />
     </>
   );
 };

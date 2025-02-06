@@ -10,6 +10,7 @@ import {
   useLikeCount,
   useLikeMutations,
 } from '@/utils/api/tanstack/post/useLike';
+import { useTranslation } from 'react-i18next';
 
 const LikeBtn = ({ postId }: { postId: string }) => {
   const { user } = useUserStore();
@@ -18,6 +19,7 @@ const LikeBtn = ({ postId }: { postId: string }) => {
   const Liked = isPostLiked(postId);
   const { toggleLikeMutation } = useLikeMutations(userId);
   const { likeCount } = useLikeCount(postId);
+  const { t } = useTranslation('post');
 
   return (
     <button
@@ -34,7 +36,7 @@ const LikeBtn = ({ postId }: { postId: string }) => {
         height={20}
         width={20}
       />
-      <div className="pl-[3px] pr-[5px]">나도 궁금해요</div>
+      <div className="pl-[3px] pr-[5px]">{t('curious')}</div>
       <div className="font-bold leading-none">{likeCount}</div>
     </button>
   );

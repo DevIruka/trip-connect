@@ -6,11 +6,13 @@ import ModalForm from '@/components/ModalForm';
 import AlertModal from '../../../components/AlertModal';
 import { useModal } from '@/providers/ModalProvider';
 import { fetchReqPostDelete } from '@/utils/api/supabase_api/home/fetchReqPostDelete';
+import { useTranslation } from 'react-i18next';
 
 const DeleteConfirmModal = () => {
   const { user } = useUserStore();
   const [showAlert, setShowAlert] = useState(false);
   const { modals, modalData, closeModal } = useModal();
+  const { t } = useTranslation('modal');
 
   if (!modals.deleteConfirm || !modalData) return null;
 
@@ -21,10 +23,10 @@ const DeleteConfirmModal = () => {
       <ModalForm
         onClose={() => closeModal('deleteConfirm')}
         imageSrc={caution}
-        text1="정말 삭제하시겠어요?"
-        text2="삭제 후에는 글을 복구할 수 없어요"
-        buttonTxt1="취소"
-        buttonTxt2="삭제"
+        text1={t('you_sure')}
+        text2={t('no_restore')}
+        buttonTxt1={t('cancel')}
+        buttonTxt2={t('delete_word')}
         onYesClick={() => {
           if (requestpost) {
             fetchReqPostDelete(requestpost, user?.id);
@@ -46,7 +48,7 @@ const DeleteConfirmModal = () => {
         }}
         color="bg-Red1"
       />
-      <AlertModal show={showAlert} message="글이 삭제되었어요" />
+      <AlertModal show={showAlert} message={t('delete_complete')} />
     </>
   );
 };

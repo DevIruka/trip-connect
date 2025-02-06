@@ -8,11 +8,19 @@ import Image from 'next/image';
 import search from '@/data/images/ic-Search.svg';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import dynamic from 'next/dynamic';
+
+
 const lefticon = '/images/ic-left.svg';
 const marker = '/images/ic-location.svg';
 const coin = '/images/goldcoin.svg';
 const badge = '/images/verified badge.svg';
-const close = '/images/ic-Close.svg';
+
+
+const EditProfileModal = dynamic(
+  () => import('./_components/EditProfileModal'),
+  { ssr: false },
+);
 
 const MyPage = () => {
   const { t } = useTranslation('mypage');
@@ -149,6 +157,8 @@ const MyPage = () => {
             src={lefticon}
             width={24}
             height={24}
+            quality={50}
+            loading="lazy"
             alt="back"
             className="cursor-pointer md:hidden"
             onClick={() => {
@@ -166,13 +176,14 @@ const MyPage = () => {
               width={24}
               height={24}
               alt="search"
+              quality={50}
               className="cursor-pointer"
             />
           </Link>
         </div>
         {/* 프로필 카드 */}
         <div className="mb-[16px] lg:flex lg:items-center lg:justify-between lg:mb-[32px]">
-          <div className="flex items-center lg:flex-row md:mt-[45px]">
+          <div className="flex items-center lg:flex-row md:mt-[55px]">
             {/* 프로필 사진 */}
             <div className="w-[52px] h-[52px] lg:w-[80px] lg:h-[80px] rounded-full bg-gray-200 overflow-hidden">
               {userProfile.profileImg ? (
@@ -181,6 +192,8 @@ const MyPage = () => {
                   alt="Profile"
                   width={80}
                   height={80}
+                  quality={70}
+                  priority
                   className="object-cover"
                 />
               ) : (
@@ -189,6 +202,8 @@ const MyPage = () => {
                   alt="Default Profile"
                   width={80}
                   height={80}
+                  quality={70}
+                  priority
                   className="object-cover"
                 />
               )}
@@ -216,13 +231,20 @@ const MyPage = () => {
                     width={16}
                     height={16}
                     alt="badge"
+                    quality={50}
                     className="ml-[4px] relative top-[1px]"
                   />
                 )}
               </h2>
               {userProfile.country ? (
                 <div className="absolute top-[24px] lg:top-[32px] left-0 flex items-center justify-center h-[20px] min-w-[80px] bg-[#F5F7FA] text-[#45484D] rounded-full py-[3px] px-[4px]">
-                  <Image src={marker} width={10} height={10} alt="marker" />
+                  <Image
+                    src={marker}
+                    width={10}
+                    height={10}
+                    quality={50}
+                    alt="marker"
+                  />
                   <p className="text-[12px] font-medium tracking-[-0.24px] ml-[4px]">
                     {userProfile.country}
                   </p>
@@ -259,7 +281,7 @@ const MyPage = () => {
   px-[24px] md:px-[38px] lg:px-[38px] h-[62px] md:h-[72px]"
         >
           <div className="flex items-center w-full">
-            <Image src={coin} width={24} height={24} alt="coin" />
+            <Image src={coin} width={24} height={24} quality={50} alt="coin" />
             <p className="text-[18px] lg:text-[20px] pt-[1px] font-[600] ml-[8px]">
               {new Intl.NumberFormat().format(Number(userProfile.credit))} C
             </p>
@@ -288,6 +310,8 @@ const MyPage = () => {
               alt="Arrow Right"
               width={18}
               height={18}
+              quality={50}
+              loading="lazy"
             />
           </Link>
         </div>
@@ -310,6 +334,8 @@ const MyPage = () => {
                 alt="Arrow Right"
                 width={18}
                 height={18}
+                quality={50}
+                loading="lazy"
               />
             </Link>
             <div className="flex flex-row justify-center items-center border-b w-[90%] border-[#EBEBEB] mx-auto"></div>
@@ -326,6 +352,8 @@ const MyPage = () => {
                 alt="Arrow Right"
                 width={18}
                 height={18}
+                quality={50}
+                loading="lazy"
               />
             </Link>
             <div className="flex flex-row justify-center items-center border-b w-[90%] border-[#EBEBEB] mx-auto"></div>
@@ -342,6 +370,8 @@ const MyPage = () => {
                 alt="Arrow Right"
                 width={18}
                 height={18}
+                quality={50}
+                loading="lazy"
               />
             </Link>
           </div>
@@ -364,114 +394,29 @@ const MyPage = () => {
             alt="Arrow Right"
             width={18}
             height={18}
+            quality={50}
+            loading="lazy"
           />
         </Link>
 
         {/* 모달 */}
         {isModalOpen && (
-          <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50 z-50 px-4 lg:px-0">
-            <div className="bg-white rounded-[12px] flex flex-col items-center gap-[16px] md:gap-[0px] p-[10px_20px] md:w-[686px] md:h-[726px] md:p-[36px]">
-              {/* 헤더 */}
-              <div className="relative w-full flex items-center md:items-start justify-center md:justify-start h-[50px] md:h-[48px] md:py-[8px] md:mb-[38px]">
-                <h2 className="absolute md:static left-1/2 md:left-0 transform -translate-x-1/2 md:translate-x-0 text-black text-[16px] md:text-[20px] font-semibold leading-[140%]">
-                  {t('edit_profile')}
-                </h2>
-                {/* 모바일에서만 X 버튼 표시 */}
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-none border-none cursor-pointer md:hidden"
-                >
-                  <Image src={close} alt="닫기" width={24} height={24} />
-                </button>
-              </div>
-
-              {/* 프로필 이미지 */}
-              <div className="flex justify-center items-center mb-[16px] w-[295px] h-[100px] md:mb-[38px]">
-                <div className="relative w-[103px] h-[100px] rounded-full overflow-hidden flex items-center justify-center">
-                  <label htmlFor="profileImageInput" className="cursor-pointer">
-                    {previewImage ? (
-                      <Image
-                        src={previewImage}
-                        alt="Preview"
-                        width={100}
-                        height={100}
-                        className="object-cover"
-                      />
-                    ) : (
-                      <Image
-                        src="/images/default-profile.svg"
-                        alt="Default Profile"
-                        width={100}
-                        height={100}
-                        className="object-cover"
-                      />
-                    )}
-                  </label>
-                  <input
-                    id="profileImageInput"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                </div>
-              </div>
-
-              {/* 닉네임 입력 */}
-              <div className="w-full">
-                <label className="text-black text-sm font-semibold leading-[140%] mb-2 md:mb-[8px]">
-                  {t('nickname')}
-                </label>
-                <input
-                  type="text"
-                  value={nicknameInput}
-                  onChange={(e) => setNicknameInput(e.target.value)}
-                  placeholder={t('nickname_input')}
-                  className={`w-full border border-gray-300 bg-white text-[14px] md:mb-[20px] rounded-[8px] px-[14px] py-[16px] md:h-[60px] mb-[12px] 
-      ${
-        nicknameInput ? 'text-black' : 'text-gray-400'
-      } placeholder:text-gray-400 focus:text-black focus:outline-none`}
-                />
-              </div>
-
-              {/* 자기소개 입력 */}
-              <div className="w-full">
-                <label className="text-black text-sm font-semibold leading-[140%] mb-[8px]">
-                  {t('self_intro')}
-                </label>
-                <textarea
-                  value={bioInput}
-                  onChange={(e) => setBioInput(e.target.value)}
-                  placeholder={t('travel_experience')}
-                  className={`w-full border border-gray-300 bg-white md:mb-[38px] text-[14px] rounded-[8px] px-[14px] py-[16px] overflow-y-auto resize-none md:h-[140px] 
-      ${
-        bioInput ? 'text-black' : 'text-gray-400'
-      } focus:text-black focus:outline-none placeholder:text-gray-400`}
-                ></textarea>
-              </div>
-
-              {/* 버튼 */}
-              <div className="flex justify-center gap-[8px] w-full mt-[24px]">
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="flex justify-center items-center bg-[#DFE1E5] text-[#45484D] text-[14px] font-semibold rounded-[12px] px-[12px] py-[6px] w-[72px] h-[48px] md:w-[168px] md:h-[64px]"
-                >
-                  {t('cancel')}
-                </button>
-                <button
-                  onClick={handleSaveProfile}
-                  className="flex justify-center items-center bg-[#0582FF] text-white text-[14px] font-semibold rounded-[12px] px-[12px] py-[6px] w-[215px] h-[48px] md:w-[168px] md:h-[64px]"
-                >
-                  {t('save')}
-                </button>
-              </div>
-            </div>
-          </div>
+          <EditProfileModal
+            onClose={() => setIsModalOpen(false)}
+            nicknameInput={nicknameInput}
+            setNicknameInput={setNicknameInput}
+            bioInput={bioInput}
+            setBioInput={setBioInput}
+            handleImageUpload={handleImageUpload}
+            previewImage={previewImage}
+            handleSaveProfile={handleSaveProfile}
+            t={t}
+          />
         )}
 
         {/* 로그아웃 버튼 */}
         <div className="w-full h-[12px] bg-[#f4f6f9]"></div>
-        <div className="h-[92px] lg:mt-8 md:mt-17 flex justify-start ml-[28px] mt-[32px] mb-[43px]">
+        <div className="h-[92px] lg:mt-8 md:mt-17 flex justify-start ml-[16px] md:mt-[32px] mb-[20px]">
           <button
             className="text-[#44484c] text-sm font-medium cursor-pointer"
             onClick={handleLogout}

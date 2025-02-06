@@ -68,7 +68,7 @@ if (error) {
   return <div>{error}</div>; 
 }
   return (
-    <div className="flex flex-col px-5 space-y-4 min-h-[calc(100vh-84px)]">
+    <div className="flex flex-col px-5 space-y-4 w-full h-full md:w-[872px] min-h-[calc(100vh-84px)]">
       <CategoryTabs activeTab="written" />
 
       {/* 필터 버튼 */}

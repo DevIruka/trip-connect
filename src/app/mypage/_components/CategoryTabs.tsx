@@ -71,7 +71,6 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
     fetchCounts();
   }, [user?.id, t]);
 
-  // useMemo로 tabs 배열을 메모이제이션
   const tabs = useMemo(
     () => [
       { key: 'written', label: t('written'), link: '/mypage/filters/all' },
@@ -81,7 +80,6 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
     [t],
   );
 
-  // useCallback으로 클릭 핸들러 메모이제이션
   const handleTabClick = useCallback(
     (link: string) => {
       router.push(link);
@@ -94,7 +92,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
       {/* 헤더 섹션 */}
       <button
         onClick={() => router.push('/mypage')}
-        className="flex items-center justify-center pt-4 md:hidden"
+        className= "flex items-center justify-center pt-4 md:hidden" 
       >
         <Image src={lefticon} width={24} height={24} alt={t('back')} priority />
       </button>

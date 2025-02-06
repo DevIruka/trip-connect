@@ -11,6 +11,7 @@ import Icon from '@/components/Icons';
 import { useTranslation } from 'react-i18next';
 import { useLang } from '@/store/languageStore';
 import { useModal } from '@/providers/ModalProvider';
+import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
 
 type Props = {
   setFilterType: React.Dispatch<
@@ -76,7 +77,9 @@ const Navbar = ({
                   key={key}
                 >
                   <Icon type={value} size={20} />
-                  <div className="pl-1">{lang === 'en' ? value : key}</div>
+                  <div className="pl-1">
+                    {lang === 'en' ? capitalizeFirstLetter(value) : key}
+                  </div>
                 </TabsTrigger>
               ))}
             </TabsList>

@@ -16,5 +16,9 @@
   "login_subtext_1": "Sign in quickly and",
   "login_subtext_2": "start asking questions!",
   "later": "Later",
-  "now": "Now"
+  "now": "Now",
+  "responses": " responses",
+  "writer": "writer",
+  "loading": "Loading...",
+  "loadMore": "Load More"
 }

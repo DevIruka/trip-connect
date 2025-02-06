@@ -11,6 +11,7 @@ import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
 import TimeAgo from '@/app/search/[id]/_components/TimeAgo';
 import { useReviewCount } from '@/utils/api/tanstack/home/useReviewCount';
 import { useLang } from '@/store/languageStore';
+import { useTranslation } from 'react-i18next';
 
 const ListResPost = ({ post }: { post: Post }) => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const ListResPost = ({ post }: { post: Post }) => {
   //리뷰 갯수
   const { reviewCount } = useReviewCount(post.id);
   const { lang } = useLang();
+  const { t } = useTranslation('home');
 
   return (
     <li
@@ -91,13 +93,14 @@ const ListResPost = ({ post }: { post: Post }) => {
             </div>
             <Image width={2} height={2} src={dot} alt="dot" />
             <div className="flex gap-[2px]">
-              작성자
+              {t('writer')}
               <div className="font-bold">{post.users?.nickname}</div>
             </div>
             <Image width={2} height={2} src={dot} alt="dot" />
             <div className="flex gap-[2px]">
-              댓글
+              {lang === 'ko' && '댓글'}
               <div className="font-bold">{reviewCount}</div>
+              {lang === 'en' && 'reviews'}
             </div>
           </div>
         </div>

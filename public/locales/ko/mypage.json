@@ -136,5 +136,6 @@
   "cannot_delete_with_comments": "댓글이 달린 게시물은 삭제할 수 없습니다.",
   "post_deleted": "게시물이 삭제되었습니다.",
   "delete_confirm_title": "정말 삭제하시겠습니까?",
-  "delete_confirm_warning": "이 작업은 되돌릴 수 없습니다."
+  "delete_confirm_warning": "이 작업은 되돌릴 수 없습니다.",
+  "no_title": "제목이 없습니다"
 }
