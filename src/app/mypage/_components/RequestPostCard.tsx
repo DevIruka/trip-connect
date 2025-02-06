@@ -55,14 +55,11 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
         .eq('request_id', post.id);
 
       if (error) {
-        console.error('답변 개수 조회 오류:', error);
         return;
       }
 
       setResponseCount(data?.length || 0);
-    } catch (err) {
-      console.error('답변 개수 조회 중 오류 발생:', err);
-    }
+    } catch {}
   }, [post.id]);
 
   useEffect(() => {
@@ -238,7 +235,7 @@ const RequestPostCard: React.FC<{ post: RequestPost }> = ({ post }) => {
             <p className="text-black md:text-[18px] font-bold md:h-[50px] text-base leading-6 line-clamp-2">
               {post.title}
             </p>
-            <p className="text-gray-500 text-sm md:h-[50px] md:text-[16px] line-clamp-2">
+            <p className="text-gray-500 text-sm md:h-[40px] md:text-[16px] line-clamp-2">
               {plainContent}
             </p>
           </div>

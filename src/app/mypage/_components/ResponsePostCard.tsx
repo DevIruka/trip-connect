@@ -13,8 +13,11 @@ import { useLang } from '@/store/languageStore';
 import { countryNameMapping } from '@/data/nation';
 import { capitalizeFirstLetter } from '@/app/search/_utils/capitalize';
 import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
+import ModalForm from '@/components/ModalForm';
+import caution from '@/data/images/⚠️ 주의.svg';
 const coinIcon = '/images/coin.svg';
 const markerIcon = '/images/ic-location.svg';
+
 
 const ResponsePostCard: React.FC<{
   post: ResponsePost;
@@ -30,45 +33,44 @@ const ResponsePostCard: React.FC<{
   const [credit, setCredit] = useState<number | null>(null);
   const [commentCount, setCommentCount] = useState<number>(0);
   const [showActions, setShowActions] = useState<boolean>(false);
-
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); 
+  
   const fetchCommentCount = useCallback(async () => {
     if (!post.request_id) return;
 
-    try {
-      const { count, error } = await supabase
-        .from('reviews')
-        .select('*', { count: 'exact', head: true })
-        .eq('response_id', post.id);
-      if (error) {
-        console.error('댓글 개수 조회 오류:', error);
-        return;
-      }
+try {
+  const { count, error } = await supabase
+    .from('reviews')
+    .select('*', { count: 'exact', head: true })
+    .eq('response_id', post.id);
 
-      setCommentCount(count || 0);
-    } catch (err) {
-      console.error('댓글 개수 조회 중 오류 발생:', err);
-    }
+  if (!error) {
+    setCommentCount(count || 0);
+  }
+    } catch { }
+    
   }, [post.request_id]);
 
-  const fetchUserNickname = useCallback(async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('users')
-        .select('nickname')
-        .eq('id', userId)
-        .single();
+const fetchUserNickname = useCallback(async (userId: string) => {
+  try {
+    const { data, error } = await supabase
+      .from('users')
+      .select('nickname')
+      .eq('id', userId)
+      .single();
 
-      if (error) {
-        console.error('닉네임 가져오기 오류:', error);
-        setNickname('알 수 없음');
-      } else {
-        setNickname(data?.nickname || '알 수 없음');
-      }
-    } catch (err) {
-      console.error('유저 닉네임 조회 중 오류 발생:', err);
-      setNickname('알 수 없음');
+    if (error) {
+      setNickname(t('unknown'));
+    } else {
+      setNickname(data?.nickname || t('unknown'));
     }
-  }, []);
+  } catch {
+    setNickname(t('unknown'));
+  }
+}, [t]);
+
 
   const fetchRequestDetails = useCallback(async (requestId: string) => {
     try {
@@ -79,21 +81,19 @@ const ResponsePostCard: React.FC<{
         .single();
 
       if (error) {
-        console.error('질문글에서 정보 가져오는 중 오류:', error);
-        setCountry('알 수 없음');
+        setCountry(t('unknown'));
         setCategory([]);
       } else {
         const countryCity = JSON.parse(data?.country_city || '{}');
-        setCountry(countryCity.country || '알 수 없음');
+        setCountry(countryCity.country || t('unknown'));
         setCategory(data?.category || []);
         setCredit(data?.credit || null);
       }
-    } catch (err) {
-      console.error('질문글에서 정보 조회 중 오류 발생:', err);
-      setCountry('알 수 없음');
+    } catch {
+      setCountry(t('unknown'));
       setCategory([]);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (post.user_id) {
@@ -133,33 +133,35 @@ const ResponsePostCard: React.FC<{
     };
   }, [showActions, post.id]);
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (commentCount > 0) {
-      alert('댓글이 달린 글은 삭제할 수 없습니다.');
+      alert(t('cannot_delete_with_comments'));
     } else {
-      const confirmDelete = confirm('정말 삭제하시겠습니까?');
-      if (confirmDelete) {
-        try {
-          const { error } = await supabase
-            .from('response_posts')
-            .delete()
-            .eq('id', post.id);
-
-          if (error) {
-            alert('삭제 중 오류가 발생했습니다.');
-            console.error('삭제 오류:', error);
-            return;
-          }
-
-          alert('게시물이 삭제되었습니다.');
-          router.refresh();
-        } catch (err) {
-          console.error('삭제 요청 중 오류 발생:', err);
-          alert('예상치 못한 오류가 발생했습니다.');
-        }
-      }
+      setIsModalOpen(true); // 모달 열기
     }
   };
+
+  const confirmDelete = async () => {
+    try {
+      const { error } = await supabase
+        .from('response_posts')
+        .delete()
+        .eq('id', post.id);
+
+      if (error) {
+        alert(t('delete_error'));
+        return;
+      }
+
+      setAlertMessage(t('delete_success'));
+      setShowAlert(true);
+      setTimeout(() => setShowAlert(false), 3000);
+      router.refresh();
+    } catch {
+      alert(t('unexpected_error'));
+    }
+  };
+
 
   const handleCardClick = () => {
     if (post.request_id) {
@@ -265,20 +267,20 @@ const ResponsePostCard: React.FC<{
                 lang === 'ko' ? (
                   <span
                     dangerouslySetInnerHTML={{
-                      __html: post.translated_title || '제목이 없습니다.',
+                      __html: post.translated_title || t('no_title'),
                     }}
                   />
                 ) : (
                   <span
                     dangerouslySetInnerHTML={{
-                      __html: post.title || '제목이 없습니다.',
+                      __html: post.title || t('no_title'),
                     }}
                   />
                 )
               ) : (
                 <span
                   dangerouslySetInnerHTML={{
-                    __html: post.translated_title || '제목이 없습니다.',
+                    __html: post.translated_title || t('no_title'),
                   }}
                 />
               )}
@@ -316,23 +318,53 @@ const ResponsePostCard: React.FC<{
       </div>
 
       {/* 하단 - 크레딧, 댓글 수, 작성 시간 */}
-      <div className="flex items-center md:text-[14px] justify-between text-sm text-gray-500 w-full">
+      <div className="flex justify-between items-center md:text-[14px] text-sm text-gray-500 w-full">
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <Image src={coinIcon} alt="coin" width={14} height={14} />
             <span>{credit}</span>
           </div>
-          <span>·</span>
-          <span>
-            {t('writer')} {nickname}
-          </span>
-          <span>·</span>
-          <span>
-            {t('reply')} {commentCount}
+          <>
+            <span>·</span>
+            <span>
+              {t('writer')} {nickname}
+            </span>
+            <span>·</span>
+            <span>
+              {t('reply')} {commentCount}
+            </span>
+          </>
+        </div>
+
+        <div className="ml-5 md:ml-0 md:text-[14px]">
+          <TimeAgo createdAt={post.created_at || new Date().toISOString()} />
+        </div>
+      </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+          <ModalForm
+            onClose={() => setIsModalOpen(false)}
+            imageSrc={caution}
+            text={t('delete_confirm_title')}
+            text1={t('delete_confirm_warning')}
+            text2=""
+            buttonTxt1={t('cancel')}
+            buttonTxt2={t('delete')}
+            onYesClick={confirmDelete}
+            color="bg-red-500"
+          />
+        </div>
+      )}
+
+      {/* 삭제 알림창 */}
+      {showAlert && (
+        <div className="fixed bottom-5 left-1/2 transform -translate-x-1/2 flex w-[335px] p-3 justify-center items-center rounded-md bg-black bg-opacity-70 z-50">
+          <span className="text-white text-sm font-semibold">
+            {alertMessage}
           </span>
         </div>
-        <TimeAgo createdAt={post.created_at || new Date().toISOString()} />
-      </div>
+      )}
     </div>
   );
 };

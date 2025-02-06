@@ -136,6 +136,6 @@
   "current_location_suffix": ".",
   "delete_confirm_title": "Are you sure you want to delete?",
   "delete_confirm_warning": "This action cannot be undone.",
-  "post_deleted": "The post has been deleted."
-
+  "post_deleted": "The post has been deleted.",
+  "no_title": "No Title"
 }
