@@ -94,7 +94,7 @@ const CategoryTabs: React.FC<Props> = ({ activeTab }) => {
       {/* 헤더 섹션 */}
       <button
         onClick={() => router.push('/mypage')}
-        className="flex items-center justify-center pt-4 md:hidden"
+        className= "flex items-center justify-center pt-4 md:hidden" 
       >
         <Image src={lefticon} width={24} height={24} alt={t('back')} priority />
       </button>
