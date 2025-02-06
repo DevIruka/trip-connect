@@ -10,18 +10,24 @@ import { useUserStore } from '@/store/userStore';
 import { useTranslation } from 'react-i18next';
 import { Editor } from '@tiptap/core';
 import { getGPTTranslator } from '@/app/post/_hooks/getGPTTranslator';
+import { useLang } from '@/store/languageStore';
+import RenderonlyTextHTML from '@/hook/home/RenderonlyTextHTML';
 
 type RequestDetails = {
   title: string;
   content: string;
   country_city: string;
+  translated_title: string;
+  translated_content: string;
   users: { country: string };
 };
 
 const fetchRequestDetails = async (postId: string): Promise<RequestDetails> => {
   const { data, error } = await supabase
     .from('request_posts')
-    .select('title, content, country_city, users!inner(country)')
+    .select(
+      'title, content, translated_title, translated_content, country_city, users!inner(country)',
+    )
     .eq('id', postId)
     .single();
 
@@ -36,6 +42,8 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   const { postId } = params;
   const { user } = useUserStore();
   const { t } = useTranslation('response');
+  const { lang } = useLang();
+
   const [data, setData] = useState({
     title: '',
     contentHtml: '',
@@ -108,10 +116,18 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
   if (error) return <p>요청 정보를 불러오는 중 오류가 발생했습니다.</p>;
 
   const title = request?.title || '';
+  const translated_title = request?.translated_title || '';
   const maxVisibleChars = 20;
+  const cleanTranslatedTitle = translated_title.replace(/<\/?p>/g, '');
+
   const visibleTitle =
-    title.length > maxVisibleChars
-      ? title.slice(0, maxVisibleChars) + '...'
+    (lang === 'en' ? cleanTranslatedTitle : title).length > maxVisibleChars
+      ? (lang === 'en' ? cleanTranslatedTitle : title).slice(
+          0,
+          maxVisibleChars,
+        ) + '...'
+      : lang === 'en'
+      ? cleanTranslatedTitle
       : title;
 
   return (
@@ -139,7 +155,13 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
                 </span>
 
                 <span className="text-black text-[16px] font-semibold">
-                  {!isVisible ? visibleTitle : title}
+                  {!isVisible ? (
+                    visibleTitle
+                  ) : lang === 'en' ? (
+                    <p dangerouslySetInnerHTML={{ __html: translated_title }} />
+                  ) : (
+                    title
+                  )}
                 </span>
               </div>
               <button
@@ -184,7 +206,16 @@ const ResponsePage = ({ params }: { params: { postId: string } }) => {
           {/* 본문 내용 */}
           {isVisible && (
             <p className="mt-2 text-[#797C80] text-[14px] font-medium whitespace-pre-line md:mt-5">
-              {request?.content}
+              {lang === 'en' ? (
+                <RenderonlyTextHTML
+                  data={{
+                    original: '',
+                    translated: request?.translated_content,
+                  }}
+                />
+              ) : (
+                request?.content
+              )}
             </p>
           )}
         </div>
