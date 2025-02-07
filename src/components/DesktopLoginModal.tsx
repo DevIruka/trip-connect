@@ -72,11 +72,11 @@ const DesktopLoginModal = () => {
             {t('login')}
           </div>
           <div className="flex flex-row mt-[12px]">
-            <p className="text-[#797c80] text-base font-medium font-['Pretendard'] leading-snug">
+            <p className="text-[#797c80] text-base font-medium leading-snug">
               {t('stillNot')}
             </p>
             <button
-              className="text-[#44484c] text-base font-medium font-['Pretendard'] underline underline-offset-[1px] ml-1 cursor-pointer"
+              className="text-[#44484c] text-base font-medium underline underline-offset-[1px] ml-1 cursor-pointer"
               onClick={handleClick}
             >
               {t('signup')}
