@@ -5,11 +5,15 @@
 ![이미지소스_L](https://github.com/user-attachments/assets/3ecb7a4e-fda8-45be-932c-7e8e8abe9610)
 
 ## 💪 Our Team
-|박주희|박현지|박민준|강민정|문다슬|김민정|
-|---|---|---|---|---|---|
-|juhuibag42@gmail.com|hjpark9955@gmail.com|[@DevIruka](https://github.com/DevIruka)|[@cara656513](https://github.com/cara656513)|[@Raina-Moon](https://github.com/Raina-Moon)|[@minjung7](https://github.com/minjung7)|
-|UI/UX|UI/UX|TL,FE|FE|FE|FE|
-|🎨꼼꼼함의 끝판왕|📝스마트 능력자|👑해결사 리더|🫶팀 마스코트|👨‍💻멀티 플레이어|🔥코드 해석 열정러|
+
+| 이름   | 이메일 또는 깃허브 | 역할    | 한 줄 설 |
+|--------|-------------------|--------|--------|
+| 박주희 | juhuibag42@gmail.com | UI/UX  | 🎨꼼꼼함의 끝판왕 |
+| 박현지 | hjpark9955@gmail.com | UI/UX  | 📝스마트 능력자 |
+| 박민준 | [@DevIruka](https://github.com/DevIruka) | TL, FE | 👑해결사 리더 |
+| 강민정 | [@cara656513](https://github.com/cara656513) | FE | 🫶팀 마스코트 |
+| 문다슬 | [@Raina-Moon](https://github.com/Raina-Moon) | FE | 👨‍💻멀티 플레이어 |
+| 김민정 | [@minjung7](https://github.com/minjung7) | FE | 🔥코드 해석 열정러 |
 
 ### [📝 프로젝트 노션 바로가기](https://www.notion.so/teamsparta/5-2c6f7f355c1a4f4999039d482886700b)
 
@@ -484,7 +488,7 @@
 
 ## 최적화
 
-### LIGHTHOUSE 진단 결과 성능을 58점에서 82점으로 개선하였다.
+### 검색 페이지 41% 성능 개선
 
 <details>
 
@@ -506,11 +510,14 @@ after
 
 </details>
 
-1. 질문글과 답변글을 따로따로 불러와 클라이언트에서 병합 후, 최신순으로 정렬하는 식으로 데이터를 불러왔으나, **supabase에서 sql editor를 사용하여 요청만 한 번 하는 것**으로 원하는 데이터를 한 번에 빠르게 얻어올 수 있었다.
+1. **클라이언트 연산을 서버로 위임하여 병목 현상 해결**:  
+   기존에는 질문글과 답변글을 따로 불러와 클라이언트에서 병합 후 최신순으로 정렬하는 방식으로 데이터를 처리했으나, 이는 클라이언트의 불필요한 연산을 유발했습니다. 이를 **Supabase의 SQL Editor를 활용하여 서버 측에서 한 번의 요청으로 원하는 데이터를 효율적으로 가져오는 방식으로 개선**함으로써, 클라이언트의 부하를 크게 줄이고 응답 속도를 향상시켰습니다.
 
-2. svg 이미지들을 적극 활용하여 기존에 사용하고 있던 무거운 라이브러리인 react-icon를 지움으로서 **번들을 최적화**할 수 있었다.
+2. **번들 크기 최적화**:  
+   기존에 사용하던 무거운 라이브러리인 `react-icons`를 제거하고, **SVG 이미지를 직접 활용**함으로써 번들 크기를 크게 줄였습니다. 이를 통해 초기 로딩 속도가 개선되었고, 사용자 경험이 향상되었습니다.
 
-3. modal provider에서 **modal을 import 시에 dynamic으로 import**하여 필요 시에만 가져오도록 하고, ssr: false로 지정해주었다.
+3. **동적 임포트를 통한 리소스 로딩 최적화**:  
+   `Modal Provider`에서 모달 컴포넌트를 **`dynamic import`를 사용하여 필요 시에만 로드**하도록 변경하고, `SSR: false`로 설정하여 서버 측 렌더링 시 불필요한 리소스 로딩을 방지했습니다. 이를 통해 초기 페이지 로딩 시간을 단축하고, 사용자 인터랙션에 필요한 리소스만 효율적으로 관리할 수 있게 되었습니다.
 
 ## 유저 테스트
 
