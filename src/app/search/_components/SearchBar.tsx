@@ -76,7 +76,7 @@ const SearchBar = ({
           onSubmit={handleSubmit(handleSearch)}
           className="flex flex-col max-w-[1200px] w-full relative"
         >
-          <span className="text-[#44484c] text-[32px] font-bold font-['Pretendard'] leading-[51.20px] ml-[36px] md:mt-[40px]">
+          <span className="text-[#44484c] text-[32px] font-bold leading-[51.20px] ml-[36px] md:mt-[40px]">
             {t('search')}
           </span>
           <div className="flex flex-row justify-center items-center relative w-full">
