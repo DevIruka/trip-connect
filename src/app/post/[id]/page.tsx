@@ -22,7 +22,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
   const { post, error } = await fetchReqPost(postId);
 
   const cookieStore = cookies();
-  const locale = cookieStore.get('lang')?.value || 'en';
+  const locale = cookieStore.get('lang')?.value || 'ko';
   const { t } = await initTranslation(locale, ['post']);
   if (error) return <div>에러 발생: {error.message}</div>;
 
@@ -108,7 +108,7 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               )}
             </p>
             <div className="text-[#7fbfff] text-xs font-medium leading-none py-1">
-              {locale === 'ko'
+              {post.users.country && locale === 'ko'
                 ? `${post.users.country}어로 작성된 글이에요`
                 : `written in the language of ${
                     countryNameMapping[post.users.country]
