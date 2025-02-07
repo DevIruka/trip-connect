@@ -108,11 +108,13 @@ const DetailPage = async ({ params }: { params: { id: string } }) => {
               )}
             </p>
             <div className="text-[#7fbfff] text-xs font-medium leading-none py-1">
-              {post.users.country && locale === 'ko'
-                ? `${post.users.country}어로 작성된 글이에요`
-                : `written in the language of ${
-                    countryNameMapping[post.users.country]
-                  }`}
+              {post.users.country
+                ? locale === 'ko'
+                  ? `${post.users.country}어로 작성된 글이에요`
+                  : `written in the language of ${
+                      countryNameMapping[post.users.country]
+                    }`
+                : null}
             </div>
             <div className="border-t border-[#dee1e5] py-4 flex place-content-between">
               <LikeBtn postId={postId} />
