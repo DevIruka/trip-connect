@@ -1,0 +1,13 @@
+{
+  "creditBalance": "Credit Balance",
+  "recharge": "Recharge",
+  "amountWithBonus": "Bonus",
+  "confirmPayment": "Pay {{amount}} KRW",
+  "paymentTitle": "Payment",
+  "selectPaymentMethod": "Select a payment method",
+  "tossPay": "TossPay",
+  "creditCard": "Credit/Debit Card",
+  "comingSoon": "Coming soon!",
+  "won" : "KRW",
+  "selectAmount" : "Checkout"
+}

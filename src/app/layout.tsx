@@ -1,22 +1,24 @@
 import type { Metadata } from 'next';
-// import localFont from 'next/font/local';
 import './globals.css';
-import Providers from '@/providers/providers';
+import Header from '@/components/Header';
+import Providers from './providers';
+//import '@/app/i18n';
+import localFont from 'next/font/local';
+import '@/config/i18n'; // 🔥 꼭 추가해야 함!
 
-// const geistSans = localFont({
-//   src: './fonts/GeistVF.woff',
-//   variable: '--font-geist-sans',
-//   weight: '100 900',
-// });
-// const geistMono = localFont({
-//   src: './fonts/GeistMonoVF.woff',
-//   variable: '--font-geist-mono',
-//   weight: '100 900',
-// });
+const pretendard = localFont({
+  src: './fonts/PretendardVariable.woff2',
+  display: 'swap',
+  weight: '100 900',
+  variable: '--font-pretendard',
+});
 
 export const metadata: Metadata = {
-  title: 'Trip Connector',
-  description: '트립 커넥터, 여행을 연결해줍니다.',
+  title: 'Hey!Local',
+  description: 'Hey!Local',
+  icons: {
+    icon: '/heylocalfavicon.svg',
+  },
 };
 
 export default function RootLayout({
@@ -26,10 +28,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        // className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Providers>{children}</Providers>
+      <body className={pretendard.className}>
+        <div className="bg-container">
+          <Providers>
+            <Header />
+            {children}
+          </Providers>
+        </div>
       </body>
     </html>
   );

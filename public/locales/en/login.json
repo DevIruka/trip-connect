@@ -1,0 +1,13 @@
+{
+  "login": "Login",
+  "email": "Email",
+  "password": "Password",
+  "easyLogin": "Easy Login",
+  "loginwithemail": "Login with Email",
+  "stillNot": "Not a member yet?",
+  "signup": "Sign up",
+  "beuser": "Join us",
+  "erroremailpattern": "Please enter a valid email address.",
+  "erroremailrequired": "Email is required.",
+  "errorpwrequired": "Password is required."
+}

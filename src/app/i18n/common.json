@@ -1,0 +1,6 @@
+{
+  "loading": "Loading...",
+  "errorFetchingData": "Error fetching data",
+  "confirmDelete": "Are you sure you want to delete this post?",
+  "deleteSuccess": "Post successfully deleted."
+}

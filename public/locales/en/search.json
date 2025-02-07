@@ -1,0 +1,19 @@
+{
+  "recentSearch": "Recent Searches",
+  "search": "Search",
+  "search.no_results": "No search results found for '{{keyword}}'.",
+  "loading": "Loading search results",
+  "more": "See more",
+  "deleteall": "Delete All",
+  "limit": "You can only view up to 10 recent searches.",
+  "placeHolder": "Search countries & categories.",
+  "pleaseinput": "Please enter a search term.",
+  "result": "Search Results",
+  "q&a": "Q&A",
+  "q": "Question",
+  "a": "Answer",
+  "writer": "writer",
+  "totalAnswers": " responses",
+  "expired": "Expired",
+  "reply": "replied"
+}

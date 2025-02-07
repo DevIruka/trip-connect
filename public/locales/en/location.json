@@ -1,0 +1,10 @@
+{
+  "select_country_city": "Select Country/City",
+  "select": "Select",
+  "search_country_city": "Search for a country or city",
+  "initialize": "Initialize selection",
+  "noresults": " - no results found",
+  "selectCountry": "Please select the country or city.",
+  "close": "Close",
+  "ok": "OK"
+}
